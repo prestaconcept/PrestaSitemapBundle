@@ -1,0 +1,5 @@
+PrestaSitemapBundle_index:
+    pattern:  /sitemap.{_format}
+    defaults: { _controller: PrestaSitemapBundle:Sitemap:index }
+    requirements:
+        _format: xml
