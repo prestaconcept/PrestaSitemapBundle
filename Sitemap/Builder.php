@@ -118,6 +118,7 @@ class Builder
 	
 	protected function buildInnerFileContents($section)
 	{
+            $section->setGenerationDate(new \DateTime());
 		$xmlFiles = array();
 		$urlCounter = 0;
 		$fileCounter = 0;

@@ -69,12 +69,17 @@ class Generator
 		
 		foreach($this->sections as $section)
 		{
-			$list += $this->builder->buildSectionFiles($section);
+			$file = $this->builder->buildSectionFiles($section);
+                        $list[$section->getName()] = $section->getGenerationDate();
 		}
 		
 		return $list;
 	}
 	
+        public function getGeneratedFile($name)
+        {
+            
+        }
     /**
      *Get or generate section
      * 

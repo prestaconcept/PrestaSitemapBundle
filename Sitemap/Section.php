@@ -16,6 +16,7 @@ class Section
 	protected $name;							// section name
 	protected $lifetime;
 	protected $urls;			// Array of associated Url objects 
+        protected $generation_date;
 	
 	/**
 	 * Constructor for the sitemapSection
@@ -31,6 +32,7 @@ class Section
 		$this->name		= $name;
 		$this->lifetime	= $lifetime;
 		$this->urls 	= array();
+                $this->generation_date = new \DateTime();
 	}
 	
 	
@@ -94,4 +96,15 @@ class Section
 			}
 		}
 	}
+        
+        public function getGenerationDate()
+        {
+            return $this->generation_date;
+        }
+        
+        public function setGenerationDate(\DateTime $date)
+        {
+            $this->generation_date = $date;
+        }
+                
 }
