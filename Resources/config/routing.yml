@@ -6,7 +6,7 @@ PrestaSitemapBundle_index:
         
         
 PrestaSitemapBundle_section:
-    pattern:  /sitemap/section_{name}.{_format}
+    pattern:  /sitemap.{name}.{_format}
     defaults: { _controller: PrestaSitemapBundle:Sitemap:section }
     requirements:
         _format: xml

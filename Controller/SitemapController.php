@@ -36,17 +36,17 @@ class SitemapController extends Controller
     	$sitemapGenerator = $this->get('sitemap.generator');
     	 
     	$sitemapGenerator->generate();
-    	$generatedFile = $sitemapGenerator->getGeneratedFile($name);
+    	$section = $sitemapGenerator->getGeneratedFile($name);
     	
-    	if (!$generatedFile) 
+    	if (!$section) 
         {
     		throw $this->createNotFoundException('This sitemap file does not exists');
     	}
     	
-    	$o_sitemapGenerator = $this->getNewSitemapGenerator();
+//    	$o_sitemapGenerator = $this->getNewSitemapGenerator();
     	
     	//return array($o_sitemapGenerator);
     	
-    	return $this->render('PrestaSitemapBundle:Generator:section.' . $_format . '.twig', array('file_list' => $file_list));
+    	return $this->render('PrestaSitemapBundle:Sitemap:section.' . $_format . '.twig', array('section' => $section));
     }
 }

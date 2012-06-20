@@ -171,7 +171,7 @@ class Builder
 				<?php echo $this->urlImageToXml($urlImage) ?>
 			<?php endforeach; ?>
 			<?php // add mobile tag extension ?>
-			<?php if( $url->getMobile() ):?>
+			<?php if( $url->isMobile() ):?>
 				<mobile:mobile/>
 			<?php endif;?>
 		</url>
