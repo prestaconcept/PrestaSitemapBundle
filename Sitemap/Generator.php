@@ -99,8 +99,8 @@ class Generator
         
         //maximum 50k sitemapindex
         $i = 0;
-        while ($urlset->isFull() && $i <= Sitemapindex::LIMIT_SITEMAP_NUMBER) {
-            $urlset = $this->getUrlset($name . '.' . $i);
+        while ($urlset->isFull() && $i <= Sitemapindex::LIMIT_NUMBER) {
+            $urlset = $this->getUrlset($name . '_' . $i);
             $i++;
         }
         
@@ -119,7 +119,7 @@ class Generator
      * @param str $name
      * @return Urlset 
      */
-    protected function getUrlset($name)
+    public function getUrlset($name)
     {
         if (!isset($this->urlsets[$name])) {
             $this->urlsets[$name] = new Urlset($this->router->generate('PrestaSitemapBundle_sitemap', array('name' => $name, '_format' => 'xml'), true));

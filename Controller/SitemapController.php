@@ -63,6 +63,29 @@ class SitemapController extends Controller
      */
     public function sectionAction($name, $_format)
     {
+        $cacheService = $this->get('liip_doctrine_cache.ns.presta_sitemap');
+        $cacheService->setNamespace('presta_sitemap');
+        
+        if (!$cacheService->contains('urlset.' . $name)) {
+            //set obj as sitemapindex or urlset
+            $this->get('sitemap.generator')->generate();
+            
+            $obj = $this->get('sitemap.generator')->getUrlset($name);
+            
+            //set in cache
+            $cacheService->save('urlset.' . $name, serialize($obj), 3600);
+        } else {
+            $obj = unserialize($cacheService->fetch('urlset.' . $name));
+        }
+        
+        $response = Response::create($obj->toXml());
+        
+        return $response;
+        
+        
+        
+        
+        
     	$sitemapGenerator = $this->get('sitemap.generator');
     	 
     	$sitemapGenerator->generate();

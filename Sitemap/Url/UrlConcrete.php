@@ -185,7 +185,7 @@ class UrlConcrete implements Url
         $xml = '<url><loc>' . $this->getLocation() . '</loc>';
         
         if ($this->getLastModificationDate()) {
-            $xml .= '<lastmod>' . $this->getLastModificationDate()->format('c') . '</lasmod>';
+            $xml .= '<lastmod>' . $this->getLastModificationDate()->format('c') . '</lastmod>';
         }
         
         if ($this->getChangeFrequency()) {
@@ -197,6 +197,8 @@ class UrlConcrete implements Url
         }
         
         $xml .= '</url>';
+        
+        return $xml;
     }
     
     
