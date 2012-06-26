@@ -1,0 +1,28 @@
+{
+    "name": "presta/sitemap-bundle",
+    "description": "This Bundle provides a sitemap generator for symfony2.",
+    "keywords": ["symfony2", "sitemap", "xml"],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "David Epely",
+            "homepage": "http://www.prestaconcept.net/"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "symfony/symfony": ">=2.1",
+        "doctrine/common": ">=2.2",
+        "liip/doctrine-cache-bundle" : "dev-master"
+    }
+//    ,
+//    "autoload": {
+//        "psr-0": {
+//            "Liip\\DoctrineCacheBundle\\": ""
+//        }
+//    },
+//    "target-dir" : "Liip/DoctrineCacheBundle"
+}
+
+

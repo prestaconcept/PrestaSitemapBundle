@@ -12,7 +12,7 @@
         <loc>{{ url.getLocation() }}</loc>
         
         {% if  url.getLastModificationDate() | length > 0  %}
-        <lastmod>{{ url.getLastModificationDate() | date("m/d/Y") }}</lastmod>
+        <lastmod>{{ url.getLastModificationDate() | date('c') }}</lastmod>
         {% endif %}
         
         {% if  url.getChangeFrequency() | length > 0 %}

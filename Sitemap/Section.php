@@ -32,7 +32,7 @@ class Section
 		$this->name		= $name;
 		$this->lifetime	= $lifetime;
 		$this->urls 	= array();
-                $this->generation_date = new \DateTime();
+        $this->generation_date = new \DateTime();
 	}
 	
 	

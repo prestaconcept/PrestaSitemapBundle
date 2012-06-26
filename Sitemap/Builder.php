@@ -9,36 +9,26 @@ use Presta\SitemapBundle\Sitemap\Url\Image;
 /**
  * Manage generation of groups of urls
  * 
- * @author  Christophe Dolivet
- * @version 1.0 - 4 août 2009 - Christophe Dolivet
+ * @author Christophe Dolivet
+ * @author David Epely
  */
 class Builder
 {
 	protected $section;
 	
-	protected $maxFileSize;
-	
-	protected $maxUrlPerFile;
-	
-	protected $maxImagePerUrl;
-	
-	protected $reservedFileSizeForHeader;
-	
+	protected $maxFileSize      = 10485760;
+	protected $maxUrlPerFile    = 49999;
+	protected $maxImagePerUrl   = 9999;
+	protected $reservedFileSizeForHeader = 5000;
 	
 	protected $rootUrl;
 	
 	/**
 	 * Constructor
 	 */
-	public function __construct($rootUrl)
-	{
+	public function __construct($rootUrl) 
+    {
 		$this->rootUrl  = $rootUrl;
-		
-		// make thoses parameters optionnal
-		$this->setMaxUrlPerFile(49999)
-			->setMaxFileSize(10485760)
-			->setMaxImagePerUrl(9999)
-			->setReservedFileSizeForHeader(5000);
 	}
 	
 	public function setSection($section)
@@ -46,29 +36,6 @@ class Builder
 		$section  = $section;
 	}
 	
-	public function setMaxUrlPerFile($maxUrlPerFile)
-	{
-		$this->maxUrlPerFile  = max(1, $maxUrlPerFile);
-		return $this;
-	}
-	
-	public function setMaxFileSize($maxFileSize)
-	{
-		$this->maxFileSize 	  = $maxFileSize;
-		return $this;
-	}
-	
-	public function setMaxImagePerUrl($maxImagePerUrl)
-	{
-		$this->maxImagePerUrl = $maxImagePerUrl;
-		return $this;
-	}
-	
-	public function setReservedFileSizeForHeader($reservedFileSizeForHeader)
-	{
-		$this->reservedFileSizeForHeader = $reservedFileSizeForHeader;
-		return $this;
-	}
 	
 	/**
 	 * Add a sitemap url to the whole results

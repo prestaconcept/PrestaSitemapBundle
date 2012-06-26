@@ -10,3 +10,10 @@ PrestaSitemapBundle_section:
     defaults: { _controller: PrestaSitemapBundle:Sitemap:section }
     requirements:
         _format: xml
+        
+        
+PrestaSitemapBundle_sitemap:
+    pattern:  /sitemap.{name}.{_format}
+    defaults: { _controller: PrestaSitemapBundle:Sitemap:section }
+    requirements:
+        _format: xml

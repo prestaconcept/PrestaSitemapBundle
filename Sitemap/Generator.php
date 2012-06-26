@@ -4,6 +4,8 @@ namespace Presta\SitemapBundle\Sitemap;
 
 use Presta\SitemapBundle\SitemapEvents;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\HttpKernel\Debug\ContainerAwareTraceableEventDispatcher;
 
 class Generator
 {
@@ -12,6 +14,8 @@ class Generator
 	 * @var EventDispatcher
 	 */
 	protected $dispatcher;
+    
+    protected $router;
 	
 	protected $container;
 	
@@ -20,13 +24,27 @@ class Generator
 	protected $files = array();
 	
 	protected $builder;
-	
-	
-	
-	public function __construct(Builder $builder, $dispatcher)
+    
+    /**
+     * @var mixed Sitemapindex or Urlset 
+     */
+    protected $root;
+    
+    /**
+     * @var array
+     */
+    protected $urlsets = array();
+
+
+
+
+
+
+    public function __construct(Builder $builder, ContainerAwareTraceableEventDispatcher $dispatcher, Router $router)
 	{
-        $this->builder = $builder;
-        $this->dispatcher = $dispatcher;
+        $this->builder      = $builder;
+        $this->dispatcher   = $dispatcher;
+        $this->router       = $router;
 	}
 	
 	
@@ -36,7 +54,8 @@ class Generator
 	public function generate()
 	{
         $this->populate();
-        $this->buildOutputFiles();
+        
+        return $this->root;
 	}
 	
 	
@@ -51,12 +70,110 @@ class Generator
         }
 	}
 	
-	
-	protected function buildOutputFiles()
+    /**
+     * add url to default urlset
+     * if default is full or is sitemapindex; get the next sitemapindex and add url to it
+     * 
+     * @param Url\Url $url 
+     */
+    public function __addUrl(Url\Url $url)
+    {
+        $root = $this->getRoot();
+        
+        if (!$root->addUrl($url)) {
+            $this->addSitemapUrl($this->generateSitemapName($this->root), $url);
+        }
+    }
+    
+    
+    /**
+     * add an Url to an Urlset
+     * 
+     * @param str $name
+     * @param Url\Url $url
+     * @throws \RuntimeException 
+     */
+    public function addUrlsetUrl($name, Url\Url $url)
+    {
+        $urlset = $this->getUrlset($name);
+        
+        //maximum 50k sitemapindex
+        $i = 0;
+        while ($urlset->isFull() && $i <= Sitemapindex::LIMIT_SITEMAP_NUMBER) {
+            $urlset = $this->getUrlset($name . '.' . $i);
+            $i++;
+        }
+        
+        if($urlset->isFull())
+        {
+            throw new \RuntimeException('The limit of sitemapindex has been exceeded');
+        }
+        
+        $urlset->addUrl($url);
+    }
+    
+    
+    /**
+     * get or create urlset
+     * 
+     * @param str $name
+     * @return Urlset 
+     */
+    protected function getUrlset($name)
+    {
+        if (!isset($this->urlsets[$name])) {
+            $this->urlsets[$name] = new Urlset($this->router->generate('PrestaSitemapBundle_sitemap', array('name' => $name, '_format' => 'xml'), true));
+            
+            if (!$this->root) {
+                $this->root = new Sitemapindex();
+                $this->root->addSitemap($name, $this->urlsets[$name]);
+            }
+        }
+        
+        return $this->urlsets[$name];
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    protected function buildOutputFiles()
 	{
 		
 	}
-	
 	
 	/**
 	 * Return a list of generated files of the sitemap
@@ -76,7 +193,6 @@ class Generator
 		return $list;
 	}
 	
-    
     /**
      * Get generated file by its section's name
      * 
@@ -112,6 +228,4 @@ class Generator
 		
 		return $this->sections[$name];
 	}
-    
-	
 }

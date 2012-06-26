@@ -4,26 +4,14 @@ parameters:
     sitemap.section.class:     Presta\SitemapBundle\Sitemap\Section
     sitemap.url.class:         Presta\SitemapBundle\Sitemap\Url
     sitemap.url.image.class:   Presta\SitemapBundle\Sitemap\Url\Image
-    
-
     sitemap.builder.class:     Presta\SitemapBundle\Sitemap\Builder
-    
-    sitemap.builder.root_url:  ~                   # root URl to be defined
-    sitemap.builder.max_url_per_file:    49999     # define the maximum number of entries for a sitemap file
-    sitemap.builder.max_file_size:       10485760  # define the maximum size allowed for a sitemap file
-    sitemap.builder.max_image_per_url:   9999      # define the maximum number of image entries for a sitemap url
-    sitemap.builder.reserved_file_size_for_header: 10000 
     
 
 services:
     sitemap.generator:
         class:        '%sitemap.generator.class%'
-        arguments:    [@sitemap.builder, @event_dispatcher]   
+        arguments:    [@sitemap.builder, @event_dispatcher, @router]   
     sitemap.builder:
         class:        '%sitemap.builder.class%'
         arguments:    ['%sitemap.builder.root_url%']   
-        calls:
-            - [ setMaxUrlPerFile, [ '%sitemap.builder.max_url_per_file%' ] ]
-            - [ setMaxFileSize, [ '%sitemap.builder.max_file_size%' ] ]
-            - [ setMaxImagePerUrl, [ '%sitemap.builder.max_image_per_url%' ] ]
-            - [ setReservedFileSizeForHeader, [ '%sitemap.builder.reserved_file_size_for_header%' ] ]
+        

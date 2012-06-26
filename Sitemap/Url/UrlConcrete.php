@@ -1,14 +1,14 @@
 <?php
 
-namespace Presta\SitemapBundle\Sitemap;
+namespace Presta\SitemapBundle\Sitemap\Url;
 
 /**
- * Class used for managing url entites
+ * Class used for managing url entities
  * 
- * @author  Christophe Dolivet
- * @version 1.0 - 4 août 2009 - Christophe Dolivet
+ * @author Christophe Dolivet
+ * @author David Epely
  */
-class Url
+class UrlConcrete implements Url
 {
     const CHANGE_FREQUENCY_ALWAYS   = 'always';
     const CHANGE_FREQUENCY_HOURLY   = 'hourly';
@@ -18,13 +18,12 @@ class Url
     const CHANGE_FREQUENCY_YEARLY   = 'yearly';
     const CHANGE_FREQUENCY_NEVER    = 'never';
 
-    protected
-            $location, // absolute url
-            $lastModificationDate, // last modifcaiotn date
-            $changeFrequency, // change frequency
-            $priority, // priority
-            $images = array(), // array of UrlImage
-            $isMobile = false;      // is mobile or not (default : not)
+    protected $location;                
+    protected $lastModificationDate;    
+    protected $changeFrequency; 
+    protected $priority; 
+    protected $images = array(); 
+    protected $isMobile = false;      
 
     /**
      * Construct a new Url mainly identified by it's url
@@ -179,6 +178,31 @@ class Url
     {
         return $this->priority;
     }
+    
+    
+    public function toXml()
+    {
+        $xml = '<url><loc>' . $this->getLocation() . '</loc>';
+        
+        if ($this->getLastModificationDate()) {
+            $xml .= '<lastmod>' . $this->getLastModificationDate()->format('c') . '</lasmod>';
+        }
+        
+        if ($this->getChangeFrequency()) {
+            $xml .= '<changefreq>' . $this->getChangeFrequency() . '</changefreq>';
+        }
+        
+        if ($this->getPriority()) {
+            $xml .= '<priority>' . $this->getPriority() . '</priority>';
+        }
+        
+        $xml .= '</url>';
+    }
+    
+    
+    
+    
+    
 
     /**
      * add a UrlImage to the current Url
