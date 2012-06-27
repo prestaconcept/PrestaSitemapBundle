@@ -16,8 +16,8 @@ class Urlset extends XmlConstraint
     protected $loc;
     protected $lastmod;
     
-    protected $urls = array();
-    
+    protected $urlsXml = '';
+
     protected $customNamespaces = array();
     
     public function __construct($loc)
@@ -37,15 +37,15 @@ class Urlset extends XmlConstraint
     }
 
 
-    public function getUrls()
-    {
-        return $this->urls;
-    }
-    
-    public function setUrls(array $urls)
-    {
-        $this->urls = $urls;
-    }
+//    public function getUrls()
+//    {
+//        return $this->urls;
+//    }
+//    
+//    public function setUrls(array $urls)
+//    {
+//        $this->urls = $urls;
+//    }
     
     
     /**
@@ -60,22 +60,23 @@ class Urlset extends XmlConstraint
             throw new \RuntimeException('The urlset limit has been exceeded');
         }
         
-        $this->urls[] = $url;
+        $urlXml = $url->toXml();
+        $this->urlsXml .= $urlXml;
         
         //---------------------
         //Check limits 
-        if (count($this->urls) >= self::LIMIT_NUMBER) {
-           $this->limitNumberReached = true;
+        if ($this->countItems++ >= self::LIMIT_ITEMS) {
+           $this->limitItemsReached = true;
         }
         
-        $urlLength = strlen($url->toXml());
+        $urlLength = strlen($urlXml);
         $this->countBytes += $urlLength;
         
         if ($this->countBytes + $urlLength + strlen($this->getStructureXml()) > self::LIMIT_BYTES ) {
             //we suppose the next url is almost the same length and cannot be added
             //plus we keep 500kB (@see self::LIMIT_BYTES)
             //... beware of numerous images set in url
-            $this->limitByteReached = true;
+            $this->limitBytesReached = true;
         }
         //---------------------
     }
@@ -103,12 +104,6 @@ class Urlset extends XmlConstraint
     
     public function toXml() 
     {
-        $urls = '';
-        
-        foreach ($this->getUrls() as $url) {
-            $urls .= $url->toXml();
-        }
-        
-        return str_replace('URLS', $urls, $this->getStructureXml());
+        return str_replace('URLS', $this->urlsXml, $this->getStructureXml());
     }
 }

@@ -2,7 +2,7 @@
 namespace Presta\SitemapBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
-use Presta\SitemapBundle\Sitemap\Generator;
+use Presta\SitemapBundle\Service\Generator;
 
 
 class SitemapPopulateEvent extends Event

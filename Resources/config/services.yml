@@ -1,5 +1,5 @@
 parameters:
-    sitemap.generator.class:   Presta\SitemapBundle\Sitemap\Generator
+    sitemap.generator.class:   Presta\SitemapBundle\Service\Generator
     
     sitemap.section.class:     Presta\SitemapBundle\Sitemap\Section
     sitemap.url.class:         Presta\SitemapBundle\Sitemap\Url
@@ -10,8 +10,11 @@ parameters:
 services:
     sitemap.generator:
         class:        '%sitemap.generator.class%'
-        arguments:    [@sitemap.builder, @event_dispatcher, @router]   
-    sitemap.builder:
-        class:        '%sitemap.builder.class%'
-        arguments:    ['%sitemap.builder.root_url%']   
+        arguments:    [@event_dispatcher, @router]   
+        calls:
+            - [ setCache, [@liip_doctrine_cache.ns.presta_sitemap] ]
+          
+#    sitemap.builder:
+#        class:        '%sitemap.builder.class%'
+#        arguments:    ['%sitemap.builder.root_url%']   
         

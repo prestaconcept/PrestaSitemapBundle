@@ -8,21 +8,25 @@ namespace Presta\SitemapBundle\Sitemap;
  */
 abstract class XmlConstraint
 {
-    const LIMIT_NUMBER  = 49999;
+    const LIMIT_ITEMS   = 49999;
     const LIMIT_BYTES   = 10000000; // 10,485,760 bytes - 485,760
     
-    protected $limitNumberReached     = false;
-    protected $limitByteReached       = false;
-    protected $countBytes             = 0;
+    protected $limitItemsReached    = false;
+    protected $limitBytesReached    = false;
+    protected $countBytes           = 0;
+    protected $countItems           = 0;
     
     /**
      * @return bool
      */
     public function isFull()
     {
-        return $this->limitNumberReached || $this->limitByteReached;
+        return $this->limitItemsReached || $this->limitBytesReached;
     }
     
-    
+    /**
+     * Render full and valid xml 
+     */
+    abstract function toXml();
     
 }

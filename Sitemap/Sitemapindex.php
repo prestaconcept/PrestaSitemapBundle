@@ -4,35 +4,37 @@ namespace Presta\SitemapBundle\Sitemap;
 
 
 /**
- * Manage generation of groups of urls
+ * Manage sitemaps listing
  * 
  * @author  David Epely
  */
 class Sitemapindex extends XmlConstraint
 {
-    protected $urlsets = array();
+    protected $sitemapsXml      = '';
     
-    public function addSitemap($name, Urlset $urlset)
+    public function addSitemap(Urlset $urlset)
     {
         if ($this->isFull()) {
             throw new \RuntimeException('The sitemapindex limit has been exceeded');
         }
         
-        $this->urlsets[$name] = $urlset;
+        $sitemapXml = $this->getSitemapXml($urlset);
+        $this->sitemapsXml .= $sitemapXml;
         
         //---------------------
         //Check limits 
-        if (count($this->urlsets) >= self::LIMIT_NUMBER) {
-           $this->limitNumberReached = true;
+        if ($this->countItems++ >= self::LIMIT_ITEMS) {
+           $this->limitItemsReached = true;
         }
         
-        $sitemapLength = strlen($this->getSitemapXml($urlset));
+        
+        $sitemapLength = strlen($sitemapXml);
         $this->countBytes += $sitemapLength;
         
         if ($this->countBytes + $sitemapLength + strlen($this->getStructureXml()) > self::LIMIT_BYTES ) {
             //we suppose the next sitemap is almost the same length and cannot be added
             //plus we keep 500kB (@see self::LIMIT_BYTES)
-            $this->limitByteReached = true;
+            $this->limitBytesReached = true;
         }
         //---------------------
     }
@@ -63,12 +65,6 @@ class Sitemapindex extends XmlConstraint
     {
         $xml = $this->getStructureXml();
         
-        $sitemaps = '';
-        
-        foreach ($this->getUrlsets() as $urlset) {
-            $sitemaps .= $this->getSitemapXml($urlset);
-        }
-        
-        return str_replace('SITEMAPS', $sitemaps, $xml);
+        return str_replace('SITEMAPS', $this->sitemapsXml, $xml);
     }
 }
