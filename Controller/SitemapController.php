@@ -19,7 +19,7 @@ class SitemapController extends Controller
      */
     public function indexAction()
     {
-        $sitemapindex   = $this->get('sitemap.generator')->fetch('root');
+        $sitemapindex   = $this->get('presta_sitemap.generator')->fetch('root');
         
         if(!$sitemapindex) {
             throw $this->createNotFoundException();
@@ -41,7 +41,7 @@ class SitemapController extends Controller
     public function sectionAction($name, $_format)
     {
         
-        $section   = $this->get('sitemap.generator')->fetch($name);
+        $section   = $this->get('presta_sitemap.generator')->fetch($name);
         
         if(!$section) {
             throw $this->createNotFoundException();

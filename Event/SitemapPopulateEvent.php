@@ -7,6 +7,8 @@ use Presta\SitemapBundle\Service\Generator;
 
 class SitemapPopulateEvent extends Event
 {
+    const onSitemapPopulate = 'presta_sitemap.populate';
+    
 	protected $generator;
 
 	public function __construct(Generator $generator)

@@ -5,7 +5,7 @@ namespace Presta\SitemapBundle\Service;
 use Doctrine\Common\Cache\Cache;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap;
-use Presta\SitemapBundle\SitemapEvents;
+//use Presta\SitemapBundle\SitemapEvents;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpKernel\Debug\ContainerAwareTraceableEventDispatcher;
 
@@ -31,21 +31,13 @@ class Generator
      */
     protected $urlsets = array();
 
-    public function __construct(ContainerAwareTraceableEventDispatcher $dispatcher, Router $router)
+    public function __construct(ContainerAwareTraceableEventDispatcher $dispatcher, Router $router, Cache $cache = null)
 	{
         $this->dispatcher   = $dispatcher;
         $this->router       = $router;
+        $this->cache        = $cache;
 	}
     
-    /**
-     * Define Cache service
-     * 
-     * @param Cache $cache 
-     */
-    public function setCache(Cache $cache = null)
-    {
-        $this->cache        = $cache;
-    }
 	
 	/**
 	 * Generate all datas
@@ -55,7 +47,7 @@ class Generator
         //---------------------
         // Populate
         $event = new SitemapPopulateEvent($this);
-        $this->dispatcher->dispatch(SitemapEvents::onSitemapPopulate, $event);
+        $this->dispatcher->dispatch(SitemapPopulateEvent::onSitemapPopulate, $event);
         //---------------------
         
         //---------------------
@@ -102,7 +94,6 @@ class Generator
      * add an Url to an Urlset
      * 
      * section is helpfull for partial cache invalidation
-     * 
      * //TODO: make $section optional
      * 
      * @param Url\Url $url
