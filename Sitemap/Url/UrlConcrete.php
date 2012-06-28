@@ -10,186 +10,135 @@ namespace Presta\SitemapBundle\Sitemap\Url;
  */
 class UrlConcrete implements Url
 {
-    const CHANGE_FREQUENCY_ALWAYS   = 'always';
-    const CHANGE_FREQUENCY_HOURLY   = 'hourly';
-    const CHANGE_FREQUENCY_DAILY    = 'daily';
-    const CHANGE_FREQUENCY_WEEKLY   = 'weekly';
-    const CHANGE_FREQUENCY_MONTHLY  = 'monthly';
-    const CHANGE_FREQUENCY_YEARLY   = 'yearly';
-    const CHANGE_FREQUENCY_NEVER    = 'never';
+    const CHANGEFREQ_ALWAYS   = 'always';
+    const CHANGEFREQ_HOURLY   = 'hourly';
+    const CHANGEFREQ_DAILY    = 'daily';
+    const CHANGEFREQ_WEEKLY   = 'weekly';
+    const CHANGEFREQ_MONTHLY  = 'monthly';
+    const CHANGEFREQ_YEARLY   = 'yearly';
+    const CHANGEFREQ_NEVER    = 'never';
 
-    protected $location;                
-    protected $lastModificationDate;    
-    protected $changeFrequency; 
+    protected $loc;                
+    protected $lastmod;    
+    protected $changefreq; 
     protected $priority; 
-    protected $images = array(); 
-    protected $isMobile = false;      
 
     /**
-     * Construct a new Url mainly identified by it's url
+     * Construct a new basic url
      * 
-     * @author  Christophe Dolivet
-     * @since   1.0 - 15 juil. 2009 - Christophe Dolivet
-     * @version 1.0 - 15 juil. 2009 - Christophe Dolivet
-     * @param Mixed $location[optional] - Valid parameters for a call to url_for()
-     * @param DateTime $lastModificationDate[optional]
-     * @param String $changeFrequency[optional]
-     * @param Float $priority[optional]
+     * @param string $loc - absolute url
+     * @param \DateTime $lastmod
+     * @param string $changefreq
+     * @param float $priority
      */
-    public function __construct($location, \DateTime $lastModificationDate = null, $changeFrequency = null, $priority = null)
+    public function __construct($loc, \DateTime $lastmod = null, $changefreq = null, $priority = null)
     {
-        // use a callback for the location as $location can be an array of parameters
-        $this->setLocation($location);
-        $this->setLastModificationDate($lastModificationDate);
-        $this->setChangeFrequency($changeFrequency);
+        $this->setLoc($loc);
+        $this->setLastmod($lastmod);
+        $this->setChangefreq($changefreq);
         $this->setPriority($priority);
     }
 
     /**
-     * Define the location base on url_for method
-     * 
-     * @author  Christophe Dolivet
-     * @since   1.0 - 15 juil. 2009 - Christophe Dolivet
-     * @version 1.0 - 15 juil. 2009 - Christophe Dolivet
-     * @param String $internal_uri
-     * @return Url
+     * @param string $loc
      */
-    public function setLocation($location)
+    public function setLoc($loc)
     {
-        $this->location = $location;
-        return $this;
+        $this->loc = $loc;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getLoc()
+    {
+        return $this->loc;
     }
 
     /**
-     * return the location
-     * 
-     * @author  Christophe Dolivet
-     * @since   1.0 - 15 juil. 2009 - Christophe Dolivet
-     * @version 1.0 - 15 juil. 2009 - Christophe Dolivet
-     * @return String
+     * @param \DateTime $lastmod 
      */
-    public function getLocation()
+    public function setLastmod(\DateTime $lastmod = null)
     {
-        return $this->location;
+        $this->lastmod = $lastmod;
     }
-
+    
     /**
-     * Define the last modificaiton date of this entry
-     * 
-     * Produce ISO 8601 date string (valid W3C Datetime format)
-     * 
-     * @author  Christophe Dolivet
-     * @since   1.0 - 15 juil. 2009 - Christophe Dolivet
-     * @version 1.0 - 15 juil. 2009 - Christophe Dolivet
-     * @param DateTime $lastModificationDate - DateTime object or null used for defining the last modification date of this entry
-     * @return Url
+     * @return \DateTime
      */
-    public function setLastModificationDate(\DateTime $lastModificationDate = null)
+    public function getLastmod()
     {
-        $this->lastModificationDate = $lastModificationDate;
-        return $this;
-    }
-
-    /**
-     * return the last modification date
-     * 
-     * @author  Christophe Dolivet
-     * @since   1.0 - 15 juil. 2009 - Christophe Dolivet
-     * @version 1.0 - 15 juil. 2009 - Christophe Dolivet
-     * @return String
-     */
-    public function getLastModificationDate()
-    {
-        return $this->lastModificationDate;
+        return $this->lastmod;
     }
 
     /**
      * Define the change frequency of this entry
      * 
-     * @author  Christophe Dolivet
-     * @since   1.0 - 15 juil. 2009 - Christophe Dolivet
-     * @version 1.0 - 15 juil. 2009 - Christophe Dolivet
-     * @param String $changeFrequency - String or null value used for defining the change frequency
-     * @return Url
+     * @param string $changefreq - String or null value used for defining the change frequency
      */
-    public function setChangeFrequency($changeFrequency)
+    public function setChangefreq($changefreq = null)
     {
-        // move this in the "builder"
-        switch ($changeFrequency) {
-            case self::CHANGE_FREQUENCY_ALWAYS:
-            case self::CHANGE_FREQUENCY_HOURLY:
-            case self::CHANGE_FREQUENCY_DAILY:
-            case self::CHANGE_FREQUENCY_WEEKLY:
-            case self::CHANGE_FREQUENCY_MONTHLY:
-            case self::CHANGE_FREQUENCY_YEARLY:
-            case self::CHANGE_FREQUENCY_NEVER:
-                $this->changeFrequency = $changeFrequency;
-                break;
-            default:
-                null;
+        if(!in_array($changefreq, array(
+            self::CHANGEFREQ_ALWAYS,
+            self::CHANGEFREQ_HOURLY,
+            self::CHANGEFREQ_DAILY,
+            self::CHANGEFREQ_WEEKLY,
+            self::CHANGEFREQ_MONTHLY,
+            self::CHANGEFREQ_YEARLY,
+            self::CHANGEFREQ_NEVER,
+            null,
+        ))) {
+            throw new \RuntimeException(sprintf('The value "%s" is not supported by the option changefreq. See http://www.sitemaps.org/protocol.html#xmlTagDefinitions', $changefreq));
         }
-
-        return $this;
+        
+        $this->changefreq = $changefreq;
     }
 
     /**
      * return the change frequency
      * 
-     * @author  Christophe Dolivet
-     * @since   1.0 - 15 juil. 2009 - Christophe Dolivet
-     * @version 1.0 - 15 juil. 2009 - Christophe Dolivet
-     * @return String
+     * @return string
      */
-    public function getChangeFrequency()
+    public function getChangefreq()
     {
-        return $this->changeFrequency;
+        return $this->changefreq;
     }
 
     /**
      * Define the priority of this entry
      * 
-     * @author  Christophe Dolivet
-     * @since   1.0 - 15 juil. 2009 - Christophe Dolivet
-     * @version 1.0 - 15 juil. 2009 - Christophe Dolivet
-     * @param Float $priority - Float or null value used for defining the priority
-     * @return Url
+     * @param float $priority - Float or null value used for defining the priority
      */
     public function setPriority($priority)
     {
-        // TODO: move this in the "builder"
         if (!is_null($priority) && is_numeric($priority) && $priority >= 0 && $priority <= 1) {
             $this->priority = sprintf('%01.1f', $priority);
         } else {
-            // TODO: loguer qu'il y a eu une erreur?
-            $this->priority = null;
+            throw new \RuntimeException(sprintf('The value "%s" is not supported by the option priority, it must be a numeric between 0.0 and 1.0. See http://www.sitemaps.org/protocol.html#xmlTagDefinitions', $priority));
         }
-        return $this;
     }
 
     /**
-     * return the priority
-     * 
-     * @author  Christophe Dolivet
-     * @since   1.0 - 15 juil. 2009 - Christophe Dolivet
-     * @version 1.0 - 15 juil. 2009 - Christophe Dolivet
-     * @return String
+     * @return string
      */
     public function getPriority()
     {
         return $this->priority;
     }
     
-    
+    /**
+     * @return string 
+     */
     public function toXml()
     {
-        $xml = '<url><loc>' . $this->getLocation() . '</loc>';
+        $xml = '<url><loc>' . $this->getLoc() . '</loc>';
         
-        if ($this->getLastModificationDate()) {
-            $xml .= '<lastmod>' . $this->getLastModificationDate()->format('c') . '</lastmod>';
+        if ($this->getLastmod()) {
+            $xml .= '<lastmod>' . $this->getLastmod()->format('c') . '</lastmod>';
         }
         
-        if ($this->getChangeFrequency()) {
-            $xml .= '<changefreq>' . $this->getChangeFrequency() . '</changefreq>';
+        if ($this->getChangefreq()) {
+            $xml .= '<changefreq>' . $this->getChangefreq() . '</changefreq>';
         }
         
         if ($this->getPriority()) {
@@ -199,90 +148,5 @@ class UrlConcrete implements Url
         $xml .= '</url>';
         
         return $xml;
-    }
-    
-    
-    
-    
-    
-
-    /**
-     * add a UrlImage to the current Url
-     * 
-     * @author	Alain Flaus <aflaus@prestaconcept.net>
-     * @version	1.0 - 5 oct. 2010 - Alain Flaus <aflaus@prestaconcept.net>
-     * @since	5 oct. 2010 - Alain Flaus <aflaus@prestaconcept.net>
-     * @param 	UrlImage $UrlImage
-     * @return 	Url
-     */
-    public function addImage(Url\Image $image)
-    {
-        $this->images[] = $image;
-        return $this;
-    }
-
-    /**
-     * Delete images with an empty location
-     * 
-     * @author	Alain Flaus <aflaus@prestaconcept.net>
-     * @version	1.0 - 5 oct. 2010 - Alain Flaus <aflaus@prestaconcept.net>
-     * @since	5 oct. 2010 - Alain Flaus <aflaus@prestaconcept.net>
-     * @param 	$index
-     * @return 	Url
-     */
-    public function validate()
-    {
-        // remove invalid images
-        foreach ($this->images as $key => $image) {
-            if ($image->validate() === false) {
-                unset($this->images[$key]);
-                unset($image);
-            }
-        }
-
-        $location = $this->getLocation();
-        $isValid = !empty($location);
-        return $isValid;
-    }
-
-    /**
-     * return the sitemapUrlImages associated to the current sitemapUrl
-     * 
-     * @author	Alain Flaus <aflaus@prestaconcept.net>
-     * @version	1.0 - 5 oct. 2010 - Alain Flaus <aflaus@prestaconcept.net>
-     * @since	5 oct. 2010 - Alain Flaus <aflaus@prestaconcept.net>
-     * @return 	array of UrlImages
-     */
-    public function getImages()
-    {
-        return $this->images;
-    }
-
-    /**
-     * set if it's an url for mobile access
-     * 
-     * @author	Matthieu Crinquand <mcrinquand@prestaconcept.net>
-     * @version	1.0 - 12 juil. 2011 - Matthieu Crinquand <mcrinquand@prestaconcept.net>
-     * @since	12 juil. 2011 - Matthieu Crinquand <mcrinquand@prestaconcept.net>
-     * @param 	boolean $mobile
-     * @return  Url
-     */
-    public function setMobile($mobile)
-    {
-        $this->isMobile = $mobile;
-        return $this;
-    }
-
-    /**
-     * get if it's an url for mobile access
-     * 
-     * @author	Matthieu Crinquand <mcrinquand@prestaconcept.net>
-     * @version	1.0 - 12 juil. 2011 - Matthieu Crinquand <mcrinquand@prestaconcept.net>
-     * @since	12 juil. 2011 - Matthieu Crinquand <mcrinquand@prestaconcept.net>
-     * @param 	boolean 
-     */
-    public function isMobile()
-    {
-        return $this->isMobile;
     }
 }

@@ -5,24 +5,23 @@ namespace Presta\SitemapBundle\Service;
 use Doctrine\Common\Cache\Cache;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap;
-//use Presta\SitemapBundle\SitemapEvents;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpKernel\Debug\ContainerAwareTraceableEventDispatcher;
 
+/**
+ * Sitemap Manager service
+ * 
+ * @author David Epely <depely@prestaconcept.net>
+ * @author Christophe Dolivet
+ */
 class Generator
 {
-	/**
-	 * Event dispatcher
-	 * @var EventDispatcher
-	 */
 	protected $dispatcher;
-    
     protected $router;
-	
     protected $cache;
     
     /**
-     * @var mixed Sitemapindex or Urlset 
+     * @var Sitemapindex
      */
     protected $root;
     
@@ -31,6 +30,11 @@ class Generator
      */
     protected $urlsets = array();
 
+    /**
+     * @param ContainerAwareTraceableEventDispatcher $dispatcher
+     * @param Router $router
+     * @param Cache $cache 
+     */
     public function __construct(ContainerAwareTraceableEventDispatcher $dispatcher, Router $router, Cache $cache = null)
 	{
         $this->dispatcher   = $dispatcher;
@@ -40,7 +44,9 @@ class Generator
     
 	
 	/**
-	 * Generate all datas
+	 * Generate all datas and store in cache if it is possible
+     * 
+     * @return void
 	 */
 	public function generate()
 	{
@@ -53,6 +59,7 @@ class Generator
         //---------------------
         // cache management
         if ($this->cache) {
+            //FIXME lifetime must be configurable
             $lifeTime = 3600;
             $this->cache->save('root', serialize($this->root), $lifeTime);
             
@@ -113,6 +120,7 @@ class Generator
         
         if($urlset->isFull())
         {
+            //TODO: recursive sitemap index
             throw new \RuntimeException('The limit of sitemapindex has been exceeded');
         }
         
@@ -129,7 +137,7 @@ class Generator
     public function getUrlset($name)
     {
         if (!isset($this->urlsets[$name])) {
-            $this->urlsets[$name] = new Sitemap\Urlset($this->router->generate('PrestaSitemapBundle_sitemap', array('name' => $name, '_format' => 'xml'), true));
+            $this->urlsets[$name] = new Sitemap\Urlset($this->router->generate('PrestaSitemapBundle_section', array('name' => $name, '_format' => 'xml'), true));
             
             if (!$this->root) {
                 $this->root = new Sitemap\Sitemapindex();

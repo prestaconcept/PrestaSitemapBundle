@@ -5,7 +5,9 @@ namespace Presta\SitemapBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
-
+/**
+ * @author David Epely <depely@prestaconcept.net> 
+ */
 class SitemapController extends Controller
 {
     /**
@@ -38,9 +40,8 @@ class SitemapController extends Controller
      * @param string
      * @return Response
      */
-    public function sectionAction($name, $_format)
+    public function sectionAction($name)
     {
-        
         $section   = $this->get('presta_sitemap.generator')->fetch($name);
         
         if(!$section) {

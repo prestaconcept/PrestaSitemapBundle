@@ -2,8 +2,6 @@
 
 namespace Presta\SitemapBundle\Sitemap;
 
-use Presta\SitemapBundle\Sitemap\UrlInterface;
-
 /**
  * Description of Urlset
  *
@@ -17,42 +15,40 @@ class Urlset extends XmlConstraint
     protected $lastmod;
     
     protected $urlsXml = '';
-
     protected $customNamespaces = array();
     
-    public function __construct($loc)
+    /**
+     * @param string $loc 
+     */
+    public function __construct($loc, \DateTime $lastmod = null)
     {
-        $this->loc = $loc;
-        $this->lastmod = new \DateTime;
+        $this->loc      = $loc;
+        $this->lastmod  = ($lastmod) ? $lastmod : new \DateTime;
     }
     
+    /**
+     * @return string 
+     */
     public function getLoc()
     {
         return $this->loc;
     }
     
+    /**
+     * @return \DateTime 
+     */
     public function getLastmod()
     {
         return $this->lastmod;
     }
 
 
-//    public function getUrls()
-//    {
-//        return $this->urls;
-//    }
-//    
-//    public function setUrls(array $urls)
-//    {
-//        $this->urls = $urls;
-//    }
-    
-    
     /**
      * add url to pool and check limits
      * 
      * @param Url\Url $url
      * @throws \RuntimeException 
+     * @return void
      */
     public function addUrl(Url\Url $url)
     {
@@ -84,7 +80,8 @@ class Urlset extends XmlConstraint
     
     /**
      * get the xml structure of the current urlset 
-     * @return type 
+     * 
+     * @return string 
      */
     protected function getStructureXml()
     {
@@ -101,7 +98,9 @@ class Urlset extends XmlConstraint
         return $struct;
     }
     
-    
+    /**
+     * @see parent::toXml()
+     */
     public function toXml() 
     {
         return str_replace('URLS', $this->urlsXml, $this->getStructureXml());

@@ -1,0 +1,66 @@
+<?php 
+
+namespace Presta\SitemapBundle\Test\Sitemap;
+
+use Presta\SitemapBundle\Sitemap;
+
+/**
+ * Manage sitemaps listing
+ * 
+ * @author  David Epely
+ */
+class SitemapindexTest extends \PHPUnit_Framework_TestCase
+{
+    public function testAddSitemap()
+    {
+        $sitemapindex = new Sitemap\Sitemapindex();
+        
+        try {
+            $sitemapindex->addSitemap(new Sitemap\Urlset('http://acme.com'));
+        } catch (\RuntimeException $e) {
+            $this->fail('An exception must not be thrown');
+        }
+    }
+    
+    
+    public function testGetSitemapXml()
+    {
+        $today          = new \DateTime;
+        $loc            = 'http://acme.com/';
+        $sitemapindex   = new Sitemap\Sitemapindex();
+        
+        $getSitemapXmlMethod = self::getMethod($sitemapindex, 'getSitemapXml');
+        
+        $this->assertXmlStringEqualsXmlString(
+                '<sitemap><loc>' . $loc . '</loc><lastmod>' . $today->format('c') . '</lastmod></sitemap>',
+                $getSitemapXmlMethod->invoke($sitemapindex, new Sitemap\Urlset($loc, $today)),
+                '->getSitemapXml() render xml'
+                );
+    }
+    
+    public function testToXml()
+    {
+        $sitemapindex   = new Sitemap\Sitemapindex();
+        $xml = $sitemapindex->toXml();
+        $this->assertXmlStringEqualsXmlString(
+            '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>',
+            $xml
+        );
+    }
+    
+    /**
+     * get accessible method that was private or protected
+     *
+     * @param mixed $obj - classname or instance
+     * @param type $name
+     * @return \ReflectionMethod 
+     */
+    protected static function getMethod($obj, $name) 
+    {
+        $method = new \ReflectionMethod($obj, $name);
+        $method->setAccessible(true);
+        return $method;
+    }
+
+    
+}

@@ -39,11 +39,6 @@ class Sitemapindex extends XmlConstraint
         //---------------------
     }
     
-    public function getUrlsets()
-    {
-        return $this->urlsets;
-    }
-    
     protected function getSitemapXml(Urlset $urlset)
     {
         return '<sitemap><loc>' . $urlset->getLoc() 
