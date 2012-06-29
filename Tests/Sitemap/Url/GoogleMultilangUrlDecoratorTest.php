@@ -1,0 +1,25 @@
+<?php 
+
+namespace Presta\SitemapBundle\Test\Sitemap\Url;
+
+use Presta\SitemapBundle\Sitemap;
+
+/**
+ * @author  David Epely
+ */
+class GoogleMultilangUrlDecoratorTest extends \PHPUnit_Framework_TestCase
+{
+    public function testAddLink()
+    {
+        $url = new Sitemap\Url\GoogleMultilangUrlDecorator(new Sitemap\Url\UrlConcrete('http://acme.com'));
+        
+        $url->addLink('http://fr.acme.com/', 'fr');
+        
+        $xml = $url->toXml();
+        
+        $this->assertTrue(
+            '<url><loc>http://acme.com</loc><xhtml:link rel="alternate" hreflang="fr" href="http://fr.acme.com/" /></url>' ==
+            $xml
+        );
+    }
+}
