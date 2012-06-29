@@ -109,9 +109,13 @@ class UrlConcrete implements Url
      * 
      * @param float $priority - Float or null value used for defining the priority
      */
-    public function setPriority($priority)
+    public function setPriority($priority = null)
     {
-        if (!is_null($priority) && is_numeric($priority) && $priority >= 0 && $priority <= 1) {
+        if( !$priority ) {
+            return;
+        }
+        
+        if ($priority && is_numeric($priority) && $priority >= 0 && $priority <= 1) {
             $this->priority = sprintf('%01.1f', $priority);
         } else {
             throw new \RuntimeException(sprintf('The value "%s" is not supported by the option priority, it must be a numeric between 0.0 and 1.0. See http://www.sitemaps.org/protocol.html#xmlTagDefinitions', $priority));
@@ -148,5 +152,14 @@ class UrlConcrete implements Url
         $xml .= '</url>';
         
         return $xml;
+    }
+    
+    /**
+     * basic url has no namespace. see decorated urls
+     * @return array 
+     */
+    public function getCustomNamespaces()
+    {
+        return array();
     }
 }

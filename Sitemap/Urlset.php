@@ -59,6 +59,9 @@ class Urlset extends XmlConstraint
         $urlXml = $url->toXml();
         $this->urlsXml .= $urlXml;
         
+        //add unknown custom namespaces
+        $this->customNamespaces = array_merge($this->customNamespaces, $url->getCustomNamespaces());
+        
         //---------------------
         //Check limits 
         if ($this->countItems++ >= self::LIMIT_ITEMS) {
