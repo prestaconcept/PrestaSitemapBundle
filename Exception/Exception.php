@@ -1,5 +1,5 @@
 <?php
-
+namespace Presta\SitemapBundle\Exception;
 /**
  * Base Exception for Sitemap
  *

@@ -117,9 +117,6 @@ class GoogleImage
     /**
      * Return the xml content of this object
      * 
-     * @author	Alain Flaus <aflaus@prestaconcept.net>
-     * @version	1.0 - 5 oct. 2010 - Alain Flaus <aflaus@prestaconcept.net>
-     * @since	5 oct. 2010 - Alain Flaus <aflaus@prestaconcept.net>
      * @return 	String
      */
     public function toXML()
