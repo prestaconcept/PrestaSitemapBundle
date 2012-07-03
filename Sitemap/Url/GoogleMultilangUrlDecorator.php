@@ -1,4 +1,13 @@
 <?php
+
+/*
+ * This file is part of the prestaSitemapPlugin package.
+ * (c) David Epely <depely@prestaconcept.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Presta\SitemapBundle\Sitemap\Url;
 
 use Presta\SitemapBundle\Exception;
@@ -12,10 +21,10 @@ use Presta\SitemapBundle\Exception;
 class GoogleMultilangUrlDecorator extends UrlDecorator
 {
     const REL_ALTERNATE = 'alternate';
-    
+
     protected $customNamespaces = array('xhtml' => 'http://www.w3.org/1999/xhtml');
     protected $linkXml = '';
-    
+
     /**
      * add an alternative language to the url
      * 
@@ -27,7 +36,7 @@ class GoogleMultilangUrlDecorator extends UrlDecorator
     {
         $this->linkXml .= $this->generateLinkXml($href, $hreflang, $rel);
     }
-    
+
     /**
      * @param string $href
      * @param string $hreflang
@@ -39,14 +48,13 @@ class GoogleMultilangUrlDecorator extends UrlDecorator
         if (null == $rel) {
             $rel = self::REL_ALTERNATE;
         }
-        
-        $xml = '<xhtml:link rel="' . $rel 
-                . '" hreflang="' . $hreflang 
+
+        $xml = '<xhtml:link rel="' . $rel
+                . '" hreflang="' . $hreflang
                 . '" href="' . $href . '" />';
-        
+
         return $xml;
     }
-
 
     /**
      * add link elements before the closing tag

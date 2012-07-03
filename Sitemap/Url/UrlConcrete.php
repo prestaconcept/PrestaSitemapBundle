@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the prestaSitemapPlugin package.
+ * (c) David Epely <depely@prestaconcept.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Presta\SitemapBundle\Sitemap\Url;
 
 /**
@@ -10,18 +18,18 @@ namespace Presta\SitemapBundle\Sitemap\Url;
  */
 class UrlConcrete implements Url
 {
-    const CHANGEFREQ_ALWAYS   = 'always';
-    const CHANGEFREQ_HOURLY   = 'hourly';
-    const CHANGEFREQ_DAILY    = 'daily';
-    const CHANGEFREQ_WEEKLY   = 'weekly';
-    const CHANGEFREQ_MONTHLY  = 'monthly';
-    const CHANGEFREQ_YEARLY   = 'yearly';
-    const CHANGEFREQ_NEVER    = 'never';
+    const CHANGEFREQ_ALWAYS = 'always';
+    const CHANGEFREQ_HOURLY = 'hourly';
+    const CHANGEFREQ_DAILY = 'daily';
+    const CHANGEFREQ_WEEKLY = 'weekly';
+    const CHANGEFREQ_MONTHLY = 'monthly';
+    const CHANGEFREQ_YEARLY = 'yearly';
+    const CHANGEFREQ_NEVER = 'never';
 
-    protected $loc;                
-    protected $lastmod;    
-    protected $changefreq; 
-    protected $priority; 
+    protected $loc;
+    protected $lastmod;
+    protected $changefreq;
+    protected $priority;
 
     /**
      * Construct a new basic url
@@ -46,7 +54,7 @@ class UrlConcrete implements Url
     {
         $this->loc = $loc;
     }
-    
+
     /**
      * @return string
      */
@@ -62,7 +70,7 @@ class UrlConcrete implements Url
     {
         $this->lastmod = $lastmod;
     }
-    
+
     /**
      * @return \DateTime
      */
@@ -78,19 +86,19 @@ class UrlConcrete implements Url
      */
     public function setChangefreq($changefreq = null)
     {
-        if(!in_array($changefreq, array(
-            self::CHANGEFREQ_ALWAYS,
-            self::CHANGEFREQ_HOURLY,
-            self::CHANGEFREQ_DAILY,
-            self::CHANGEFREQ_WEEKLY,
-            self::CHANGEFREQ_MONTHLY,
-            self::CHANGEFREQ_YEARLY,
-            self::CHANGEFREQ_NEVER,
-            null,
-        ))) {
+        if (!in_array($changefreq, array(
+                    self::CHANGEFREQ_ALWAYS,
+                    self::CHANGEFREQ_HOURLY,
+                    self::CHANGEFREQ_DAILY,
+                    self::CHANGEFREQ_WEEKLY,
+                    self::CHANGEFREQ_MONTHLY,
+                    self::CHANGEFREQ_YEARLY,
+                    self::CHANGEFREQ_NEVER,
+                    null,
+                ))) {
             throw new \RuntimeException(sprintf('The value "%s" is not supported by the option changefreq. See http://www.sitemaps.org/protocol.html#xmlTagDefinitions', $changefreq));
         }
-        
+
         $this->changefreq = $changefreq;
     }
 
@@ -111,10 +119,10 @@ class UrlConcrete implements Url
      */
     public function setPriority($priority = null)
     {
-        if( !$priority ) {
+        if (!$priority) {
             return;
         }
-        
+
         if ($priority && is_numeric($priority) && $priority >= 0 && $priority <= 1) {
             $this->priority = sprintf('%01.1f', $priority);
         } else {
@@ -129,31 +137,31 @@ class UrlConcrete implements Url
     {
         return $this->priority;
     }
-    
+
     /**
      * @return string 
      */
     public function toXml()
     {
         $xml = '<url><loc>' . $this->getLoc() . '</loc>';
-        
+
         if ($this->getLastmod()) {
             $xml .= '<lastmod>' . $this->getLastmod()->format('c') . '</lastmod>';
         }
-        
+
         if ($this->getChangefreq()) {
             $xml .= '<changefreq>' . $this->getChangefreq() . '</changefreq>';
         }
-        
+
         if ($this->getPriority()) {
             $xml .= '<priority>' . $this->getPriority() . '</priority>';
         }
-        
+
         $xml .= '</url>';
-        
+
         return $xml;
     }
-    
+
     /**
      * basic url has no namespace. see decorated urls
      * @return array 

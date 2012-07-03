@@ -1,15 +1,26 @@
 <?php
 
+/*
+ * This file is part of the prestaSitemapPlugin package.
+ * (c) David Epely <depely@prestaconcept.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Presta\SitemapBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * Provides action to render sitemap files
+ * 
  * @author David Epely <depely@prestaconcept.net> 
  */
 class SitemapController extends Controller
 {
+
     /**
      * list sitemaps
      * 
@@ -21,19 +32,18 @@ class SitemapController extends Controller
      */
     public function indexAction()
     {
-        $sitemapindex   = $this->get('presta_sitemap.generator')->fetch('root');
-        
-        if(!$sitemapindex) {
+        $sitemapindex = $this->get('presta_sitemap.generator')->fetch('root');
+
+        if (!$sitemapindex) {
             throw $this->createNotFoundException();
         }
-        
-        $response       = Response::create($sitemapindex->toXml());
+
+        $response = Response::create($sitemapindex->toXml());
         //TODO: set http cache
-        
+
         return $response;
     }
-    
-    
+
     /**
      * list urls of a section
      * 
@@ -42,15 +52,15 @@ class SitemapController extends Controller
      */
     public function sectionAction($name)
     {
-        $section   = $this->get('presta_sitemap.generator')->fetch($name);
-        
-        if(!$section) {
+        $section = $this->get('presta_sitemap.generator')->fetch($name);
+
+        if (!$section) {
             throw $this->createNotFoundException();
         }
-        
-        $response  = Response::create($section->toXml());
+
+        $response = Response::create($section->toXml());
         //TODO: set http cache
-        
+
         return $response;
     }
 }

@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the prestaSitemapPlugin package.
+ * (c) David Epely <depely@prestaconcept.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Presta\SitemapBundle\Service;
 
 use Doctrine\Common\Cache\Cache;
@@ -16,15 +24,15 @@ use Symfony\Component\HttpKernel\Debug\ContainerAwareTraceableEventDispatcher;
  */
 class Generator
 {
-	protected $dispatcher;
+    protected $dispatcher;
     protected $router;
     protected $cache;
-    
+
     /**
      * @var Sitemapindex
      */
     protected $root;
-    
+
     /**
      * @var array
      */
@@ -36,41 +44,38 @@ class Generator
      * @param Cache $cache 
      */
     public function __construct(ContainerAwareTraceableEventDispatcher $dispatcher, Router $router, Cache $cache = null)
-	{
-        $this->dispatcher   = $dispatcher;
-        $this->router       = $router;
-        $this->cache        = $cache;
-	}
-    
-	
-	/**
-	 * Generate all datas and store in cache if it is possible
+    {
+        $this->dispatcher = $dispatcher;
+        $this->router = $router;
+        $this->cache = $cache;
+    }
+
+    /**
+     * Generate all datas and store in cache if it is possible
      * 
      * @return void
-	 */
-	public function generate()
-	{
+     */
+    public function generate()
+    {
         //---------------------
         // Populate
         $event = new SitemapPopulateEvent($this);
         $this->dispatcher->dispatch(SitemapPopulateEvent::onSitemapPopulate, $event);
         //---------------------
-        
         //---------------------
         // cache management
         if ($this->cache) {
             //FIXME lifetime must be configurable
             $lifeTime = 3600;
             $this->cache->save('root', serialize($this->root), $lifeTime);
-            
+
             foreach ($this->urlsets as $name => $urlset) {
                 $this->cache->save($name, serialize($urlset), $lifeTime);
             }
         }
         //---------------------
-	}
-    
-    
+    }
+
     /**
      * Get eventual cached data or generate whole sitemap
      * 
@@ -79,24 +84,23 @@ class Generator
      */
     public function fetch($name)
     {
-        if($this->cache && $this->cache->contains($name)) {
+        if ($this->cache && $this->cache->contains($name)) {
             return unserialize($this->cache->fetch($name));
         }
-        
+
         $this->generate();
-        
-        if( 'root' == $name) {
+
+        if ('root' == $name) {
             return $this->root;
         }
-        
+
         if (array_key_exists($name, $this->urlsets)) {
             return $this->urlsets[$name];
         }
-        
+
         return null;
     }
-	
-	
+
     /**
      * add an Url to an Urlset
      * 
@@ -110,24 +114,22 @@ class Generator
     public function addUrl(Sitemap\Url\Url $url, $section)
     {
         $urlset = $this->getUrlset($section);
-        
+
         //maximum 50k sitemap in sitemapindex
         $i = 0;
         while ($urlset->isFull() && $i <= Sitemap\Sitemapindex::LIMIT_ITEMS) {
             $urlset = $this->getUrlset($section . '_' . $i);
             $i++;
         }
-        
-        if($urlset->isFull())
-        {
+
+        if ($urlset->isFull()) {
             //TODO: recursive sitemap index
             throw new \RuntimeException('The limit of sitemapindex has been exceeded');
         }
-        
+
         $urlset->addUrl($url);
     }
-    
-    
+
     /**
      * get or create urlset
      * 
@@ -138,14 +140,14 @@ class Generator
     {
         if (!isset($this->urlsets[$name])) {
             $this->urlsets[$name] = new Sitemap\Urlset($this->router->generate('PrestaSitemapBundle_section', array('name' => $name, '_format' => 'xml'), true));
-            
+
             if (!$this->root) {
                 $this->root = new Sitemap\Sitemapindex();
             }
-            
+
             $this->root->addSitemap($this->urlsets[$name]);
         }
-        
+
         return $this->urlsets[$name];
     }
 }

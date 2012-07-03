@@ -1,11 +1,19 @@
 <?php
 
+/*
+ * This file is part of the prestaSitemapPlugin package.
+ * (c) David Epely <depely@prestaconcept.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Presta\SitemapBundle\Sitemap\Url;
 
 /**
- * Class used for managing image's url entites
+ * Class used for managing image's url entities
  * 
- * @author David Epely
+ * @author David Epely <depely@prestaconcept.net>
  * @author Alain Flaus <aflaus@prestaconcept.net>
  */
 class GoogleImage
@@ -43,7 +51,7 @@ class GoogleImage
     }
 
     /**
-     * @return 	String
+     * @return 	string
      */
     public function getLoc()
     {
@@ -51,7 +59,7 @@ class GoogleImage
     }
 
     /**
-     * @param 	String $caption
+     * @param 	string $caption
      */
     public function setCaption($caption)
     {
@@ -59,7 +67,7 @@ class GoogleImage
     }
 
     /**
-     * @return 	String
+     * @return 	string
      */
     public function getCaption()
     {
@@ -67,7 +75,7 @@ class GoogleImage
     }
 
     /**
-     * @param 	String $caption
+     * @param 	string $caption
      */
     public function setGeoLocation($geo_location)
     {
@@ -75,7 +83,7 @@ class GoogleImage
     }
 
     /**
-     * @return 	String
+     * @return 	string
      */
     public function getGeoLocation()
     {
@@ -83,7 +91,7 @@ class GoogleImage
     }
 
     /**
-     * @param 	String $title
+     * @param 	string $title
      */
     public function setTitle($title)
     {
@@ -91,7 +99,7 @@ class GoogleImage
     }
 
     /**
-     * @return 	String
+     * @return 	string
      */
     public function getTitle()
     {
@@ -99,7 +107,7 @@ class GoogleImage
     }
 
     /**
-     * @param 	String $license
+     * @param 	string $license
      */
     public function setLicense($license)
     {
@@ -107,7 +115,7 @@ class GoogleImage
     }
 
     /**
-     * @return 	String
+     * @return 	string
      */
     public function getLicense()
     {
@@ -115,32 +123,32 @@ class GoogleImage
     }
 
     /**
-     * Return the xml content of this object
+     * Return the xml representation for the image
      * 
-     * @return 	String
+     * @return 	string
      */
     public function toXML()
     {
         $xml = '<image:image><image:loc>' . $this->getLoc() . '</image:loc>';
-        
+
         if ($this->getCaption()) {
             $xml .= '<image:caption>' . $this->getCaption() . '</image:caption>';
         }
-        
+
         if ($this->getGeoLocation()) {
             $xml .= '<image:geo_location>' . $this->getGeoLocation() . '</image:geo_location>';
         }
-        
+
         if ($this->getTitle()) {
             $xml .= '<image:title>' . $this->getTitle() . '</image:title>';
         }
-        
+
         if ($this->getLicense()) {
             $xml .= '<image:license>' . $this->getLicense() . '</image:license>';
         }
-        
+
         $xml .= '</image:image>';
-                
+
         return $xml;
     }
 }

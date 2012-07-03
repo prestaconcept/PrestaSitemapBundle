@@ -1,4 +1,13 @@
 <?php
+
+/*
+ * This file is part of the prestaSitemapPlugin package.
+ * (c) David Epely <depely@prestaconcept.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Presta\SitemapBundle\Sitemap\Url;
 
 use Presta\SitemapBundle\Exception;
@@ -12,44 +21,41 @@ use Presta\SitemapBundle\Exception;
  */
 class GoogleVideoUrlDecorator extends UrlDecorator
 {
-    const PLAYER_LOC_ALLOW_EMBED_YES    = 'yes';
-    const PLAYER_LOC_ALLOW_EMBED_NO     = 'no';
-    const FAMILY_FRIENDLY_YES   = 'yes';
-    const FAMILY_FRIENDLY_NO    = 'no';
-    const RELATIONSHIP_ALLOW    = 'allow';
-    const RELATIONSHIP_DENY     = 'deny';
-    const PRICE_TYPE_RENT       = 'rent';
-    const PRICE_TYPE_OWN        = 'own';
-    const PRICE_RESOLUTION_HD   = 'HD';
-    const PRICE_RESOLUTION_SD   = 'SD';
+    const PLAYER_LOC_ALLOW_EMBED_YES = 'yes';
+    const PLAYER_LOC_ALLOW_EMBED_NO = 'no';
+    const FAMILY_FRIENDLY_YES = 'yes';
+    const FAMILY_FRIENDLY_NO = 'no';
+    const RELATIONSHIP_ALLOW = 'allow';
+    const RELATIONSHIP_DENY = 'deny';
+    const PRICE_TYPE_RENT = 'rent';
+    const PRICE_TYPE_OWN = 'own';
+    const PRICE_RESOLUTION_HD = 'HD';
+    const PRICE_RESOLUTION_SD = 'SD';
     const REQUIRES_SUBSCRIPTION_YES = 'yes';
-    const REQUIRES_SUBSCRIPTION_NO  = 'no';
-    const PLATFORM_WEB          = 'web';
-    const PLATFORM_MOBILE       = 'mobile';
-    const PLATFORM_TV           = 'tv';
-    const PLATFORM_RELATIONSHIP_ALLOW   = 'allow';
-    const PLATFORM_RELATIONSHIP_DENY    = 'deny';
-    const LIVE_YES  = 'yes';
-    const LIVE_NO   = 'no';
-    
+    const REQUIRES_SUBSCRIPTION_NO = 'no';
+    const PLATFORM_WEB = 'web';
+    const PLATFORM_MOBILE = 'mobile';
+    const PLATFORM_TV = 'tv';
+    const PLATFORM_RELATIONSHIP_ALLOW = 'allow';
+    const PLATFORM_RELATIONSHIP_DENY = 'deny';
+    const LIVE_YES = 'yes';
+    const LIVE_NO = 'no';
     const TAG_ITEMS_LIMIT = 32;
-    
+
     protected $customNamespaces = array('video' => 'http://www.google.com/schemas/sitemap-video/1.1');
-    
     protected $thumbnail_loc;
     protected $title;
     protected $description;
-    
     //list of optional parameters 
     protected $content_loc;
     protected $player_loc;
-    
+
     /**
      * allow google to embed video in search results
      * @var string
      */
     protected $player_loc_allow_embed;
-    
+
     /**
      * user defined string for flashvar parameters in embed tag (e.g. autoplay="ap=1")
      * @var string
@@ -63,7 +69,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     protected $family_friendly;
     protected $category;
     protected $restriction_allow = array();
-    protected $restriction_deny  = array();
+    protected $restriction_deny = array();
     protected $gallery_loc;
     protected $gallery_loc_title;
     protected $requires_subscription;
@@ -72,13 +78,11 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     protected $platforms = array();
     protected $platform_relationship;
     protected $live;
-    
     //multiple prices can be added, see self::addPrice()
-    protected $prices   = array();
+    protected $prices = array();
     //multiple tags can be added, see self::addTag()
-    protected $tags     = array();
-            
-    
+    protected $tags = array();
+
     /**
      * Decorate url with a video
      * 
@@ -90,67 +94,63 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * @throws Exception\GoogleVideoUrlException 
      */
     public function __construct(
-        Url $urlDecorated,
-        $thumnail_loc, 
-        $title, 
-        $description, 
-        array $parameters = array())
+    Url $urlDecorated, $thumnail_loc, $title, $description, array $parameters = array())
     {
         foreach ($parameters as $key => $param) {
             $method = $this->getSetMethod($key);
             $this->$method($param);
         }
-        
+
         $this->setThumbnailLoc($thumnail_loc);
         $this->setTitle($title);
         $this->setDescription($description);
-        
-        if(!$this->content_loc && !$this->player_loc) {
+
+        if (!$this->content_loc && !$this->player_loc) {
             throw new Exception\GoogleVideoUrlException('The parameter content_loc or player_loc is required');
         }
-        
-        if(count($this->platforms) && !$this->platform_relationship) {
+
+        if (count($this->platforms) && !$this->platform_relationship) {
             throw new Exception\GoogleVideoUrlException('The parameter platform_relationship is required when platform is set');
         }
-        
+
         parent::__construct($urlDecorated);
     }
-    
+
     public function setThumbnailLoc($thumbnail_loc)
     {
         $this->thumbnail_loc = $thumbnail_loc;
     }
-    
+
     public function getThumbnailLoc()
     {
         return $this->thumbnail_loc;
     }
-    
+
     public function setTitle($title)
     {
         $this->title = $title;
     }
-    
+
     public function setDescription($description)
     {
         $this->description = $description;
     }
-    
+
     public function setContentLoc($content_loc)
     {
         $this->content_loc = $content_loc;
     }
-    
+
     public function setPlayerLoc($player_loc)
     {
         $this->player_loc = $player_loc;
     }
-    
+
     public function getPlayerLoc()
     {
         return $this->player_loc;
     }
-    
+
     public function setPlayerLocAllowEmbed($player_loc_allow_embed)
     {
         if (!in_array($player_loc_allow_embed, array(self::PLAYER_LOC_ALLOW_EMBED_YES, self::PLAYER_LOC_ALLOW_EMBED_NO))) {
@@ -158,7 +158,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
         }
         $this->player_loc_allow_embed = $player_loc_allow_embed;
     }
-    
+
     public function getPlayerLocAllowEmbed()
     {
         return $this->player_loc_allow_embed;
@@ -171,13 +171,12 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->player_loc_autoplay = $player_loc_autoplay;
     }
-    
+
     public function getPlayerLocAutoplay()
     {
         return $this->player_loc_autoplay;
     }
-        
-    
+
     /**
      * @param int $duration
      * @return void
@@ -185,39 +184,39 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      */
     public function setDuration($duration)
     {
-        if(!is_numeric($duration) || $duration < 0 || $duration > 28800) {
+        if (!is_numeric($duration) || $duration < 0 || $duration > 28800) {
             throw new Exception\GoogleVideoUrlException(sprintf('The parameter %s must be a valid duration.see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4', $duration));
         }
-        
+
         $this->duration = $duration;
     }
-    
+
     public function setExpirationDate(\DateTime $expiration_date)
     {
         $this->expiration_date = $expiration_date;
     }
-    
+
     /**
      * @param float $rating 
      */
     public function setRating($rating)
     {
-        if(!is_numeric($rating) || $rating < 0 || $rating > 5) {
+        if (!is_numeric($rating) || $rating < 0 || $rating > 5) {
             throw new Exception\GoogleVideoUrlException(sprintf('The parameter %s must be a valid rating.see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4', $rating));
         }
-        
+
         $this->rating = $rating;
     }
-    
+
     public function setViewCount($view_count)
     {
         if (!is_int($view_count)) {
             throw new Exception\GoogleVideoUrlException(sprintf('The parameter %s must be a valid view count.see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4', $view_count));
         }
-        
+
         $this->view_count = $view_count;
     }
-    
+
     public function setPublicationDate(\DateTime $publication_date)
     {
         $this->publication_date = $publication_date;
@@ -228,43 +227,41 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      */
     public function setFamilyFriendly($family_friendly = null)
     {
-        if(null == $family_friendly) {
+        if (null == $family_friendly) {
             $family_friendly = self::FAMILY_FRIENDLY_YES;
         }
-        
+
         if (!in_array($family_friendly, array(self::FAMILY_FRIENDLY_YES, self::FAMILY_FRIENDLY_NO))) {
             throw new Exception\GoogleVideoUrlException(sprintf('The parameter %s must be a valid family_friendly. see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4', $family_friendly));
         }
-        
+
         $this->family_friendly = $family_friendly;
     }
-    
+
     public function setCategory($category)
     {
-        if(strlen($category) > 256)
-        {
+        if (strlen($category) > 256) {
             throw new Exception\GoogleVideoUrlException(sprintf('The parameter %s must be a valid category. see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4', $category));
         }
-        
+
         $this->category = $category;
     }
-    
-    
+
     public function setRestrictionAllow(array $countries = array())
     {
         $this->restriction_allow = $countries;
     }
-    
+
     public function getRestrictionAllow()
     {
         return $this->restriction_allow;
     }
-    
+
     public function setRestrictionDeny(array $countries = array())
     {
         $this->restriction_deny = $countries;
     }
-    
+
     public function getRestrictionDeny()
     {
         return $this->restriction_deny;
@@ -274,7 +271,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->gallery_loc = $gallery_loc;
     }
-    
+
     public function setGalleryLocTitle($gallery_loc_title)
     {
         $this->gallery_loc_title = $gallery_loc_title;
@@ -289,7 +286,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->uploader = $uploader;
     }
-    
+
     public function setUploaderInfo($uploader_info)
     {
         $this->uploader_info = $uploader_info;
@@ -299,7 +296,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->platforms = $platforms;
     }
-    
+
     public function getPlatforms()
     {
         return $this->platforms;
@@ -309,7 +306,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->platform_relationship = $platform_relationship;
     }
-    
+
     public function getPlatformRelationship()
     {
         return $this->platform_relationship;
@@ -319,7 +316,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->live = $live;
     }
-    
+
     public function getTitle()
     {
         return $this->title;
@@ -334,7 +331,6 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         return $this->content_loc;
     }
-
 
     public function getDuration()
     {
@@ -365,7 +361,6 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         return $this->family_friendly;
     }
-
 
     public function getCategory()
     {
@@ -413,13 +408,13 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     public function addPrice($amount, $currency, $type = null, $resolution = null)
     {
         $this->prices[] = array(
-            'amount'    => $amount, 
-            'currency'  => $currency, 
-            'type'      => $type, 
+            'amount' => $amount,
+            'currency' => $currency,
+            'type' => $type,
             'resolution' => $resolution
-            );
+        );
     }
-    
+
     /**
      * list of defined prices with price, currency, type and resolution
      * 
@@ -429,7 +424,6 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         return $this->prices;
     }
-    
 
     /**
      * @param string $tag
@@ -437,19 +431,18 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      */
     public function addTag($tag)
     {
-        if(count($this->tags) >= self::TAG_ITEMS_LIMIT) {
+        if (count($this->tags) >= self::TAG_ITEMS_LIMIT) {
             throw new Exception\GoogleVideoUrlTagException(sprintf('The parameter %s must be a valid family_friendly. see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4'));
         }
-        
+
         $this->tags[] = $tag;
     }
-    
+
     public function getTags()
     {
         return $this->tags;
     }
-    
-    
+
     /**
      * decorate w/ the video element before the closing tag
      * 
@@ -458,83 +451,80 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     public function toXml()
     {
         $videoXml = '<video:video>';
-        
+
         //----------------------
         // required fields
-        foreach(array('thumbnail_loc', 'title', 'description') as $paramName) {
+        foreach (array('thumbnail_loc', 'title', 'description') as $paramName) {
             $getMethod = $this->getGetMethod($paramName);
-            $videoXml .= '<video:' . $paramName .'>' . $this->$getMethod() . '</video:' . $paramName . '>';
+            $videoXml .= '<video:' . $paramName . '>' . $this->$getMethod() . '</video:' . $paramName . '>';
         }
         //----------------------
-        
         //----------------------
         // simple optionnal fields
-        foreach(array('content_loc', 'duration', 'rating', 'view_count', 'family_friendly', 'requires_subscription', 'live') as $paramName) {
+        foreach (array('content_loc', 'duration', 'rating', 'view_count', 'family_friendly', 'requires_subscription', 'live') as $paramName) {
             $getMethod = $this->getGetMethod($paramName);
             if ($this->$getMethod()) {
-                $videoXml .= '<video:' . $paramName .'>' . $this->$getMethod() . '</video:' . $paramName . '>';
+                $videoXml .= '<video:' . $paramName . '>' . $this->$getMethod() . '</video:' . $paramName . '>';
             }
         }
         //----------------------
-        
         //----------------------
         // date based optionnal fields
-        foreach(array('expiration_date', 'publication_date') as $paramName) {
+        foreach (array('expiration_date', 'publication_date') as $paramName) {
             $getMethod = $this->getGetMethod($paramName);
             if ($this->$getMethod()) {
-                $videoXml .= '<video:' . $paramName .'>' . $this->$getMethod()->format('c') . '</video:' . $paramName . '>';
+                $videoXml .= '<video:' . $paramName . '>' . $this->$getMethod()->format('c') . '</video:' . $paramName . '>';
             }
         }
         //----------------------
-        
         //----------------------
         // moar complexe optionnal fields
         if ($this->getPlayerLoc()) {
-            $allow_embed    = ($this->getPlayerLocAllowEmbed()) ? ' allow_embed="' . $this->getPlayerLocAllowEmbed() . '"' : '';
-            $autoplay       = ($this->getPlayerLocAutoplay()) ? ' autoplay="' . $this->getPlayerLocAutoplay() . '"' : '';
+            $allow_embed = ($this->getPlayerLocAllowEmbed()) ? ' allow_embed="' . $this->getPlayerLocAllowEmbed() . '"' : '';
+            $autoplay = ($this->getPlayerLocAutoplay()) ? ' autoplay="' . $this->getPlayerLocAutoplay() . '"' : '';
             $videoXml .= '<video:player_loc' . $allow_embed . $autoplay . '>' . $this->getPlayerLoc() . '</video:player_loc>';
         }
-        
+
         if ($this->getRestrictionAllow()) {
             $videoXml .= '<video:restriction relationship="allow">' . implode(' ', $this->getRestrictionAllow()) . '</video:restriction>';
         }
-        
+
         if ($this->getRestrictionDeny()) {
             $videoXml .= '<video:restriction relationship="deny">' . implode(' ', $this->getRestrictionDeny()) . '</video:restriction>';
         }
-        
+
         if ($this->getGalleryLoc()) {
-            $title    = ($this->getGalleryLocTitle()) ? ' title="' . $this->getGalleryLocTitle() . '"' : '';
+            $title = ($this->getGalleryLocTitle()) ? ' title="' . $this->getGalleryLocTitle() . '"' : '';
             $videoXml .= '<video:gallery_loc' . $title . '>' . $this->getGalleryLoc() . '</video:gallery_loc>';
         }
-        
+
         foreach ($this->getTags() as $tag) {
             $videoXml .= '<video:tag>' . $tag . '</video:tag>';
         }
-        
+
         foreach ($this->getPrices() as $price) {
-            $type       = ($price['type']) ? ' type="' . $price['type'] . '"' : '';
-            $resolution = ($price['resolution']) ? ' resolution="' . $price['resolution'] . '"': '';
+            $type = ($price['type']) ? ' type="' . $price['type'] . '"' : '';
+            $resolution = ($price['resolution']) ? ' resolution="' . $price['resolution'] . '"' : '';
             $videoXml .= '<video:price currency="' . $price['currency'] . '"' . $type . $resolution . '>' . $price['amount'] . '</video:price>';
         }
-        
+
         if ($this->getUploader()) {
-            $info       = ($this->getUploaderInfo()) ? ' info="' . $this->getUploaderInfo() . '"' : '';
+            $info = ($this->getUploaderInfo()) ? ' info="' . $this->getUploaderInfo() . '"' : '';
             $videoXml .= '<video:uploader' . $info . '>' . $this->getUploader() . '</video:uploader>';
         }
-        
-        if( count($this->getPlatforms())) {
+
+        if (count($this->getPlatforms())) {
             $relationship = $this->getPlatformRelationship();
-            $videoXml .= '<video:platform relationship="' . $relationship . '">'. implode(' ', $this->getPlatforms()) . '</video:platform>';
+            $videoXml .= '<video:platform relationship="' . $relationship . '">' . implode(' ', $this->getPlatforms()) . '</video:platform>';
         }
         //----------------------
-        
+
         $videoXml .= '</video:video>';
-        
+
         $baseXml = $this->urlDecorated->toXml();
         return str_replace('</url>', $videoXml . '</url>', $baseXml);
     }
-    
+
     /**
      * verify method affiliated to given param
      * 
@@ -545,15 +535,14 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     protected function getSetMethod($name)
     {
         $methodName = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $name)));
-        
-        if(!method_exists($this, $methodName)) {
+
+        if (!method_exists($this, $methodName)) {
             throw new Exception\GoogleVideoUrlException(sprintf('The parameter %s is unknown', $name));
         }
-        
+
         return $methodName;
     }
-    
-    
+
     /**
      * verify method affiliated to given param
      * 
@@ -564,11 +553,11 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     protected function getGetMethod($name)
     {
         $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $name)));
-        
-        if(!method_exists($this, $methodName)) {
+
+        if (!method_exists($this, $methodName)) {
             throw new Exception\GoogleVideoUrlException(sprintf('The parameter %s is unknown', $name));
         }
-        
+
         return $methodName;
     }
 }
