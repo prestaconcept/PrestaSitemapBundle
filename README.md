@@ -3,7 +3,8 @@
 ## Introduction
 
 What PrestaSitemapBundle can do for you. 
-The main goal is generate easily your sitemap.xml with several features you may need:
+The main goal is generate easily your sitemap.xml with several features you may 
+need:
 
  * sitemapindex
  * google images, video, mobile and multilang urls
@@ -15,33 +16,33 @@ The main goal is generate easily your sitemap.xml with several features you may 
 
 1. Add to your composer.json
 
-    //TODO
+        //TODO
 
 2. Enable the bundle
 
-    <?php
-    // app/AppKernel.php
+        <?php
+        // app/AppKernel.php
 
-    public function registerBundles()
-    {
-        $bundles = array(
-            //...
-            new Presta\SitemapBundle\PrestaSitemapBundle(),
-        );
-    }
+        public function registerBundles()
+        {
+            $bundles = array(
+                //...
+                new Presta\SitemapBundle\PrestaSitemapBundle(),
+            );
+        }
 
 3. Add the routes
 
-    #app/config/routing.yml
-    PrestaSitemapBundle:
-        resource: "@PrestaSitemapBundle/Resources/config/routing.yml"
-        prefix:   /
+        #app/config/routing.yml
+        PrestaSitemapBundle:
+            resource: "@PrestaSitemapBundle/Resources/config/routing.yml"
+            prefix:   /
 
 ## Usage
 
 The only thing required is : register url for each available pages.
-You need to add one or more listeners in your application that provides your urls to 
-PrestaSitemapBundle when called. 
+You need to add one or more listeners in your application that provides your 
+urls to PrestaSitemapBundle when called. 
 
 For example in your AcmeDemoBundle :
 
@@ -80,7 +81,8 @@ For example in your AcmeDemoBundle :
 Then the sitemap can be generated and optionnaly set in cache; 
 the sitemapindex will be : http://acme.com/sitemap.xml
 So the default section will be available at http://acme.com/sitemap.default.xml . 
-Note that if one limit is exceeded a new section will be added (eg. http://acme.com/sitemap.default_1.xml)
+Note that if one limit is exceeded a new section will be added 
+(eg. http://acme.com/sitemap.default_1.xml)
 
 ### Url Decorator
 
@@ -120,7 +122,8 @@ Each sitemaps can be stored in your cache system :
 
 PrestaSitemapBundle uses LiipDoctrineCacheBundle to store Cache. 
 This bundle provides an abstract access to any Doctrine Common Cache classes.
-You need to install LiipDoctrineCacheBundle and specify what kind of cache system to with PrestaSitemap.
+You need to install LiipDoctrineCacheBundle and specify what kind of cache 
+system to use with PrestaSitemap.
 
  * Follow the instruction to install [LiipDoctrineCacheBundle](http://packagist.org/packages/liip/doctrine-cache-bundle).
  * Configure a service for PrestaSitemap, this is an exemple with php-apc :
@@ -136,10 +139,12 @@ You need to install LiipDoctrineCacheBundle and specify what kind of cache syste
 
 As you can see the bundle takes care about limit constraints and automatically 
 divide sections for example because this is allowed.
-But it is not allowed to add more than 1000 images for one url (see related documentation)[http://support.google.com/webmasters/bin/answer.py?hl=en&answer=178636&topic=20986&ctx=topic]. 
+But it is not allowed to add more than 1000 images for one url 
+[see related documentation](http://support.google.com/webmasters/bin/answer.py?hl=en&answer=178636&topic=20986&ctx=topic). 
 In this case the generator will throw Exceptions.
 
-So you yo have to set the limit yourself or safely try to add elements to your sitemap :
+So you yo have to set the limit yourself or safely try to add elements to your 
+sitemap :
 
     //...
     $url = new Url\GoogleImageUrlDecorator(new Url\UrlConcrete('http://acme.com/'));
