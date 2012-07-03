@@ -1,5 +1,7 @@
 # PrestaSitemapBundle
 
+[![Build Status](https://secure.travis-ci.org/prestaconcept/PrestaSitemapBundle.png)](http://travis-ci.org/prestaconcept/PrestaSitemapBundle)
+
 ## Introduction
 
 What PrestaSitemapBundle can do for you. 
