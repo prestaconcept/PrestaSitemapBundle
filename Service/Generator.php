@@ -65,12 +65,11 @@ class Generator
         //---------------------
         // cache management
         if ($this->cache) {
-            //FIXME lifetime must be configurable
-            $lifeTime = 3600;
-            $this->cache->save('root', serialize($this->root), $lifeTime);
+            $ttl = $this->container->getParameter('presta_sitemap.timetolive');
+            $this->cache->save('root', serialize($this->root), $ttl);
 
             foreach ($this->urlsets as $name => $urlset) {
-                $this->cache->save($name, serialize($urlset), $lifeTime);
+                $this->cache->save($name, serialize($urlset), $ttl);
             }
         }
         //---------------------

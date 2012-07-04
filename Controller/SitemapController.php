@@ -39,7 +39,7 @@ class SitemapController extends Controller
         }
 
         $response = Response::create($sitemapindex->toXml());
-        //TODO: set http cache
+        $response->setClientTtl($this->getTtl());
 
         return $response;
     }
@@ -59,8 +59,17 @@ class SitemapController extends Controller
         }
 
         $response = Response::create($section->toXml());
-        //TODO: set http cache
+        $response->setClientTtl($this->getTtl());
 
         return $response;
+    }
+    
+    /**
+     * Time to live of the response in seconds
+     * @return int
+     */
+    protected function getTtl()
+    {
+        return $this->container->getParameter('presta_sitemap.timetolive');
     }
 }
