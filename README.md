@@ -18,7 +18,10 @@ need:
 
 1. Add to your composer.json
 
-        //TODO
+        "require": { 
+            //...
+            "presta/sitemap-bundle": "dev-master"
+        }
 
 2. Enable the bundle
 
