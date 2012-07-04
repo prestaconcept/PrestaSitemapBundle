@@ -43,6 +43,18 @@ need:
             resource: "@PrestaSitemapBundle/Resources/config/routing.yml"
             prefix:   /
 
+4. [optionnal] Configure the time to live
+
+You may want to change the default 3600 seconds max-age set when rendering the
+sitemap. Edit the following configuration in your application.
+
+    #app/config/config.yml
+    presta_sitemap:
+        timetolive: 3600
+
+Also this value is used by the cache if you have installed and configured 
+liip_doctrine_cache.
+
 ## Usage
 
 The only thing required is : register url for each available pages.

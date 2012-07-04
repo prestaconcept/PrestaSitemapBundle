@@ -65,7 +65,7 @@ class Generator
         //---------------------
         // cache management
         if ($this->cache) {
-            $ttl = $this->container->getParameter('presta_sitemap.timetolive');
+            $ttl = $this->dispatcher->getContainer()->getParameter('presta_sitemap.timetolive');
             $this->cache->save('root', serialize($this->root), $ttl);
 
             foreach ($this->urlsets as $name => $urlset) {
