@@ -130,11 +130,11 @@ system to use with PrestaSitemap.
  * Follow the instruction to install [LiipDoctrineCacheBundle](http://packagist.org/packages/liip/doctrine-cache-bundle).
  * Configure a service for PrestaSitemap, this is an exemple with php-apc :
 
-    #config.yml
-    liip_doctrine_cache:
-        namespaces:
-            presta_sitemap:
-                type: apc
+        #config.yml
+        liip_doctrine_cache:
+            namespaces:
+                presta_sitemap:
+                    type: apc
 
 
 ## Deeper informations

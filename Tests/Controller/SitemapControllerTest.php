@@ -3,35 +3,55 @@
 namespace Presta\SitemapBundle\Tests\Controller;
 
 use Presta\SitemapBundle\Controller;
+use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Service\Generator;
+use Presta\SitemapBundle\Sitemap\Url;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class SitemapControllerTest extends WebTestCase
 {
-    public function testIndexAction()
+    
+    public function setUp() 
     {
         //boot appKernel
         self::createClient();
+        $this->container  = static::$kernel->getContainer();
         
-        $container  = static::$kernel->getContainer();
-        $controller = new Controller\SitemapController();
-        $controller->setContainer($container);
+        //set controller to test
+        $this->controller = new Controller\SitemapController();
+        $this->controller->setContainer($this->container);
         
-        $response   = $controller->indexAction();
+        //-------------------
+        // add url to sitemap
+        $this->container->get('event_dispatcher')
+            ->addListener(SitemapPopulateEvent::onSitemapPopulate, function(SitemapPopulateEvent $event) {
+                $event->getGenerator()->addUrl(
+                    new Url\UrlConcrete(
+                            'http://acme.com/static-page.html', 
+                            new \DateTime(), 
+                            Url\UrlConcrete::CHANGEFREQ_HOURLY, 1), 
+                        'default');
+            });
+        //-------------------
+            
+    }
+    
+    public function testIndexAction()
+    {
+        $response   = $this->controller->indexAction();
         $this->isInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
     }
     
-    public function testSectionAction()
+    public function testValidSectionAction()
     {
-        //boot appKernel
-        self::createClient();
-        $container = static::$kernel->getContainer();
-        
-        $controller = new Controller\SitemapController();
-        $controller->setContainer($container);
-        
+        $response = $this->controller->sectionAction('default');
+        $this->isInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
+    }
+    
+    public function testNotFoundSectionAction()
+    {
         try {
-            $controller->sectionAction('void');
+            $this->controller->sectionAction('void');
             $this->fail('section "void" does\'nt exist');
         } catch (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
             //this is ok

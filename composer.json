@@ -1,7 +1,7 @@
 {
     "name": "presta/sitemap-bundle",
-    "description": "This Bundle provides a sitemap generator for symfony2.",
-    "keywords": ["symfony2", "sitemap", "xml"],
+    "description": "A symfony 2 bundle that provides tools to build your application sitemap.",
+    "keywords": ["symfony2", "bundle", "sitemap", "xml"],
     "type": "symfony-bundle",
     "license": "MIT",
     "authors": [
@@ -12,11 +12,11 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "symfony/symfony": ">=2.1",
-        "doctrine/common": ">=2.2",
-        "liip/doctrine-cache-bundle" : "*"
-    }
-    ,
+        "symfony/symfony": ">=2.1"
+    },
+    "suggest": {
+        "liip/doctrine-cache-bundle" : "Allows to store sitemaps in cache"
+    },
     "autoload": {
         "psr-0": {
             "Presta\\SitemapBundle\\": ""
