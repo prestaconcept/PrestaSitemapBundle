@@ -89,7 +89,7 @@ For example in your AcmeDemoBundle :
                         $event->getGenerator()->addUrl(new UrlConcrete(
                                 $url, 
                                 new \DateTime(), 
-                                UrlConcrete::CHANGE_FREQUENCY_HOURLY, 
+                                UrlConcrete::CHANGEFREQ_HOURLY, 
                                 1), 'default');
                     });
         }
