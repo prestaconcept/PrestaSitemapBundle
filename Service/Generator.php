@@ -14,7 +14,7 @@ use Doctrine\Common\Cache\Cache;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
-use Symfony\Component\HttpKernel\Debug\ContainerAwareTraceableEventDispatcher;
+use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
 
 /**
  * Sitemap Manager service
@@ -39,11 +39,11 @@ class Generator
     protected $urlsets = array();
 
     /**
-     * @param ContainerAwareTraceableEventDispatcher $dispatcher
+     * @param ContainerAwareEventDispatcher $dispatcher
      * @param Router $router
      * @param Cache $cache 
      */
-    public function __construct(ContainerAwareTraceableEventDispatcher $dispatcher, Router $router, Cache $cache = null)
+    public function __construct(ContainerAwareEventDispatcher $dispatcher, Router $router, Cache $cache = null)
     {
         $this->dispatcher = $dispatcher;
         $this->router = $router;
