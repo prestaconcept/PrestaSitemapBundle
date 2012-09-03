@@ -15,18 +15,18 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Provides action to render sitemap files
- * 
- * @author David Epely <depely@prestaconcept.net> 
+ *
+ * @author David Epely <depely@prestaconcept.net>
  */
 class SitemapController extends Controller
 {
 
     /**
      * list sitemaps
-     * 
+     *
      * //TODO: implement basic urlset rendering
      * //TODO: implement sitemapindex composed by sitemapindex
-     * 
+     *
      * @param $_format
      * @return Response
      */
@@ -39,6 +39,7 @@ class SitemapController extends Controller
         }
 
         $response = Response::create($sitemapindex->toXml());
+        $response->setPublic();
         $response->setClientTtl($this->getTtl());
 
         return $response;
@@ -46,7 +47,7 @@ class SitemapController extends Controller
 
     /**
      * list urls of a section
-     * 
+     *
      * @param string
      * @return Response
      */
@@ -59,11 +60,12 @@ class SitemapController extends Controller
         }
 
         $response = Response::create($section->toXml());
+        $response->setPublic();
         $response->setClientTtl($this->getTtl());
 
         return $response;
     }
-    
+
     /**
      * Time to live of the response in seconds
      * @return int
