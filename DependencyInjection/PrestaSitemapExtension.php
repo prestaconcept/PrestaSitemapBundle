@@ -35,5 +35,7 @@ class PrestaSitemapExtension extends Extension
         $loader->load('services.xml');
         
         $container->setParameter($this->getAlias().'.timetolive', $config['timetolive']);
+        $container->setParameter($this->getAlias().'.dumper_base_url', $config['dumper_base_url']);
+
     }
 }

@@ -5,6 +5,7 @@
 
     <parameters>
         <parameter key="presta_sitemap.generator.class">Presta\SitemapBundle\Service\Generator</parameter>
+        <parameter key="presta_sitemap.dumper.class">Presta\SitemapBundle\Service\Dumper</parameter>
     </parameters>
 
     <services>
@@ -12,6 +13,12 @@
             <argument id="event_dispatcher" type="service" />
             <argument id="router" type="service" />
             <argument id="liip_doctrine_cache.ns.presta_sitemap" type="service" on-invalid="ignore"  />
+        </service>
+
+        <service id="presta_sitemap.dumper" class="%presta_sitemap.dumper.class%">
+            <argument id="event_dispatcher" type="service" />
+            <argument id="filesystem" type="service" />
+            <argument>%presta_sitemap.dumper_base_url%</argument>
         </service>
     </services>
 

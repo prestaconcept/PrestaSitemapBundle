@@ -63,7 +63,7 @@ class Urlset extends XmlConstraint
         }
 
         $urlXml = $url->toXml();
-        $this->urlsXml .= $urlXml;
+        $this->appendXML($urlXml);
 
         //add unknown custom namespaces
         $this->customNamespaces = array_merge($this->customNamespaces, $url->getCustomNamespaces());
@@ -84,6 +84,16 @@ class Urlset extends XmlConstraint
             $this->limitBytesReached = true;
         }
         //---------------------
+    }
+
+    /**
+     * Appends URL's XML to internal string buffer
+     *
+     * @param $urlXml
+     */
+    protected function appendXML($urlXml)
+    {
+        $this->urlsXml .= $urlXml;
     }
 
     /**

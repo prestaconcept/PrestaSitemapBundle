@@ -15,6 +15,7 @@ use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Presta\SitemapBundle\Sitemap\Sitemapindex;
 
 /**
  * Sitemap Manager service
@@ -57,10 +58,8 @@ class Generator
      */
     public function generate()
     {
-        //---------------------
-        // Populate
-        $event = new SitemapPopulateEvent($this);
-        $this->dispatcher->dispatch(SitemapPopulateEvent::onSitemapPopulate, $event);
+        $this->populate();
+
         //---------------------
         //---------------------
         // cache management
@@ -73,6 +72,12 @@ class Generator
             }
         }
         //---------------------
+    }
+
+    protected function populate($section=null)
+    {
+        $event = new SitemapPopulateEvent($this, $section);
+        $this->dispatcher->dispatch(SitemapPopulateEvent::onSitemapPopulate, $event);
     }
 
     /**
@@ -129,6 +134,11 @@ class Generator
         $urlset->addUrl($url);
     }
 
+    protected function newUrlset($name)
+    {
+        return new Sitemap\Urlset($this->router->generate('PrestaSitemapBundle_section', array('name' => $name, '_format' => 'xml'), true));
+    }
+
     /**
      * get or create urlset
      * 
@@ -138,7 +148,7 @@ class Generator
     public function getUrlset($name)
     {
         if (!isset($this->urlsets[$name])) {
-            $this->urlsets[$name] = new Sitemap\Urlset($this->router->generate('PrestaSitemapBundle_section', array('name' => $name, '_format' => 'xml'), true));
+            $this->urlsets[$name] = $this->newUrlset($name);
 
             if (!$this->root) {
                 $this->root = new Sitemap\Sitemapindex();
