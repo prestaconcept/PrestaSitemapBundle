@@ -45,25 +45,25 @@ need:
 
 4. [optional] Configure the time to live
 
-You may want to change the default 3600 seconds max-age set when rendering the
-sitemap. Edit the following configuration in your application.
+    You may want to change the default 3600 seconds max-age set when rendering the
+    sitemap. Edit the following configuration in your application.
 
-    #app/config/config.yml
-    presta_sitemap:
-        timetolive: 3600
+        #app/config/config.yml
+        presta_sitemap:
+            timetolive: 3600
 
-Also this value is used by the cache if you have installed and configured 
-liip_doctrine_cache.
+    Also this value is used by the cache if you have installed and configured
+    liip_doctrine_cache.
 
 5. [optional] Configure base URL for dumper
 
-If you are going to use sitemap Dumper to create sitemap files by using CLI command
-you have to set the base URL of where you sitemap files will be accessible. The hostname
-of the URL will also be used to make Router generate URLs with hostname.
+    If you are going to use sitemap Dumper to create sitemap files by using CLI command
+    you have to set the base URL of where you sitemap files will be accessible. The hostname
+    of the URL will also be used to make Router generate URLs with hostname.
 
-    #app/config/config.yml
-    presta_sitemap:
-        dumper_base_url: http://www.example.com/
+        #app/config/config.yml
+        presta_sitemap:
+            dumper_base_url: http://www.example.com/
 
 ## Usage
 
