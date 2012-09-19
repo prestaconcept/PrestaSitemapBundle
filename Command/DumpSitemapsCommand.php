@@ -84,7 +84,12 @@ class DumpSitemapsCommand extends ContainerAwareCommand
         }
         $filenames = $dumper->dump($targetDir, $input->getOption('section'));
 
-        $output->writeln("<info>Created the following sitemap files:</info>");
+        if ($filenames === false) {
+            $output->writeln("<error>No URLs were added to sitemap by EventListeners</error> - this may happen when provided section is invalid");
+            return;
+        }
+
+        $output->writeln("<info>Created/Updated the following sitemap files:</info>");
         foreach ($filenames as $filename) {
             $output->writeln("    <comment>$filename</comment>");
         }

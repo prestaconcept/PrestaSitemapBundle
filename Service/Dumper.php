@@ -60,14 +60,22 @@ class Dumper extends Generator
     }
 
     /**
-     * Dumps sitemaps into provided directory
+     * Dumps sitemaps and sitemap index into provided directory
      *
-     * @param $targetDir
-     * @return array List of created sitemap files
+     * @param      $targetDir Directory where to save sitemap files
+     * @param null $section   Optional section name - only sitemaps of this section will be updated
+     *
+     * @return array|bool
      */
     public function dump($targetDir, $section=null)
     {
         $this->populate($section);
+
+        // if root wasn't created during populating
+        // it means no URLs were added to the sitemap
+        if (!$this->root) {
+            return false;
+        }
 
         foreach ($this->urlsets as $urlset) {
             $urlset->save($this->tmpFolder);
