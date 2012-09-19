@@ -111,6 +111,45 @@ So the default section will be available at http://acme.com/sitemap.default.xml 
 Note that if one limit is exceeded a new section will be added 
 (eg. http://acme.com/sitemap.default_1.xml)
 
+### Sitemap Event Listeners
+
+You can also register your sitemap event listeners by creating service classes implementing
+`Presta\SitemapBundle\Service\SitemapListenerInterface` and tagging these services with `presta.sitemap.listener`
+tag. This way the services will be lazy-loaded by Symfony's event dispatcher, only when the event is dispatched:
+
+    // services.xml
+    <service id="my.sitemap.listener" class="Acme\DemoBundle\EventListener\SitemapListener">
+        <tag name="presta.sitemap.listener" />
+        <argument type="service" id="router"/>
+    </service>
+
+    // Acme/DemoBundle/EventListener/SitemapListener.php
+    class SitemapListener implements SitemapListenerInterface
+    {
+
+        private $router;
+
+        public function __construct(RouterInterface $router)
+        {
+            $this->router = $router;
+        }
+
+        public function populateSitemap(SitemapPopulateEvent $event)
+        {
+            $section = $event->getSection();
+            if (is_null($section) || $section == 'default') {
+                //get absolute homepage url
+                $url = $router->generate('homepage', array(), true);
+                //add homepage url to the urlset named default
+                $event->getGenerator()->addUrl(new UrlConcrete(
+                        $url,
+                        new \DateTime(),
+                        UrlConcrete::CHANGEFREQ_HOURLY,
+                        1), 'default');
+            }
+        }
+    }
+
 ### Url Decorator
 
 UrlConcrete is the most basic url, but you may want to add images to your url. 
