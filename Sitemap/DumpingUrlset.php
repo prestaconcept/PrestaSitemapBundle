@@ -31,7 +31,11 @@ class DumpingUrlset extends Urlset
     public function __construct($loc, \DateTime $lastmod = null)
     {
         parent::__construct($loc, $lastmod);
-        $this->bodyFile = new \SplTempFileObject(0); // Use disk, not memory
+
+        $tmpFile = tempnam(sys_get_temp_dir(), 'sitemap');
+        if (false === $this->bodyFile = @fopen($tmpFile, 'w+')) {
+            throw new \RuntimeException("Cannot create temporary file $tmpFile");
+        }
     }
 
     /**
@@ -41,7 +45,7 @@ class DumpingUrlset extends Urlset
      */
     protected function appendXML($urlXml)
     {
-        $this->bodyFile->fwrite($urlXml);
+        fwrite($this->bodyFile, $urlXml);
     }
 
     /**
@@ -53,21 +57,23 @@ class DumpingUrlset extends Urlset
     public function save($targetDir)
     {
         $filename = realpath($targetDir) . '/' . basename($this->getLoc());
-        $sitemapFile = new \SplFileObject($filename, 'w');
+        $sitemapFile = fopen($filename, 'w');
         $structureXml = $this->getStructureXml();
 
         // since header may contain namespaces which may get added when adding URLs
         // we can't prepare the header beforehand, so here we just take it and add to the beginning of the file
         $header = substr($structureXml, 0, strpos($structureXml, 'URLS</urlset>'));
-        $sitemapFile->fwrite($header);
+        fwrite($sitemapFile, $header);
 
         // append body file to sitemap file (after the header)
-        $this->bodyFile->fflush();
-        $this->bodyFile->rewind();
-        while (!$this->bodyFile->eof()) {
-            $sitemapFile->fwrite($this->bodyFile->fgets());
+        fflush($this->bodyFile);
+        fseek($this->bodyFile, 0);
+
+        while (!feof($this->bodyFile)) {
+            fwrite($sitemapFile, fread($this->bodyFile, 65536));
         }
-        $sitemapFile->fwrite('</urlset>');
-        $sitemapFile->fflush();
+        fwrite($sitemapFile, '</urlset>');
+        fclose($sitemapFile);
+        fclose($this->bodyFile);
     }
 }
