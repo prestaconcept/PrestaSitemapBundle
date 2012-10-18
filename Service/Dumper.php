@@ -117,7 +117,7 @@ class Dumper extends Generator
     protected function loadCurrentSitemapIndex($filename)
     {
         if (!file_exists($filename)) {
-            return;
+            return array();
         }
 
         $urlsets = array();
