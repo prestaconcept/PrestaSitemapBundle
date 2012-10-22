@@ -54,9 +54,6 @@ class Dumper extends Generator
         $this->dispatcher = $dispatcher;
         $this->filesystem = $filesystem;
         $this->baseUrl = $baseUrl;
-
-        $this->tmpFolder = sys_get_temp_dir() . '/PrestaSitemaps-' . uniqid();
-        $this->filesystem->mkdir($this->tmpFolder);
     }
 
     /**
@@ -69,6 +66,10 @@ class Dumper extends Generator
      */
     public function dump($targetDir, $section=null)
     {
+        // we should prepare temp folder each time, because dump may be called several times (with different sections)
+        // and activate command below removes temp folder
+        $this->prepareTempFolder();
+
         $this->populate($section);
 
         // if root wasn't created during populating
@@ -104,6 +105,27 @@ class Dumper extends Generator
         $this->activate($targetDir);
 
         return $filenames;
+    }
+
+    /**
+     * Prepares temp folder for storing sitemap files
+     *
+     * @return void
+     */
+    protected function prepareTempFolder()
+    {
+        $this->tmpFolder = sys_get_temp_dir() . '/PrestaSitemaps-' . uniqid();
+        $this->filesystem->mkdir($this->tmpFolder);
+    }
+
+    /**
+     * Cleans up temporary files
+     *
+     * @return void
+     */
+    protected function cleanup()
+    {
+        $this->filesystem->remove($this->tmpFolder);
     }
 
     /**
@@ -149,14 +171,14 @@ class Dumper extends Generator
     protected function activate($targetDir)
     {
         if (!is_writable($targetDir)) {
-            $this->filesystem->remove($this->tmpFolder);
+            $this->cleanup();
             throw new \RuntimeException("Can't move sitemaps to $targetDir - directory is not writeable");
         }
         $this->deleteExistingSitemaps($targetDir);
 
         // no need to delete the root file as it always exists, it will be overwritten
         $this->filesystem->mirror($this->tmpFolder, $targetDir, null, array('override' => true));
-        $this->filesystem->remove($this->tmpFolder);
+        $this->cleanup();
     }
 
     /**
