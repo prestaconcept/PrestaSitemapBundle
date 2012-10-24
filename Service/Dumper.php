@@ -23,8 +23,6 @@ use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher,
  */
 class Dumper extends Generator
 {
-    protected $dispatcher;
-
     /**
      * Path to folder where temporary files will be created
      *
@@ -126,6 +124,8 @@ class Dumper extends Generator
     protected function cleanup()
     {
         $this->filesystem->remove($this->tmpFolder);
+        $this->root = null;
+        $this->urlsets = array();
     }
 
     /**
