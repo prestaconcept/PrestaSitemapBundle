@@ -31,7 +31,7 @@ class SitemapPopulateEvent extends Event
      */
     protected $section;
 
-    public function __construct(Generator $generator, $section=null)
+    public function __construct(Generator $generator, $section = null)
     {
         $this->generator = $generator;
         $this->section = $section;

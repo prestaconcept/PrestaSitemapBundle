@@ -10,9 +10,9 @@
 
 namespace Presta\SitemapBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface,
-    Presta\SitemapBundle\Event\SitemapPopulateEvent;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 
 /**
  * Registering services tagged with presta.sitemap.listener as actual event listeners

@@ -10,11 +10,9 @@
 
 namespace Presta\SitemapBundle\Service;
 
-use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher,
-    Presta\SitemapBundle\Event\SitemapPopulateEvent,
-    Presta\SitemapBundle\Sitemap\Url\Url,
-    Symfony\Component\Filesystem\Filesystem,
-    Symfony\Component\Finder\Finder;
+use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Service for dumping sitemaps into static files
@@ -57,12 +55,12 @@ class Dumper extends Generator
     /**
      * Dumps sitemaps and sitemap index into provided directory
      *
-     * @param      $targetDir Directory where to save sitemap files
-     * @param null $section   Optional section name - only sitemaps of this section will be updated
+     * @param string $targetDir Directory where to save sitemap files
+     * @param null   $section   Optional section name - only sitemaps of this section will be updated
      *
      * @return array|bool
      */
-    public function dump($targetDir, $section=null)
+    public function dump($targetDir, $section = null)
     {
         // we should prepare temp folder each time, because dump may be called several times (with different sections)
         // and activate command below removes temp folder
@@ -147,12 +145,16 @@ class Dumper extends Generator
         foreach ($index->children() as $child) {
             if ($child->getName() == 'sitemap') {
                 if (!isset($child->loc)) {
-                    throw new \InvalidArgumentException("One of referenced sitemaps in $filename doesn't contain 'loc' attribute");
+                    throw new \InvalidArgumentException(
+                        "One of referenced sitemaps in $filename doesn't contain 'loc' attribute"
+                    );
                 }
                 $basename = substr(basename($child->loc), 0, -4); // cut .xml
 
                 if (!isset($child->lastmod)) {
-                    throw new \InvalidArgumentException("One of referenced sitemaps in $filename doesn't contain 'lastmod' attribute");
+                    throw new \InvalidArgumentException(
+                        "One of referenced sitemaps in $filename doesn't contain 'lastmod' attribute"
+                    );
                 }
                 $lastmod = new \DateTime($child->lastmod);
                 $urlsets[$basename] = $this->newUrlset($basename, $lastmod);
@@ -164,7 +166,7 @@ class Dumper extends Generator
     /**
      * Moves sitemaps created in a temporary folder to their real location
      *
-     * @param $targetDir Directory to move created sitemaps to
+     * @param string $targetDir Directory to move created sitemaps to
      *
      * @throws \RuntimeException
      */
@@ -188,8 +190,7 @@ class Dumper extends Generator
      */
     protected function deleteExistingSitemaps($targetDir)
     {
-        foreach ($this->urlsets as $urlset)
-        {
+        foreach ($this->urlsets as $urlset) {
             $basename = basename($urlset->getLoc());
             if (preg_match('/(.*)_[\d]+\.xml/', $basename)) {
                 continue; // skip numbered files
@@ -205,7 +206,9 @@ class Dumper extends Generator
     /**
      * Factory method for creating Urlset objects
      *
-     * @param $name
+     * @param string    $name
+     *
+     * @param \DateTime $lastmod
      *
      * @return \Presta\SitemapBundle\Sitemap\DumpingUrlset
      */

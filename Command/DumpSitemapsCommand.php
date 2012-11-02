@@ -10,11 +10,11 @@
 
 namespace Presta\SitemapBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface,
-    Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Command to dump the sitemaps to provided directory
@@ -51,6 +51,8 @@ class DumpSitemapsCommand extends ContainerAwareCommand
      *
      * @param \Symfony\Component\Console\Input\InputInterface   $input  Input object from the console
      * @param \Symfony\Component\Console\Output\OutputInterface $output Output object for the console
+     *
+     * @throws \InvalidArgumentException
      * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -78,9 +80,13 @@ class DumpSitemapsCommand extends ContainerAwareCommand
                     $targetDir
                 )
             );
-        }
-        else {
-            $output->writeln(sprintf("Dumping <comment>all sections</comment> of sitemaps into <comment>%s</comment> directory", $targetDir));
+        } else {
+            $output->writeln(
+                sprintf(
+                    "Dumping <comment>all sections</comment> of sitemaps into <comment>%s</comment> directory",
+                    $targetDir
+                )
+            );
         }
         $filenames = $dumper->dump($targetDir, $input->getOption('section'));
 

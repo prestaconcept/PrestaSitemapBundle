@@ -17,7 +17,8 @@ use \Presta\SitemapBundle\Event\SitemapPopulateEvent;
  *
  * @author Konstantin Tjuterev <kostik.lv@gmail.com>
  */
-interface SitemapListenerInterface {
+interface SitemapListenerInterface
+{
 
     /**
      * @abstract
@@ -30,5 +31,4 @@ interface SitemapListenerInterface {
      * @return void
      */
     public function populateSitemap(SitemapPopulateEvent $event);
-
 }

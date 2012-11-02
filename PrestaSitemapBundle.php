@@ -10,9 +10,9 @@
 
 namespace Presta\SitemapBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle,
-    Symfony\Component\DependencyInjection\ContainerBuilder,
-    Presta\SitemapBundle\DependencyInjection\Compiler\AddSitemapListenersPass;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Presta\SitemapBundle\DependencyInjection\Compiler\AddSitemapListenersPass;
 
 /**
  * Bundle that provides tools to render application sitemap according to 

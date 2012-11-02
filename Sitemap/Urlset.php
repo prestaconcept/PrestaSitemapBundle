@@ -25,7 +25,8 @@ class Urlset extends XmlConstraint
     protected $customNamespaces = array();
 
     /**
-     * @param string $loc 
+     * @param string    $loc
+     * @param \DateTime $lastmod
      */
     public function __construct($loc, \DateTime $lastmod = null)
     {
@@ -69,7 +70,7 @@ class Urlset extends XmlConstraint
         $this->customNamespaces = array_merge($this->customNamespaces, $url->getCustomNamespaces());
 
         //---------------------
-        //Check limits 
+        //Check limits
         if ($this->countItems++ >= self::LIMIT_ITEMS) {
             $this->limitItemsReached = true;
         }

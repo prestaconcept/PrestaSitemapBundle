@@ -27,6 +27,8 @@ class DumpingUrlset extends Urlset
     /**
      * @param string    $loc      This Urlset (sitemap) URL, for use in Sitemapindex
      * @param \DateTime $lastmod  Modification time
+     *
+     * @throws \RuntimeException
      */
     public function __construct($loc, \DateTime $lastmod = null)
     {
@@ -52,7 +54,7 @@ class DumpingUrlset extends Urlset
      * Saves prepared (in a temporary file) sitemap to target dir
      * Basename of sitemap location is used (as they should always match)
      *
-     * @param $targetDir Directory where file should be saved
+     * @param string $targetDir Directory where file should be saved
      */
     public function save($targetDir)
     {
