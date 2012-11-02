@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class SitemapControllerTest extends WebTestCase
 {
-    
+
     public function setUp() 
     {
         //boot appKernel
@@ -27,10 +27,13 @@ class SitemapControllerTest extends WebTestCase
             ->addListener(SitemapPopulateEvent::onSitemapPopulate, function(SitemapPopulateEvent $event) {
                 $event->getGenerator()->addUrl(
                     new Url\UrlConcrete(
-                            'http://acme.com/static-page.html', 
-                            new \DateTime(), 
-                            Url\UrlConcrete::CHANGEFREQ_HOURLY, 1), 
-                        'default');
+                        'http://acme.com/static-page.html',
+                        new \DateTime(),
+                        Url\UrlConcrete::CHANGEFREQ_HOURLY,
+                        1
+                    ),
+                    'default'
+                );
             });
         //-------------------
             

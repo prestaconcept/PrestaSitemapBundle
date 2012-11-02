@@ -25,7 +25,8 @@ class Urlset extends XmlConstraint
     protected $customNamespaces = array();
 
     /**
-     * @param string $loc 
+     * @param string    $loc
+     * @param \DateTime $lastmod
      */
     public function __construct($loc, \DateTime $lastmod = null)
     {
@@ -63,13 +64,13 @@ class Urlset extends XmlConstraint
         }
 
         $urlXml = $url->toXml();
-        $this->urlsXml .= $urlXml;
+        $this->appendXML($urlXml);
 
         //add unknown custom namespaces
         $this->customNamespaces = array_merge($this->customNamespaces, $url->getCustomNamespaces());
 
         //---------------------
-        //Check limits 
+        //Check limits
         if ($this->countItems++ >= self::LIMIT_ITEMS) {
             $this->limitItemsReached = true;
         }
@@ -84,6 +85,16 @@ class Urlset extends XmlConstraint
             $this->limitBytesReached = true;
         }
         //---------------------
+    }
+
+    /**
+     * Appends URL's XML to internal string buffer
+     *
+     * @param $urlXml
+     */
+    protected function appendXML($urlXml)
+    {
+        $this->urlsXml .= $urlXml;
     }
 
     /**

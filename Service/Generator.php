@@ -15,6 +15,8 @@ use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Presta\SitemapBundle\Sitemap\Sitemapindex;
+use Presta\SitemapBundle\Sitemap\Url\Url;
 
 /**
  * Sitemap Manager service
@@ -57,10 +59,8 @@ class Generator
      */
     public function generate()
     {
-        //---------------------
-        // Populate
-        $event = new SitemapPopulateEvent($this);
-        $this->dispatcher->dispatch(SitemapPopulateEvent::onSitemapPopulate, $event);
+        $this->populate();
+
         //---------------------
         //---------------------
         // cache management
@@ -73,6 +73,17 @@ class Generator
             }
         }
         //---------------------
+    }
+
+    /**
+     * Dispatches SitemapPopulate Event - the listeners should use it to add their URLs to the sitemap
+     *
+     * @param string|null $section
+     */
+    protected function populate($section = null)
+    {
+        $event = new SitemapPopulateEvent($this, $section);
+        $this->dispatcher->dispatch(SitemapPopulateEvent::onSitemapPopulate, $event);
     }
 
     /**
@@ -102,15 +113,16 @@ class Generator
 
     /**
      * add an Url to an Urlset
-     * 
+     *
      * section is helpfull for partial cache invalidation
      * //TODO: make $section optional
-     * 
-     * @param Url\Url $url
-     * @param str $section 
-     * @throws \RuntimeException 
+     *
+     * @param \Presta\SitemapBundle\Sitemap\Url\Url $url
+     * @param string                                $section
+     *
+     * @throws \RuntimeException
      */
-    public function addUrl(Sitemap\Url\Url $url, $section)
+    public function addUrl(Url $url, $section)
     {
         $urlset = $this->getUrlset($section);
 
@@ -130,15 +142,30 @@ class Generator
     }
 
     /**
+     * Factory method for create Urlsets
+     *
+     * @param string $name
+     *
+     * @return \Presta\SitemapBundle\Sitemap\Urlset
+     */
+    protected function newUrlset($name)
+    {
+        return new Sitemap\Urlset(
+            $this->router->generate('PrestaSitemapBundle_section', array('name' => $name, '_format' => 'xml'), true)
+        );
+    }
+
+    /**
      * get or create urlset
      * 
-     * @param str $name
-     * @return Urlset 
+     * @param string $name
+     *
+     * @return \Presta\SitemapBundle\Sitemap\Urlset
      */
     public function getUrlset($name)
     {
         if (!isset($this->urlsets[$name])) {
-            $this->urlsets[$name] = new Sitemap\Urlset($this->router->generate('PrestaSitemapBundle_section', array('name' => $name, '_format' => 'xml'), true));
+            $this->urlsets[$name] = $this->newUrlset($name);
 
             if (!$this->root) {
                 $this->root = new Sitemap\Sitemapindex();

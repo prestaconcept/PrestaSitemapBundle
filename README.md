@@ -43,17 +43,27 @@ need:
             resource: "@PrestaSitemapBundle/Resources/config/routing.yml"
             prefix:   /
 
-4. [optionnal] Configure the time to live
+4. [optional] Configure the time to live
 
-You may want to change the default 3600 seconds max-age set when rendering the
-sitemap. Edit the following configuration in your application.
+    You may want to change the default 3600 seconds max-age set when rendering the
+    sitemap. Edit the following configuration in your application.
 
-    #app/config/config.yml
-    presta_sitemap:
-        timetolive: 3600
+        #app/config/config.yml
+        presta_sitemap:
+            timetolive: 3600
 
-Also this value is used by the cache if you have installed and configured 
-liip_doctrine_cache.
+    Also this value is used by the cache if you have installed and configured
+    liip_doctrine_cache.
+
+5. [optional] Configure base URL for dumper
+
+    If you are going to use sitemap Dumper to create sitemap files by using CLI command
+    you have to set the base URL of where you sitemap files will be accessible. The hostname
+    of the URL will also be used to make Router generate URLs with hostname.
+
+        #app/config/config.yml
+        presta_sitemap:
+            dumper_base_url: http://www.example.com/
 
 ## Usage
 
@@ -100,6 +110,45 @@ the sitemapindex will be : http://acme.com/sitemap.xml
 So the default section will be available at http://acme.com/sitemap.default.xml . 
 Note that if one limit is exceeded a new section will be added 
 (eg. http://acme.com/sitemap.default_1.xml)
+
+### Sitemap Event Listeners
+
+You can also register your sitemap event listeners by creating service classes implementing
+`Presta\SitemapBundle\Service\SitemapListenerInterface` and tagging these services with `presta.sitemap.listener`
+tag. This way the services will be lazy-loaded by Symfony's event dispatcher, only when the event is dispatched:
+
+    // services.xml
+    <service id="my.sitemap.listener" class="Acme\DemoBundle\EventListener\SitemapListener">
+        <tag name="presta.sitemap.listener" />
+        <argument type="service" id="router"/>
+    </service>
+
+    // Acme/DemoBundle/EventListener/SitemapListener.php
+    class SitemapListener implements SitemapListenerInterface
+    {
+
+        private $router;
+
+        public function __construct(RouterInterface $router)
+        {
+            $this->router = $router;
+        }
+
+        public function populateSitemap(SitemapPopulateEvent $event)
+        {
+            $section = $event->getSection();
+            if (is_null($section) || $section == 'default') {
+                //get absolute homepage url
+                $url = $router->generate('homepage', array(), true);
+                //add homepage url to the urlset named default
+                $event->getGenerator()->addUrl(new UrlConcrete(
+                        $url,
+                        new \DateTime(),
+                        UrlConcrete::CHANGEFREQ_HOURLY,
+                        1), 'default');
+            }
+        }
+    }
 
 ### Url Decorator
 
@@ -178,3 +227,43 @@ sitemap :
     //...
 
 This case is similar for tags in GoogleVideoUrlDecorator.
+
+## Dumper command
+
+If you want to dump your sitemaps to files and serve them statically (like assets are served)
+you can use `presta:sitemap:dump` console command. This can also be useful if you have really large sitemaps.
+The command dumps them into files w/o consuming much memory.
+
+To use it you have to set `dumper_base_url` in your config.yml (see above).
+The command accepts single argument which is the folder where to dump sitemaps to, it defaults to `web`, since
+most of the people keep the sitemaps in the root of their sites.
+The command always creates `sitemap.xml` file as sitemaps index. The other files are named according to section names
+you provide, when adding URLs in your `SitemapPopulateEvent` event listeners.
+
+    > app/console presta:sitemap:dump
+    Dumping all sections of sitemaps into web directory
+    Created the following sitemap files
+        main.xml
+        main_0.xml
+        sitemap.xml
+
+The command first creates all sitemap files in a temporary location. Once all of the files are created
+it deletes matching (by section names) files from your target directory and copies newly prepared files in place.
+This happens in almost atomic way. In case anything went wrong during sitemap generation your existing sitemap files
+will be untouched.
+
+Dumper command can also be used to regenerate just a part of sitemaps (by section name). In order to do that
+you have to supply `--section=name` option to the command. It will regenerate only sections with that name
+and update corresponding part of sitemap index file, leaving other sitemap references intact.
+
+To make use of these feature your Event listeners should check `$event->getSection()` in the following way:
+
+    if (is_null($event->getSection()) || $event->getSection() == 'mysection') {
+        $event->getGenerator()->addUrl(new UrlConcrete(
+                                $url,
+                                new \DateTime(),
+                                UrlConcrete::CHANGEFREQ_HOURLY,
+                                1), 'mysection');
+    }
+
+

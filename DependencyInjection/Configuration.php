@@ -32,7 +32,10 @@ class Configuration implements ConfigurationInterface
         $rootNode->children()
                     ->scalarNode('timetolive')
                         ->defaultValue('3600')
-                        ->end();
+                    ->end()
+                    ->scalarNode('dumper_base_url')
+                        ->defaultValue('http://localhost/')
+                    ->end();
 
         return $treeBuilder;
     }

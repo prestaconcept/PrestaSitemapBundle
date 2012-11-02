@@ -11,6 +11,8 @@
 namespace Presta\SitemapBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Presta\SitemapBundle\DependencyInjection\Compiler\AddSitemapListenersPass;
 
 /**
  * Bundle that provides tools to render application sitemap according to 
@@ -21,5 +23,10 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class PrestaSitemapBundle extends Bundle
 {
-    
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new AddSitemapListenersPass());
+    }
 }
