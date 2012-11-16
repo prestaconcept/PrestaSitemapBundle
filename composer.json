@@ -12,7 +12,7 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "symfony/symfony": ">=2.1.0,<2.2.*@dev"
+        "symfony/symfony": ">=2.1.0"
     },
     "suggest": {
         "liip/doctrine-cache-bundle" : "Allows to store sitemaps in cache"
