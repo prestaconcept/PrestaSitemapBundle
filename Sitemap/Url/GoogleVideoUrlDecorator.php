@@ -461,7 +461,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
         //----------------------
         //----------------------
         // simple optionnal fields
-        foreach (array('content_loc', 'duration', 'rating', 'view_count', 'family_friendly', 'requires_subscription', 'live') as $paramName) {
+        foreach (array('category', 'content_loc', 'duration', 'rating', 'view_count', 'family_friendly', 'requires_subscription', 'live') as $paramName) {
             $getMethod = $this->getGetMethod($paramName);
             if ($this->$getMethod()) {
                 $videoXml .= '<video:' . $paramName . '>' . $this->$getMethod() . '</video:' . $paramName . '>';
