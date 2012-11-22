@@ -16,18 +16,18 @@ need:
 
 ## Installation
 
-1. Add to your composer.json
+1. Add to your `composer.json`
 
+    ```yaml
         "require": { 
             //...
             "presta/sitemap-bundle": "dev-master"
         }
+    ```
 
-2. Enable the bundle
+2. Enable the bundle in your `app/AppKernel.php`
 
-        <?php
-        // app/AppKernel.php
-
+    ```php
         public function registerBundles()
         {
             $bundles = array(
@@ -35,35 +35,38 @@ need:
                 new Presta\SitemapBundle\PrestaSitemapBundle(),
             );
         }
+    ```
 
-3. Add the routes
+3. [optional] Add the routes to your `app/config/routing.yml`
 
-        #app/config/routing.yml
-        PrestaSitemapBundle:
-            resource: "@PrestaSitemapBundle/Resources/config/routing.yml"
-            prefix:   /
+    ```yaml
+    PrestaSitemapBundle:
+        resource: "@PrestaSitemapBundle/Resources/config/routing.yml"
+        prefix:   /
+    ```
 
-4. [optional] Configure the time to live
+4. [optional] Configure the time to live in `app/config/config.yml`
 
     You may want to change the default 3600 seconds max-age set when rendering the
     sitemap. Edit the following configuration in your application.
 
-        #app/config/config.yml
-        presta_sitemap:
-            timetolive: 3600
+    ```yaml
+    presta_sitemap:
+        timetolive: 3600
+    ```
 
-    Also this value is used by the cache if you have installed and configured
-    liip_doctrine_cache.
+    Also this value is used by the cache if you have installed and configured liip_doctrine_cache.
 
-5. [optional] Configure base URL for dumper
+5. [optional] Configure base URL for dumper in `app/config/config.yml`
 
     If you are going to use sitemap Dumper to create sitemap files by using CLI command
     you have to set the base URL of where you sitemap files will be accessible. The hostname
     of the URL will also be used to make Router generate URLs with hostname.
 
-        #app/config/config.yml
-        presta_sitemap:
-            dumper_base_url: http://www.example.com/
+    ```yaml
+    presta_sitemap:
+        dumper_base_url: "http://www.example.com/"
+    ```
 
 ## Usage
 
@@ -73,37 +76,43 @@ urls to PrestaSitemapBundle when called.
 
 For example in your AcmeDemoBundle :
 
-    <?php
+```php
+<?php
+namespace Acme\DemoBundle;
 
-    namespace Acme\DemoBundle;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-    use Presta\SitemapBundle\Event\SitemapPopulateEvent;
-    use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
-    use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Presta\SitemapBundle\Event\SitemapPopulateEvent;
+use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
-    class AcmeDemoBundle extends Bundle
+class AcmeDemoBundle extends Bundle
+{
+    public function boot()
     {
+        $router = $this->container->get('router');
+        $event  = $this->container->get('event_dispatcher');
 
-        public function boot()
-        {
-            $router = $this->container->get('router');
-            $event  = $this->container->get('event_dispatcher');
+        //listen presta_sitemap.populate event
+        $event->addListener(
+            SitemapPopulateEvent::onSitemapPopulate, 
+            function(SitemapPopulateEvent $event) use ($router){
+                //get absolute homepage url
+                $url = $router->generate('homepage', array(), true);
 
-            //listen presta_sitemap.populate event
-            $event->addListener(
-                    SitemapPopulateEvent::onSitemapPopulate, 
-                    function(SitemapPopulateEvent $event) use ($router){
-                        //get absolute homepage url
-                        $url = $router->generate('homepage', array(), true);
-                        //add homepage url to the urlset named default
-                        $event->getGenerator()->addUrl(new UrlConcrete(
-                                $url, 
-                                new \DateTime(), 
-                                UrlConcrete::CHANGEFREQ_HOURLY, 
-                                1), 'default');
-                    });
-        }
+                //add homepage url to the urlset named default
+                $event->getGenerator()->addUrl(
+                    new UrlConcrete(
+                        $url, 
+                        new \DateTime(), 
+                        UrlConcrete::CHANGEFREQ_HOURLY, 
+                        1
+                    ),
+                    'default'
+                );
+        });
     }
+}
+```
 
 Then the sitemap can be generated and optionnaly set in cache; 
 the sitemapindex will be : http://acme.com/sitemap.xml
@@ -115,63 +124,81 @@ Note that if one limit is exceeded a new section will be added
 
 You can also register your sitemap event listeners by creating service classes implementing
 `Presta\SitemapBundle\Service\SitemapListenerInterface` and tagging these services with `presta.sitemap.listener`
-tag. This way the services will be lazy-loaded by Symfony's event dispatcher, only when the event is dispatched:
+tag in your `Resources/config/services.xml`. This way the services will be lazy-loaded by Symfony's event dispatcher, only when the event is dispatched:
 
-    // services.xml
-    <service id="my.sitemap.listener" class="Acme\DemoBundle\EventListener\SitemapListener">
-        <tag name="presta.sitemap.listener" />
-        <argument type="service" id="router"/>
-    </service>
+```xml
+<service id="my.sitemap.listener" class="Acme\DemoBundle\EventListener\SitemapListener">
+    <tag name="presta.sitemap.listener" />
+    <argument type="service" id="router"/>
+</service>
+```
 
-    // Acme/DemoBundle/EventListener/SitemapListener.php
-    class SitemapListener implements SitemapListenerInterface
+Sitemap listener example `Acme/DemoBundle/EventListener/SitemapListener.php`
+```php
+<?php
+namespace Acme\DemoBundle\EventListener;
+
+use Symfony\Component\Routing\RouterInterface;
+
+use Presta\SitemapBundle\Service\SitemapListenerInterface;
+use Presta\SitemapBundle\Event\SitemapPopulateEvent;
+use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
+
+class SitemapListener implements SitemapListenerInterface
+{
+    private $router;
+
+    public function __construct(RouterInterface $router)
     {
+        $this->router = $router;
+    }
 
-        private $router;
+    public function populateSitemap(SitemapPopulateEvent $event)
+    {
+        $section = $event->getSection();
+        if (is_null($section) || $section == 'default') {
+            //get absolute homepage url
+            $url = $router->generate('homepage', array(), true);
 
-        public function __construct(RouterInterface $router)
-        {
-            $this->router = $router;
-        }
-
-        public function populateSitemap(SitemapPopulateEvent $event)
-        {
-            $section = $event->getSection();
-            if (is_null($section) || $section == 'default') {
-                //get absolute homepage url
-                $url = $router->generate('homepage', array(), true);
-                //add homepage url to the urlset named default
-                $event->getGenerator()->addUrl(new UrlConcrete(
-                        $url,
-                        new \DateTime(),
-                        UrlConcrete::CHANGEFREQ_HOURLY,
-                        1), 'default');
-            }
+            //add homepage url to the urlset named default
+            $event->getGenerator()->addUrl(
+                new UrlConcrete(
+                    $url,
+                    new \DateTime(),
+                    UrlConcrete::CHANGEFREQ_HOURLY,
+                    1
+                ),
+                'default'
+            );
         }
     }
+}
+```
 
 ### Url Decorator
 
 UrlConcrete is the most basic url, but you may want to add images to your url. 
-You just need to decorate with GoogleImageUrlDecorator :
+You just need to decorate with `GoogleImageUrlDecorator`:
 
-    use Presta\SitemapBundle\Sitemap\Url;
+```php
+use Presta\SitemapBundle\Sitemap\Url;
     
-    //a basic url that provide a xml element following protocol
-    $urlBase    = new Url\UrlConcrete('http://acme.com/');
+// a basic url that provide a xml element following protocol
+$urlBase    = new Url\UrlConcrete('http://acme.com/');
     
-    //decorate the url with images for google crawler
-    //this also indicates to urlset to use the "image" namespace
-    $urlImage   = new Url\GoogleImageUrlDecorator($urlBase);
+// decorate the url with images for google crawler
+// this also indicates to urlset to use the "image" namespace
+$urlImage   = new Url\GoogleImageUrlDecorator($urlBase);
     
-    //add one or more images to the url
-    $urlImage->addImage(new Url\GoogleImage('http://acme.com/the-big-picture.jpg'));
+// add one or more images to the url
+$urlImage->addImage(new Url\GoogleImage('http://acme.com/the-big-picture.jpg'));
     
-    //you can add other decorators to the url
-    $urlLang    = new Url\GoogleMultilangUrlDecorator($urlImage);
+// you can add other decorators to the url
+$urlLang    = new Url\GoogleMultilangUrlDecorator($urlImage);
 
-    //... don't forget to add the url to a section
-    $event->getGenerator()->addUrl($urlLang);
+// ... don't forget to add the url to a section
+$event->getGenerator()->addUrl($urlLang);
+```
 
 PrestaSitemapBundle provides those decorators (but you can use your own) : 
 
@@ -192,14 +219,14 @@ You need to install LiipDoctrineCacheBundle and specify what kind of cache
 system to use with PrestaSitemap.
 
  * Follow the instruction to install [LiipDoctrineCacheBundle](http://packagist.org/packages/liip/doctrine-cache-bundle).
- * Configure a service for PrestaSitemap, this is an exemple with php-apc :
+ * Configure a service for PrestaSitemap, this is an exemple in `app/config/config.yml` with php-apc :
 
-        #config.yml
-        liip_doctrine_cache:
-            namespaces:
-                presta_sitemap:
-                    type: apc
-
+```yaml
+liip_doctrine_cache:
+    namespaces:
+        presta_sitemap:
+            type: "apc"
+```
 
 ## Deeper informations
 
@@ -212,19 +239,21 @@ In this case the generator will throw Exceptions.
 So you yo have to set the limit yourself or safely try to add elements to your 
 sitemap :
 
-    //...
-    $url = new Url\GoogleImageUrlDecorator(new Url\UrlConcrete('http://acme.com/'));
+```php
+use Presta\SitemapBundle\Sitemap\Url;
+
+$url = new Url\GoogleImageUrlDecorator(new Url\UrlConcrete('http://acme.com/'));
     
-    try {
-        foreach($bigCollectionNotSafe as $loc) {
-            $url->addImage(new Url\GoogleImage($loc));
-        }
-    } catch (Presta\SitemapBundle\Exception $e) {
-        //Sir, the area is safe, Sir!
+try {
+    foreach($bigCollectionNotSafe as $loc) {
+        $url->addImage(new Url\GoogleImage($loc));
     }
+} catch (Presta\SitemapBundle\Exception $e) {
+    // Sir, the area is safe, Sir!
+}
     
-    $event->getGenerator()->addUrl($url, 'default');
-    //...
+$event->getGenerator()->addUrl($url, 'default');
+```
 
 This case is similar for tags in GoogleVideoUrlDecorator.
 
@@ -258,12 +287,18 @@ and update corresponding part of sitemap index file, leaving other sitemap refer
 
 To make use of these feature your Event listeners should check `$event->getSection()` in the following way:
 
-    if (is_null($event->getSection()) || $event->getSection() == 'mysection') {
-        $event->getGenerator()->addUrl(new UrlConcrete(
-                                $url,
-                                new \DateTime(),
-                                UrlConcrete::CHANGEFREQ_HOURLY,
-                                1), 'mysection');
-    }
+```php
+if (is_null($event->getSection()) || $event->getSection() == 'mysection') {
+    $event->getGenerator()->addUrl(
+        new UrlConcrete(
+            $url,
+            new \DateTime(),
+            UrlConcrete::CHANGEFREQ_HOURLY,
+            1
+        ),
+        'mysection'
+    );
+}
+```
 
 
