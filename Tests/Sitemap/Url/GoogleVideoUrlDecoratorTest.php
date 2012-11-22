@@ -63,7 +63,7 @@ class GoogleVideoUrlDecoratorTest extends \PHPUnit_Framework_TestCase
     public function testCountNamespaces()
     {
         $namespaces = $this->xml->getElementsByTagNameNS('http://www.google.com/schemas/sitemap-video/1.1', '*');
-        $this->assertEquals(23, $namespaces->length);
+        $this->assertEquals(24, $namespaces->length);
     }
     
 }
