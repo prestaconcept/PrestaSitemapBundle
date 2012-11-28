@@ -6,4 +6,4 @@
  * Andrej Hudec
  * Konstantin Tjuterev (@kostiklv)
  * @mcrinquand
- * Gordon Franke (@gimle)
+ * Gordon Franke (@gimler)
