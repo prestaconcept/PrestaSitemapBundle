@@ -10,9 +10,13 @@
 
 namespace Presta\SitemapBundle\Sitemap\Url;
 
+if (!defined('ENT_SUBSTITUTE')) {
+    define('ENT_SUBSTITUTE', 8);
+}
+
 /**
  * Class used for managing url entities
- * 
+ *
  * @author Christophe Dolivet
  * @author David Epely
  */
@@ -33,7 +37,7 @@ class UrlConcrete implements Url
 
     /**
      * Construct a new basic url
-     * 
+     *
      * @param string $loc - absolute url
      * @param \DateTime $lastmod
      * @param string $changefreq
@@ -64,7 +68,7 @@ class UrlConcrete implements Url
     }
 
     /**
-     * @param \DateTime $lastmod 
+     * @param \DateTime $lastmod
      */
     public function setLastmod(\DateTime $lastmod = null)
     {
@@ -81,7 +85,7 @@ class UrlConcrete implements Url
 
     /**
      * Define the change frequency of this entry
-     * 
+     *
      * @param string $changefreq - String or null value used for defining the change frequency
      */
     public function setChangefreq($changefreq = null)
@@ -104,7 +108,7 @@ class UrlConcrete implements Url
 
     /**
      * return the change frequency
-     * 
+     *
      * @return string
      */
     public function getChangefreq()
@@ -114,7 +118,7 @@ class UrlConcrete implements Url
 
     /**
      * Define the priority of this entry
-     * 
+     *
      * @param float $priority - Float or null value used for defining the priority
      */
     public function setPriority($priority = null)
@@ -139,11 +143,11 @@ class UrlConcrete implements Url
     }
 
     /**
-     * @return string 
+     * @return string
      */
     public function toXml()
     {
-        $xml = '<url><loc>' . $this->getLoc() . '</loc>';
+        $xml = '<url><loc>' . $this->encode($this->getLoc()) . '</loc>';
 
         if ($this->getLastmod()) {
             $xml .= '<lastmod>' . $this->getLastmod()->format('c') . '</lastmod>';
@@ -164,10 +168,15 @@ class UrlConcrete implements Url
 
     /**
      * basic url has no namespace. see decorated urls
-     * @return array 
+     * @return array
      */
     public function getCustomNamespaces()
     {
         return array();
+    }
+
+    private function encode($string)
+    {
+        return htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 }
