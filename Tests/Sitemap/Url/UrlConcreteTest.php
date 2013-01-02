@@ -25,7 +25,7 @@ class UrlConcreteTest extends \PHPUnit_Framework_TestCase
             array('<url><loc>http://example.com/</loc></url>', 'http://example.com/'),
             array('<url><loc>http://example.com/abcd</loc></url>', 'http://example.com/abcd'),
             array('<url><loc>http://example.com/abcd/?a=1&amp;b=cdf</loc></url>', 'http://example.com/abcd/?a=1&b=cdf'),
-            array('<url><loc>http://example.com/</loc><lastmod>2012-12-29T10:39:12+01:00</lastmod></url>', 'http://example.com/', new \DateTime('2012-12-29 10:39:12')),
+            array('<url><loc>http://example.com/</loc><lastmod>2012-12-29T10:39:12+00:00</lastmod></url>', 'http://example.com/', new \DateTime('2012-12-29 10:39:12', new \DateTimeZone('Europe/London'))),
             array('<url><loc>http://example.com/</loc><changefreq>always</changefreq></url>', 'http://example.com/', null, 'always'),
             array('<url><loc>http://example.com/</loc><changefreq>hourly</changefreq></url>', 'http://example.com/', null, 'hourly'),
             array('<url><loc>http://example.com/</loc><changefreq>weekly</changefreq></url>', 'http://example.com/', null, 'weekly'),
@@ -36,7 +36,7 @@ class UrlConcreteTest extends \PHPUnit_Framework_TestCase
             array('<url><loc>http://example.com/</loc><priority>0.1</priority></url>', 'http://example.com/', null, null, 0.1),
             array('<url><loc>http://example.com/</loc><priority>0.5</priority></url>', 'http://example.com/', null, null, 0.5),
             array('<url><loc>http://example.com/</loc><priority>1.0</priority></url>', 'http://example.com/', null, null, 1),
-            array('<url><loc>http://example.com/abcd/?a=1&amp;b=cdf&amp;ghj=ijklmn</loc><lastmod>2012-01-01T00:00:00+01:00</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>', 'http://example.com/abcd/?a=1&b=cdf&ghj=ijklmn', new \DateTime('2012-1-1 00:00:00'), 'daily', 0.7),
+            array('<url><loc>http://example.com/abcd/?a=1&amp;b=cdf&amp;ghj=ijklmn</loc><lastmod>2012-01-01T00:00:00+00:00</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>', 'http://example.com/abcd/?a=1&b=cdf&ghj=ijklmn', new \DateTime('2012-1-1 00:00:00', new \DateTimeZone('Europe/London')), 'daily', 0.7),
             array('<url><loc>http://example.com/abcd/?a=1&amp;b=cdf&amp;ghj=ijklmn</loc><changefreq>daily</changefreq><priority>0.7</priority></url>', 'http://example.com/abcd/?a=1&b=cdf&ghj=ijklmn', null, 'daily', 0.7),
         );
     }
