@@ -35,6 +35,7 @@ class GoogleMultilangUrlDecorator extends UrlDecorator
     public function addLink($href, $hreflang, $rel = null)
     {
         $this->linkXml .= $this->generateLinkXml($href, $hreflang, $rel);
+        return $this;
     }
 
     /**

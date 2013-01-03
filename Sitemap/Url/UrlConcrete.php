@@ -10,9 +10,7 @@
 
 namespace Presta\SitemapBundle\Sitemap\Url;
 
-if (!defined('ENT_SUBSTITUTE')) {
-    define('ENT_SUBSTITUTE', 8);
-}
+use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
  * Class used for managing url entities
@@ -57,6 +55,7 @@ class UrlConcrete implements Url
     public function setLoc($loc)
     {
         $this->loc = $loc;
+        return $this;
     }
 
     /**
@@ -73,6 +72,7 @@ class UrlConcrete implements Url
     public function setLastmod(\DateTime $lastmod = null)
     {
         $this->lastmod = $lastmod;
+        return $this;
     }
 
     /**
@@ -104,6 +104,7 @@ class UrlConcrete implements Url
         }
 
         $this->changefreq = $changefreq;
+        return $this;
     }
 
     /**
@@ -132,6 +133,7 @@ class UrlConcrete implements Url
         } else {
             throw new \RuntimeException(sprintf('The value "%s" is not supported by the option priority, it must be a numeric between 0.0 and 1.0. See http://www.sitemaps.org/protocol.html#xmlTagDefinitions', $priority));
         }
+        return $this;
     }
 
     /**
@@ -147,7 +149,7 @@ class UrlConcrete implements Url
      */
     public function toXml()
     {
-        $xml = '<url><loc>' . $this->encode($this->getLoc()) . '</loc>';
+        $xml = '<url><loc>' . Utils::encode($this->getLoc()) . '</loc>';
 
         if ($this->getLastmod()) {
             $xml .= '<lastmod>' . $this->getLastmod()->format('c') . '</lastmod>';
@@ -173,10 +175,5 @@ class UrlConcrete implements Url
     public function getCustomNamespaces()
     {
         return array();
-    }
-
-    private function encode($string)
-    {
-        return htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 }

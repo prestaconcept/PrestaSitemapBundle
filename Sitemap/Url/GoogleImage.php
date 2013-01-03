@@ -10,6 +10,8 @@
 
 namespace Presta\SitemapBundle\Sitemap\Url;
 
+use Presta\SitemapBundle\Sitemap\Utils;
+
 /**
  * Class used for managing image's url entities
  * 
@@ -48,6 +50,7 @@ class GoogleImage
     public function setLoc($loc)
     {
         $this->loc = $loc;
+        return $this;
     }
 
     /**
@@ -64,6 +67,7 @@ class GoogleImage
     public function setCaption($caption)
     {
         $this->caption = $caption;
+        return $this;
     }
 
     /**
@@ -80,6 +84,7 @@ class GoogleImage
     public function setGeoLocation($geo_location)
     {
         $this->geo_location = $geo_location;
+        return $this;
     }
 
     /**
@@ -96,6 +101,7 @@ class GoogleImage
     public function setTitle($title)
     {
         $this->title = $title;
+        return $this;
     }
 
     /**
@@ -112,6 +118,7 @@ class GoogleImage
     public function setLicense($license)
     {
         $this->license = $license;
+        return $this;
     }
 
     /**
@@ -129,22 +136,22 @@ class GoogleImage
      */
     public function toXML()
     {
-        $xml = '<image:image><image:loc>' . $this->getLoc() . '</image:loc>';
+        $xml = '<image:image><image:loc>' . Utils::encode($this->getLoc()) . '</image:loc>';
 
         if ($this->getCaption()) {
-            $xml .= '<image:caption>' . $this->getCaption() . '</image:caption>';
+            $xml .= '<image:caption>' . Utils::render($this->getCaption()) . '</image:caption>';
         }
 
         if ($this->getGeoLocation()) {
-            $xml .= '<image:geo_location>' . $this->getGeoLocation() . '</image:geo_location>';
+            $xml .= '<image:geo_location>' . Utils::render($this->getGeoLocation()) . '</image:geo_location>';
         }
 
         if ($this->getTitle()) {
-            $xml .= '<image:title>' . $this->getTitle() . '</image:title>';
+            $xml .= '<image:title>' . Utils::render($this->getTitle()) . '</image:title>';
         }
 
         if ($this->getLicense()) {
-            $xml .= '<image:license>' . $this->getLicense() . '</image:license>';
+            $xml .= '<image:license>' . Utils::render($this->getLicense()) . '</image:license>';
         }
 
         $xml .= '</image:image>';

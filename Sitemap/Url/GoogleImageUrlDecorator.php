@@ -42,6 +42,7 @@ class GoogleImageUrlDecorator extends UrlDecorator
             $this->limitItemsReached = true;
         }
         //---------------------
+        return $this;
     }
 
     /**
