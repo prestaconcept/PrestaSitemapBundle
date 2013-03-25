@@ -40,6 +40,10 @@ class AddSitemapListenersPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds('presta.sitemap.listener') as $id => $tags) {
             $class = $container->getDefinition($id)->getClass();
 
+            // Resolve parameters
+            $parametersBag = $container->getParameterBag();
+            $class = $parametersBag->resolveValue($class);
+
             $refClass = new \ReflectionClass($class);
             $interface = 'Presta\SitemapBundle\Service\SitemapListenerInterface';
             if (!$refClass->implementsInterface($interface)) {
