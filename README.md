@@ -130,10 +130,16 @@ You can also register your sitemap event listeners by creating service classes i
 tag in your `Resources/config/services.xml`. This way the services will be lazy-loaded by Symfony's event dispatcher, only when the event is dispatched:
 
 ```xml
-<service id="my.sitemap.listener" class="Acme\DemoBundle\EventListener\SitemapListener">
-    <tag name="presta.sitemap.listener" />
-    <argument type="service" id="router"/>
-</service>
+<parameters>
+    <parameter key="acme_demo.sitemap.listener.class">Acme\DemoBundle\EventListener\SitemapListener</parameter>
+</parameters>
+
+<services>
+    <service id="my.sitemap.listener" class="%acme_demo.sitemap.listener.class%">
+        <tag name="presta.sitemap.listener" />
+        <argument type="service" id="router"/>
+    </service>
+</services>
 ```
 
 Sitemap listener example `Acme/DemoBundle/EventListener/SitemapListener.php`
