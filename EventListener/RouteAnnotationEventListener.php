@@ -59,7 +59,7 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
     }
 
     /**
-     * @param SitemapPopulateEvent $event
+     * @param  SitemapPopulateEvent      $event
      * @throws \InvalidArgumentException
      */
     private function addUrlsFromRoutes(SitemapPopulateEvent $event)
@@ -69,8 +69,7 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
         foreach ($collection->all() as $name => $route) {
 
             $options = $this->getOptions($name, $route);
-            if($options)
-            {
+            if ($options) {
                 $event->getGenerator()->addUrl(
                     $this->getUrlConcrete($name, $options),
                     $event->getSection() ? $event->getSection() : 'default'
@@ -82,7 +81,7 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
 
     /**
      * @param $name
-     * @param Route $route
+     * @param  Route                     $route
      * @throws \InvalidArgumentException
      * @return array
      */

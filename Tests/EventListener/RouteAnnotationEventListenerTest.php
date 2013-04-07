@@ -89,7 +89,7 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param null $option
+     * @param  null                             $option
      * @return \Symfony\Component\Routing\Route
      */
     private function getRoute($option = null)
@@ -123,8 +123,8 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
     private function getListener()
     {
         $listener = new RouteAnnotationEventListener($this->getRouter());
+
         return $listener;
     }
-
 
 }
