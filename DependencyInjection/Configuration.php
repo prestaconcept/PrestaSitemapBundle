@@ -35,7 +35,9 @@ class Configuration implements ConfigurationInterface
                     ->end()
                     ->scalarNode('dumper_base_url')
                         ->defaultValue('http://localhost/')
-                    ->end();
+                    ->end()
+                    ->scalarNode('route_annotation_listener')->defaultTrue()->end()
+        ;
 
         return $treeBuilder;
     }
