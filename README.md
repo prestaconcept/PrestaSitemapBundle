@@ -73,7 +73,8 @@ need:
 
 ## Usage
 
-The only thing required is : register url for each available pages.
+The only thing required is to register a url for each available page.
+
 You need to add one or more listeners in your application that provides your 
 urls to PrestaSitemapBundle when called. 
 
@@ -215,6 +216,62 @@ PrestaSitemapBundle provides those decorators (but you can use your own) :
  * GoogleMobileUrlDecorator
  * GoogleMultilangUrlDecorator
  * GoogleVideoUrlDecorator
+
+### Configure with Annotations
+
+You can use annotations to configure any route which does not use parameters (e.g. your static pages such as '/about',
+'/faq'). The listener that does this is enabled by default. To disable it, add the following configuration to your
+application.
+
+```yaml
+presta_sitemap:
+   route_annotation_listener: false
+```
+
+The supported sitemap parameters are:
+
+ * lastmod: a text string that can be parsed by \DateTime (default: 'now')
+ * changefreq: a text string that matches a constant defined in UrlConcrete (default: 'daily')
+ * priority: a number between 0 and 1 (default: 1)
+
+```php
+<?php
+
+class DefaultController extends Controller
+{
+    /**
+     * @Route("/", name="homepage", options={"sitemap" = true})
+     *                                      ^ include in the sitemap with default parameters
+     * @Template()
+     */
+    public function indexAction()
+    {
+        return array();
+    }
+
+    /**
+     * @Route("/faq", name="faq", options={"sitemap" = {"priority" = 0.7 }})
+     *                                      ^ override the priority parameter
+     * @Template()
+     */
+    public function faqAction()
+    {
+        return array();
+    }
+
+    /**
+     * @Route("/about", name="about", options={"sitemap" = {"priority" = 0.7, "changefreq" = "weekly" }})
+     *                                      ^ override the priority and changefreq parameters
+     * @Template()
+     */
+    public function aboutAction()
+    {
+        return array();
+    }
+
+
+}
+```
 
 ## Configuration
 

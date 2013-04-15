@@ -6,7 +6,6 @@
     <parameters>
         <parameter key="presta_sitemap.generator.class">Presta\SitemapBundle\Service\Generator</parameter>
         <parameter key="presta_sitemap.dumper.class">Presta\SitemapBundle\Service\Dumper</parameter>
-        <parameter key="presta_sitemap.eventlistener.route_annotation.class">Presta\SitemapBundle\EventListener\RouteAnnotationEventListener</parameter>
     </parameters>
 
     <services>
@@ -21,12 +20,6 @@
             <argument id="filesystem" type="service" />
             <argument>%presta_sitemap.dumper_base_url%</argument>
         </service>
-
-        <service id="presta_sitemap.eventlistener.route_annotation" class="%presta_sitemap.eventlistener.route_annotation.class%">
-            <tag name="presta.sitemap.listener" />
-            <argument type="service" id="router"/>
-        </service>
-
     </services>
 
 </container>
