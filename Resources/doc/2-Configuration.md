@@ -1,0 +1,54 @@
+# Configuration
+
+## Time to live
+
+You may want to change the default 3600 seconds max-age set when rendering the
+sitemap. Edit the following configuration in your application.
+
+```yaml
+presta_sitemap:
+    timetolive: 3600
+```
+
+Also this value is used by the cache if you have installed and configured liip_doctrine_cache.
+
+## The base URL for dumper
+
+If you are going to use sitemap Dumper to create sitemap files by using CLI command
+you have to set the base URL of where you sitemap files will be accessible. The hostname
+of the URL will also be used to make Router generate URLs with hostname.
+
+```yaml
+presta_sitemap:
+    dumper_base_url: "http://www.example.com/"
+```
+
+
+## Annotation
+
+The listener that provides annotation support is enabled by default. To disable it, add the following configuration to 
+your application.
+
+```yaml
+presta_sitemap:
+   route_annotation_listener: false
+```
+
+## Cache [optional] 
+
+Each sitemaps can be stored in your cache system :
+
+PrestaSitemapBundle uses LiipDoctrineCacheBundle to store Cache. 
+This bundle provides an abstract access to any Doctrine Common Cache classes.
+You need to install LiipDoctrineCacheBundle and specify what kind of cache 
+system to use with PrestaSitemap.
+
+ * Follow the instruction to install [LiipDoctrineCacheBundle](http://packagist.org/packages/liip/doctrine-cache-bundle).
+ * Configure a service for PrestaSitemap, this is an exemple in `app/config/config.yml` with php-apc :
+
+```yaml
+liip_doctrine_cache:
+    namespaces:
+        presta_sitemap:
+            type: "apc"
+```
