@@ -1,5 +1,8 @@
 # CHANGELOG
 
+* v1.2.0 [tag](https://github.com/prestaconcept/PrestaSitemapBundle/commits/v1.2.0)
+  * 09af5c0 : add annotation support for simple routes
+
 * v1.1.0 [tag](https://github.com/prestaconcept/PrestaSitemapBundle/commits/v1.1.0)
   * a865420 : encode url & enclose user defined data in cdata section
   * b672175 : fix parameters in service definition
