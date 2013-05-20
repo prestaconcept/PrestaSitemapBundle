@@ -13,7 +13,7 @@ namespace Presta\SitemapBundle\Service;
 use Doctrine\Common\Cache\Cache;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap;
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Presta\SitemapBundle\Sitemap\Sitemapindex;
 use Presta\SitemapBundle\Sitemap\Url\Url;
@@ -45,7 +45,7 @@ class Generator
      * @param Router $router
      * @param Cache $cache 
      */
-    public function __construct(ContainerAwareEventDispatcher $dispatcher, Router $router, Cache $cache = null)
+    public function __construct(ContainerAwareEventDispatcher $dispatcher, RouterInterface $router, Cache $cache = null)
     {
         $this->dispatcher = $dispatcher;
         $this->router = $router;
