@@ -38,6 +38,12 @@ class DumpSitemapsCommand extends ContainerAwareCommand
                 InputOption::VALUE_REQUIRED,
                 'Name of sitemap section to dump, all sections are dumped by default'
             )
+            ->addOption(
+                'host',
+                'h',
+                InputOption::VALUE_REQUIRED,
+                'Host to use for absolute urls. Defaults to dumper_base_url config parameter'
+            )
             ->addArgument(
                 'target',
                 InputArgument::OPTIONAL,
@@ -69,7 +75,7 @@ class DumpSitemapsCommand extends ContainerAwareCommand
         // Set Router's host used for generating URLs from configuration param
         // There is no other way to manage domain in CLI
         $this->getContainer()->get('router')->getContext()->setHost(
-            parse_url($this->getContainer()->getParameter('presta_sitemap.dumper_base_url'), PHP_URL_HOST)
+            parse_url($input->getOption('host') ?: $this->getContainer()->getParameter('presta_sitemap.dumper_base_url'), PHP_URL_HOST)
         );
 
         if ($input->getOption('section')) {
