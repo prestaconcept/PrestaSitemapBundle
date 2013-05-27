@@ -10,12 +10,14 @@ most of the people keep the sitemaps in the root of their sites.
 The command always creates `sitemap.xml` file as sitemaps index. The other files are named according to section names
 you provide, when adding URLs in your `SitemapPopulateEvent` event listeners.
 
-    > app/console presta:sitemap:dump
-    Dumping all sections of sitemaps into web directory
-    Created the following sitemap files
-        main.xml
-        main_0.xml
-        sitemap.xml
+```bash
+$ app/console presta:sitemap:dump
+Dumping all sections of sitemaps into web directory
+Created the following sitemap files
+    main.xml
+    main_0.xml
+    sitemap.xml
+```
 
 The command first creates all sitemap files in a temporary location. Once all of the files are created
 it deletes matching (by section names) files from your target directory and copies newly prepared files in place.
@@ -40,4 +42,15 @@ if (is_null($event->getSection()) || $event->getSection() == 'mysection') {
         'mysection'
     );
 }
+```
+
+You can overwrite default host specified `dumper_base_url` parameter if you need to generate several sitemaps with different hosts. Consider following example:
+
+```bash
+$ app/console presta:sitemap:dump --host=es.mysite.com es/
+Dumping all sections of sitemaps into web directory
+Created the following sitemap files
+    main.xml
+    main_0.xml
+    sitemap.xml
 ```
