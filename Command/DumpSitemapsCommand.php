@@ -40,7 +40,7 @@ class DumpSitemapsCommand extends ContainerAwareCommand
             )
             ->addOption(
                 'host',
-                'h',
+                null,
                 InputOption::VALUE_REQUIRED,
                 'Host to use for absolute urls. Defaults to dumper_base_url config parameter'
             )
