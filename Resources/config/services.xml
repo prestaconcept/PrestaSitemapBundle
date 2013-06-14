@@ -18,7 +18,6 @@
         <service id="presta_sitemap.dumper" class="%presta_sitemap.dumper.class%">
             <argument id="event_dispatcher" type="service" />
             <argument id="filesystem" type="service" />
-            <argument>%presta_sitemap.dumper_base_url%</argument>
         </service>
     </services>
 

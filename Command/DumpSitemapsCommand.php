@@ -38,6 +38,12 @@ class DumpSitemapsCommand extends ContainerAwareCommand
                 InputOption::VALUE_REQUIRED,
                 'Name of sitemap section to dump, all sections are dumped by default'
             )
+            ->addOption(
+                'host',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Host to use for absolute urls. Defaults to dumper_base_url config parameter'
+            )
             ->addArgument(
                 'target',
                 InputArgument::OPTIONAL,
@@ -66,11 +72,11 @@ class DumpSitemapsCommand extends ContainerAwareCommand
         /** @var $dumper \Presta\SitemapBundle\Service\Dumper */
         $dumper = $this->getContainer()->get('presta_sitemap.dumper');
 
+
+        $host = parse_url($input->getOption('host') ?: $this->getContainer()->getParameter('presta_sitemap.dumper_base_url'), PHP_URL_HOST);
         // Set Router's host used for generating URLs from configuration param
         // There is no other way to manage domain in CLI
-        $this->getContainer()->get('router')->getContext()->setHost(
-            parse_url($this->getContainer()->getParameter('presta_sitemap.dumper_base_url'), PHP_URL_HOST)
-        );
+        $this->getContainer()->get('router')->getContext()->setHost($host);
 
         if ($input->getOption('section')) {
             $output->writeln(
@@ -88,7 +94,7 @@ class DumpSitemapsCommand extends ContainerAwareCommand
                 )
             );
         }
-        $filenames = $dumper->dump($targetDir, $input->getOption('section'));
+        $filenames = $dumper->dump($targetDir, $host, $input->getOption('section'));
 
         if ($filenames === false) {
             $output->writeln("<error>No URLs were added to sitemap by EventListeners</error> - this may happen when provided section is invalid");
