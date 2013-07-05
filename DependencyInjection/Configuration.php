@@ -35,7 +35,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                     ->scalarNode('dumper_base_url')
                         ->defaultValue('http://localhost/')
-                        ->info('Used for dumper command. Default host to use if host argument is missing')
+                        ->info('Deprecated: please use host option in command. Used for dumper command. Default host to use if host argument is missing')
                     ->end()
                     ->scalarNode('route_annotation_listener')->defaultTrue()->end()
         ;
