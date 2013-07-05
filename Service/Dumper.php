@@ -159,6 +159,7 @@ class Dumper extends Generator
                 $urlsets[$basename] = $this->newUrlset($basename, $lastmod);
             }
         }
+
         return $urlsets;
     }
 
@@ -205,7 +206,7 @@ class Dumper extends Generator
     /**
      * Factory method for creating Urlset objects
      *
-     * @param string    $name
+     * @param string $name
      *
      * @param \DateTime $lastmod
      *
@@ -213,6 +214,6 @@ class Dumper extends Generator
      */
     protected function newUrlset($name, \DateTime $lastmod = null)
     {
-        return new \Presta\SitemapBundle\Sitemap\DumpingUrlset($this->baseUrl . $name . '.xml', $lastmod);
+        return new \Presta\SitemapBundle\Sitemap\DumpingUrlset($this->baseUrl . 'sitemap.' . $name . '.xml', $lastmod);
     }
 }
