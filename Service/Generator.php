@@ -20,7 +20,7 @@ use Presta\SitemapBundle\Sitemap\Url\Url;
 
 /**
  * Sitemap Manager service
- * 
+ *
  * @author David Epely <depely@prestaconcept.net>
  * @author Christophe Dolivet
  */
@@ -42,8 +42,8 @@ class Generator
 
     /**
      * @param ContainerAwareEventDispatcher $dispatcher
-     * @param Router $router
-     * @param Cache $cache 
+     * @param RouterInterface $router
+     * @param Cache $cache
      */
     public function __construct(ContainerAwareEventDispatcher $dispatcher, RouterInterface $router, Cache $cache = null)
     {
@@ -54,7 +54,7 @@ class Generator
 
     /**
      * Generate all datas and store in cache if it is possible
-     * 
+     *
      * @return void
      */
     public function generate()
@@ -88,9 +88,9 @@ class Generator
 
     /**
      * Get eventual cached data or generate whole sitemap
-     * 
+     *
      * @param string $name
-     * @return Sitemapindex or Urlset - can be <null> 
+     * @return Sitemapindex or Urlset - can be <null>
      */
     public function fetch($name)
     {
@@ -157,7 +157,7 @@ class Generator
 
     /**
      * get or create urlset
-     * 
+     *
      * @param string $name
      *
      * @return \Presta\SitemapBundle\Sitemap\Urlset
