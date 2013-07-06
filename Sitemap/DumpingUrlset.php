@@ -14,41 +14,16 @@ namespace Presta\SitemapBundle\Sitemap;
  * Urlset which writes added URLs into (temporary) files directly, w/o consuming memory
  *
  * @author Konstantin Tjuterev <kostik.lv@gmail.com>
+ * @author Konstantin Myakshin <koc-dp@yandex.ru>
  */
 class DumpingUrlset extends Urlset
 {
     /**
      * Temporary file holding the body of the sitemap
      *
-     * @var \SplTempFileObject
+     * @var resource
      */
     private $bodyFile;
-
-    /**
-     * @param string    $loc      This Urlset (sitemap) URL, for use in Sitemapindex
-     * @param \DateTime $lastmod  Modification time
-     *
-     * @throws \RuntimeException
-     */
-    public function __construct($loc, \DateTime $lastmod = null)
-    {
-        parent::__construct($loc, $lastmod);
-
-        $tmpFile = tempnam(sys_get_temp_dir(), 'sitemap');
-        if (false === $this->bodyFile = @fopen($tmpFile, 'w+')) {
-            throw new \RuntimeException("Cannot create temporary file $tmpFile");
-        }
-    }
-
-    /**
-     * Append URL's XML (to temporary file)
-     *
-     * @param $urlXml
-     */
-    protected function appendXML($urlXml)
-    {
-        fwrite($this->bodyFile, $urlXml);
-    }
 
     /**
      * Saves prepared (in a temporary file) sitemap to target dir
@@ -58,6 +33,7 @@ class DumpingUrlset extends Urlset
      */
     public function save($targetDir)
     {
+        $this->initializeFileHandler();
         $filename = realpath($targetDir) . '/' . basename($this->getLoc());
         $sitemapFile = fopen($filename, 'w');
         $structureXml = $this->getStructureXml();
@@ -76,6 +52,36 @@ class DumpingUrlset extends Urlset
         }
         fwrite($sitemapFile, '</urlset>');
         fclose($sitemapFile);
+
+        $streamInfo = stream_get_meta_data($this->bodyFile);
         fclose($this->bodyFile);
+        // removing temporary file
+        unlink($streamInfo['uri']);
+    }
+
+    /**
+     * Append URL's XML (to temporary file)
+     *
+     * @param $urlXml
+     */
+    protected function appendXML($urlXml)
+    {
+        $this->initializeFileHandler();
+        fwrite($this->bodyFile, $urlXml);
+    }
+
+    /**
+     * @throws \RuntimeException
+     */
+    private function initializeFileHandler()
+    {
+        if (null !== $this->bodyFile) {
+            return;
+        }
+
+        $tmpFile = tempnam(sys_get_temp_dir(), 'sitemap');
+        if (false === $this->bodyFile = @fopen($tmpFile, 'w+')) {
+            throw new \RuntimeException("Cannot create temporary file $tmpFile");
+        }
     }
 }
