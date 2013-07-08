@@ -55,8 +55,8 @@ class DumpSitemapsCommand extends ContainerAwareCommand
     /**
      * Code to execute for the command
      *
-     * @param \Symfony\Component\Console\Input\InputInterface   $input  Input object from the console
-     * @param \Symfony\Component\Console\Output\OutputInterface $output Output object for the console
+     * @param InputInterface   $input  Input object from the console
+     * @param OutputInterface $output Output object for the console
      *
      * @throws \InvalidArgumentException
      * @return void
@@ -65,12 +65,8 @@ class DumpSitemapsCommand extends ContainerAwareCommand
     {
         $targetDir = rtrim($input->getArgument('target'), '/');
 
-        if (!is_dir($targetDir)) {
-            throw new \InvalidArgumentException(sprintf('The target directory "%s" does not exist.', $input->getArgument('target')));
-        }
-
-        /** @var $dumper \Presta\SitemapBundle\Service\Dumper */
         $dumper = $this->getContainer()->get('presta_sitemap.dumper');
+        /** @var $dumper \Presta\SitemapBundle\Service\Dumper */
 
         $baseUrl = $input->getOption('host') ?: $this->getContainer()->getParameter('presta_sitemap.dumper_base_url');
         $baseUrl = rtrim($baseUrl, '/') . '/';
