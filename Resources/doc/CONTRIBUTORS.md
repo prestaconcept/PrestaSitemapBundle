@@ -8,3 +8,5 @@
  * Matthieu Crinquand (@mcrinquand)
  * Gordon Franke (@gimler)
  * Tony Piper (@tonypiper)
+ * Alex Vasilenko (@mente)
+ * Konstantin.Myakshin (@Koc)
