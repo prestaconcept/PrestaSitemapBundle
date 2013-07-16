@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Command to dump the sitemaps to provided directory
@@ -23,6 +24,9 @@ use Symfony\Component\Console\Input\InputOption;
  */
 class DumpSitemapsCommand extends ContainerAwareCommand
 {
+    const ERR_INVALID_HOST = -1;
+    const ERR_INVALID_DIR = -2;
+    
     /**
      * Configure CLI command, message, options
      *
@@ -39,10 +43,10 @@ class DumpSitemapsCommand extends ContainerAwareCommand
                 'Name of sitemap section to dump, all sections are dumped by default'
             )
             ->addOption(
-                'host',
+                'base-url',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Host to use for absolute urls. Defaults to dumper_base_url config parameter'
+                'Base url to use for absolute urls. Use fully qualified Defaults to dumper_base_url config parameter'
             )
             ->addArgument(
                 'target',
@@ -66,18 +70,23 @@ class DumpSitemapsCommand extends ContainerAwareCommand
         $targetDir = rtrim($input->getArgument('target'), '/');
 
         if (!is_dir($targetDir)) {
-            throw new \InvalidArgumentException(sprintf('The target directory "%s" does not exist.', $input->getArgument('target')));
+            throw new \InvalidArgumentException(sprintf('The target directory "%s" does not exist.', $input->getArgument('target')), self::ERR_INVALID_DIR);
         }
 
         /** @var $dumper \Presta\SitemapBundle\Service\Dumper */
         $dumper = $this->getContainer()->get('presta_sitemap.dumper');
 
-        $baseUrl = $input->getOption('host') ?: $this->getContainer()->getParameter('presta_sitemap.dumper_base_url');
+        $baseUrl = $input->getOption('base-url') ?: $this->getContainer()->getParameter('presta_sitemap.dumper_base_url');
         $baseUrl = rtrim($baseUrl, '/') . '/';
+        if (!parse_url($baseUrl, PHP_URL_HOST)) { //sanity check
+            throw new \InvalidArgumentException("Invalid base url. Use fully qualified base url, e.g. http://acme.com/", self::ERR_INVALID_HOST);
+        }
+        $request = Request::create($baseUrl);
 
         // Set Router's host used for generating URLs from configuration param
         // There is no other way to manage domain in CLI
-        $this->getContainer()->get('router')->getContext()->setHost(parse_url($baseUrl, PHP_URL_HOST));
+        $this->getContainer()->set('request', $request);
+        $this->getContainer()->get('router')->getContext()->fromRequest($request);
 
         if ($input->getOption('section')) {
             $output->writeln(

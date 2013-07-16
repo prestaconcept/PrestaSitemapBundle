@@ -47,7 +47,7 @@ if (is_null($event->getSection()) || $event->getSection() == 'mysection') {
 You can overwrite default host specified `dumper_base_url` parameter if you need to generate several sitemaps with different hosts. Consider following example:
 
 ```bash
-$ app/console presta:sitemap:dump --host=es.mysite.com es/
+$ app/console presta:sitemap:dump --base-url=http://es.mysite.com/ es/
 Dumping all sections of sitemaps into web directory
 Created the following sitemap files
     main.xml
