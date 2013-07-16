@@ -43,13 +43,11 @@ class Dumper extends Generator
     /**
      * @param \Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher $dispatcher Symfony's EventDispatcher
      * @param \Symfony\Component\Filesystem\Filesystem                         $filesystem Symfony's Filesystem
-     * @param \Doctrine\Common\Cache\Cache                                     $baseUrl    Base URL for generated sitemaps
      */
-    public function __construct(ContainerAwareEventDispatcher $dispatcher, Filesystem $filesystem, $baseUrl)
+    public function __construct(ContainerAwareEventDispatcher $dispatcher, Filesystem $filesystem)
     {
         $this->dispatcher = $dispatcher;
         $this->filesystem = $filesystem;
-        $this->baseUrl = $baseUrl;
     }
 
     /**
@@ -60,8 +58,9 @@ class Dumper extends Generator
      *
      * @return array|bool
      */
-    public function dump($targetDir, $section = null)
+    public function dump($targetDir, $host, $section = null)
     {
+        $this->baseUrl = $host;
         // we should prepare temp folder each time, because dump may be called several times (with different sections)
         // and activate command below removes temp folder
         $this->prepareTempFolder();
@@ -160,6 +159,7 @@ class Dumper extends Generator
                 $urlsets[$basename] = $this->newUrlset($basename, $lastmod);
             }
         }
+
         return $urlsets;
     }
 
@@ -206,7 +206,7 @@ class Dumper extends Generator
     /**
      * Factory method for creating Urlset objects
      *
-     * @param string    $name
+     * @param string $name
      *
      * @param \DateTime $lastmod
      *
@@ -214,6 +214,6 @@ class Dumper extends Generator
      */
     protected function newUrlset($name, \DateTime $lastmod = null)
     {
-        return new \Presta\SitemapBundle\Sitemap\DumpingUrlset($this->baseUrl . $name . '.xml', $lastmod);
+        return new \Presta\SitemapBundle\Sitemap\DumpingUrlset($this->baseUrl . 'sitemap.' . $name . '.xml', $lastmod);
     }
 }

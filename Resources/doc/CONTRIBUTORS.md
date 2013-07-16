@@ -5,5 +5,8 @@
  * Michel Salib (@michelsalib)
  * Andrej Hudec (@pulzarraider)
  * Konstantin Tjuterev (@kostiklv)
- * @mcrinquand
+ * Matthieu Crinquand (@mcrinquand)
  * Gordon Franke (@gimler)
+ * Tony Piper (@tonypiper)
+ * Alex Vasilenko (@mente)
+ * Konstantin.Myakshin (@Koc)
