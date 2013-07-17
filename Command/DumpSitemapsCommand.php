@@ -46,7 +46,7 @@ class DumpSitemapsCommand extends ContainerAwareCommand
                 'base-url',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Base url to use for absolute urls. Use fully qualified Defaults to dumper_base_url config parameter'
+                'Base url to use for absolute urls. Good example - http://acme.com/, bad example - acme.com. Defaults to dumper_base_url config parameter'
             )
             ->addArgument(
                 'target',
