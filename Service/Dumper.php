@@ -149,6 +149,7 @@ class Dumper extends Generator
                     );
                 }
                 $basename = substr(basename($child->loc), 0, -4); // cut .xml
+                $basename = str_replace('sitemap.', '', $basename); // cut sitemap.
 
                 if (!isset($child->lastmod)) {
                     throw new \InvalidArgumentException(
