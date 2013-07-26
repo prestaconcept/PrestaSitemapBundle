@@ -41,8 +41,8 @@ class Dumper extends Generator
     protected $filesystem;
 
     /**
-     * @param \Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher $dispatcher Symfony's EventDispatcher
-     * @param \Symfony\Component\Filesystem\Filesystem                         $filesystem Symfony's Filesystem
+     * @param ContainerAwareEventDispatcher $dispatcher Symfony's EventDispatcher
+     * @param Filesystem $filesystem Symfony's Filesystem
      */
     public function __construct(ContainerAwareEventDispatcher $dispatcher, Filesystem $filesystem)
     {
@@ -172,6 +172,10 @@ class Dumper extends Generator
      */
     protected function activate($targetDir)
     {
+        if (!is_dir($targetDir)) {
+            mkdir($targetDir, 0777, true);
+        }
+
         if (!is_writable($targetDir)) {
             $this->cleanup();
             throw new \RuntimeException("Can't move sitemaps to $targetDir - directory is not writeable");
