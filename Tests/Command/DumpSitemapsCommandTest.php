@@ -54,14 +54,44 @@ class DumpSitemapsCommandTest extends WebTestCase
         $this->assertEquals(0, $res, 'Command exited with error');
         $this->assertXmlFileEqualsXmlFile(__DIR__ . '/../sitemap.video.xml', __DIR__ . '/../web/sitemap.video.xml');
     }
-    
+
     public function testSitemapDumpWithInvalidUrl()
     {
         $this->setExpectedException('\InvalidArgumentException', '', DumpSitemapsCommand::ERR_INVALID_HOST);
         $this->executeDumpWithOptions(array('target' => __DIR__ . '/../web', '--base-url' => 'fake host'));
     }
-    
-    private function executeDumpWithOptions(array $options = array()) 
+
+    public function testSitemapDumpWithoutUpdatingIndex()
+    {
+        $file = __DIR__ . '/../web/sitemap.xml';
+
+        if( file_exists($file) )
+        {
+            unlink($file);
+        }
+
+        $this->assertFileNotExists($file, 'Unable to delete sitemap.xml before running command');
+        $res = $this->executeDumpWithOptions(array('target' => __DIR__ . '/../web', '--base-url' => 'http://sitemap.php54.local/', '--no-index' => null));
+        $this->assertEquals(0, $res, 'Command exited with error');
+        $this->assertFileNotExists($file, 'Unable to find sitemap.xml after running command');
+    }
+
+    public function testSitemapDumpWithNamedSitemapIndex()
+    {
+        $file = __DIR__ . '/../web/sitemap-index.xml';
+
+        if( file_exists($file) )
+        {
+            unlink($file);
+        }
+
+        $this->assertFileNotExists($file, 'Unable to delete sitemap-index.xml before running command');
+        $res = $this->executeDumpWithOptions(array('target' => __DIR__ . '/../web', '--base-url' => 'http://sitemap.php54.local/', '--sitemap-index' => 'sitemap-index.xml'));
+        $this->assertEquals(0, $res, 'Command exited with error');
+        $this->assertFileExists($file, 'Unable to find sitemap-index.xml after running command');
+    }
+
+    private function executeDumpWithOptions(array $options = array())
     {
         $application = new Application(self::$kernel);
         $application->add(new DumpSitemapsCommand());
