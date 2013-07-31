@@ -58,7 +58,7 @@ class Dumper extends Generator
      *
      * @return array|bool
      */
-    public function dump($targetDir, $host, $section = null)
+    public function dump($targetDir, $host, $section = null, $sitemap_index = null)
     {
         $this->baseUrl = $host;
         // we should prepare temp folder each time, because dump may be called several times (with different sections)
@@ -92,8 +92,11 @@ class Dumper extends Generator
             }
         }
 
-        file_put_contents($this->tmpFolder . '/sitemap.xml', $this->root->toXml());
-        $filenames[] = 'sitemap.xml';
+        if( $sitemap_index )
+        {
+            file_put_contents($this->tmpFolder . '/' . $sitemap_index, $this->root->toXml());
+            $filenames[] = $sitemap_index;
+        }
 
         // if we came to this point - we can activate new files
         // if we fail on exception eariler - old files will stay making Google happy
