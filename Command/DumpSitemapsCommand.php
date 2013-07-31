@@ -26,7 +26,7 @@ class DumpSitemapsCommand extends ContainerAwareCommand
 {
     const ERR_INVALID_HOST = -1;
     const ERR_INVALID_DIR = -2;
-    
+
     /**
      * Configure CLI command, message, options
      *
@@ -47,6 +47,19 @@ class DumpSitemapsCommand extends ContainerAwareCommand
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Base url to use for absolute urls. Good example - http://acme.com/, bad example - acme.com. Defaults to dumper_base_url config parameter'
+            )
+            ->addOption(
+                'no-index',
+                null,
+                InputOption::VALUE_NONE,
+                "Don't create or update the sitemap.xml index file"
+            )
+            ->addOption(
+                'sitemap-index',
+                null,
+                InputOption::VALUE_REQUIRED,
+                "Filename to use for sitemap index",
+                'sitemap.xml'
             )
             ->addArgument(
                 'target',
@@ -100,7 +113,11 @@ class DumpSitemapsCommand extends ContainerAwareCommand
                 )
             );
         }
-        $filenames = $dumper->dump($targetDir, $baseUrl, $input->getOption('section'));
+
+        // set to null if no-index option has been provided
+        $sitemap_index = $input->getOption('no-index') ? null : $input->getOption('sitemap-index');
+
+        $filenames = $dumper->dump($targetDir, $baseUrl, $input->getOption('section'), $sitemap_index);
 
         if ($filenames === false) {
             $output->writeln("<error>No URLs were added to sitemap by EventListeners</error> - this may happen when provided section is invalid");
