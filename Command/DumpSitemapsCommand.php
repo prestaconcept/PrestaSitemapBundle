@@ -26,7 +26,7 @@ class DumpSitemapsCommand extends ContainerAwareCommand
 {
     const ERR_INVALID_HOST = -1;
     const ERR_INVALID_DIR = -2;
-    
+
     /**
      * Configure CLI command, message, options
      *
@@ -47,6 +47,12 @@ class DumpSitemapsCommand extends ContainerAwareCommand
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Base url to use for absolute urls. Good example - http://acme.com/, bad example - acme.com. Defaults to dumper_base_url config parameter'
+            )
+            ->addOption(
+                'gzip',
+                null,
+                InputOption::VALUE_NONE,
+                'Gzip sitemap'
             )
             ->addArgument(
                 'target',
@@ -69,10 +75,11 @@ class DumpSitemapsCommand extends ContainerAwareCommand
     {
         $targetDir = rtrim($input->getArgument('target'), '/');
 
-        /** @var $dumper \Presta\SitemapBundle\Service\Dumper */
-        $dumper = $this->getContainer()->get('presta_sitemap.dumper');
+        $container = $this->getContainer();
+        $dumper = $container->get('presta_sitemap.dumper');
+        /* @var $dumper \Presta\SitemapBundle\Service\Dumper */
 
-        $baseUrl = $input->getOption('base-url') ?: $this->getContainer()->getParameter('presta_sitemap.dumper_base_url');
+        $baseUrl = $input->getOption('base-url') ?: $container->getParameter('presta_sitemap.dumper_base_url');
         $baseUrl = rtrim($baseUrl, '/') . '/';
         if (!parse_url($baseUrl, PHP_URL_HOST)) { //sanity check
             throw new \InvalidArgumentException("Invalid base url. Use fully qualified base url, e.g. http://acme.com/", self::ERR_INVALID_HOST);
@@ -81,8 +88,8 @@ class DumpSitemapsCommand extends ContainerAwareCommand
 
         // Set Router's host used for generating URLs from configuration param
         // There is no other way to manage domain in CLI
-        $this->getContainer()->set('request', $request);
-        $this->getContainer()->get('router')->getContext()->fromRequest($request);
+        $container->set('request', $request);
+        $container->get('router')->getContext()->fromRequest($request);
 
         if ($input->getOption('section')) {
             $output->writeln(
@@ -100,7 +107,7 @@ class DumpSitemapsCommand extends ContainerAwareCommand
                 )
             );
         }
-        $filenames = $dumper->dump($targetDir, $baseUrl, $input->getOption('section'));
+        $filenames = $dumper->dump($targetDir, $baseUrl, $input->getOption('section'), $input->getOption('gzip'));
 
         if ($filenames === false) {
             $output->writeln("<error>No URLs were added to sitemap by EventListeners</error> - this may happen when provided section is invalid");

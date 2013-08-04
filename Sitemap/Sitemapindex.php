@@ -12,7 +12,7 @@ namespace Presta\SitemapBundle\Sitemap;
 
 /**
  * Representation of sitemap (urlset) list
- * 
+ *
  * @author  David Epely
  */
 class Sitemapindex extends XmlConstraint
@@ -29,11 +29,10 @@ class Sitemapindex extends XmlConstraint
         $this->sitemapsXml .= $sitemapXml;
 
         //---------------------
-        //Check limits 
+        //Check limits
         if ($this->countItems++ >= self::LIMIT_ITEMS) {
             $this->limitItemsReached = true;
         }
-
 
         $sitemapLength = strlen($sitemapXml);
         $this->countBytes += $sitemapLength;
@@ -48,9 +47,9 @@ class Sitemapindex extends XmlConstraint
 
     /**
      * Render urlset as sitemap in xml
-     * 
+     *
      * @param Urlset $urlset
-     * @return string 
+     * @return string
      */
     protected function getSitemapXml(Urlset $urlset)
     {
@@ -61,8 +60,8 @@ class Sitemapindex extends XmlConstraint
 
     /**
      * sitemindex xml structure
-     * 
-     * @return string 
+     *
+     * @return string
      */
     protected function getStructureXml()
     {

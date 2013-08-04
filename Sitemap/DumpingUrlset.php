@@ -30,12 +30,13 @@ class DumpingUrlset extends Urlset
      * Basename of sitemap location is used (as they should always match)
      *
      * @param string $targetDir Directory where file should be saved
+     * @param Boolean $gzip
      */
-    public function save($targetDir)
+    public function save($targetDir, $gzip = false)
     {
         $this->initializeFileHandler();
         $filename = realpath($targetDir) . '/' . basename($this->getLoc());
-        $sitemapFile = fopen($filename, 'w');
+        $sitemapFile = fopen($filename, 'w+');
         $structureXml = $this->getStructureXml();
 
         // since header may contain namespaces which may get added when adding URLs
@@ -51,12 +52,27 @@ class DumpingUrlset extends Urlset
             fwrite($sitemapFile, fread($this->bodyFile, 65536));
         }
         fwrite($sitemapFile, '</urlset>');
-        fclose($sitemapFile);
 
         $streamInfo = stream_get_meta_data($this->bodyFile);
         fclose($this->bodyFile);
         // removing temporary file
         unlink($streamInfo['uri']);
+
+        if ($gzip) {
+            $this->loc .= '.gz';
+            $filenameGz = $filename . '.gz';
+            fseek($sitemapFile, 0);
+            $sitemapFileGz = gzopen($filenameGz, 'wb9');
+            while (!feof($sitemapFile)) {
+                gzwrite($sitemapFileGz, fread($sitemapFile, 65536));
+            }
+            gzclose($sitemapFileGz);
+        }
+
+        fclose($sitemapFile);
+        if ($gzip) {
+            unlink($filename);
+        }
     }
 
     /**

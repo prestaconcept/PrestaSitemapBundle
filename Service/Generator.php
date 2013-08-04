@@ -11,10 +11,10 @@
 namespace Presta\SitemapBundle\Service;
 
 use Doctrine\Common\Cache\Cache;
-use Presta\SitemapBundle\Event\SitemapPopulateEvent;
-use Presta\SitemapBundle\Sitemap;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Presta\SitemapBundle\Event\SitemapPopulateEvent;
+use Presta\SitemapBundle\Sitemap;
 use Presta\SitemapBundle\Sitemap\Sitemapindex;
 use Presta\SitemapBundle\Sitemap\Url\Url;
 
@@ -36,7 +36,7 @@ class Generator
     protected $root;
 
     /**
-     * @var array
+     * @var Sitemap\Urlset[]|Sitemap\DumpingUrlset[]
      */
     protected $urlsets = array();
 
@@ -66,7 +66,7 @@ class Generator
         // cache management
         if ($this->cache) {
             $ttl = $this->dispatcher->getContainer()->getParameter('presta_sitemap.timetolive');
-            $this->cache->save('root', serialize($this->root), $ttl);
+            $this->cache->save('root', serialize($this->getRoot()), $ttl);
 
             foreach ($this->urlsets as $name => $urlset) {
                 $this->cache->save($name, serialize($urlset), $ttl);
@@ -101,7 +101,7 @@ class Generator
         $this->generate();
 
         if ('root' == $name) {
-            return $this->root;
+            return $this->getRoot();
         }
 
         if (array_key_exists($name, $this->urlsets)) {
@@ -166,14 +166,24 @@ class Generator
     {
         if (!isset($this->urlsets[$name])) {
             $this->urlsets[$name] = $this->newUrlset($name);
-
-            if (!$this->root) {
-                $this->root = new Sitemap\Sitemapindex();
-            }
-
-            $this->root->addSitemap($this->urlsets[$name]);
         }
 
         return $this->urlsets[$name];
+    }
+
+    /**
+     * @return Sitemapindex
+     */
+    protected function getRoot()
+    {
+        if (null === $this->root) {
+            $this->root = new Sitemapindex();
+
+            foreach ($this->urlsets as $urlset) {
+                $this->root->addSitemap($urlset);
+            }
+        }
+
+        return $this->root;
     }
 }
