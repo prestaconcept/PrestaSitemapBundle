@@ -39,6 +39,7 @@ class SitemapController extends Controller
         }
 
         $response = Response::create($sitemapindex->toXml());
+        $response->headers->set('Content-Type', 'text/xml');
         $response->setPublic();
         $response->setClientTtl($this->getTtl());
 
@@ -60,6 +61,7 @@ class SitemapController extends Controller
         }
 
         $response = Response::create($section->toXml());
+        $response->headers->set('Content-Type', 'text/xml');
         $response->setPublic();
         $response->setClientTtl($this->getTtl());
 
