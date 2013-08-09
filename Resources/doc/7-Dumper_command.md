@@ -54,3 +54,17 @@ Created the following sitemap files
     main_0.xml
     sitemap.xml
 ```
+
+The dumper command support gzip compression as described in [sitemaps protocol][1] :
+
+```bash
+$ app/console presta:sitemap:dump --gzip
+Dumping all sections of sitemaps into tmp4 directory
+Created/Updated the following sitemap files:
+    sitemap.default.xml.gz
+    sitemap.image.xml.gz
+    [...]
+    sitemap.xml
+```
+
+[1]: http://www.sitemaps.org/protocol.html#index
