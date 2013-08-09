@@ -70,7 +70,9 @@ class DumpSitemapsCommandTest extends WebTestCase
     {
         $res = $this->executeDumpWithOptions(array('target' => $this->webDir, '--base-url' => 'http://sitemap.php54.local/', '--gzip' => true));
         $this->assertEquals(0, $res, 'Command exited with error');
-        $this->assertFileEquals($this->fixturesDir . '/sitemap.video.xml.gz', $this->webDir . '/sitemap.video.xml.gz');
+
+        $xml = gzinflate(substr(file_get_contents($this->webDir . '/sitemap.video.xml.gz'), 10, -8));
+        $this->assertXmlStringEqualsXmlFile($this->fixturesDir . '/sitemap.video.xml', $xml);
 
         $expectedSitemaps = array('http://sitemap.php54.local/sitemap.video.xml.gz');
         $this->assertSitemapIndexEquals($this->webDir . '/sitemap.xml', $expectedSitemaps);
