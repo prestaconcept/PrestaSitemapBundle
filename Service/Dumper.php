@@ -18,6 +18,7 @@ use Symfony\Component\Finder\Finder;
  * Service for dumping sitemaps into static files
  *
  * @author Konstantin Tjuterev <kostik.lv@gmail.com>
+ * @author Konstantin Myakshin <koc-dp@yandex.ru>
  */
 class Dumper extends Generator
 {
@@ -54,11 +55,13 @@ class Dumper extends Generator
      * Dumps sitemaps and sitemap index into provided directory
      *
      * @param string $targetDir Directory where to save sitemap files
+     * @param string $host
      * @param null   $section   Optional section name - only sitemaps of this section will be updated
+     * @param Boolean $gzip
      *
      * @return array|bool
      */
-    public function dump($targetDir, $host, $section = null)
+    public function dump($targetDir, $host, $section = null, $gzip = false)
     {
         $this->baseUrl = $host;
         // we should prepare temp folder each time, because dump may be called several times (with different sections)
@@ -67,18 +70,18 @@ class Dumper extends Generator
 
         $this->populate($section);
 
-        // if root wasn't created during populating
+        // if no urlset wasn't created during populating
         // it means no URLs were added to the sitemap
-        if (!$this->root) {
+        if (!count($this->urlsets)) {
             return false;
         }
 
         foreach ($this->urlsets as $urlset) {
-            $urlset->save($this->tmpFolder);
+            $urlset->save($this->tmpFolder, $gzip);
             $filenames[] = basename($urlset->getLoc());
         }
 
-        if (!is_null($section)) {
+        if (null !== $section) {
             // Load current SitemapIndex file and add all sitemaps except those,
             // matching section currently being regenerated to root
             foreach ($this->loadCurrentSitemapIndex($targetDir . '/sitemap.xml') as $key => $urlset) {
@@ -87,12 +90,12 @@ class Dumper extends Generator
                 if ($baseKey !== $section) {
                     // we add them to root only, if we add them to $this->urlset
                     // deleteExistingSitemaps() will delete matching files, which we don't want
-                    $this->root->addSitemap($urlset);
+                    $this->getRoot()->addSitemap($urlset);
                 }
             }
         }
 
-        file_put_contents($this->tmpFolder . '/sitemap.xml', $this->root->toXml());
+        file_put_contents($this->tmpFolder . '/sitemap.xml', $this->getRoot()->toXml());
         $filenames[] = 'sitemap.xml';
 
         // if we came to this point - we can activate new files
@@ -148,7 +151,7 @@ class Dumper extends Generator
                         "One of referenced sitemaps in $filename doesn't contain 'loc' attribute"
                     );
                 }
-                $basename = substr(basename($child->loc), 0, -4); // cut .xml
+                $basename = preg_replace('/^sitemap\.(.+)\.xml(?:\.gz)?$/', '\1', basename($child->loc)); // cut .xml|.xml.gz
 
                 if (!isset($child->lastmod)) {
                     throw new \InvalidArgumentException(
@@ -178,7 +181,7 @@ class Dumper extends Generator
 
         if (!is_writable($targetDir)) {
             $this->cleanup();
-            throw new \RuntimeException("Can't move sitemaps to $targetDir - directory is not writeable");
+            throw new \RuntimeException(sprintf('Can\'t move sitemaps to "%s" - directory is not writeable', $targetDir));
         }
         $this->deleteExistingSitemaps($targetDir);
 
@@ -196,11 +199,12 @@ class Dumper extends Generator
     {
         foreach ($this->urlsets as $urlset) {
             $basename = basename($urlset->getLoc());
-            if (preg_match('/(.*)_[\d]+\.xml/', $basename)) {
+            if (preg_match('/(.*)_[\d]+\.xml(?:\.gz)?$/', $basename)) {
                 continue; // skip numbered files
             }
             // pattern is base name of sitemap file (with .xml cut) optionally followed by _X for numbered files
-            $pattern = '/' . preg_quote(substr($basename, 0, -4), '/') . '(_\d+)?\.xml/';
+            $basename = preg_replace('/\.xml(?:\.gz)?$/', '', $basename); // cut .xml|.xml.gz
+            $pattern = '/' . preg_quote($basename, '/') . '(_\d+)?\.xml(?:\.gz)?$/';
             foreach (Finder::create()->in($targetDir)->name($pattern)->files() as $file) {
                 $this->filesystem->remove($file);
             }
