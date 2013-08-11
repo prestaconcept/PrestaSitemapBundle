@@ -13,6 +13,7 @@ namespace Presta\SitemapBundle\Service;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Presta\SitemapBundle\Sitemap\DumpingUrlset;
 
 /**
  * Service for dumping sitemaps into static files
@@ -20,7 +21,7 @@ use Symfony\Component\Finder\Finder;
  * @author Konstantin Tjuterev <kostik.lv@gmail.com>
  * @author Konstantin Myakshin <koc-dp@yandex.ru>
  */
-class Dumper extends Generator
+class Dumper extends AbstractGenerator
 {
     /**
      * Path to folder where temporary files will be created
@@ -47,7 +48,7 @@ class Dumper extends Generator
      */
     public function __construct(EventDispatcherInterface $dispatcher, Filesystem $filesystem)
     {
-        $this->dispatcher = $dispatcher;
+        parent::__construct($dispatcher);
         $this->filesystem = $filesystem;
     }
 
@@ -221,10 +222,10 @@ class Dumper extends Generator
      *
      * @param \DateTime $lastmod
      *
-     * @return \Presta\SitemapBundle\Sitemap\DumpingUrlset
+     * @return DumpingUrlset
      */
     protected function newUrlset($name, \DateTime $lastmod = null)
     {
-        return new \Presta\SitemapBundle\Sitemap\DumpingUrlset($this->baseUrl . 'sitemap.' . $name . '.xml', $lastmod);
+        return new DumpingUrlset($this->baseUrl . 'sitemap.' . $name . '.xml', $lastmod);
     }
 }

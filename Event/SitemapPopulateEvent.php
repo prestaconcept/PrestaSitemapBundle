@@ -10,12 +10,12 @@
 
 namespace Presta\SitemapBundle\Event;
 
+use Presta\SitemapBundle\Service\AbstractGenerator;
 use Symfony\Component\EventDispatcher\Event;
-use Presta\SitemapBundle\Service\Generator;
 
 /**
- * Manage populate event 
- * 
+ * Manage populate event
+ *
  * @author depely
  */
 class SitemapPopulateEvent extends Event
@@ -31,14 +31,14 @@ class SitemapPopulateEvent extends Event
      */
     protected $section;
 
-    public function __construct(Generator $generator, $section = null)
+    public function __construct(AbstractGenerator $generator, $section = null)
     {
         $this->generator = $generator;
         $this->section = $section;
     }
 
     /**
-     * @return Generator
+     * @return AbstractGenerator
      */
     public function getGenerator()
     {
