@@ -57,12 +57,15 @@ class Dumper extends Generator
      * @param string $targetDir Directory where to save sitemap files
      * @param string $host
      * @param null   $section   Optional section name - only sitemaps of this section will be updated
-     * @param Boolean $gzip
+     * @param array  $options   Possible options: gzip
      *
      * @return array|bool
      */
-    public function dump($targetDir, $host, $section = null, $gzip = false)
+    public function dump($targetDir, $host, $section = null, array $options = array())
     {
+        $options = array_merge(array(
+                'gzip' => false,
+            ), $options);
         $this->baseUrl = $host;
         // we should prepare temp folder each time, because dump may be called several times (with different sections)
         // and activate command below removes temp folder
@@ -77,7 +80,7 @@ class Dumper extends Generator
         }
 
         foreach ($this->urlsets as $urlset) {
-            $urlset->save($this->tmpFolder, $gzip);
+            $urlset->save($this->tmpFolder, $options['gzip']);
             $filenames[] = basename($urlset->getLoc());
         }
 
