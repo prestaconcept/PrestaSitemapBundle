@@ -11,8 +11,8 @@
 namespace Presta\SitemapBundle\Service;
 
 use Doctrine\Common\Cache\Cache;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap;
 use Presta\SitemapBundle\Sitemap\Sitemapindex;
@@ -23,12 +23,14 @@ use Presta\SitemapBundle\Sitemap\Url\Url;
  *
  * @author David Epely <depely@prestaconcept.net>
  * @author Christophe Dolivet
+ * @author Konstantin Myakshin <koc-dp@yandex.ru>
  */
 class Generator
 {
     protected $dispatcher;
     protected $router;
     protected $cache;
+    protected $cacheTtl;
 
     /**
      * @var Sitemapindex
@@ -41,15 +43,17 @@ class Generator
     protected $urlsets = array();
 
     /**
-     * @param ContainerAwareEventDispatcher $dispatcher
+     * @param EventDispatcherInterface $dispatcher
      * @param RouterInterface $router
-     * @param Cache $cache
+     * @param Cache|null $cache
+     * @param integer|null $cacheTtl
      */
-    public function __construct(ContainerAwareEventDispatcher $dispatcher, RouterInterface $router, Cache $cache = null)
+    public function __construct(EventDispatcherInterface $dispatcher, RouterInterface $router, Cache $cache = null, $cacheTtl = null)
     {
         $this->dispatcher = $dispatcher;
         $this->router = $router;
         $this->cache = $cache;
+        $this->cacheTtl = $cacheTtl;
     }
 
     /**
@@ -65,11 +69,10 @@ class Generator
         //---------------------
         // cache management
         if ($this->cache) {
-            $ttl = $this->dispatcher->getContainer()->getParameter('presta_sitemap.timetolive');
-            $this->cache->save('root', serialize($this->getRoot()), $ttl);
+            $this->cache->save('root', serialize($this->getRoot()), $this->cacheTtl);
 
             foreach ($this->urlsets as $name => $urlset) {
-                $this->cache->save($name, serialize($urlset), $ttl);
+                $this->cache->save($name, serialize($urlset), $this->cacheTtl);
             }
         }
         //---------------------

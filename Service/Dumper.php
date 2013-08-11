@@ -10,7 +10,7 @@
 
 namespace Presta\SitemapBundle\Service;
 
-use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
@@ -42,10 +42,10 @@ class Dumper extends Generator
     protected $filesystem;
 
     /**
-     * @param ContainerAwareEventDispatcher $dispatcher Symfony's EventDispatcher
+     * @param EventDispatcherInterface $dispatcher Symfony's EventDispatcher
      * @param Filesystem $filesystem Symfony's Filesystem
      */
-    public function __construct(ContainerAwareEventDispatcher $dispatcher, Filesystem $filesystem)
+    public function __construct(EventDispatcherInterface $dispatcher, Filesystem $filesystem)
     {
         $this->dispatcher = $dispatcher;
         $this->filesystem = $filesystem;
