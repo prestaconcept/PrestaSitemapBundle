@@ -13,6 +13,7 @@
             <argument id="event_dispatcher" type="service" />
             <argument id="router" type="service" />
             <argument id="liip_doctrine_cache.ns.presta_sitemap" type="service" on-invalid="ignore"  />
+            <argument>%presta_sitemap.timetolive%</argument>
         </service>
 
         <service id="presta_sitemap.dumper" class="%presta_sitemap.dumper.class%">

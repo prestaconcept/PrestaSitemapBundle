@@ -31,11 +31,11 @@ class Urlset extends XmlConstraint
     public function __construct($loc, \DateTime $lastmod = null)
     {
         $this->loc = $loc;
-        $this->lastmod = ($lastmod) ? $lastmod : new \DateTime;
+        $this->lastmod = $lastmod ? $lastmod : new \DateTime();
     }
 
     /**
-     * @return string 
+     * @return string
      */
     public function getLoc()
     {
@@ -43,7 +43,7 @@ class Urlset extends XmlConstraint
     }
 
     /**
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLastmod()
     {
@@ -52,9 +52,9 @@ class Urlset extends XmlConstraint
 
     /**
      * add url to pool and check limits
-     * 
+     *
      * @param Url\Url $url
-     * @throws \RuntimeException 
+     * @throws \RuntimeException
      * @return void
      */
     public function addUrl(Url\Url $url)
@@ -98,9 +98,9 @@ class Urlset extends XmlConstraint
     }
 
     /**
-     * get the xml structure of the current urlset 
-     * 
-     * @return string 
+     * get the xml structure of the current urlset
+     *
+     * @return string
      */
     protected function getStructureXml()
     {
