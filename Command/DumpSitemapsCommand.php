@@ -54,6 +54,19 @@ class DumpSitemapsCommand extends ContainerAwareCommand
                 InputOption::VALUE_NONE,
                 'Gzip sitemap'
             )
+            ->addOption(
+                'no-index',
+                null,
+                InputOption::VALUE_NONE,
+                "Don't create or update the sitemap.xml index file"
+            )
+            ->addOption(
+                'sitemap-index',
+                null,
+                InputOption::VALUE_REQUIRED,
+                "Filename to use for sitemap index",
+                'sitemap.xml'
+            )
             ->addArgument(
                 'target',
                 InputArgument::OPTIONAL,
@@ -109,7 +122,10 @@ class DumpSitemapsCommand extends ContainerAwareCommand
         }
         $options = array(
             'gzip' => (Boolean)$input->getOption('gzip'),
+            // set to null if no-index option has been provided
+            'sitemap-index' => $input->getOption('no-index') ? null : $input->getOption('sitemap-index'),
         );
+
         $filenames = $dumper->dump($targetDir, $baseUrl, $input->getOption('section'), $options);
 
         if ($filenames === false) {

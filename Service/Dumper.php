@@ -66,6 +66,7 @@ class Dumper extends AbstractGenerator
     {
         $options = array_merge(array(
                 'gzip' => false,
+                'sitemap-index' => null,
             ), $options);
         $this->baseUrl = $host;
         // we should prepare temp folder each time, because dump may be called several times (with different sections)
@@ -99,8 +100,11 @@ class Dumper extends AbstractGenerator
             }
         }
 
-        file_put_contents($this->tmpFolder . '/sitemap.xml', $this->getRoot()->toXml());
-        $filenames[] = 'sitemap.xml';
+        if( $options['sitemap-index'] )
+        {
+            file_put_contents($this->tmpFolder . '/' . $options['sitemap-index'], $this->getRoot()->toXml());
+            $filenames[] = $options['sitemap-index'];
+        }
 
         // if we came to this point - we can activate new files
         // if we fail on exception eariler - old files will stay making Google happy
