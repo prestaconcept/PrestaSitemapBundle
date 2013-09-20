@@ -7,9 +7,18 @@
     "authors": [
         {
             "name": "David Epely",
-            "homepage": "http://www.prestaconcept.net/"
+            "homepage": "http://www.prestaconcept.net/",
+            "role": "Initial developer"
+        },
+        {
+            "name": "Alain Flaus",
+            "homepage": "http://www.prestaconcept.net/",
+            "role": "Maintainer, Developer"
         }
     ],
+    "support": {
+        "issues": "https://github.com/prestaconcept/PrestaSitemapBundle/issues"
+    },
     "require": {
         "php": ">=5.3.0",
         "symfony/symfony": ">=2.1.0"
