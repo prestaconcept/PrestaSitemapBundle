@@ -104,3 +104,6 @@ You will find the detailed documentation in the following links :
 [7]: Resources/doc/7-Dumper_command.md
 [8]: CHANGELOG.md
 [9]: Resources/doc/CONTRIBUTORS.md
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/prestaconcept/prestasitemapbundle/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
