@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the PrestaSitemapBundle
+ *
+ * (c) PrestaConcept <www.prestaconcept.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Presta\SitemapBundle\Test\Sitemap\Url;
 
 use Presta\SitemapBundle\Exception\GoogleNewsUrlException;
@@ -10,6 +19,8 @@ use Presta\SitemapBundle\Sitemap\Url\Url;
 
 /**
  * Tests the GoogleNewsUrlDecorator
+ *
+ * @author Christoph Foehrdes
  */
 class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
 {

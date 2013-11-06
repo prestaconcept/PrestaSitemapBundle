@@ -28,6 +28,7 @@ PrestaSitemapBundle provides those decorators (but you can use your own) :
  * GoogleImageUrlDecorator
  * GoogleMobileUrlDecorator
  * GoogleMultilangUrlDecorator
+ * GoogleNewsUrlDecorator
  * GoogleVideoUrlDecorator
 
 ## Deeper informations
@@ -58,3 +59,33 @@ $event->getGenerator()->addUrl($url, 'default');
 ```
 
 This case is similar for tags in GoogleVideoUrlDecorator.
+
+The GoogleNewsUrlDecorator helps to generate google news sitemap elements.
+A news URL has some tag limitations which are checked by the decorator.
+For example are the google finance stock_tickers related to a news limited to 5.
+The decorator will throw an exception if a limit is passed:
+
+```php
+use Presta\SitemapBundle\Sitemap\Url;
+use Presta\SitemapBundle\Exception;
+
+$url = new Url\GoogleNewsUrlDecorator(new Url\UrlConcrete('http://acme.com/'),
+    'The Example Times', 'en', new \DateTime(),
+    'An example news article'
+);
+
+try {
+    $url->setStockTickers(array(
+        'NYSE:OWW',
+        'NASDAQ:GTAT',
+        'NYSE:AOL',
+        'NASDAQ:ENDP',
+        'CVE:GTA',
+        'NASDAQ:IMGN'
+    ));
+} catch (Exception\GoogleNewsUrlException $e) {
+    // limit of 5 tickers passed
+}
+```
+
+For more information on the news URL limitations [see the related documentation](https://support.google.com/webmasters/answer/74288?hl=en).
