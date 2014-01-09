@@ -1,13 +1,14 @@
 language: php
+
 php:
     - 5.3
     - 5.4
+    - 5.5
 
 before_script:
-    - wget http://getcomposer.org/composer.phar 
+    - wget http://getcomposer.org/composer.phar
     - php composer.phar install
 
 notifications:
   email:
-    - depely@prestaconcept.net
-    
+    - aflaus@prestaconcept.net
