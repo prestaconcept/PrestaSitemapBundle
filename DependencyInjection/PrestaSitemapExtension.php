@@ -35,6 +35,7 @@ class PrestaSitemapExtension extends Extension
         $loader->load('services.xml');
         
         $container->setParameter($this->getAlias().'.timetolive', $config['timetolive']);
+        $container->setParameter($this->getAlias().'.sitemap_file_prefix', $config['sitemap_file_prefix']);
         $container->setParameter($this->getAlias().'.dumper_base_url', $config['dumper_base_url']);
 
         if (true === $config['route_annotation_listener']) {
