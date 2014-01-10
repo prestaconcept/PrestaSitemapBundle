@@ -18,7 +18,7 @@ before_script:
 
 script:
     - phpunit --coverage-text
-    - phpcs --ignore=/vendor/* --extensions=php --encoding=utf-8 --standard=PSR2 -np .
+    - phpcs --ignore=/vendor/*,/Tests/Resources/app/* --extensions=php --encoding=utf-8 --standard=PSR2 -np .
 
 matrix:
   allow_failures:
