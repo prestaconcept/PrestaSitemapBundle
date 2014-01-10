@@ -35,7 +35,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                     ->scalarNode('sitemap_file_prefix')
                         ->defaultValue('sitemap')
-                        ->description('Sets sitemap filename prefix defaults to "sitemap" -> sitemap.xml (for index); sitemap.<section>.xml(.gz) (for sitemaps)')
+                        ->info('Sets sitemap filename prefix defaults to "sitemap" -> sitemap.xml (for index); sitemap.<section>.xml(.gz) (for sitemaps)')
                     ->end()
                     ->scalarNode('dumper_base_url')
                         ->defaultValue('http://localhost/')
