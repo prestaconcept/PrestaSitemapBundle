@@ -5,9 +5,24 @@ php:
     - 5.4
     - 5.5
 
+env:
+    - SYMFONY_VERSION=2.1.*
+    - SYMFONY_VERSION=2.3.*
+    - SYMFONY_VERSION=dev-master
+
 before_script:
-    - wget http://getcomposer.org/composer.phar
-    - php composer.phar install
+    - pear install pear/PHP_CodeSniffer
+    - phpenv rehash
+    - composer selfupdate
+    - composer require symfony/symfony:${SYMFONY_VERSION}
+
+script:
+    - phpunit --coverage-text
+    - phpcs --ignore=/vendor/* --extensions=php --encoding=utf-8 --standard=PSR2 -np .
+
+matrix:
+  allow_failures:
+    - env: SYMFONY_VERSION=dev-master
 
 notifications:
   email:
