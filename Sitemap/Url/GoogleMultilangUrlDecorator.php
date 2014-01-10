@@ -11,8 +11,6 @@
 
 namespace Presta\SitemapBundle\Sitemap\Url;
 
-use Presta\SitemapBundle\Exception;
-
 /**
  * Decorate w/ google alternate language url guidelines
  * @see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=2620865

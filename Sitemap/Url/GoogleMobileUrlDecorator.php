@@ -11,8 +11,6 @@
 
 namespace Presta\SitemapBundle\Sitemap\Url;
 
-use Presta\SitemapBundle\Exception;
-
 /**
  * Decorate url for mobile website
  *
