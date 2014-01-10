@@ -1,12 +1,3 @@
-PrestaSitemapBundle_index:
-    pattern:  /sitemap.{_format}
-    defaults: { _controller: PrestaSitemapBundle:Sitemap:index }
-    requirements:
-        _format: xml
-        
-        
-PrestaSitemapBundle_section:
-    pattern:  /sitemap.{name}.{_format}
-    defaults: { _controller: PrestaSitemapBundle:Sitemap:section }
-    requirements:
-        _format: xml
+PrestaSitemapBundle_loader:
+    resource: .
+    type: presta_sitemap
