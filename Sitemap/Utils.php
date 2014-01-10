@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the PrestaSitemapBundle
+ *
+ * (c) PrestaConcept <www.prestaconcept.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Presta\SitemapBundle\Sitemap;
 
 use Presta\SitemapBundle\Exception\Exception;
@@ -13,12 +22,11 @@ if (!defined('ENT_SUBSTITUTE')) {
  *
  * @author David Epely <depely@prestaconcept.net>
  */
-class Utils 
+class Utils
 {
-            
     /**
      * verify method affiliated to given param
-     * 
+     *
      * @param string $name
      * @return string
      * @throws Exception
@@ -36,7 +44,7 @@ class Utils
 
     /**
      * verify method affiliated to given param
-     * 
+     *
      * @param string $name
      * @return string
      * @throws Exception
@@ -51,10 +59,10 @@ class Utils
 
         return $methodName;
     }
-    
+
     /**
      * Render a string as CDATA section
-     * 
+     *
      * @param str $string
      * @return str
      */
@@ -62,10 +70,10 @@ class Utils
     {
         return '<![CDATA[' . $string . ']]>';
     }
-    
+
     /**
      * Encode special chars
-     * 
+     *
      * @param type $string
      * @return type
      */
@@ -73,9 +81,9 @@ class Utils
     {
         return htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
-    
+
     /**
-     * uppercase first letter after a space or underscore 
+     * uppercase first letter after a space or underscore
      * @param type $string
      * @return type
      */

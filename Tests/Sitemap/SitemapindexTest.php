@@ -1,4 +1,13 @@
-<?php 
+<?php
+
+/**
+ * This file is part of the PrestaSitemapBundle
+ *
+ * (c) PrestaConcept <www.prestaconcept.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Presta\SitemapBundle\Test\Sitemap;
 
@@ -6,38 +15,37 @@ use Presta\SitemapBundle\Sitemap;
 
 /**
  * Manage sitemaps listing
- * 
- * @author  David Epely
+ *
+ * @author David Epely <depely@prestaconcept.net>
  */
 class SitemapindexTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddSitemap()
     {
         $sitemapindex = new Sitemap\Sitemapindex();
-        
+
         try {
             $sitemapindex->addSitemap(new Sitemap\Urlset('http://acme.com'));
         } catch (\RuntimeException $e) {
             $this->fail('An exception must not be thrown');
         }
     }
-    
-    
+
     public function testGetSitemapXml()
     {
         $today          = new \DateTime;
         $loc            = 'http://acme.com/';
         $sitemapindex   = new Sitemap\Sitemapindex();
-        
+
         $getSitemapXmlMethod = self::getMethod($sitemapindex, 'getSitemapXml');
-        
+
         $this->assertXmlStringEqualsXmlString(
-                '<sitemap><loc>' . $loc . '</loc><lastmod>' . $today->format('c') . '</lastmod></sitemap>',
-                $getSitemapXmlMethod->invoke($sitemapindex, new Sitemap\Urlset($loc, $today)),
-                '->getSitemapXml() render xml'
-                );
+            '<sitemap><loc>' . $loc . '</loc><lastmod>' . $today->format('c') . '</lastmod></sitemap>',
+            $getSitemapXmlMethod->invoke($sitemapindex, new Sitemap\Urlset($loc, $today)),
+            '->getSitemapXml() render xml'
+        );
     }
-    
+
     public function testToXml()
     {
         $sitemapindex   = new Sitemap\Sitemapindex();
@@ -47,20 +55,18 @@ class SitemapindexTest extends \PHPUnit_Framework_TestCase
             $xml
         );
     }
-    
+
     /**
      * get accessible method that was private or protected
      *
      * @param mixed $obj - classname or instance
      * @param type $name
-     * @return \ReflectionMethod 
+     * @return \ReflectionMethod
      */
-    protected static function getMethod($obj, $name) 
+    protected static function getMethod($obj, $name)
     {
         $method = new \ReflectionMethod($obj, $name);
         $method->setAccessible(true);
         return $method;
     }
-
-    
 }

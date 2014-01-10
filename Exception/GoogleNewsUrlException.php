@@ -18,5 +18,4 @@ namespace Presta\SitemapBundle\Exception;
  */
 class GoogleNewsUrlException extends Exception
 {
-
 }

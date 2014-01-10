@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the PrestaSitemapBundle
+ *
+ * (c) PrestaConcept <www.prestaconcept.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Presta\SitemapBundle\Tests\Command;
 
 use Presta\SitemapBundle\Command\DumpSitemapsCommand;
@@ -12,6 +21,9 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouterInterface;
 
+/**
+ * @author Alex Vasilenko
+ */
 class DumpSitemapsCommandTest extends WebTestCase
 {
     /**
@@ -33,22 +45,25 @@ class DumpSitemapsCommandTest extends WebTestCase
         $router = $this->container->get('router');
         /* @var $router RouterInterface */
         $this->container->get('event_dispatcher')
-            ->addListener(SitemapPopulateEvent::onSitemapPopulate, function(SitemapPopulateEvent $event) use ($router) {
-                $base_url   = $router->generate('PrestaDemoBundle_homepage', array(), true);
-                $urlVideo = new GoogleVideoUrlDecorator(
-                    new UrlConcrete($base_url . 'page_video1/'),
-                    $base_url . 'page_video1/thumbnail_loc?a=b&b=c',
-                    'Title & spécial chars',
-                    'The description & spécial chars',
-                    array('content_loc' => $base_url . 'page_video1/content?format=mov&a=b')
-                );
+            ->addListener(
+                SitemapPopulateEvent::ON_SITEMAP_POPULATE,
+                function (SitemapPopulateEvent $event) use ($router) {
+                    $base_url   = $router->generate('PrestaDemoBundle_homepage', array(), true);
+                    $urlVideo = new GoogleVideoUrlDecorator(
+                        new UrlConcrete($base_url . 'page_video1/'),
+                        $base_url . 'page_video1/thumbnail_loc?a=b&b=c',
+                        'Title & spécial chars',
+                        'The description & spécial chars',
+                        array('content_loc' => $base_url . 'page_video1/content?format=mov&a=b')
+                    );
 
-                $urlVideo
-                    ->setGalleryLoc($base_url . 'page_video1/gallery_loc/?p=1&sort=desc')
-                    ->setGalleryLocTitle('Gallery title & spécial chars');
+                    $urlVideo
+                        ->setGalleryLoc($base_url . 'page_video1/gallery_loc/?p=1&sort=desc')
+                        ->setGalleryLocTitle('Gallery title & spécial chars');
 
-                $event->getGenerator()->addUrl($urlVideo, 'video');
-            });
+                    $event->getGenerator()->addUrl($urlVideo, 'video');
+                }
+            );
     }
 
     protected function tearDown()

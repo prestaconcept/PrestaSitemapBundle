@@ -1,8 +1,9 @@
 <?php
 
-/*
- * This file is part of the prestaSitemapPlugin package.
- * (c) David Epely <depely@prestaconcept.net>
+/**
+ * This file is part of the PrestaSitemapBundle
+ *
+ * (c) PrestaConcept <www.prestaconcept.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +15,6 @@ use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap;
 use Presta\SitemapBundle\Sitemap\Url\Url;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-
 
 /**
  * Abstract sitemap generator class
@@ -110,7 +110,7 @@ abstract class AbstractGenerator
     protected function populate($section = null)
     {
         $event = new SitemapPopulateEvent($this, $section);
-        $this->dispatcher->dispatch(SitemapPopulateEvent::onSitemapPopulate, $event);
+        $this->dispatcher->dispatch(SitemapPopulateEvent::ON_SITEMAP_POPULATE, $event);
     }
 
     /**

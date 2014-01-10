@@ -64,9 +64,8 @@ class Dumper extends AbstractGenerator
      */
     public function dump($targetDir, $host, $section = null, array $options = array())
     {
-        $options = array_merge(array(
-                'gzip' => false,
-            ), $options);
+        $options = array_merge(array('gzip' => false), $options);
+
         $this->baseUrl = $host;
         // we should prepare temp folder each time, because dump may be called several times (with different sections)
         // and activate command below removes temp folder

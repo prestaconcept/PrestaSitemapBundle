@@ -35,7 +35,7 @@ abstract class XmlConstraint
     }
 
     /**
-     * Render full and valid xml 
+     * Render full and valid xml
      */
-    abstract function toXml();
+    abstract public function toXml();
 }

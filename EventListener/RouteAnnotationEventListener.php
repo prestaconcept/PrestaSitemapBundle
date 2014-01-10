@@ -1,4 +1,14 @@
 <?php
+
+/**
+ * This file is part of the PrestaSitemapBundle
+ *
+ * (c) PrestaConcept <www.prestaconcept.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Presta\SitemapBundle\EventListener;
 
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
@@ -109,11 +119,13 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
                     $lastmod = new \DateTime($option['lastmod']);
                     $option['lastmod'] = $lastmod;
                 } catch (\Exception $e) {
-                    throw new \InvalidArgumentException(sprintf(
-                        'The route %s has an invalid value "%s" specified for the "lastmod" option',
-                        $name,
-                        $option['lastmod']
-                    ));
+                    throw new \InvalidArgumentException(
+                        sprintf(
+                            'The route %s has an invalid value "%s" specified for the "lastmod" option',
+                            $name,
+                            $option['lastmod']
+                        )
+                    );
                 }
             }
 
@@ -136,15 +148,18 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
                 $this->getRouteUri($name),
                 $options['lastmod'],
                 $options['changefreq'],
-                $options['priority']);
+                $options['priority']
+            );
 
             return $url;
         } catch (\Exception $e) {
-            throw new \InvalidArgumentException(sprintf(
-                'Invalid argument for route "%s": %s',
-                $name,
-                $e->getMessage()
-            ));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Invalid argument for route "%s": %s',
+                    $name,
+                    $e->getMessage()
+                )
+            );
         }
     }
 
@@ -159,10 +174,12 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
         try {
             return $this->router->generate($name, array(), true);
         } catch (MissingMandatoryParametersException $e) {
-            throw new \InvalidArgumentException(sprintf(
-                'The route "%s" cannot have the sitemap option because it requires parameters',
-                $name
-            ));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'The route "%s" cannot have the sitemap option because it requires parameters',
+                    $name
+                )
+            );
         }
     }
 }

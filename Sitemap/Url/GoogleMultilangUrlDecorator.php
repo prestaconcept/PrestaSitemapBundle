@@ -1,8 +1,9 @@
 <?php
 
-/*
- * This file is part of the prestaSitemapPlugin package.
- * (c) David Epely <depely@prestaconcept.net>
+/**
+ * This file is part of the PrestaSitemapBundle
+ *
+ * (c) PrestaConcept <www.prestaconcept.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,19 +16,26 @@ use Presta\SitemapBundle\Exception;
 /**
  * Decorate w/ google alternate language url guidelines
  * @see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=2620865
- * 
- * @author David Epely 
+ *
+ * @author David Epely <depely@prestaconcept.net>
  */
 class GoogleMultilangUrlDecorator extends UrlDecorator
 {
     const REL_ALTERNATE = 'alternate';
 
+    /**
+     * @var array
+     */
     protected $customNamespaces = array('xhtml' => 'http://www.w3.org/1999/xhtml');
+
+    /**
+     * @var string
+     */
     protected $linkXml = '';
 
     /**
      * add an alternative language to the url
-     * 
+     *
      * @param string $href - valid url of the translated page
      * @param string $hreflang - valid language code @see http://www.w3.org/TR/xhtml-modularization/abstraction.html#dt_LanguageCode
      * @param string $rel (default is alternate) - valid link type @see http://www.w3.org/TR/xhtml-modularization/abstraction.html#dt_LinkTypes
@@ -42,7 +50,7 @@ class GoogleMultilangUrlDecorator extends UrlDecorator
      * @param string $href
      * @param string $hreflang
      * @param string $rel
-     * @return string 
+     * @return string
      */
     protected function generateLinkXml($href, $hreflang, $rel = null)
     {
@@ -59,8 +67,8 @@ class GoogleMultilangUrlDecorator extends UrlDecorator
 
     /**
      * add link elements before the closing tag
-     * 
-     * @return string 
+     *
+     * @return string
      */
     public function toXml()
     {

@@ -14,10 +14,10 @@ use Presta\SitemapBundle\Exception;
 
 /**
  * Decorate url with images
- * 
+ *
  * @see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=178636&topic=20986&ctx=topic
- * 
- * @author David Epely 
+ *
+ * @author David Epely
  */
 class GoogleImageUrlDecorator extends UrlDecorator
 {
@@ -37,7 +37,7 @@ class GoogleImageUrlDecorator extends UrlDecorator
         $this->imageXml .= $image->toXml();
 
         //---------------------
-        //Check limits 
+        //Check limits
         if ($this->countItems++ >= self::LIMIT_ITEMS) {
             $this->limitItemsReached = true;
         }
@@ -47,8 +47,8 @@ class GoogleImageUrlDecorator extends UrlDecorator
 
     /**
      * add image elements before the closing tag
-     * 
-     * @return string 
+     *
+     * @return string
      */
     public function toXml()
     {

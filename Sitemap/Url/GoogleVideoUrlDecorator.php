@@ -1,8 +1,9 @@
 <?php
 
-/*
- * This file is part of the prestaSitemapPlugin package.
- * (c) David Epely <depely@prestaconcept.net>
+/**
+ * This file is part of the PrestaSitemapBundle
+ *
+ * (c) PrestaConcept <www.prestaconcept.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,11 +15,11 @@ use Presta\SitemapBundle\Exception;
 use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
- * Help to generate video url 
- * 
+ * Help to generate video url
+ *
  * @see guidelines at http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472
- * 
- * @author David Epely 
+ *
+ * @author David Epely <depely@prestaconcept.net>
  */
 class GoogleVideoUrlDecorator extends UrlDecorator
 {
@@ -47,7 +48,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     protected $thumbnail_loc;
     protected $title;
     protected $description;
-    //list of optional parameters 
+    //list of optional parameters
     protected $content_loc;
     protected $player_loc;
 
@@ -86,16 +87,15 @@ class GoogleVideoUrlDecorator extends UrlDecorator
 
     /**
      * Decorate url with a video
-     * 
+     *
      * @param Url $urlDecorated
      * @param type $thumnail_loc
      * @param type $title
      * @param type $description
      * @param array $parameters - the keys to use are the optional properties of this class, (e.g. 'player_loc' => 'http://acme.com/player.swf')
-     * @throws Exception\GoogleVideoUrlException 
+     * @throws Exception\GoogleVideoUrlException
      */
-    public function __construct(
-    Url $urlDecorated, $thumnail_loc, $title, $description, array $parameters = array())
+    public function __construct(Url $urlDecorated, $thumnail_loc, $title, $description, array $parameters = array())
     {
         foreach ($parameters as $key => $param) {
             $method = Utils::getSetMethod($this, $key);
@@ -172,7 +172,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     }
 
     /**
-     * @param string $player_loc_autoplay 
+     * @param string $player_loc_autoplay
      */
     public function setPlayerLocAutoplay($player_loc_autoplay)
     {
@@ -188,7 +188,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @param int $duration
      * @return void
-     * @throws Exception\GoogleVideoUrlException 
+     * @throws Exception\GoogleVideoUrlException
      */
     public function setDuration($duration)
     {
@@ -207,7 +207,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     }
 
     /**
-     * @param float $rating 
+     * @param float $rating
      */
     public function setRating($rating)
     {
@@ -236,7 +236,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     }
 
     /**
-     * @param string $family_friendly 
+     * @param string $family_friendly
      */
     public function setFamilyFriendly($family_friendly = null)
     {
@@ -301,7 +301,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
         if (!in_array($requires_subscription, array(self::REQUIRES_SUBSCRIPTION_YES, self::REQUIRES_SUBSCRIPTION_NO))) {
             throw new Exception\GoogleVideoUrlException(sprintf('The parameter %s must be a valid requires_subscription.see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4', $requires_subscription));
         }
-        
+
         $this->requires_subscription = $requires_subscription;
         return $this;
     }
@@ -427,10 +427,10 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     }
 
     /**
-     * add price element 
-     * 
+     * add price element
+     *
      * @param float $price
-     * @param string $currency - ISO 4217 format. 
+     * @param string $currency - ISO 4217 format.
      * @param string $type - rent or own
      * @param string $resolution  - hd or sd
      */
@@ -442,13 +442,13 @@ class GoogleVideoUrlDecorator extends UrlDecorator
             'type' => $type,
             'resolution' => $resolution
         );
-        
+
         return $this;
     }
 
     /**
      * list of defined prices with price, currency, type and resolution
-     * 
+     *
      * @return array
      */
     public function getPrices()
@@ -458,7 +458,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
 
     /**
      * @param string $tag
-     * @throws Exception\GoogleVideoUrlTagException 
+     * @throws Exception\GoogleVideoUrlTagException
      */
     public function addTag($tag)
     {
@@ -476,8 +476,8 @@ class GoogleVideoUrlDecorator extends UrlDecorator
 
     /**
      * decorate w/ the video element before the closing tag
-     * 
-     * @return string 
+     *
+     * @return string
      */
     public function toXml()
     {
@@ -486,7 +486,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
         //----------------------
         // required fields
         $videoXml .= '<video:thumbnail_loc>' . Utils::encode($this->getThumbnailLoc()) . '</video:thumbnail_loc>';
-        
+
         foreach (array('title', 'description') as $paramName) {
             $videoXml .= '<video:' . $paramName . '>' . Utils::render($this->{Utils::getGetMethod($this, $paramName)}()) . '</video:' . $paramName . '>';
         }

@@ -1,8 +1,9 @@
 <?php
 
-/*
- * This file is part of the prestaSitemapPlugin package.
- * (c) David Epely <depely@prestaconcept.net>
+/**
+ * This file is part of the PrestaSitemapBundle
+ *
+ * (c) PrestaConcept <www.prestaconcept.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -90,16 +91,19 @@ class UrlConcrete implements Url
      */
     public function setChangefreq($changefreq = null)
     {
-        if (!in_array($changefreq, array(
-                    self::CHANGEFREQ_ALWAYS,
-                    self::CHANGEFREQ_HOURLY,
-                    self::CHANGEFREQ_DAILY,
-                    self::CHANGEFREQ_WEEKLY,
-                    self::CHANGEFREQ_MONTHLY,
-                    self::CHANGEFREQ_YEARLY,
-                    self::CHANGEFREQ_NEVER,
-                    null,
-                ))) {
+        if (!in_array(
+            $changefreq,
+            array(
+                self::CHANGEFREQ_ALWAYS,
+                self::CHANGEFREQ_HOURLY,
+                self::CHANGEFREQ_DAILY,
+                self::CHANGEFREQ_WEEKLY,
+                self::CHANGEFREQ_MONTHLY,
+                self::CHANGEFREQ_YEARLY,
+                self::CHANGEFREQ_NEVER,
+                null,
+            )
+        )) {
             throw new \RuntimeException(sprintf('The value "%s" is not supported by the option changefreq. See http://www.sitemaps.org/protocol.html#xmlTagDefinitions', $changefreq));
         }
 

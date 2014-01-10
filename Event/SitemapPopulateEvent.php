@@ -20,7 +20,7 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class SitemapPopulateEvent extends Event
 {
-    const onSitemapPopulate = 'presta_sitemap.populate';
+    const ON_SITEMAP_POPULATE = 'presta_sitemap.populate';
 
     protected $generator;
 

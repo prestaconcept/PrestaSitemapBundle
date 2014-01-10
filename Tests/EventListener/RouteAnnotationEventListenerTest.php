@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file is part of the PrestaSitemapBundle
+ *
+ * (c) PrestaConcept <www.prestaconcept.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Presta\SitemapBundle\Test\Sitemap;
 
 use Presta\SitemapBundle\EventListener\RouteAnnotationEventListener;
@@ -8,7 +17,7 @@ use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 /**
 * Manage sitemaps listing
 *
-* @author  David Epely
+* @author David Epely <depely@prestaconcept.net>
 */
 class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,7 +26,7 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testNoAnnotation()
     {
-        $this->assertEquals(null,$this->getListener()->getOptions('route1', $this->getRoute(null)),'sitemap = null returns null');
+        $this->assertEquals(null, $this->getListener()->getOptions('route1', $this->getRoute(null)), 'sitemap = null returns null');
     }
 
     /**
@@ -26,7 +35,7 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
     public function testInvalidSitemapFalse()
     {
         $this->setExpectedException('InvalidArgumentException');
-        $this->assertEquals(-1,$this->getListener()->getOptions('route1',$this->getRoute(false)),'sitemap = false throws an exception');
+        $this->assertEquals(-1, $this->getListener()->getOptions('route1', $this->getRoute(false)), 'sitemap = false throws an exception');
     }
 
     /**
@@ -35,7 +44,7 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
     public function testInvalidSitemapArbitrary()
     {
         $this->setExpectedException('InvalidArgumentException');
-        $this->assertEquals(-1,$this->getListener()->getOptions('route1',$this->getRoute('anything')),'sitemap = "anything" throws an exception');
+        $this->assertEquals(-1, $this->getListener()->getOptions('route1', $this->getRoute('anything')), 'sitemap = "anything" throws an exception');
     }
 
     /**
@@ -43,13 +52,13 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testDefaultAnnotation()
     {
-        $result=$this->getListener()->getOptions('route1',$this->getRoute(true));
-        $this->assertArrayHasKey('priority',$result);
-        $this->assertArrayHasKey('changefreq',$result);
-        $this->assertArrayHasKey('lastmod',$result);
-        $this->assertEquals(1,$result['priority']);
-        $this->assertEquals(UrlConcrete::CHANGEFREQ_DAILY,$result['changefreq']);
-        $this->assertInstanceOf('\DateTime',$result['lastmod']);
+        $result=$this->getListener()->getOptions('route1', $this->getRoute(true));
+        $this->assertArrayHasKey('priority', $result);
+        $this->assertArrayHasKey('changefreq', $result);
+        $this->assertArrayHasKey('lastmod', $result);
+        $this->assertEquals(1, $result['priority']);
+        $this->assertEquals(UrlConcrete::CHANGEFREQ_DAILY, $result['changefreq']);
+        $this->assertInstanceOf('\DateTime', $result['lastmod']);
     }
 
     /**
@@ -57,8 +66,8 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidPriority()
     {
-        $result=$this->getListener()->getOptions('route1',$this->getRoute(array('priority'=>0.5)));
-        $this->assertEquals(0.5,$result['priority']);
+        $result=$this->getListener()->getOptions('route1', $this->getRoute(array('priority'=>0.5)));
+        $this->assertEquals(0.5, $result['priority']);
     }
 
     /**
@@ -66,8 +75,8 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidChangefreq()
     {
-        $result=$this->getListener()->getOptions('route1',$this->getRoute(array('changefreq'=>'weekly')));
-        $this->assertEquals('weekly',$result['changefreq']);
+        $result=$this->getListener()->getOptions('route1', $this->getRoute(array('changefreq'=>'weekly')));
+        $this->assertEquals('weekly', $result['changefreq']);
     }
 
     /**
@@ -75,8 +84,8 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidLastmod()
     {
-        $result=$this->getListener()->getOptions('route1',$this->getRoute(array('lastmod'=>'2012-01-01 00:00:00')));
-        $this->assertEquals(new \DateTime('2012-01-01 00:00:00'),$result['lastmod']);
+        $result=$this->getListener()->getOptions('route1', $this->getRoute(array('lastmod'=>'2012-01-01 00:00:00')));
+        $this->assertEquals(new \DateTime('2012-01-01 00:00:00'), $result['lastmod']);
     }
 
     /**
@@ -85,7 +94,7 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
     public function testInvalidLastmod()
     {
         $this->setExpectedException('\InvalidArgumentException');
-        $this->getListener()->getOptions('route1',$this->getRoute(array('lastmod'=>'unknown')));
+        $this->getListener()->getOptions('route1', $this->getRoute(array('lastmod'=>'unknown')));
     }
 
     /**
@@ -126,5 +135,4 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
 
         return $listener;
     }
-
 }

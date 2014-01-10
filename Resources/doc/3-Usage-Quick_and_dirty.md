@@ -2,8 +2,8 @@
 
 The only thing required is to register a url for each available page.
 
-You need to add one or more listeners in your application that provides your 
-urls to PrestaSitemapBundle when called. 
+You need to add one or more listeners in your application that provides your
+urls to PrestaSitemapBundle when called.
 
 For example in your AcmeDemoBundle :
 
@@ -25,7 +25,7 @@ class AcmeDemoBundle extends Bundle
 
         //listen presta_sitemap.populate event
         $event->addListener(
-            SitemapPopulateEvent::onSitemapPopulate, 
+            SitemapPopulateEvent::ON_SITEMAP_POPULATE,
             function(SitemapPopulateEvent $event) use ($router){
                 //get absolute homepage url
                 $url = $router->generate('homepage', array(), true);
@@ -33,9 +33,9 @@ class AcmeDemoBundle extends Bundle
                 //add homepage url to the urlset named default
                 $event->getGenerator()->addUrl(
                     new UrlConcrete(
-                        $url, 
-                        new \DateTime(), 
-                        UrlConcrete::CHANGEFREQ_HOURLY, 
+                        $url,
+                        new \DateTime(),
+                        UrlConcrete::CHANGEFREQ_HOURLY,
                         1
                     ),
                     'default'
@@ -45,8 +45,8 @@ class AcmeDemoBundle extends Bundle
 }
 ```
 
-Then the sitemap can be generated and optionnaly set in cache; 
+Then the sitemap can be generated and optionnaly set in cache;
 the sitemapindex will be : http://acme.com/sitemap.xml
-So the default section will be available at http://acme.com/sitemap.default.xml . 
-Note that if one limit is exceeded a new section will be added 
+So the default section will be available at http://acme.com/sitemap.default.xml .
+Note that if one limit is exceeded a new section will be added
 (eg. http://acme.com/sitemap.default_1.xml)

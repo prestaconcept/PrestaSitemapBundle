@@ -47,7 +47,7 @@ class AddSitemapListenersPass implements CompilerPassInterface
             }
             $definition->addMethodCall(
                 'addListenerService',
-                array(SitemapPopulateEvent::onSitemapPopulate, array($id, 'populateSitemap'))
+                array(SitemapPopulateEvent::ON_SITEMAP_POPULATE, array($id, 'populateSitemap'))
             );
         }
     }

@@ -146,14 +146,16 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
 
         $failed = false;
         try {
-            $url->setStockTickers(array(
-                'NYSE:OWW',
-                'NASDAQ:GTAT',
-                'NYSE:AOL',
-                'NASDAQ:ENDP',
-                'CVE:GTA',
-                'NASDAQ:IMGN'
-            ));
+            $url->setStockTickers(
+                array(
+                    'NYSE:OWW',
+                    'NASDAQ:GTAT',
+                    'NYSE:AOL',
+                    'NASDAQ:ENDP',
+                    'CVE:GTA',
+                    'NASDAQ:IMGN'
+                )
+            );
         } catch (GoogleNewsUrlException $e) {
             $failed = true;
         }
@@ -161,13 +163,15 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
 
         $failed = false;
         try {
-            $url->setStockTickers(array(
-                'NYSE:OWW',
-                'NASDAQ:GTAT',
-                'NYSE:AOL',
-                'NASDAQ:ENDP',
-                'CVE:GTA'
-            ));
+            $url->setStockTickers(
+                array(
+                    'NYSE:OWW',
+                    'NASDAQ:GTAT',
+                    'NYSE:AOL',
+                    'NASDAQ:ENDP',
+                    'CVE:GTA'
+                )
+            );
         } catch (GoogleNewsUrlException $e) {
             $failed = true;
         }
@@ -181,10 +185,12 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
         }
         $this->assertTrue($failed, 'Setting to many stock tickers over the add method did not fail');
 
-        $url->setStockTickers(array(
-            'NYSE:OWW',
-            'NASDAQ:GTAT'
-        ));
+        $url->setStockTickers(
+            array(
+                'NYSE:OWW',
+                'NASDAQ:GTAT'
+            )
+        );
         $dom = new \DOMDocument();
         $dom->loadXML($this->generateXml($url));
         $stockNodes = $dom->getElementsByTagNameNS('http://www.google.com/schemas/sitemap-news/0.9', 'stock_tickers');
@@ -199,8 +205,11 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
      */
     private function createExampleUrl()
     {
-        $url = new GoogleNewsUrlDecorator(new UrlConcrete('http://acme.com/'),
-            'The Example Times', 'en', new \DateTime(),
+        $url = new GoogleNewsUrlDecorator(
+            new UrlConcrete('http://acme.com/'),
+            'The Example Times',
+            'en',
+            new \DateTime(),
             'An example news article'
         );
 
@@ -225,4 +234,4 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
 
         return $generator->fetch($section)->toXml();
     }
-} 
+}

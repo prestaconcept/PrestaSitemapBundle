@@ -1,4 +1,14 @@
 <?php
+
+/**
+ * This file is part of the PrestaSitemapBundle
+ *
+ * (c) PrestaConcept <www.prestaconcept.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Presta\SitemapBundle\Test\Sitemap;
 
 use Presta\SitemapBundle\Sitemap\Utils;
@@ -11,7 +21,7 @@ use Presta\SitemapBundle\Exception\Exception;
  */
 class UtilsTest extends \PHPUnit_Framework_TestCase
 {
-    
+
     /**
      * @expectedException Exception
      */
@@ -20,7 +30,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
         $object = new \stdClass();
         Utils::getSetMethod($object, 'unknown');
     }
-    
+
     /**
      * @expectedException Exception
      */
@@ -29,21 +39,21 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
         $object = new \stdClass();
         Utils::getGetMethod($object, 'unknown');
     }
-    
-    
+
+
     public function testRender()
     {
         $actual = Utils::render('data w/ cdata section');
         $this->assertEquals('<![CDATA[data w/ cdata section]]>', $actual);
     }
-    
+
     public function testEncode()
     {
         $actual = Utils::encode('data & spécial chars>');
         $this->assertEquals('data &amp; spécial chars&gt;', $actual);
     }
-    
-    
+
+
     public function testCamelize()
     {
         $actual = Utils::camelize('data to_camelize');
