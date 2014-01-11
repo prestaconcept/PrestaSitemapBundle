@@ -10,6 +10,7 @@
 
 namespace Presta\SitemapBundle\Service;
 
+use Presta\SitemapBundle\DependencyInjection\Configuration;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -52,7 +53,10 @@ class Dumper extends AbstractGenerator
      * @param Filesystem $filesystem Symfony's Filesystem
      * @param $sitemapFilePrefix
      */
-    public function __construct(EventDispatcherInterface $dispatcher, Filesystem $filesystem, $sitemapFilePrefix)
+    public function __construct(
+        EventDispatcherInterface $dispatcher,
+        Filesystem $filesystem,
+        $sitemapFilePrefix = Configuration::DEFAULT_FILENAME)
     {
         parent::__construct($dispatcher);
         $this->filesystem = $filesystem;

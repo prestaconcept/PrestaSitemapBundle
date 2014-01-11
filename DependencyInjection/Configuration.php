@@ -20,6 +20,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class Configuration implements ConfigurationInterface
 {
+    const DEFAULT_FILENAME = 'sitemap';
 
     /**
      * {@inheritDoc}
@@ -34,7 +35,7 @@ class Configuration implements ConfigurationInterface
                         ->defaultValue('3600')
                     ->end()
                     ->scalarNode('sitemap_file_prefix')
-                        ->defaultValue('sitemap')
+                        ->defaultValue(self::DEFAULT_FILENAME)
                         ->info('Sets sitemap filename prefix defaults to "sitemap" -> sitemap.xml (for index); sitemap.<section>.xml(.gz) (for sitemaps)')
                     ->end()
                     ->scalarNode('dumper_base_url')
