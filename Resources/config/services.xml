@@ -22,11 +22,6 @@
             <argument id="filesystem" type="service" />
             <argument>%presta_sitemap.sitemap_file_prefix%</argument>
         </service>
-
-        <service id="presta_sitemap.routing_loader" class="%presta_sitemap.routing_loader.class%">
-            <argument>%presta_sitemap.sitemap_file_prefix%</argument>
-            <tag name="routing.loader" />
-        </service>
     </services>
 
 </container>
