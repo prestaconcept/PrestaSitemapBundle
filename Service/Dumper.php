@@ -46,7 +46,7 @@ class Dumper extends AbstractGenerator
     /**
      * @var string
      */
-    private $sitemapFilePrefix;
+    protected $sitemapFilePrefix;
 
     /**
      * @param EventDispatcherInterface $dispatcher Symfony's EventDispatcher
