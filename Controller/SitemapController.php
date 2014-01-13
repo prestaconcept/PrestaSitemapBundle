@@ -24,9 +24,6 @@ class SitemapController extends Controller
     /**
      * list sitemaps
      *
-     * //TODO: implement basic urlset rendering
-     * //TODO: implement sitemapindex composed by sitemapindex
-     *
      * @param $_format
      * @return Response
      */

@@ -50,7 +50,6 @@ abstract class AbstractGenerator
      * add an Url to an Urlset
      *
      * section is helpfull for partial cache invalidation
-     * //TODO: make $section optional
      *
      * @param Url    $url
      * @param string $section
@@ -69,7 +68,6 @@ abstract class AbstractGenerator
         }
 
         if ($urlset->isFull()) {
-            //TODO: recursive sitemap index
             throw new \RuntimeException('The limit of sitemapindex has been exceeded');
         }
 
