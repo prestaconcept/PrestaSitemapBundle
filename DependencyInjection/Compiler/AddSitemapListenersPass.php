@@ -32,10 +32,14 @@ class AddSitemapListenersPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         if (!$container->hasDefinition('event_dispatcher')) {
-            return;
+            if (!$container->hasAlias('event_dispatcher')) {
+                return;
+            } else {
+                $definition = $container->getDefinition($container->getAlias('event_dispatcher'));
+            }
+        } else {
+            $definition = $container->getDefinition('event_dispatcher');
         }
-
-        $definition = $container->getDefinition('event_dispatcher');
 
         foreach ($container->findTaggedServiceIds('presta.sitemap.listener') as $id => $tags) {
             $class = $container->getDefinition($id)->getClass();
