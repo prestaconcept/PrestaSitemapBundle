@@ -166,7 +166,7 @@ class Dumper extends AbstractGenerator
                         "One of referenced sitemaps in $filename doesn't contain 'loc' attribute"
                     );
                 }
-                $basename = preg_replace('/^' . $this->sitemapFilePrefix . '\.(.+)\.xml(?:\.gz)?$/', '\1', basename($child->loc)); // cut .xml|.xml.gz
+                $basename = preg_replace('/^' . preg_quote($this->sitemapFilePrefix) . '\.(.+)\.xml(?:\.gz)?$/', '\1', basename($child->loc)); // cut .xml|.xml.gz
 
                 if (!isset($child->lastmod)) {
                     throw new \InvalidArgumentException(
