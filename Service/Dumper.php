@@ -56,8 +56,8 @@ class Dumper extends AbstractGenerator
     public function __construct(
         EventDispatcherInterface $dispatcher,
         Filesystem $filesystem,
-        $sitemapFilePrefix = Configuration::DEFAULT_FILENAME)
-    {
+        $sitemapFilePrefix = Configuration::DEFAULT_FILENAME
+    ) {
         parent::__construct($dispatcher);
         $this->filesystem = $filesystem;
         $this->sitemapFilePrefix = $sitemapFilePrefix;
