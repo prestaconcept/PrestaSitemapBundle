@@ -10,6 +10,7 @@
 
 namespace Presta\SitemapBundle\Service;
 
+use Presta\SitemapBundle\DependencyInjection\Configuration;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -43,13 +44,23 @@ class Dumper extends AbstractGenerator
     protected $filesystem;
 
     /**
+     * @var string
+     */
+    protected $sitemapFilePrefix;
+
+    /**
      * @param EventDispatcherInterface $dispatcher Symfony's EventDispatcher
      * @param Filesystem $filesystem Symfony's Filesystem
+     * @param $sitemapFilePrefix
      */
-    public function __construct(EventDispatcherInterface $dispatcher, Filesystem $filesystem)
-    {
+    public function __construct(
+        EventDispatcherInterface $dispatcher,
+        Filesystem $filesystem,
+        $sitemapFilePrefix = Configuration::DEFAULT_FILENAME
+    ) {
         parent::__construct($dispatcher);
         $this->filesystem = $filesystem;
+        $this->sitemapFilePrefix = $sitemapFilePrefix;
     }
 
     /**
@@ -87,7 +98,7 @@ class Dumper extends AbstractGenerator
         if (null !== $section) {
             // Load current SitemapIndex file and add all sitemaps except those,
             // matching section currently being regenerated to root
-            foreach ($this->loadCurrentSitemapIndex($targetDir . '/sitemap.xml') as $key => $urlset) {
+            foreach ($this->loadCurrentSitemapIndex($targetDir . '/' . $this->sitemapFilePrefix . '.xml') as $key => $urlset) {
                 // cut possible _X, to compare base section name
                 $baseKey = preg_replace('/(.*?)(_\d+)?/', '\1', $key);
                 if ($baseKey !== $section) {
@@ -98,8 +109,8 @@ class Dumper extends AbstractGenerator
             }
         }
 
-        file_put_contents($this->tmpFolder . '/sitemap.xml', $this->getRoot()->toXml());
-        $filenames[] = 'sitemap.xml';
+        file_put_contents($this->tmpFolder . '/' . $this->sitemapFilePrefix . '.xml', $this->getRoot()->toXml());
+        $filenames[] = $this->sitemapFilePrefix . '.xml';
 
         // if we came to this point - we can activate new files
         // if we fail on exception eariler - old files will stay making Google happy
@@ -154,7 +165,7 @@ class Dumper extends AbstractGenerator
                         "One of referenced sitemaps in $filename doesn't contain 'loc' attribute"
                     );
                 }
-                $basename = preg_replace('/^sitemap\.(.+)\.xml(?:\.gz)?$/', '\1', basename($child->loc)); // cut .xml|.xml.gz
+                $basename = preg_replace('/^' . preg_quote($this->sitemapFilePrefix) . '\.(.+)\.xml(?:\.gz)?$/', '\1', basename($child->loc)); // cut .xml|.xml.gz
 
                 if (!isset($child->lastmod)) {
                     throw new \InvalidArgumentException(
@@ -225,6 +236,6 @@ class Dumper extends AbstractGenerator
      */
     protected function newUrlset($name, \DateTime $lastmod = null)
     {
-        return new DumpingUrlset($this->baseUrl . 'sitemap.' . $name . '.xml', $lastmod);
+        return new DumpingUrlset($this->baseUrl . $this->sitemapFilePrefix . '.' . $name . '.xml', $lastmod);
     }
 }
