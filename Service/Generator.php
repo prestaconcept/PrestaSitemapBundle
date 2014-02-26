@@ -55,10 +55,10 @@ class Generator extends AbstractGenerator
         //---------------------
         // cache management
         if ($this->cache) {
-            $this->cache->save('root', serialize($this->getRoot()), $this->cacheTtl);
+            $this->cache->save('root', $this->getRoot(), $this->cacheTtl);
 
             foreach ($this->urlsets as $name => $urlset) {
-                $this->cache->save($name, serialize($urlset), $this->cacheTtl);
+                $this->cache->save($name, $urlset, $this->cacheTtl);
             }
         }
         //---------------------
@@ -73,7 +73,7 @@ class Generator extends AbstractGenerator
     public function fetch($name)
     {
         if ($this->cache && $this->cache->contains($name)) {
-            return unserialize($this->cache->fetch($name));
+            return $this->cache->fetch($name);
         }
 
         $this->generate();
