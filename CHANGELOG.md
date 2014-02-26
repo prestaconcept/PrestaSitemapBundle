@@ -1,6 +1,7 @@
 # CHANGELOG
 
   * #42 : Remove serialize. The cache provider decides if serialization is the correct way to store the data.
+  * #43 : Made Filename for dumped sitemaps configurable
 
 * v1.3.x
   * 7476b29 : [dumper] add host option
