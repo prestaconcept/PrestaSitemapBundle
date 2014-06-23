@@ -87,6 +87,8 @@ class Dumper extends AbstractGenerator
         // if no urlset wasn't created during populating
         // it means no URLs were added to the sitemap
         if (!count($this->urlsets)) {
+            $this->cleanup();
+
             return false;
         }
 
