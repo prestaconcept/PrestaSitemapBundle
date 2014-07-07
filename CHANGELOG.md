@@ -1,9 +1,11 @@
 # CHANGELOG
 
+* master
+  * #58 : Remove temporary directory if no urlset was created
+
+* v1.3.0
   * #42 : Remove serialize. The cache provider decides if serialization is the correct way to store the data.
   * #43 : Made Filename for dumped sitemaps configurable
-
-* v1.3.x
   * 7476b29 : [dumper] add host option
   * dfc52e7 : Clean temporary files
   * 918b49e : [dumper] fake request and use request scope
