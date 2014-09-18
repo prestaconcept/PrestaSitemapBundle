@@ -202,7 +202,13 @@ class Dumper extends AbstractGenerator
         $this->deleteExistingSitemaps($targetDir);
 
         // no need to delete the root file as it always exists, it will be overwritten
-        $this->filesystem->mirror($this->tmpFolder, $targetDir, null, array('override' => true));
+        $iterator = new \DirectoryIterator($this->tmpFolder);
+        foreach ($iterator as $file) {
+            if (!$file->isDot()) {
+                $this->filesystem->rename($file->getPathname(), $targetDir.'/'.$file->getFilename(), true);
+            }
+        }
+
         $this->cleanup();
     }
 
