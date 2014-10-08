@@ -80,6 +80,12 @@ class DumpSitemapsCommand extends ContainerAwareCommand
         /* @var $dumper \Presta\SitemapBundle\Service\Dumper */
 
         $baseUrl = $input->getOption('base-url') ?: $container->getParameter('presta_sitemap.dumper_base_url');
+
+        if (null === $baseUrl) {
+            $context = $container->get('router')->getContext();
+            $baseUrl = sprintf('%s://%s/', $context->getScheme(), $context->getHost());
+        }
+
         $baseUrl = rtrim($baseUrl, '/') . '/';
         if (!parse_url($baseUrl, PHP_URL_HOST)) { //sanity check
             throw new \InvalidArgumentException("Invalid base url. Use fully qualified base url, e.g. http://acme.com/", self::ERR_INVALID_HOST);

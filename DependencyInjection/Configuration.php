@@ -39,7 +39,7 @@ class Configuration implements ConfigurationInterface
                         ->info('Sets sitemap filename prefix defaults to "sitemap" -> sitemap.xml (for index); sitemap.<section>.xml(.gz) (for sitemaps)')
                     ->end()
                     ->scalarNode('dumper_base_url')
-                        ->defaultValue('http://localhost/')
+                        ->defaultValue(null)
                         ->info('Deprecated: please use host option in command. Used for dumper command. Default host to use if host argument is missing')
                     ->end()
                     ->scalarNode('route_annotation_listener')->defaultTrue()->end()
