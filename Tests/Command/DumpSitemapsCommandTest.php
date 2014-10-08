@@ -81,6 +81,18 @@ class DumpSitemapsCommandTest extends WebTestCase
         $this->assertXmlFileEqualsXmlFile($this->fixturesDir . '/sitemap.video.xml', $this->webDir . '/sitemap.video.xml');
     }
 
+    public function testSitemapDumpWithRouterContextUrl()
+    {
+        //set routing context
+        $context = $this->container->get('router')->getContext();
+        $context->setHost('sitemap.php54.local');
+        $context->setScheme('http');
+
+        $res = $this->executeDumpWithOptions(array('target' => $this->webDir));
+        $this->assertEquals(0, $res, 'Command exited with error');
+        $this->assertXmlFileEqualsXmlFile($this->fixturesDir . '/sitemap.video.xml', $this->webDir . '/sitemap.video.xml');
+    }
+
     public function testSitemapDumpWithGzip()
     {
         $res = $this->executeDumpWithOptions(array('target' => $this->webDir, '--base-url' => 'http://sitemap.php54.local/', '--gzip' => true));
