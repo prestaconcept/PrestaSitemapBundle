@@ -41,12 +41,8 @@ Sandbox is also deployed for a live demonstration :
 
 1. Installation
 
-    ```js
-        //composer.json
-        "require": {
-            //...
-            "presta/sitemap-bundle": "dev-master"
-        }
+    ```sh
+    composer require presta/sitemap-bundle
     ```
 
     ```php
