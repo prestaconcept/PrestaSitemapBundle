@@ -38,6 +38,7 @@ class SitemapController extends Controller
         $response = Response::create($sitemapindex->toXml());
         $response->setPublic();
         $response->setClientTtl($this->getTtl());
+        $response->headers->set('X-Robots-Tag', 'noindex');
 
         return $response;
     }
@@ -59,6 +60,7 @@ class SitemapController extends Controller
         $response = Response::create($section->toXml());
         $response->setPublic();
         $response->setClientTtl($this->getTtl());
+        $response->headers->set('X-Robots-Tag', 'noindex');
 
         return $response;
     }
