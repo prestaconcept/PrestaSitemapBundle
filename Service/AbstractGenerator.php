@@ -39,11 +39,21 @@ abstract class AbstractGenerator
     protected $urlsets = array();
 
     /**
+     * The maximum number of item generated in a sitemap
+     *
+     * @var int
+     */
+    protected $itemsBySet;
+
+    /**
      * @param EventDispatcherInterface $dispatcher
      */
-    public function __construct(EventDispatcherInterface $dispatcher)
+    public function __construct(EventDispatcherInterface $dispatcher, $itemsBySet = null)
     {
         $this->dispatcher = $dispatcher;
+        // We add one to LIMIT_ITEMS because it was used as an index, not a
+        // quantity
+        $this->itemsBySet = ($itemsBySet === null) ? Sitemap\Sitemapindex::LIMIT_ITEMS + 1 : $itemsBySet;
     }
 
     /**
@@ -60,14 +70,15 @@ abstract class AbstractGenerator
     {
         $urlset = $this->getUrlset($section);
 
-        //maximum 50k sitemap in sitemapindex
+        // Compare the number of items in the urlset against the maximum
+        // allowed and check the maximum of 50k sitemap in sitemapindex
         $i = 0;
-        while ($urlset->isFull() && $i <= Sitemap\Sitemapindex::LIMIT_ITEMS) {
+        while ((count($urlset) >= $this->itemsBySet || $urlset->isFull()) && $i <= Sitemap\Sitemapindex::LIMIT_ITEMS) {
             $urlset = $this->getUrlset($section . '_' . $i);
             $i++;
         }
 
-        if ($urlset->isFull()) {
+        if (count($urlset) >= $this->itemsBySet || $urlset->isFull()) {
             throw new \RuntimeException('The limit of sitemapindex has been exceeded');
         }
 

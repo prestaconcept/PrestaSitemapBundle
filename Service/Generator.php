@@ -30,13 +30,14 @@ class Generator extends AbstractGenerator
 
     /**
      * @param EventDispatcherInterface $dispatcher
+     * @param int $itemsBySet
      * @param RouterInterface $router
      * @param Cache|null $cache
      * @param integer|null $cacheTtl
      */
-    public function __construct(EventDispatcherInterface $dispatcher, RouterInterface $router, Cache $cache = null, $cacheTtl = null)
+    public function __construct(EventDispatcherInterface $dispatcher, RouterInterface $router, Cache $cache = null, $cacheTtl = null, $itemsBySet = null)
     {
-        parent::__construct($dispatcher);
+        parent::__construct($dispatcher, $itemsBySet);
         $this->router = $router;
         $this->cache = $cache;
         $this->cacheTtl = $cacheTtl;
