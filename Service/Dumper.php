@@ -52,13 +52,15 @@ class Dumper extends AbstractGenerator
      * @param EventDispatcherInterface $dispatcher Symfony's EventDispatcher
      * @param Filesystem $filesystem Symfony's Filesystem
      * @param $sitemapFilePrefix
+     * @param int $itemsBySet
      */
     public function __construct(
         EventDispatcherInterface $dispatcher,
         Filesystem $filesystem,
-        $sitemapFilePrefix = Configuration::DEFAULT_FILENAME
+        $sitemapFilePrefix = Configuration::DEFAULT_FILENAME,
+        $itemsBySet = null
     ) {
-        parent::__construct($dispatcher);
+        parent::__construct($dispatcher, $itemsBySet);
         $this->filesystem = $filesystem;
         $this->sitemapFilePrefix = $sitemapFilePrefix;
     }

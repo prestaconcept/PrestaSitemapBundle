@@ -16,7 +16,7 @@ namespace Presta\SitemapBundle\Sitemap;
  *
  * @author depely
  */
-abstract class XmlConstraint
+abstract class XmlConstraint implements \Countable
 {
     const LIMIT_ITEMS = 49999;
     const LIMIT_BYTES = 10000000; // 10,485,760 bytes - 485,760
@@ -32,6 +32,14 @@ abstract class XmlConstraint
     public function isFull()
     {
         return $this->limitItemsReached || $this->limitBytesReached;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function count()
+    {
+        return $this->countItems;
     }
 
     /**
