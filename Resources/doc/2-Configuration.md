@@ -26,7 +26,7 @@ presta_sitemap:
 
 ## Annotation
 
-The listener that provides annotation support is enabled by default. To disable it, add the following configuration to 
+The listener that provides annotation support is enabled by default. To disable it, add the following configuration to
 your application.
 
 ```yaml
@@ -34,13 +34,24 @@ presta_sitemap:
    route_annotation_listener: false
 ```
 
-## Cache [optional] 
+## Items by set [optional]
+
+You can change the default maximum number of items generated for each sitemap
+with the following configuration. It cannot break the maximum limit of
+50,000 items and maximum size of 1,000,000 bytes. The default value is 50,000.
+
+```yaml
+presta_sitemap:
+    items_by_set: 50000
+```
+
+## Cache [optional]
 
 Each sitemaps can be stored in your cache system :
 
-PrestaSitemapBundle uses LiipDoctrineCacheBundle to store Cache. 
+PrestaSitemapBundle uses LiipDoctrineCacheBundle to store Cache.
 This bundle provides an abstract access to any Doctrine Common Cache classes.
-You need to install LiipDoctrineCacheBundle and specify what kind of cache 
+You need to install LiipDoctrineCacheBundle and specify what kind of cache
 system to use with PrestaSitemap.
 
  * Follow the instruction to install [LiipDoctrineCacheBundle](http://packagist.org/packages/liip/doctrine-cache-bundle).
