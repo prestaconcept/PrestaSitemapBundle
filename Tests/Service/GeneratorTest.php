@@ -27,7 +27,7 @@ class GeneratorTest extends WebTestCase
         self::createClient();
         $container  = static::$kernel->getContainer();
 
-        $this->generator = new Generator($container->get('event_dispatcher'), $container->get('router'));
+        $this->generator = new Generator($container->get('event_dispatcher'), $container->get('router'), null, null, 1);
     }
 
     public function testGenerate()
@@ -59,5 +59,19 @@ class GeneratorTest extends WebTestCase
         $urlset = $this->generator->getUrlset('default');
 
         $this->assertInstanceOf('Presta\\SitemapBundle\\Sitemap\\Urlset', $urlset);
+    }
+
+    public function testItemsBySet()
+    {
+        $url = new Sitemap\Url\UrlConcrete('http://acme.com/');
+
+        $this->generator->addUrl($url, 'default');
+        $this->generator->addUrl($url, 'default');
+
+        $fullUrlset  = $this->generator->getUrlset('default_0');
+        $emptyUrlset = $this->generator->getUrlset('default_1');
+
+        $this->assertEquals(count($fullUrlset), 1);
+        $this->assertEquals(count($emptyUrlset), 0);
     }
 }
