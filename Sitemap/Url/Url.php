@@ -19,7 +19,7 @@ interface Url
 {
 
     /**
-     * render element as xml 
+     * render element as xml
      * @return string
      */
     public function toXml();

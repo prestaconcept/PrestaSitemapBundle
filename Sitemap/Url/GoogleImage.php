@@ -14,7 +14,7 @@ use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
  * Class used for managing image's url entities
- * 
+ *
  * @author David Epely <depely@prestaconcept.net>
  * @author Alain Flaus <aflaus@prestaconcept.net>
  */
@@ -28,12 +28,12 @@ class GoogleImage
 
     /**
      * create a GoogleImage for your GoogleImageUrl
-     * 
-     * @param 	string $loc
-     * @param 	string $caption[optional]
-     * @param 	string $geo_location[optional]
-     * @param 	string $title[optional]
-     * @param 	string $license[optional]
+     *
+     * @param string $loc
+     * @param string $caption[optional]
+     * @param string $geo_location[optional]
+     * @param string $title[optional]
+     * @param string $license[optional]
      */
     public function __construct($loc, $caption = null, $geo_location = null, $title = null, $license = null)
     {
@@ -45,7 +45,9 @@ class GoogleImage
     }
 
     /**
-     * @param 	string $internal_uri
+     * @param $loc
+     *
+     * @return $this
      */
     public function setLoc($loc)
     {
@@ -54,7 +56,7 @@ class GoogleImage
     }
 
     /**
-     * @return 	string
+     * @return mixed
      */
     public function getLoc()
     {
@@ -62,7 +64,9 @@ class GoogleImage
     }
 
     /**
-     * @param 	string $caption
+     * @param $caption
+     *
+     * @return $this
      */
     public function setCaption($caption)
     {
@@ -71,7 +75,7 @@ class GoogleImage
     }
 
     /**
-     * @return 	string
+     * @return string
      */
     public function getCaption()
     {
@@ -79,7 +83,9 @@ class GoogleImage
     }
 
     /**
-     * @param 	string $caption
+     * @param $geo_location
+     *
+     * @return $this
      */
     public function setGeoLocation($geo_location)
     {
@@ -88,7 +94,7 @@ class GoogleImage
     }
 
     /**
-     * @return 	string
+     * @return mixed
      */
     public function getGeoLocation()
     {
@@ -96,7 +102,9 @@ class GoogleImage
     }
 
     /**
-     * @param 	string $title
+     * @param $title
+     *
+     * @return $this
      */
     public function setTitle($title)
     {
@@ -105,7 +113,7 @@ class GoogleImage
     }
 
     /**
-     * @return 	string
+     * @return mixed
      */
     public function getTitle()
     {
@@ -113,7 +121,9 @@ class GoogleImage
     }
 
     /**
-     * @param 	string $license
+     * @param $license
+     *
+     * @return $this
      */
     public function setLicense($license)
     {
@@ -122,7 +132,7 @@ class GoogleImage
     }
 
     /**
-     * @return 	string
+     * @return mixed
      */
     public function getLicense()
     {
@@ -131,8 +141,8 @@ class GoogleImage
 
     /**
      * Return the xml representation for the image
-     * 
-     * @return 	string
+     *
+     * @return string
      */
     public function toXML()
     {
