@@ -1,6 +1,8 @@
 # CHANGELOG
 
-* master
+* v1.4.0
+  * #76 : Fix PSR - travis build success
+  * #71 : Add the ability to configure the number of items by sitemap
   * #58 : Remove temporary directory if no urlset was created
 
 * v1.3.0
