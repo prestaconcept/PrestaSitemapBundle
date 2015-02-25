@@ -12,8 +12,8 @@ namespace Presta\SitemapBundle\Sitemap\Url;
 
 /**
  * decorated url model
- * 
- * @author David Epely 
+ *
+ * @author David Epely
  */
 abstract class UrlDecorator implements Url
 {
@@ -21,7 +21,7 @@ abstract class UrlDecorator implements Url
     protected $customNamespaces = array();
 
     /**
-     * @param Url $urlDecorated 
+     * @param Url $urlDecorated
      */
     public function __construct(Url $urlDecorated)
     {
@@ -29,7 +29,7 @@ abstract class UrlDecorator implements Url
     }
 
     /**
-     * @return array 
+     * @return array
      */
     public function getCustomNamespaces()
     {

@@ -63,7 +63,6 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
         $section = $event->getSection();
 
         if (is_null($section) || $section == 'default') {
-
             $this->addUrlsFromRoutes($event);
         }
     }
@@ -77,8 +76,8 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
         $collection = $this->router->getRouteCollection();
 
         foreach ($collection->all() as $name => $route) {
-
             $options = $this->getOptions($name, $route);
+
             if ($options) {
                 $event->getGenerator()->addUrl(
                     $this->getUrlConcrete($name, $options),
