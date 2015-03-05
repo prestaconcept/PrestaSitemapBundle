@@ -133,7 +133,7 @@ class UrlConcrete implements Url
         }
 
         if ($priority && is_numeric($priority) && $priority >= 0 && $priority <= 1) {
-            $this->priority = sprintf('%01.1f', $priority);
+            $this->priority = number_format($priority, 1);
         } else {
             throw new \RuntimeException(sprintf('The value "%s" is not supported by the option priority, it must be a numeric between 0.0 and 1.0. See http://www.sitemaps.org/protocol.html#xmlTagDefinitions', $priority));
         }
