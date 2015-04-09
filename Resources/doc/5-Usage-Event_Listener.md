@@ -56,7 +56,7 @@ class SitemapListener implements SitemapListenerInterface
         $section = $event->getSection();
         if (is_null($section) || $section == 'default') {
             //get absolute homepage url
-            $url = $this->router->generate('homepage', array(), true);
+            $url = $this->router->generate('homepage', array(), RouterInterface::ABSOLUTE_URL);
 
             //add homepage url to the urlset named default
             $event->getGenerator()->addUrl(
