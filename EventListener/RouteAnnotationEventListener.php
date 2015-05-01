@@ -102,7 +102,7 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
             return null;
         }
 
-        if ($option !== true && !is_array($option)) {
+        if (!filter_var($option, FILTER_VALIDATE_BOOLEAN) && !is_array($option)) {
             throw new \InvalidArgumentException('the sitemap option must be "true" or an array of parameters');
         }
 
