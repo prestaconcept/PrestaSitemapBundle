@@ -34,7 +34,7 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidSitemapFalse()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->setExpectedException('InvalidArgumentException');
         $this->assertEquals(-1, $this->getListener()->getOptions('route1', $this->getRoute(false)), 'sitemap = false throws an exception');
     }
 
@@ -43,7 +43,7 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidSitemapArbitrary()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->setExpectedException('InvalidArgumentException');
         $this->assertEquals(-1, $this->getListener()->getOptions('route1', $this->getRoute('anything')), 'sitemap = "anything" throws an exception');
     }
 
@@ -93,7 +93,7 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidLastmod()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->setExpectedException('InvalidArgumentException');
         $this->getListener()->getOptions('route1', $this->getRoute(array('lastmod'=>'unknown')));
     }
 
