@@ -93,7 +93,7 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidLastmod()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->setExpectedException('InvalidArgumentException');
         $this->getListener()->getOptions('route1', $this->getRoute(array('lastmod'=>'unknown')));
     }
 
