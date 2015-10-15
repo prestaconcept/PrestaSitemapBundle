@@ -27,7 +27,7 @@
         "phpunit/phpunit": "3.7.*@stable"
     },
     "suggest": {
-        "liip/doctrine-cache-bundle" : "Allows to store sitemaps in cache"
+        "doctrine/doctrine-cache-bundle" : "Allows to store sitemaps in cache"
     },
     "autoload": {
         "psr-0": {

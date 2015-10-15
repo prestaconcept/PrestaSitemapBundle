@@ -10,7 +10,7 @@ presta_sitemap:
     timetolive: 3600
 ```
 
-Also this value is used by the cache if you have installed and configured liip_doctrine_cache.
+Also this value is used by the cache if you have installed and configured doctrine_cache.
 
 ## The base URL for dumper
 
@@ -49,17 +49,18 @@ presta_sitemap:
 
 Each sitemaps can be stored in your cache system :
 
-PrestaSitemapBundle uses LiipDoctrineCacheBundle to store Cache.
+PrestaSitemapBundle uses DoctrineCacheBundle to store Cache.
 This bundle provides an abstract access to any Doctrine Common Cache classes.
-You need to install LiipDoctrineCacheBundle and specify what kind of cache
+You need to install DoctrineCacheBundle and specify what kind of cache
 system to use with PrestaSitemap.
 
- * Follow the instruction to install [LiipDoctrineCacheBundle](http://packagist.org/packages/liip/doctrine-cache-bundle).
- * Configure a service for PrestaSitemap, this is an exemple in `app/config/config.yml` with php-apc :
+ * Follow the instruction to install [DoctrineCacheBundle](https://packagist.org/packages/doctrine/doctrine-cache-bundle).
+ * Configure a service for PrestaSitemap, this is an exemple in `app/config/config.yml` with xcache :
 
 ```yaml
-liip_doctrine_cache:
-    namespaces:
+doctrine_cache:
+    providers:
         presta_sitemap:
-            type: "apc"
+            type: xcache
+            namespace: presta_sitemap
 ```
