@@ -4,28 +4,37 @@ php:
     - 5.3
     - 5.4
     - 5.5
+    - 5.6
+    - hhvm
 
 env:
-    - SYMFONY_VERSION=2.1.*
-    - SYMFONY_VERSION=2.2.*
     - SYMFONY_VERSION=2.3.*
-    - SYMFONY_VERSION=2.4.*
-    - SYMFONY_VERSION=2.5.*
-    - SYMFONY_VERSION=dev-master
 
 before_script:
-    - pear install pear/PHP_CodeSniffer
-    - phpenv rehash
+    - sh -c 'if [ "${TRAVIS_PHP_VERSION}" != "hhvm" ]; then pear install pear/PHP_CodeSniffer; fi;'
+    - sh -c 'if [ "${TRAVIS_PHP_VERSION}" != "hhvm" ]; then phpenv rehash; fi;'
     - composer selfupdate
     - composer require symfony/symfony:${SYMFONY_VERSION}
 
 script:
     - phpunit --coverage-text
-    - phpcs --ignore=/vendor/*,/Tests/app/* --extensions=php --encoding=utf-8 --standard=PSR2 -np .
+    - sh -c 'if [ "${TRAVIS_PHP_VERSION}" != "hhvm" ]; then phpcs --ignore=/vendor/*,/Tests/app/* --extensions=php --encoding=utf-8 --standard=PSR2 -np .; fi;'
 
 matrix:
   allow_failures:
     - env: SYMFONY_VERSION=dev-master
+    - php: hhvm
+  include:
+    - php: 5.5
+      env: SYMFONY_VERSION=2.1.*
+    - php: 5.5
+      env: SYMFONY_VERSION=2.2.*
+    - php: 5.5
+      env: SYMFONY_VERSION=2.4.*
+    - php: 5.5
+      env: SYMFONY_VERSION=2.5.*
+    - php: 5.5
+      env: SYMFONY_VERSION=dev-master
 
 notifications:
   email:
