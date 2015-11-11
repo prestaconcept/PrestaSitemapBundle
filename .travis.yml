@@ -4,29 +4,55 @@ php:
     - 5.3
     - 5.4
     - 5.5
-
-env:
-    - SYMFONY_VERSION=2.1.*
-    - SYMFONY_VERSION=2.2.*
-    - SYMFONY_VERSION=2.3.*
-    - SYMFONY_VERSION=2.4.*
-    - SYMFONY_VERSION=2.5.*
-    - SYMFONY_VERSION=dev-master
-
-before_script:
-    - pear install pear/PHP_CodeSniffer
-    - phpenv rehash
-    - composer selfupdate
-    - composer require symfony/symfony:${SYMFONY_VERSION}
-
-script:
-    - phpunit --coverage-text
-    - phpcs --ignore=/vendor/*,/Tests/app/* --extensions=php --encoding=utf-8 --standard=PSR2 -np .
+    - 5.6
+    - 7.0
+    - hhvm
 
 matrix:
-  allow_failures:
-    - env: SYMFONY_VERSION=dev-master
+    include:
+        - php: 5.6
+          env: SYMFONY_VERSION=2.1.*
+        - php: 5.6
+          env: SYMFONY_VERSION=2.2.*
+        - php: 5.6
+          env: SYMFONY_VERSION=2.3.*
+        - php: 5.6
+          env: SYMFONY_VERSION=2.4.*
+        - php: 5.6
+          env: SYMFONY_VERSION=2.5.*
+        - php: 5.6
+          env: SYMFONY_VERSION=2.6.*
+        - php: 5.6
+          env: SYMFONY_VERSION=2.8.*@dev SYMFONY_DEPRECATIONS_HELPER=strict
+        - php: 5.6
+          env: SYMFONY_VERSION=3.0.*@dev SYMFONY_DEPRECATIONS_HELPER=strict
+        - php: 5.6
+          env: PHPCS=yes
+    allow_failures:
+        - env: SYMFONY_VERSION=3.0.*@dev
+
+env:
+    global:
+        - SYMFONY_DEPRECATIONS_HELPER=weak
+
+sudo: false
+
+cache:
+    directories:
+        - $HOME/.composer/cache
+
+before_install:
+    - if [ "$PHPCS" = "yes" ]; then pear install pear/PHP_CodeSniffer; fi
+    - if [ "$PHPCS" = "yes" ]; then phpenv rehash; fi
+    - if [ "$PHPCS" != "yes"]; then composer selfupdate; fi
+    - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony:${SYMFONY_VERSION}; fi
+
+install: if [ "$PHPCS" != "yes" ]; then composer update --prefer-dist; fi
+
+script:
+    - if [ "$PHPCS" != "yes" ]; then phpunit --coverage-text; fi
+    - if [ "$PHPCS" = "yes" ]; then phpcs --ignore=/vendor/*,/Tests/app/* --extensions=php --encoding=utf-8 --standard=PSR2 -np .; fi
 
 notifications:
-  email:
-    - aflaus@prestaconcept.net
+    email:
+        - aflaus@prestaconcept.net

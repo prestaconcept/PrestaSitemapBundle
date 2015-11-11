@@ -24,7 +24,8 @@
         "symfony/symfony": ">=2.1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.*@stable"
+        "phpunit/phpunit": "3.7.*@stable",
+        "symfony/phpunit-bridge": "~2.7|~3.0"
     },
     "suggest": {
         "liip/doctrine-cache-bundle" : "Allows to store sitemaps in cache"
