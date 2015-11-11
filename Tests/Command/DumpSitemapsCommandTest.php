@@ -20,6 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * @author Alex Vasilenko
@@ -48,7 +49,7 @@ class DumpSitemapsCommandTest extends WebTestCase
             ->addListener(
                 SitemapPopulateEvent::ON_SITEMAP_POPULATE,
                 function (SitemapPopulateEvent $event) use ($router) {
-                    $base_url   = $router->generate('PrestaDemoBundle_homepage', array(), true);
+                    $base_url   = $router->generate('PrestaDemoBundle_homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
                     $urlVideo = new GoogleVideoUrlDecorator(
                         new UrlConcrete($base_url . 'page_video1/'),
                         $base_url . 'page_video1/thumbnail_loc?a=b&b=c',

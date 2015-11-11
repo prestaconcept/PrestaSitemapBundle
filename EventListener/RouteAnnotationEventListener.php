@@ -15,6 +15,7 @@ use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Service\SitemapListenerInterface;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -171,7 +172,7 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
     {
         // does the route need parameters? if so, we can't add it
         try {
-            return $this->router->generate($name, array(), true);
+            return $this->router->generate($name, array(), UrlGeneratorInterface::ABSOLUTE_URL);
         } catch (MissingMandatoryParametersException $e) {
             throw new \InvalidArgumentException(
                 sprintf(

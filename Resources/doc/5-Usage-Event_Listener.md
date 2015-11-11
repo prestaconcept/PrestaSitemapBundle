@@ -37,6 +37,7 @@ Sitemap listener example `Acme/DemoBundle/EventListener/SitemapListener.php`
 namespace Acme\DemoBundle\EventListener;
 
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use Presta\SitemapBundle\Service\SitemapListenerInterface;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
@@ -56,7 +57,7 @@ class SitemapListener implements SitemapListenerInterface
         $section = $event->getSection();
         if (is_null($section) || $section == 'default') {
             //get absolute homepage url
-            $url = $this->router->generate('homepage', array(), true);
+            $url = $this->router->generate('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
 
             //add homepage url to the urlset named default
             $event->getGenerator()->addUrl(
