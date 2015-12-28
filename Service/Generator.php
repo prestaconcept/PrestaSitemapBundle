@@ -13,6 +13,7 @@ namespace Presta\SitemapBundle\Service;
 use Doctrine\Common\Cache\Cache;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Presta\SitemapBundle\Sitemap;
 
 /**
@@ -100,7 +101,7 @@ class Generator extends AbstractGenerator
     protected function newUrlset($name, \DateTime $lastmod = null)
     {
         return new Sitemap\Urlset(
-            $this->router->generate('PrestaSitemapBundle_section', array('name' => $name, '_format' => 'xml'), true),
+            $this->router->generate('PrestaSitemapBundle_section', array('name' => $name, '_format' => 'xml'), UrlGeneratorInterface::ABSOLUTE_URL),
             $lastmod
         );
     }

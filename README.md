@@ -78,9 +78,12 @@ Sandbox is also deployed for a live demonstration :
     For complexe routes, create a [Closure][3] or a [Service][5] dedicated to your sitemap then add your urls :
 
     ```php
+    use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+    // ...
+
         function(SitemapPopulateEvent $event) use ($router){
             //get absolute homepage url
-            $url = $router->generate('homepage', array(), true);
+            $url = $router->generate('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
 
             //add homepage url to the urlset named default
             $event->getGenerator()->addUrl(

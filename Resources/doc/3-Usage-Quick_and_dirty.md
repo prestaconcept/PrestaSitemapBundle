@@ -12,6 +12,7 @@ For example in your AcmeDemoBundle :
 namespace Acme\DemoBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
@@ -28,7 +29,7 @@ class AcmeDemoBundle extends Bundle
             SitemapPopulateEvent::ON_SITEMAP_POPULATE,
             function(SitemapPopulateEvent $event) use ($router){
                 //get absolute homepage url
-                $url = $router->generate('homepage', array(), true);
+                $url = $router->generate('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
 
                 //add homepage url to the urlset named default
                 $event->getGenerator()->addUrl(
