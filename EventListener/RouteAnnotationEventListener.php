@@ -178,7 +178,9 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
                 sprintf(
                     'The route "%s" cannot have the sitemap option because it requires parameters',
                     $name
-                )
+                ),
+                0,
+                $e
             );
         }
     }
