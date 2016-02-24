@@ -141,7 +141,7 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
      * @return UrlConcrete
      * @throws \InvalidArgumentException
      */
-    private function getUrlConcrete($name, $options)
+    protected function getUrlConcrete($name, $options)
     {
         try {
             $url = new UrlConcrete(
