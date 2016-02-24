@@ -27,7 +27,7 @@
         "symfony/phpunit-bridge": "~2.7|~3.0"
     },
     "suggest": {
-        "liip/doctrine-cache-bundle" : "Allows to store sitemaps in cache"
+        "doctrine/doctrine-cache-bundle" : "Allows to store sitemaps in cache"
     },
     "autoload": {
         "psr-4": {
