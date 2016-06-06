@@ -17,6 +17,7 @@ use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -39,6 +40,9 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class RouteAnnotationEventListener implements SitemapListenerInterface
 {
+    /**
+     * @var RouterInterface
+     */
     protected $router;
 
     /**
@@ -57,7 +61,6 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
      * @param SitemapPopulateEvent $event
      *
      * @throws \InvalidArgumentException
-     * @return void
      */
     public function populateSitemap(SitemapPopulateEvent $event)
     {
@@ -69,28 +72,29 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
     }
 
     /**
-     * @param  SitemapPopulateEvent      $event
+     * @param SitemapPopulateEvent $event
+     *
      * @throws \InvalidArgumentException
      */
     private function addUrlsFromRoutes(SitemapPopulateEvent $event)
     {
         $collection = $this->getRouteCollection();
+        $generator = $event->getGenerator();
 
         foreach ($collection->all() as $name => $route) {
             $options = $this->getOptions($name, $route);
 
             if ($options) {
-                $event->getGenerator()->addUrl(
+                $generator->addUrl(
                     $this->getUrlConcrete($name, $options),
                     $event->getSection() ? $event->getSection() : 'default'
                 );
             }
-
         }
     }
 
     /**
-     * @return \Symfony\Component\Routing\RouteCollection
+     * @return RouteCollection
      */
     protected function getRouteCollection()
     {
@@ -98,10 +102,11 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
     }
 
     /**
-     * @param $name
-     * @param  Route                     $route
-     * @throws \InvalidArgumentException
+     * @param string $name
+     * @param Route  $route
+     *
      * @return array
+     * @throws \InvalidArgumentException
      */
     public function getOptions($name, Route $route)
     {
@@ -146,22 +151,21 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
     }
 
     /**
-     * @param $name
-     * @param $options
+     * @param string $name    Route name
+     * @param array  $options Node options
+     *
      * @return UrlConcrete
      * @throws \InvalidArgumentException
      */
     protected function getUrlConcrete($name, $options)
     {
         try {
-            $url = new UrlConcrete(
+            return new UrlConcrete(
                 $this->getRouteUri($name),
                 $options['lastmod'],
                 $options['changefreq'],
                 $options['priority']
             );
-
-            return $url;
         } catch (\Exception $e) {
             throw new \InvalidArgumentException(
                 sprintf(
@@ -176,8 +180,9 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
     }
 
     /**
-     * @param $name
-     * @param array $params Route additional parameters
+     * @param string $name   Route name
+     * @param array  $params Route additional parameters
+     *
      * @return string
      * @throws \InvalidArgumentException
      */

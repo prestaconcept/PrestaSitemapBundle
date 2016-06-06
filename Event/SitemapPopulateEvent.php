@@ -22,15 +22,21 @@ class SitemapPopulateEvent extends Event
 {
     const ON_SITEMAP_POPULATE = 'presta_sitemap.populate';
 
+    /**
+     * @var AbstractGenerator
+     */
     protected $generator;
 
     /**
      * Allows creating EventListeners for particular sitemap sections, used when dumping
-     *
      * @var string
      */
     protected $section;
 
+    /**
+     * @param AbstractGenerator $generator
+     * @param string|null       $section
+     */
     public function __construct(AbstractGenerator $generator, $section = null)
     {
         $this->generator = $generator;
