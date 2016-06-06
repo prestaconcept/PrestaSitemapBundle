@@ -11,10 +11,11 @@
 namespace Presta\SitemapBundle\Service;
 
 use Doctrine\Common\Cache\Cache;
+use Presta\SitemapBundle\Sitemap\Sitemapindex;
+use Presta\SitemapBundle\Sitemap\Urlset;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Presta\SitemapBundle\Sitemap;
 
 /**
  * Sitemap Manager service
@@ -25,16 +26,27 @@ use Presta\SitemapBundle\Sitemap;
  */
 class Generator extends AbstractGenerator
 {
+    /**
+     * @var RouterInterface
+     */
     protected $router;
+
+    /**
+     * @var Cache|null
+     */
     protected $cache;
+
+    /**
+     * @var int|null
+     */
     protected $cacheTtl;
 
     /**
      * @param EventDispatcherInterface $dispatcher
-     * @param int $itemsBySet
-     * @param RouterInterface $router
-     * @param Cache|null $cache
-     * @param integer|null $cacheTtl
+     * @param RouterInterface          $router
+     * @param Cache|null               $cache
+     * @param integer|null             $cacheTtl
+     * @param integer|null             $itemsBySet
      */
     public function __construct(EventDispatcherInterface $dispatcher, RouterInterface $router, Cache $cache = null, $cacheTtl = null, $itemsBySet = null)
     {
@@ -70,7 +82,8 @@ class Generator extends AbstractGenerator
      * Get eventual cached data or generate whole sitemap
      *
      * @param string $name
-     * @return Sitemap\Sitemapindex or Urlset - can be <null>
+     *
+     * @return Sitemapindex|Urlset|null
      */
     public function fetch($name)
     {
@@ -96,11 +109,11 @@ class Generator extends AbstractGenerator
      *
      * @param string $name
      *
-     * @return Sitemap\Urlset
+     * @return Urlset
      */
     protected function newUrlset($name, \DateTime $lastmod = null)
     {
-        return new Sitemap\Urlset(
+        return new Urlset(
             $this->router->generate('PrestaSitemapBundle_section', array('name' => $name, '_format' => 'xml'), UrlGeneratorInterface::ABSOLUTE_URL),
             $lastmod
         );

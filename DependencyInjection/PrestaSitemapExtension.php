@@ -17,14 +17,11 @@ use Symfony\Component\DependencyInjection\Loader;
 
 /**
  * This is the class that loads and manages your bundle configuration
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
 class PrestaSitemapExtension extends Extension
 {
-
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -34,14 +31,13 @@ class PrestaSitemapExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
 
-        $container->setParameter($this->getAlias().'.timetolive', $config['timetolive']);
-        $container->setParameter($this->getAlias().'.sitemap_file_prefix', $config['sitemap_file_prefix']);
-        $container->setParameter($this->getAlias().'.dumper_base_url', $config['dumper_base_url']);
-        $container->setParameter($this->getAlias().'.items_by_set', $config['items_by_set']);
+        $container->setParameter($this->getAlias() . '.timetolive', $config['timetolive']);
+        $container->setParameter($this->getAlias() . '.sitemap_file_prefix', $config['sitemap_file_prefix']);
+        $container->setParameter($this->getAlias() . '.dumper_base_url', $config['dumper_base_url']);
+        $container->setParameter($this->getAlias() . '.items_by_set', $config['items_by_set']);
 
         if (true === $config['route_annotation_listener']) {
             $loader->load('route_annotation_listener.xml');
         }
-
     }
 }

@@ -12,8 +12,10 @@
 namespace Presta\SitemapBundle\Service;
 
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
-use Presta\SitemapBundle\Sitemap;
+use Presta\SitemapBundle\Sitemap\DumpingUrlset;
+use Presta\SitemapBundle\Sitemap\Sitemapindex;
 use Presta\SitemapBundle\Sitemap\Url\Url;
+use Presta\SitemapBundle\Sitemap\Urlset;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -29,18 +31,17 @@ abstract class AbstractGenerator
     protected $dispatcher;
 
     /**
-     * @var Sitemap\Sitemapindex
+     * @var Sitemapindex
      */
     protected $root;
 
     /**
-     * @var Sitemap\Urlset[]|Sitemap\DumpingUrlset[]
+     * @var Urlset[]|DumpingUrlset[]
      */
     protected $urlsets = array();
 
     /**
      * The maximum number of item generated in a sitemap
-     *
      * @var int
      */
     protected $itemsBySet;
@@ -53,7 +54,7 @@ abstract class AbstractGenerator
         $this->dispatcher = $dispatcher;
         // We add one to LIMIT_ITEMS because it was used as an index, not a
         // quantity
-        $this->itemsBySet = ($itemsBySet === null) ? Sitemap\Sitemapindex::LIMIT_ITEMS + 1 : $itemsBySet;
+        $this->itemsBySet = ($itemsBySet === null) ? Sitemapindex::LIMIT_ITEMS + 1 : $itemsBySet;
     }
 
     /**
@@ -73,7 +74,7 @@ abstract class AbstractGenerator
         // Compare the number of items in the urlset against the maximum
         // allowed and check the maximum of 50k sitemap in sitemapindex
         $i = 0;
-        while ((count($urlset) >= $this->itemsBySet || $urlset->isFull()) && $i <= Sitemap\Sitemapindex::LIMIT_ITEMS) {
+        while ((count($urlset) >= $this->itemsBySet || $urlset->isFull()) && $i <= Sitemapindex::LIMIT_ITEMS) {
             $urlset = $this->getUrlset($section . '_' . $i);
             $i++;
         }
@@ -90,7 +91,7 @@ abstract class AbstractGenerator
      *
      * @param string $name
      *
-     * @return Sitemap\Urlset
+     * @return Urlset
      */
     public function getUrlset($name)
     {
@@ -104,10 +105,10 @@ abstract class AbstractGenerator
     /**
      * Factory method for create Urlsets
      *
-     * @param string $name
+     * @param string    $name
      * @param \DateTime $lastmod
      *
-     * @return Sitemap\Urlset
+     * @return Urlset
      */
     abstract protected function newUrlset($name, \DateTime $lastmod = null);
 
@@ -123,12 +124,12 @@ abstract class AbstractGenerator
     }
 
     /**
-     * @return Sitemap\Sitemapindex
+     * @return Sitemapindex
      */
     protected function getRoot()
     {
         if (null === $this->root) {
-            $this->root = new Sitemap\Sitemapindex();
+            $this->root = new Sitemapindex();
 
             foreach ($this->urlsets as $urlset) {
                 $this->root->addSitemap($urlset);

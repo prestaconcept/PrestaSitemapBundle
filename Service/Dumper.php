@@ -39,7 +39,7 @@ class Dumper extends AbstractGenerator
     protected $baseUrl;
 
     /**
-     * @var \Symfony\Component\Filesystem\Filesystem
+     * @var Filesystem
      */
     protected $filesystem;
 

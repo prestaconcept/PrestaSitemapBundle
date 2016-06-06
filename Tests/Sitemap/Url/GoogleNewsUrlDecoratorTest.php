@@ -124,7 +124,6 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
         try {
             $url->setGeoLocations('Hamburg, Germany');
             $url->setGeoLocations('Detroit, Michigan, USA');
-
         } catch (GoogleNewsUrlException $e) {
             $failed = true;
         }

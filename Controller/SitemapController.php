@@ -20,11 +20,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class SitemapController extends Controller
 {
-
     /**
      * list sitemaps
      *
-     * @param $_format
      * @return Response
      */
     public function indexAction()
@@ -45,7 +43,8 @@ class SitemapController extends Controller
     /**
      * list urls of a section
      *
-     * @param string
+     * @param string $name
+     *
      * @return Response
      */
     public function sectionAction($name)
@@ -65,6 +64,7 @@ class SitemapController extends Controller
 
     /**
      * Time to live of the response in seconds
+     *
      * @return int
      */
     protected function getTtl()
