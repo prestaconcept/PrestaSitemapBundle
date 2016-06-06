@@ -149,7 +149,7 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
      * @return UrlConcrete
      * @throws \InvalidArgumentException
      */
-    private function getUrlConcrete($name, $options)
+    protected function getUrlConcrete($name, $options)
     {
         try {
             $url = new UrlConcrete(
@@ -173,19 +173,21 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
 
     /**
      * @param $name
+     * @param array $params Route additional parameters
      * @return string
      * @throws \InvalidArgumentException
      */
-    private function getRouteUri($name)
+    protected function getRouteUri($name, $params = array())
     {
-        // does the route need parameters? if so, we can't add it
+        // If the route needs additional parameters, we can't add it
         try {
-            return $this->router->generate($name, array(), UrlGeneratorInterface::ABSOLUTE_URL);
+            return $this->router->generate($name, $params, UrlGeneratorInterface::ABSOLUTE_URL);
         } catch (MissingMandatoryParametersException $e) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    'The route "%s" cannot have the sitemap option because it requires parameters',
-                    $name
+                    'The route "%s" cannot have the sitemap option because it requires parameters other than "%s"',
+                    $name,
+                    implode('", "', array_keys($params))
                 )
             );
         }
