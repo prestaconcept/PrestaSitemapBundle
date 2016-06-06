@@ -11,6 +11,8 @@
 
 namespace Presta\SitemapBundle\Sitemap\Url;
 
+use Presta\SitemapBundle\Sitemap\Utils;
+
 /**
  * Decorate w/ google alternate language url guidelines
  * @see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=2620865
@@ -58,7 +60,7 @@ class GoogleMultilangUrlDecorator extends UrlDecorator
 
         $xml = '<xhtml:link rel="' . $rel
                 . '" hreflang="' . $hreflang
-                . '" href="' . $href . '" />';
+                . '" href="' . Utils::encode($href) . '" />';
 
         return $xml;
     }
