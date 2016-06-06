@@ -132,7 +132,9 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
                             'The route %s has an invalid value "%s" specified for the "lastmod" option',
                             $name,
                             $option['lastmod']
-                        )
+                        ),
+                        0,
+                        $e
                     );
                 }
             }
@@ -166,7 +168,9 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
                     'Invalid argument for route "%s": %s',
                     $name,
                     $e->getMessage()
-                )
+                ),
+                0,
+                $e
             );
         }
     }
@@ -188,7 +192,9 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
                     'The route "%s" cannot have the sitemap option because it requires parameters other than "%s"',
                     $name,
                     implode('", "', array_keys($params))
-                )
+                ),
+                0,
+                $e
             );
         }
     }
