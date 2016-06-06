@@ -39,7 +39,7 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class RouteAnnotationEventListener implements SitemapListenerInterface
 {
-    private $router;
+    protected $router;
 
     /**
      * @param RouterInterface $router
@@ -74,7 +74,7 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
      */
     private function addUrlsFromRoutes(SitemapPopulateEvent $event)
     {
-        $collection = $this->router->getRouteCollection();
+        $collection = $this->getRouteCollection();
 
         foreach ($collection->all() as $name => $route) {
             $options = $this->getOptions($name, $route);
@@ -87,6 +87,14 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
             }
 
         }
+    }
+
+    /**
+     * @return \Symfony\Component\Routing\RouteCollection
+     */
+    protected function getRouteCollection()
+    {
+        return $this->router->getRouteCollection();
     }
 
     /**
