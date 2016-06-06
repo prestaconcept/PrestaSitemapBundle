@@ -33,7 +33,7 @@ Sandbox is also deployed for a live demonstration :
  * Google images, video, mobile and multilang urls
  * Respect constraints (50k items / 10mB per files)
  * No database required
- * Optionnal caching (using LiipDoctrineCacheBundle, disabled by default)
+ * Optionnal caching (using DoctrineCacheBundle, disabled by default)
 
 ## TL;DR
 
