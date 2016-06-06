@@ -21,13 +21,17 @@ matrix:
         - php: 5.6
           env: SYMFONY_VERSION=2.6.*
         - php: 5.6
-          env: SYMFONY_VERSION=2.8.*@dev SYMFONY_DEPRECATIONS_HELPER=strict
+          env: SYMFONY_VERSION=2.8.* SYMFONY_DEPRECATIONS_HELPER=strict
         - php: 5.6
-          env: SYMFONY_VERSION=3.0.*@dev SYMFONY_DEPRECATIONS_HELPER=strict
+          env: SYMFONY_VERSION=3.0.* SYMFONY_DEPRECATIONS_HELPER=strict
+        - php: 5.6
+          env: SYMFONY_VERSION=3.1.* SYMFONY_DEPRECATIONS_HELPER=strict
+        - php: 5.6
+          env: SYMFONY_VERSION=3.2.*@dev SYMFONY_DEPRECATIONS_HELPER=strict
         - php: 5.6
           env: PHPCS=yes
     allow_failures:
-        - env: SYMFONY_VERSION=3.0.*@dev
+        - env: SYMFONY_VERSION=3.2.*@dev
 
 env:
     global:
@@ -53,4 +57,4 @@ script:
 
 notifications:
     email:
-        - aflaus@prestaconcept.net
+        - yeugone@prestaconcept.net
