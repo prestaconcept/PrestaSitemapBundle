@@ -85,7 +85,6 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
                     $event->getSection() ? $event->getSection() : 'default'
                 );
             }
-
         }
     }
 
