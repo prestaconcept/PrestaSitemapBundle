@@ -131,7 +131,7 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
             }
         }
 
-        if (!is_array($option)) {
+        if (!is_array($option) && !is_bool($option)) {
             $bool = filter_var($option, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
             if (null === $bool) {
