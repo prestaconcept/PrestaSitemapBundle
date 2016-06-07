@@ -30,21 +30,20 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * test "sitemap"=false annotation
-     */
-    public function testInvalidSitemapFalse()
-    {
-        $this->setExpectedException('InvalidArgumentException');
-        $this->assertEquals(-1, $this->getListener()->getOptions('route1', $this->getRoute(false)), 'sitemap = false throws an exception');
-    }
-
-    /**
      * test "sitemap"="anything" annotation
      */
     public function testInvalidSitemapArbitrary()
     {
         $this->setExpectedException('InvalidArgumentException');
         $this->assertEquals(-1, $this->getListener()->getOptions('route1', $this->getRoute('anything')), 'sitemap = "anything" throws an exception');
+    }
+
+    /**
+     * test "sitemap"=false annotation
+     */
+    public function testSitemapFalse()
+    {
+        $this->assertNull($this->getListener()->getOptions('route1', $this->getRoute(false)), 'sitemap = false returns null');
     }
 
     /**

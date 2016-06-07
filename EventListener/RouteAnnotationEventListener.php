@@ -131,8 +131,23 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
             }
         }
 
-        if (!filter_var($option, FILTER_VALIDATE_BOOLEAN) && !is_array($option)) {
-            throw new \InvalidArgumentException('the sitemap option must be "true" or an array of parameters');
+        if (!is_array($option) && !is_bool($option)) {
+            $bool = filter_var($option, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+            if (null === $bool) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'The sitemap option must be of type "boolean" or "array", got "%s"',
+                        $option
+                    )
+                );
+            }
+
+            $option = $bool;
+        }
+
+        if (!$option) {
+            return null;
         }
 
         $options = $this->defaults;
