@@ -10,7 +10,7 @@
     </parameters>
 
     <services>
-        <service id="presta_sitemap.generator" class="%presta_sitemap.generator.class%">
+        <service id="presta_sitemap.generator_default" class="%presta_sitemap.generator.class%">
             <argument id="event_dispatcher" type="service" />
             <argument id="router" type="service" />
             <argument id="doctrine_cache.providers.presta_sitemap" type="service" on-invalid="ignore"/>
@@ -18,7 +18,7 @@
             <argument>%presta_sitemap.items_by_set%</argument>
         </service>
 
-        <service id="presta_sitemap.dumper" class="%presta_sitemap.dumper.class%">
+        <service id="presta_sitemap.dumper_default" class="%presta_sitemap.dumper.class%">
             <argument id="event_dispatcher" type="service" />
             <argument id="filesystem" type="service" />
             <argument>%presta_sitemap.sitemap_file_prefix%</argument>

@@ -11,7 +11,6 @@
 namespace Presta\SitemapBundle\Service;
 
 use Doctrine\Common\Cache\Cache;
-use Presta\SitemapBundle\Sitemap\Sitemapindex;
 use Presta\SitemapBundle\Sitemap\Urlset;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -24,7 +23,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * @author Christophe Dolivet
  * @author Konstantin Myakshin <koc-dp@yandex.ru>
  */
-class Generator extends AbstractGenerator
+class Generator extends AbstractGenerator implements GeneratorInterface
 {
     /**
      * @var RouterInterface
@@ -57,9 +56,7 @@ class Generator extends AbstractGenerator
     }
 
     /**
-     * Generate all datas and store in cache if it is possible
-     *
-     * @return void
+     * @inheritdoc
      */
     public function generate()
     {
@@ -79,11 +76,7 @@ class Generator extends AbstractGenerator
     }
 
     /**
-     * Get eventual cached data or generate whole sitemap
-     *
-     * @param string $name
-     *
-     * @return Sitemapindex|Urlset|null
+     * @inheritdoc
      */
     public function fetch($name)
     {

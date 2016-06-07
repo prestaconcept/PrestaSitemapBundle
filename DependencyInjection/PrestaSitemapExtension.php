@@ -39,5 +39,8 @@ class PrestaSitemapExtension extends Extension
         if (true === $config['route_annotation_listener']) {
             $loader->load('route_annotation_listener.xml');
         }
+
+        $container->setAlias('presta_sitemap.generator', $config['generator']);
+        $container->setAlias('presta_sitemap.dumper', $config['dumper']);
     }
 }

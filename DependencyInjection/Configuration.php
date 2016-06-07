@@ -30,6 +30,8 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('presta_sitemap');
 
         $rootNode->children()
+            ->scalarNode('generator')->defaultValue('presta_sitemap.generator_default')->end()
+            ->scalarNode('dumper')->defaultValue('presta_sitemap.dumper_default')->end()
             ->scalarNode('timetolive')
                 ->defaultValue('3600')
             ->end()
