@@ -62,7 +62,7 @@ class DumpSitemapsCommandTest extends WebTestCase
                         ->setGalleryLoc($base_url . 'page_video1/gallery_loc/?p=1&sort=desc')
                         ->setGalleryLocTitle('Gallery title & spécial chars');
 
-                    $event->getGenerator()->addUrl($urlVideo, 'video');
+                    $event->getUrlContainer()->addUrl($urlVideo, 'video');
                 }
             );
     }

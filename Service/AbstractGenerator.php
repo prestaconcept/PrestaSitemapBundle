@@ -23,7 +23,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *
  * @author Konstantin Myakshin <koc-dp@yandex.ru>
  */
-abstract class AbstractGenerator
+abstract class AbstractGenerator implements UrlContainerInterface
 {
     /**
      * @var EventDispatcherInterface
@@ -58,14 +58,7 @@ abstract class AbstractGenerator
     }
 
     /**
-     * add an Url to an Urlset
-     *
-     * section is helpfull for partial cache invalidation
-     *
-     * @param Url    $url
-     * @param string $section
-     *
-     * @throws \RuntimeException
+     * @inheritdoc
      */
     public function addUrl(Url $url, $section)
     {

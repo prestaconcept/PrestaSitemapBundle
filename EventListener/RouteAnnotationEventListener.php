@@ -79,7 +79,7 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
     private function addUrlsFromRoutes(SitemapPopulateEvent $event)
     {
         $collection = $this->getRouteCollection();
-        $generator = $event->getGenerator();
+        $generator = $event->getUrlContainer();
 
         foreach ($collection->all() as $name => $route) {
             $options = $this->getOptions($name, $route);

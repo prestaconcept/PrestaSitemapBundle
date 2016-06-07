@@ -10,6 +10,7 @@
 
 namespace Presta\SitemapBundle\Controller;
 
+use Presta\SitemapBundle\Service\GeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,7 +28,7 @@ class SitemapController extends Controller
      */
     public function indexAction()
     {
-        $sitemapindex = $this->get('presta_sitemap.generator')->fetch('root');
+        $sitemapindex = $this->getGenerator()->fetch('root');
 
         if (!$sitemapindex) {
             throw $this->createNotFoundException();
@@ -49,7 +50,7 @@ class SitemapController extends Controller
      */
     public function sectionAction($name)
     {
-        $section = $this->get('presta_sitemap.generator')->fetch($name);
+        $section = $this->getGenerator()->fetch($name);
 
         if (!$section) {
             throw $this->createNotFoundException();
@@ -70,5 +71,13 @@ class SitemapController extends Controller
     protected function getTtl()
     {
         return $this->container->getParameter('presta_sitemap.timetolive');
+    }
+
+    /**
+     * @return GeneratorInterface
+     */
+    private function getGenerator()
+    {
+        return $this->get('presta_sitemap.generator');
     }
 }
