@@ -19,16 +19,13 @@ use \Presta\SitemapBundle\Event\SitemapPopulateEvent;
  */
 interface SitemapListenerInterface
 {
-
     /**
      * @abstract
      * Should check $event->getSection() and then populate the sitemap
      * using $event->getGenerator()->addUrl(\Presta\SitemapBundle\Sitemap\Url\Url $url, $section)
      * if $event->getSection() is null or matches the listener's section
      *
-     * @param \Presta\SitemapBundle\Event\SitemapPopulateEvent $event
-     *
-     * @return void
+     * @param SitemapPopulateEvent $event
      */
     public function populateSitemap(SitemapPopulateEvent $event);
 }

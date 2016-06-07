@@ -22,12 +22,7 @@ use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 class AddSitemapListenersPass implements CompilerPassInterface
 {
     /**
-     * Adds services tagges as presta.sitemap.listener as event listeners for
-     * corresponding sitemap event
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     *
-     * @throws \InvalidArgumentException
+     * @inheritdoc
      */
     public function process(ContainerBuilder $container)
     {

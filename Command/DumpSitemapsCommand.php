@@ -10,6 +10,7 @@
 
 namespace Presta\SitemapBundle\Command;
 
+use Presta\SitemapBundle\Service\DumperInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -77,7 +78,7 @@ class DumpSitemapsCommand extends ContainerAwareCommand
 
         $container = $this->getContainer();
         $dumper = $container->get('presta_sitemap.dumper');
-        /* @var $dumper \Presta\SitemapBundle\Service\Dumper */
+        /* @var $dumper DumperInterface */
 
         $baseUrl = $input->getOption('base-url') ?: $container->getParameter('presta_sitemap.dumper_base_url');
         $baseUrl = rtrim($baseUrl, '/') . '/';

@@ -22,7 +22,7 @@ use Presta\SitemapBundle\Sitemap\DumpingUrlset;
  * @author Konstantin Tjuterev <kostik.lv@gmail.com>
  * @author Konstantin Myakshin <koc-dp@yandex.ru>
  */
-class Dumper extends AbstractGenerator
+class Dumper extends AbstractGenerator implements DumperInterface
 {
     /**
      * Path to folder where temporary files will be created
@@ -39,7 +39,7 @@ class Dumper extends AbstractGenerator
     protected $baseUrl;
 
     /**
-     * @var \Symfony\Component\Filesystem\Filesystem
+     * @var Filesystem
      */
     protected $filesystem;
 
@@ -66,14 +66,7 @@ class Dumper extends AbstractGenerator
     }
 
     /**
-     * Dumps sitemaps and sitemap index into provided directory
-     *
-     * @param string $targetDir Directory where to save sitemap files
-     * @param string $host
-     * @param null   $section   Optional section name - only sitemaps of this section will be updated
-     * @param array  $options   Possible options: gzip
-     *
-     * @return array|bool
+     * @inheritdoc
      */
     public function dump($targetDir, $host, $section = null, array $options = array())
     {

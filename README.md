@@ -1,12 +1,10 @@
 # PrestaSitemapBundle
 
 [![Build Status](https://secure.travis-ci.org/prestaconcept/PrestaSitemapBundle.png)](http://travis-ci.org/prestaconcept/PrestaSitemapBundle)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/prestaconcept/PrestaSitemapBundle/badges/quality-score.png?s=da48ad378528cf48bc56f6ae51645e5b74540f52)](https://scrutinizer-ci.com/g/prestaconcept/PrestaSitemapBundle/)
 
 [![Latest Stable Version](https://poser.pugx.org/presta/sitemap-bundle/v/stable.png)](https://packagist.org/packages/presta/sitemap-bundle)
 [![Total Downloads](https://poser.pugx.org/presta/sitemap-bundle/downloads.png)](https://packagist.org/packages/presta/sitemap-bundle)
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/ad664e80-f44e-49df-bd28-fa03ca48aca6/big.png)](https://insight.sensiolabs.com/projects/ad664e80-f44e-49df-bd28-fa03ca48aca6)
 [![PrestaSitemapBundle on Knpbundles](http://knpbundles.com/prestaconcept/PrestaSitemapBundle/badge)](http://knpbundles.com/prestaconcept/PrestaSitemapBundle)
 
 
@@ -35,18 +33,14 @@ Sandbox is also deployed for a live demonstration :
  * Google images, video, mobile and multilang urls
  * Respect constraints (50k items / 10mB per files)
  * No database required
- * Optionnal caching (using LiipDoctrineCacheBundle, disabled by default)
+ * Optionnal caching (using DoctrineCacheBundle, disabled by default)
 
 ## TL;DR
 
 1. Installation
 
-    ```js
-        //composer.json
-        "require": {
-            //...
-            "presta/sitemap-bundle": "dev-master"
-        }
+    ```sh
+    composer require presta/sitemap-bundle
     ```
 
     ```php
@@ -80,9 +74,12 @@ Sandbox is also deployed for a live demonstration :
     For complexe routes, create a [Closure][3] or a [Service][5] dedicated to your sitemap then add your urls :
 
     ```php
+    use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+    // ...
+
         function(SitemapPopulateEvent $event) use ($router){
             //get absolute homepage url
-            $url = $router->generate('homepage', array(), true);
+            $url = $router->generate('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
 
             //add homepage url to the urlset named default
             $event->getGenerator()->addUrl(
@@ -130,7 +127,7 @@ Thanks to
 
 *This project is supported by [PrestaConcept](http://www.prestaconcept.net)*
 
-**Lead Developer** : [@alain-flaus](https://github.com/alain-flaus)
+**Lead Developer** : [@nicolas-bastien](https://github.com/nicolas-bastien)
 
 Released under the MIT License
 

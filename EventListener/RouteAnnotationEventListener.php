@@ -15,7 +15,9 @@ use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Service\SitemapListenerInterface;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -38,25 +40,28 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class RouteAnnotationEventListener implements SitemapListenerInterface
 {
-    private $router;
+    /**
+     * @var RouterInterface
+     */
+    protected $router;
+
+    /**
+     * @var array
+     */
+    private $defaults;
 
     /**
      * @param RouterInterface $router
+     * @param array           $defaults
      */
-    public function __construct(RouterInterface $router)
+    public function __construct(RouterInterface $router, array $defaults)
     {
         $this->router = $router;
+        $this->defaults = $defaults;
     }
 
     /**
-     * Should check $event->getSection() and then populate the sitemap
-     * using $event->getGenerator()->addUrl(\Presta\SitemapBundle\Sitemap\Url\Url $url, $section)
-     * if $event->getSection() is null or matches the listener's section
-     *
-     * @param SitemapPopulateEvent $event
-     *
-     * @throws \InvalidArgumentException
-     * @return void
+     * @inheritdoc
      */
     public function populateSitemap(SitemapPopulateEvent $event)
     {
@@ -68,31 +73,48 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
     }
 
     /**
-     * @param  SitemapPopulateEvent      $event
+     * @param SitemapPopulateEvent $event
+     *
      * @throws \InvalidArgumentException
      */
     private function addUrlsFromRoutes(SitemapPopulateEvent $event)
     {
-        $collection = $this->router->getRouteCollection();
+        $collection = $this->getRouteCollection();
+        $container = $event->getUrlContainer();
 
         foreach ($collection->all() as $name => $route) {
             $options = $this->getOptions($name, $route);
 
-            if ($options) {
-                $event->getGenerator()->addUrl(
-                    $this->getUrlConcrete($name, $options),
-                    $event->getSection() ? $event->getSection() : 'default'
-                );
+            if (!$options) {
+                continue;
             }
 
+            $section = $event->getSection() ?: 'default';
+            if (isset($options['section'])) {
+                $section = $options['section'];
+            }
+
+            $container->addUrl(
+                $this->getUrlConcrete($name, $options),
+                $section
+            );
         }
     }
 
     /**
-     * @param $name
-     * @param  Route                     $route
-     * @throws \InvalidArgumentException
+     * @return RouteCollection
+     */
+    protected function getRouteCollection()
+    {
+        return $this->router->getRouteCollection();
+    }
+
+    /**
+     * @param string $name
+     * @param Route  $route
+     *
      * @return array
+     * @throws \InvalidArgumentException
      */
     public function getOptions($name, Route $route)
     {
@@ -102,82 +124,106 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
             return null;
         }
 
-        if ($option !== true && !is_array($option)) {
-            throw new \InvalidArgumentException('the sitemap option must be "true" or an array of parameters');
+        if (is_string($option)) {
+            $decoded = json_decode($option, true);
+            if (!json_last_error() && is_array($decoded)) {
+                $option = $decoded;
+            }
         }
 
-        $options = array(
-            'priority' => 1,
-            'changefreq' => UrlConcrete::CHANGEFREQ_DAILY,
-            'lastmod' => new \DateTime()
-        );
+        if (!is_array($option) && !is_bool($option)) {
+            $bool = filter_var($option, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
-        if (is_array($option)) {
-            if (isset($option['lastmod'])) {
-                try {
-                    $lastmod = new \DateTime($option['lastmod']);
-                    $option['lastmod'] = $lastmod;
-                } catch (\Exception $e) {
-                    throw new \InvalidArgumentException(
-                        sprintf(
-                            'The route %s has an invalid value "%s" specified for the "lastmod" option',
-                            $name,
-                            $option['lastmod']
-                        )
-                    );
-                }
+            if (null === $bool) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'The sitemap option must be of type "boolean" or "array", got "%s"',
+                        $option
+                    )
+                );
             }
 
+            $option = $bool;
+        }
+
+        if (!$option) {
+            return null;
+        }
+
+        $options = $this->defaults;
+        if (is_array($option)) {
             $options = array_merge($options, $option);
+        }
+
+        if (is_string($options['lastmod'])) {
+            try {
+                $options['lastmod'] = new \DateTime($options['lastmod']);
+            } catch (\Exception $e) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'The route %s has an invalid value "%s" specified for the "lastmod" option',
+                        $name,
+                        $options['lastmod']
+                    ),
+                    0,
+                    $e
+                );
+            }
         }
 
         return $options;
     }
 
     /**
-     * @param $name
-     * @param $options
+     * @param string $name    Route name
+     * @param array  $options Node options
+     *
      * @return UrlConcrete
      * @throws \InvalidArgumentException
      */
-    private function getUrlConcrete($name, $options)
+    protected function getUrlConcrete($name, $options)
     {
         try {
-            $url = new UrlConcrete(
+            return new UrlConcrete(
                 $this->getRouteUri($name),
                 $options['lastmod'],
                 $options['changefreq'],
                 $options['priority']
             );
-
-            return $url;
         } catch (\Exception $e) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'Invalid argument for route "%s": %s',
                     $name,
                     $e->getMessage()
-                )
+                ),
+                0,
+                $e
             );
         }
     }
 
     /**
-     * @param $name
+     * @param string $name   Route name
+     * @param array  $params Route additional parameters
+     *
      * @return string
      * @throws \InvalidArgumentException
      */
-    private function getRouteUri($name)
+    protected function getRouteUri($name, $params = array())
     {
-        // does the route need parameters? if so, we can't add it
+        // If the route needs additional parameters, we can't add it
         try {
-            return $this->router->generate($name, array(), true);
+            return $this->router->generate($name, $params, UrlGeneratorInterface::ABSOLUTE_URL);
         } catch (MissingMandatoryParametersException $e) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    'The route "%s" cannot have the sitemap option because it requires parameters',
-                    $name
-                )
+                    'The route "%s" cannot have the sitemap option because it requires parameters other than "%s"',
+                    $name,
+                    implode('", "', array_keys($params))
+                ),
+                0,
+                $e
             );
         }
     }

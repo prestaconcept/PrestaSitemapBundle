@@ -463,7 +463,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     public function addTag($tag)
     {
         if (count($this->tags) >= self::TAG_ITEMS_LIMIT) {
-            throw new Exception\GoogleVideoUrlTagException(sprintf('The parameter %s must be a valid family_friendly. see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4'));
+            throw new Exception\GoogleVideoUrlTagException(sprintf('The tags limit of %d items is exceeded.', self::TAG_ITEMS_LIMIT));
         }
 
         $this->tags[] = $tag;

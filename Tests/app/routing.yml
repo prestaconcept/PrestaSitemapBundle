@@ -3,5 +3,5 @@ PrestaSitemapBundle:
     prefix:   /
 
 PrestaDemoBundle_homepage:
-    pattern: /
+    path:     /
     defaults: { _controller: PrestaSitemapBundle:Sitemap:index }

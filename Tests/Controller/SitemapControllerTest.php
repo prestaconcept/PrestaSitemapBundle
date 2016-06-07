@@ -35,7 +35,7 @@ class SitemapControllerTest extends WebTestCase
             ->addListener(
                 SitemapPopulateEvent::ON_SITEMAP_POPULATE,
                 function (SitemapPopulateEvent $event) {
-                    $event->getGenerator()->addUrl(
+                    $event->getUrlContainer()->addUrl(
                         new Url\UrlConcrete(
                             'http://acme.com/static-page.html',
                             new \DateTime(),

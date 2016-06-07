@@ -11,9 +11,10 @@
 namespace Presta\SitemapBundle\Service;
 
 use Doctrine\Common\Cache\Cache;
+use Presta\SitemapBundle\Sitemap\Urlset;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Presta\SitemapBundle\Sitemap;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Sitemap Manager service
@@ -22,18 +23,29 @@ use Presta\SitemapBundle\Sitemap;
  * @author Christophe Dolivet
  * @author Konstantin Myakshin <koc-dp@yandex.ru>
  */
-class Generator extends AbstractGenerator
+class Generator extends AbstractGenerator implements GeneratorInterface
 {
+    /**
+     * @var RouterInterface
+     */
     protected $router;
+
+    /**
+     * @var Cache|null
+     */
     protected $cache;
+
+    /**
+     * @var int|null
+     */
     protected $cacheTtl;
 
     /**
      * @param EventDispatcherInterface $dispatcher
-     * @param int $itemsBySet
-     * @param RouterInterface $router
-     * @param Cache|null $cache
-     * @param integer|null $cacheTtl
+     * @param RouterInterface          $router
+     * @param Cache|null               $cache
+     * @param integer|null             $cacheTtl
+     * @param integer|null             $itemsBySet
      */
     public function __construct(EventDispatcherInterface $dispatcher, RouterInterface $router, Cache $cache = null, $cacheTtl = null, $itemsBySet = null)
     {
@@ -44,9 +56,7 @@ class Generator extends AbstractGenerator
     }
 
     /**
-     * Generate all datas and store in cache if it is possible
-     *
-     * @return void
+     * @inheritdoc
      */
     public function generate()
     {
@@ -66,10 +76,7 @@ class Generator extends AbstractGenerator
     }
 
     /**
-     * Get eventual cached data or generate whole sitemap
-     *
-     * @param string $name
-     * @return Sitemap\Sitemapindex or Urlset - can be <null>
+     * @inheritdoc
      */
     public function fetch($name)
     {
@@ -95,12 +102,12 @@ class Generator extends AbstractGenerator
      *
      * @param string $name
      *
-     * @return Sitemap\Urlset
+     * @return Urlset
      */
     protected function newUrlset($name, \DateTime $lastmod = null)
     {
-        return new Sitemap\Urlset(
-            $this->router->generate('PrestaSitemapBundle_section', array('name' => $name, '_format' => 'xml'), true),
+        return new Urlset(
+            $this->router->generate('PrestaSitemapBundle_section', array('name' => $name, '_format' => 'xml'), UrlGeneratorInterface::ABSOLUTE_URL),
             $lastmod
         );
     }

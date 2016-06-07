@@ -21,23 +21,22 @@
     },
     "require": {
         "php": ">=5.3.0",
-        "symfony/symfony": ">=2.1.0"
+        "symfony/symfony": "~2.2|~3.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.*@stable"
+        "symfony/phpunit-bridge": "~2.7|~3.0"
     },
     "suggest": {
-        "liip/doctrine-cache-bundle" : "Allows to store sitemaps in cache"
+        "doctrine/doctrine-cache-bundle" : "Allows to store sitemaps in cache"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "Presta\\SitemapBundle\\": ""
         }
     },
-    "target-dir" : "Presta/SitemapBundle",
     "extra": {
         "branch-alias": {
-            "dev-master": "1.3.x-dev"
+            "dev-master": "1.5.x-dev"
         }
     }
 }
