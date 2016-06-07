@@ -13,7 +13,6 @@ namespace Presta\SitemapBundle\EventListener;
 
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Service\SitemapListenerInterface;
-use Presta\SitemapBundle\Service\UrlContainerInterface;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -47,11 +46,18 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
     protected $router;
 
     /**
-     * @param RouterInterface $router
+     * @var array
      */
-    public function __construct(RouterInterface $router)
+    private $defaults;
+
+    /**
+     * @param RouterInterface $router
+     * @param array           $defaults
+     */
+    public function __construct(RouterInterface $router, array $defaults)
     {
         $this->router = $router;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -129,31 +135,25 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
             throw new \InvalidArgumentException('the sitemap option must be "true" or an array of parameters');
         }
 
-        $options = array(
-            'priority' => 1,
-            'changefreq' => UrlConcrete::CHANGEFREQ_DAILY,
-            'lastmod' => new \DateTime()
-        );
-
+        $options = $this->defaults;
         if (is_array($option)) {
-            if (isset($option['lastmod'])) {
-                try {
-                    $lastmod = new \DateTime($option['lastmod']);
-                    $option['lastmod'] = $lastmod;
-                } catch (\Exception $e) {
-                    throw new \InvalidArgumentException(
-                        sprintf(
-                            'The route %s has an invalid value "%s" specified for the "lastmod" option',
-                            $name,
-                            $option['lastmod']
-                        ),
-                        0,
-                        $e
-                    );
-                }
-            }
-
             $options = array_merge($options, $option);
+        }
+
+        if (is_string($options['lastmod'])) {
+            try {
+                $options['lastmod'] = new \DateTime($options['lastmod']);
+            } catch (\Exception $e) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'The route %s has an invalid value "%s" specified for the "lastmod" option',
+                        $name,
+                        $options['lastmod']
+                    ),
+                    0,
+                    $e
+                );
+            }
         }
 
         return $options;
