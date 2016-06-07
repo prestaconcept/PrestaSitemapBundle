@@ -131,7 +131,14 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     private function getListener()
     {
-        $listener = new RouteAnnotationEventListener($this->getRouter());
+        $listener = new RouteAnnotationEventListener(
+            $this->getRouter(),
+            array(
+                'priority' => 1,
+                'changefreq' => UrlConcrete::CHANGEFREQ_DAILY,
+                'lastmod' => 'now',
+            )
+        );
 
         return $listener;
     }
