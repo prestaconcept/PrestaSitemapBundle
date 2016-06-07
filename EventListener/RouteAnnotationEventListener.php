@@ -13,6 +13,7 @@ namespace Presta\SitemapBundle\EventListener;
 
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Service\SitemapListenerInterface;
+use Presta\SitemapBundle\Service\UrlContainerInterface;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -54,13 +55,7 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
     }
 
     /**
-     * Should check $event->getSection() and then populate the sitemap
-     * using $event->getGenerator()->addUrl(\Presta\SitemapBundle\Sitemap\Url\Url $url, $section)
-     * if $event->getSection() is null or matches the listener's section
-     *
-     * @param SitemapPopulateEvent $event
-     *
-     * @throws \InvalidArgumentException
+     * @inheritdoc
      */
     public function populateSitemap(SitemapPopulateEvent $event)
     {
@@ -79,17 +74,24 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
     private function addUrlsFromRoutes(SitemapPopulateEvent $event)
     {
         $collection = $this->getRouteCollection();
-        $generator = $event->getUrlContainer();
+        $container = $event->getUrlContainer();
 
         foreach ($collection->all() as $name => $route) {
             $options = $this->getOptions($name, $route);
 
-            if ($options) {
-                $generator->addUrl(
-                    $this->getUrlConcrete($name, $options),
-                    $event->getSection() ? $event->getSection() : 'default'
-                );
+            if (!$options) {
+                continue;
             }
+
+            $section = $event->getSection() ?: 'default';
+            if (isset($options['section'])) {
+                $section = $options['section'];
+            }
+
+            $container->addUrl(
+                $this->getUrlConcrete($name, $options),
+                $section
+            );
         }
     }
 
@@ -114,6 +116,13 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
 
         if ($option === null) {
             return null;
+        }
+
+        if (is_string($option)) {
+            $decoded = json_decode($option, true);
+            if (!json_last_error() && is_array($decoded)) {
+                $option = $decoded;
+            }
         }
 
         if (!filter_var($option, FILTER_VALIDATE_BOOLEAN) && !is_array($option)) {
