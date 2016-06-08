@@ -25,8 +25,8 @@ parameters:
 
 services:
     my.sitemap.listener:
-        class: %acme_demo.sitemap.listener.class%
-        arguments: [@router]
+        class: "%acme_demo.sitemap.listener.class%"
+        arguments: ["@router"]
         tags: [{name: "presta.sitemap.listener"}]
 ```
 
