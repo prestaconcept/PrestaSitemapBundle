@@ -19,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -45,6 +46,11 @@ class DumpSitemapsCommandTest extends WebTestCase
         $this->container = self::$kernel->getContainer();
         $router = $this->container->get('router');
         /* @var $router RouterInterface */
+
+        $router->setContext(
+            $router->getContext()->fromRequest(Request::create('http://sitemap.php54.local'))
+        );
+
         $this->container->get('event_dispatcher')
             ->addListener(
                 SitemapPopulateEvent::ON_SITEMAP_POPULATE,
@@ -75,16 +81,9 @@ class DumpSitemapsCommandTest extends WebTestCase
         }
     }
 
-    public function testSitemapDumpWithFullyQualifiedBaseUrl()
-    {
-        $res = $this->executeDumpWithOptions(array('target' => $this->webDir, '--base-url' => 'http://sitemap.php54.local/'));
-        $this->assertEquals(0, $res, 'Command exited with error');
-        $this->assertXmlFileEqualsXmlFile($this->fixturesDir . '/sitemap.video.xml', $this->webDir . '/sitemap.video.xml');
-    }
-
     public function testSitemapDumpWithGzip()
     {
-        $res = $this->executeDumpWithOptions(array('target' => $this->webDir, '--base-url' => 'http://sitemap.php54.local/', '--gzip' => true));
+        $res = $this->executeDumpWithOptions(array('target' => $this->webDir, '--gzip' => true));
         $this->assertEquals(0, $res, 'Command exited with error');
 
         $xml = gzinflate(substr(file_get_contents($this->webDir . '/sitemap.video.xml.gz'), 10, -8));
@@ -101,7 +100,6 @@ class DumpSitemapsCommandTest extends WebTestCase
         $this->executeDumpWithOptions(
             array(
                 'target' => $this->webDir,
-                '--base-url' => 'http://sitemap.php54.local/',
                 '--section' => 'video',
                 '--gzip' => true
             )
@@ -113,12 +111,6 @@ class DumpSitemapsCommandTest extends WebTestCase
         );
 
         $this->assertSitemapIndexEquals($this->webDir . '/sitemap.xml', $expectedSitemaps);
-    }
-
-    public function testSitemapDumpWithInvalidUrl()
-    {
-        $this->setExpectedException('\InvalidArgumentException', '', DumpSitemapsCommand::ERR_INVALID_HOST);
-        $this->executeDumpWithOptions(array('target' => $this->webDir, '--base-url' => 'fake host'));
     }
 
     private function assertSitemapIndexEquals($sitemapFile, array $expectedSitemaps)

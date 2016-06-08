@@ -41,10 +41,6 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue(self::DEFAULT_FILENAME)
                     ->info('Sets sitemap filename prefix defaults to "sitemap" -> sitemap.xml (for index); sitemap.<section>.xml(.gz) (for sitemaps)')
                 ->end()
-                ->scalarNode('dumper_base_url')
-                    ->defaultValue('http://localhost/')
-                    ->info('Deprecated: please use host option in command. Used for dumper command. Default host to use if host argument is missing')
-                ->end()
                 ->scalarNode('items_by_set')
                     // Add one to the limit items value because it's an
                     // index value (not a quantity)

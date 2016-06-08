@@ -19,8 +19,10 @@ you have to set the base URL of where you sitemap files will be accessible. The 
 of the URL will also be used to make Router generate URLs with hostname.
 
 ```yaml
-presta_sitemap:
-    dumper_base_url: "http://www.example.com/"
+# app/config/parameters.yml
+parameters:
+    router.request_context.host:   your-domain.com
+    router.request_context.scheme: http
 ```
 
 

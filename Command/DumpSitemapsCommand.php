@@ -16,7 +16,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Command to dump the sitemaps to provided directory
@@ -25,9 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class DumpSitemapsCommand extends ContainerAwareCommand
 {
-    const ERR_INVALID_HOST = -1;
-    const ERR_INVALID_DIR = -2;
-
     /**
      * Configure CLI command, message, options
      *
@@ -42,12 +38,6 @@ class DumpSitemapsCommand extends ContainerAwareCommand
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Name of sitemap section to dump, all sections are dumped by default'
-            )
-            ->addOption(
-                'base-url',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Base url to use for absolute urls. Good example - http://acme.com/, bad example - acme.com. Defaults to dumper_base_url config parameter'
             )
             ->addOption(
                 'gzip',
@@ -80,19 +70,7 @@ class DumpSitemapsCommand extends ContainerAwareCommand
         $dumper = $container->get('presta_sitemap.dumper');
         /* @var $dumper DumperInterface */
 
-        $baseUrl = $input->getOption('base-url') ?: $container->getParameter('presta_sitemap.dumper_base_url');
-        $baseUrl = rtrim($baseUrl, '/') . '/';
-
-        //sanity check
-        if (!parse_url($baseUrl, PHP_URL_HOST)) {
-            throw new \InvalidArgumentException("Invalid base url. Use fully qualified base url, e.g. http://acme.com/", self::ERR_INVALID_HOST);
-        }
-        $request = Request::create($baseUrl);
-
-        // Set Router's host used for generating URLs from configuration param
-        // There is no other way to manage domain in CLI
-        $container->set('request', $request);
-        $container->get('router')->getContext()->fromRequest($request);
+        $baseUrl = $this->getBaseUrl();
 
         if ($input->getOption('section')) {
             $output->writeln(
@@ -125,5 +103,30 @@ class DumpSitemapsCommand extends ContainerAwareCommand
         foreach ($filenames as $filename) {
             $output->writeln("    <comment>$filename</comment>");
         }
+    }
+
+    /**
+     * @return string
+     */
+    private function getBaseUrl()
+    {
+        $context = $this->getContainer()->get('router.request_context');
+
+        if ('' === $host = $context->getHost()) {
+            throw new \RuntimeException(
+                'Router host must be configured to be able to dump the sitemap, please see documentation.'
+            );
+        }
+
+        $scheme = $context->getScheme();
+        $port = '';
+
+        if ('http' === $scheme && 80 != $context->getHttpPort()) {
+            $port = ':'.$context->getHttpPort();
+        } elseif ('https' === $scheme && 443 != $context->getHttpsPort()) {
+            $port = ':'.$context->getHttpsPort();
+        }
+
+        return rtrim($scheme . '://' . $host . $port, '/') . '/';
     }
 }
