@@ -216,7 +216,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
             // pattern is base name of sitemap file (with .xml cut) optionally followed by _X for numbered files
             $basename = preg_replace('/\.xml(?:\.gz)?$/', '', $basename); // cut .xml|.xml.gz
             $pattern = '/' . preg_quote($basename, '/') . '(_\d+)?\.xml(?:\.gz)?$/';
-            foreach (Finder::create()->in($targetDir)->name($pattern)->files() as $file) {
+            foreach (Finder::create()->in($targetDir)->depth(0)->name($pattern)->files() as $file) {
                 $this->filesystem->remove($file);
             }
         }
