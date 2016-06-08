@@ -47,9 +47,7 @@ class DumpSitemapsCommandTest extends WebTestCase
         $router = $this->container->get('router');
         /* @var $router RouterInterface */
 
-        $router->setContext(
-            $router->getContext()->fromRequest(Request::create('http://sitemap.php54.local'))
-        );
+        $router->getContext()->fromRequest(Request::create('http://sitemap.php54.local'));
 
         $this->container->get('event_dispatcher')
             ->addListener(
