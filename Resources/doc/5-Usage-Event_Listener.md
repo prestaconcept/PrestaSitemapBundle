@@ -10,7 +10,7 @@ tag in your `Resources/config/services.xml`. This way the services will be lazy-
 </parameters>
 
 <services>
-    <service id="my.sitemap.listener" class="%acme_demo.sitemap.listener.class%">
+    <service id="my.sitemap.listener" class="%acme_demo.sitemap.listener.class%" public="false">
         <tag name="presta.sitemap.listener" />
         <argument type="service" id="router"/>
     </service>
@@ -28,6 +28,7 @@ services:
         class: "%acme_demo.sitemap.listener.class%"
         arguments: ["@router"]
         tags: [{name: "presta.sitemap.listener"}]
+        public: false
 ```
 
 Sitemap listener example `Acme/DemoBundle/EventListener/SitemapListener.php`
