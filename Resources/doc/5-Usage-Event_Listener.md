@@ -17,7 +17,7 @@ tag in your `Resources/config/services.xml`. This way the services will be lazy-
 </services>
 ```
 
-or in yaml
+or in yaml:
 
 ```yaml
 parameters:
@@ -30,7 +30,7 @@ services:
         tags: [{name: "presta.sitemap.listener"}]
 ```
 
-Sitemap listener example `Acme/DemoBundle/EventListener/SitemapListener.php`
+Sitemap listener example `Acme/DemoBundle/EventListener/SitemapListener.php`:
 
 ```php
 <?php
