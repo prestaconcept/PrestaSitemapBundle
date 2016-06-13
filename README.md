@@ -71,6 +71,16 @@ Sandbox is also deployed for a live demonstration :
      */
     ```
 
+    Or YAML support:
+
+    ```php
+    homepage:
+        path: /
+        defaults: { _controller: AppBundle:Default:homepage }
+        options:
+            sitemap: true
+    ```
+
     For complexe routes, create a [Closure][3] or a [Service][5] dedicated to your sitemap then add your urls :
 
     ```php
