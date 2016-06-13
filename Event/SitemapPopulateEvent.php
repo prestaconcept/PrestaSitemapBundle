@@ -10,7 +10,6 @@
 
 namespace Presta\SitemapBundle\Event;
 
-use Presta\SitemapBundle\Service\GeneratorInterface;
 use Presta\SitemapBundle\Service\UrlContainerInterface;
 use Symfony\Component\EventDispatcher\Event;
 
@@ -24,7 +23,7 @@ class SitemapPopulateEvent extends Event
     const ON_SITEMAP_POPULATE = 'presta_sitemap.populate';
 
     /**
-     * @var GeneratorInterface
+     * @var UrlContainerInterface
      */
     protected $urlContainer;
 
@@ -45,7 +44,17 @@ class SitemapPopulateEvent extends Event
     }
 
     /**
-     * @return GeneratorInterface
+     * @deprecated in favor of `Presta\SitemapBundle\Event\SitemapPopulateEvent::getUrlContainer()`
+     *
+     * @return UrlContainerInterface
+     */
+    public function getGenerator()
+    {
+        return $this->urlContainer;
+    }
+
+    /**
+     * @return UrlContainerInterface
      */
     public function getUrlContainer()
     {

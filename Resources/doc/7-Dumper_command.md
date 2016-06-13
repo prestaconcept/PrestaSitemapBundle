@@ -32,7 +32,7 @@ To make use of these feature your Event listeners should check `$event->getSecti
 
 ```php
 if (is_null($event->getSection()) || $event->getSection() == 'mysection') {
-    $event->getGenerator()->addUrl(
+    $event->getUrlContainer()->addUrl(
         new UrlConcrete(
             $url,
             new \DateTime(),
