@@ -20,7 +20,7 @@ $urlImage->addImage(new Url\GoogleImage('http://acme.com/the-big-picture.jpg'));
 $urlLang    = new Url\GoogleMultilangUrlDecorator($urlImage);
 
 // ... don't forget to add the url to a section
-$event->getGenerator()->addUrl($urlLang);
+$event->getUrlContainer()->addUrl($urlLang);
 ```
 
 PrestaSitemapBundle provides those decorators (but you can use your own) : 
@@ -55,7 +55,7 @@ try {
     // Sir, the area is safe, Sir!
 }
     
-$event->getGenerator()->addUrl($url, 'default');
+$event->getUrlContainer()->addUrl($url, 'default');
 ```
 
 This case is similar for tags in GoogleVideoUrlDecorator.
