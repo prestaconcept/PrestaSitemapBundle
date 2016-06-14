@@ -76,9 +76,18 @@ Sandbox is also deployed for a live demonstration :
     ```php
     homepage:
         path: /
-        defaults: { _controller: AppBundle:Default:homepage }
+        defaults: { _controller: "AppBundle:Default:index" }
         options:
             sitemap: true
+    ```
+    
+    Or XML support:
+    
+    ```xml
+    <route id="homepage" path="/">
+        <default key="_controller">AppBundle:Default:index</default>
+        <option key="sitemap">true</option>
+    </route>
     ```
 
     For complexe routes, create a [Closure][3] or a [Service][5] dedicated to your sitemap then add your urls :
