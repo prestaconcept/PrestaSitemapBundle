@@ -42,7 +42,7 @@ class UrlConcrete implements Url
      * @param string $changefreq
      * @param float $priority
      */
-    public function __construct($loc, \DateTime $lastmod = null, $changefreq = null, $priority = null)
+    public function __construct($loc, \DateTime $lastmod = null, $changefreq = null, $priority = 0.5)
     {
         $this->setLoc($loc);
         $this->setLastmod($lastmod);
