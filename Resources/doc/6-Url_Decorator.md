@@ -5,14 +5,14 @@ You just need to decorate with `GoogleImageUrlDecorator`:
 
 ```php
 use Presta\SitemapBundle\Sitemap\Url;
-    
+
 // a basic url that provide a xml element following protocol
 $urlBase    = new Url\UrlConcrete('http://acme.com/');
-    
+
 // decorate the url with images for google crawler
 // this also indicates to urlset to use the "image" namespace
 $urlImage   = new Url\GoogleImageUrlDecorator($urlBase);
-    
+
 // add one or more images to the url
 $urlImage->addImage(new Url\GoogleImage('http://acme.com/the-big-picture.jpg'));
     
@@ -20,7 +20,7 @@ $urlImage->addImage(new Url\GoogleImage('http://acme.com/the-big-picture.jpg'));
 $urlLang    = new Url\GoogleMultilangUrlDecorator($urlImage);
 
 // ... don't forget to add the url to a section
-$event->getGenerator()->addUrl($urlLang);
+$event->getUrlContainer()->addUrl($urlLang);
 ```
 
 PrestaSitemapBundle provides those decorators (but you can use your own) : 
@@ -54,8 +54,8 @@ try {
 } catch (Presta\SitemapBundle\Exception $e) {
     // Sir, the area is safe, Sir!
 }
-    
-$event->getGenerator()->addUrl($url, 'default');
+
+$event->getUrlContainer()->addUrl($url, 'default');
 ```
 
 This case is similar for tags in GoogleVideoUrlDecorator.

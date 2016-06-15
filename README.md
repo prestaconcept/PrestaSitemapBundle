@@ -101,7 +101,7 @@ Sandbox is also deployed for a live demonstration :
             $url = $router->generate('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
 
             //add homepage url to the urlset named default
-            $event->getGenerator()->addUrl(
+            $event->getUrlContainer()->addUrl(
                 new UrlConcrete(
                     $url,
                     new \DateTime(),
