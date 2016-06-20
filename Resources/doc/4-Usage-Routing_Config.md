@@ -5,10 +5,10 @@ You can use annotations to configure any route which does not use parameters (e.
 
 The supported sitemap parameters are:
 
- * section: a text string that represent the section in which to store the URL
- * lastmod: a text string that can be parsed by \DateTime (default: 'now')
- * changefreq: a text string that matches a constant defined in UrlConcrete (default: 'daily')
- * priority: a number between 0 and 1 (default: 1)
+ * `section`: a text string that represent the section in which to store the URL
+ * `lastmod`: a text string that can be parsed by \DateTime (default: 'now')
+ * `changefreq`: a text string that matches a constant defined in UrlConcrete (default: 'daily')
+ * `priority`: a number between 0 and 1 (default: 1)
 
 ## Annotation
 
