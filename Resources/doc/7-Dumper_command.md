@@ -4,7 +4,9 @@ If you want to dump your sitemaps to files and serve them statically (like asset
 you can use `presta:sitemap:dump` console command. This can also be useful if you have really large sitemaps.
 The command dumps them into files w/o consuming much memory.
 
-To use it you have to set `dumper_base_url` in your config.yml (see above).
+To use it you have to configure the framework to be aware of your domain name even in commands.
+See [configuration](2-Configuration.md#the-base-url-for-dumper).
+
 The command accepts single argument which is the folder where to dump sitemaps to, it defaults to `web`, since
 most of the people keep the sitemaps in the root of their sites.
 The command always creates `sitemap.xml` file as sitemaps index. The other files are named according to section names
@@ -44,7 +46,8 @@ if (is_null($event->getSection()) || $event->getSection() == 'mysection') {
 }
 ```
 
-You can overwrite default host specified `dumper_base_url` parameter if you need to generate several sitemaps with different hosts. Consider following example:
+You can overwrite default host if you need to generate several sitemaps with different hosts.
+Consider following example:
 
 ```bash
 $ app/console presta:sitemap:dump --base-url=http://es.mysite.com/ es/
