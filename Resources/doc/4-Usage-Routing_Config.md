@@ -1,4 +1,4 @@
-# Usage Annotations
+# Usage Routing Configuration
 
 You can use annotations to configure any route which does not use parameters (e.g. your static pages such as '/about',
 '/faq').
