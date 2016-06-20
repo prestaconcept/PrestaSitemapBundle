@@ -124,7 +124,7 @@ You will find the detailed documentation in the following links :
 * [1-Installation.md][1]
 * [2-Configuration.md][2]
 * [3-Usage-Quick_and_dirty.md][3]
-* [4-Usage-Annotation.md][4]
+* [4-Usage-Routing_Config.md][4]
 * [5-Usage-Event_Listener.md][5]
 * [6-Url_Decorator.md][6]
 * [7-Dumper_command.md][7]
@@ -153,7 +153,7 @@ Released under the MIT License
 [1]: Resources/doc/1-Installation.md
 [2]: Resources/doc/2-Configuration.md
 [3]: Resources/doc/3-Usage-Quick_and_dirty.md
-[4]: Resources/doc/4-Usage-Annotation.md
+[4]: Resources/doc/4-Usage-Routing_Config.md
 [5]: Resources/doc/5-Usage-Event_Listener.md
 [6]: Resources/doc/6-Url_Decorator.md
 [7]: Resources/doc/7-Dumper_command.md
