@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the prestaSitemapPlugin package.
+ * This file is part of the PrestaSitemapBundle package.
  * (c) David Epely <depely@prestaconcept.net>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Command to dump the sitemaps to provided directory
@@ -25,9 +26,7 @@ use Symfony\Component\Console\Input\InputOption;
 class DumpSitemapsCommand extends ContainerAwareCommand
 {
     /**
-     * Configure CLI command, message, options
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -38,6 +37,12 @@ class DumpSitemapsCommand extends ContainerAwareCommand
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Name of sitemap section to dump, all sections are dumped by default'
+            )
+            ->addOption(
+                'base-url',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Base url to use for absolute urls. Good example - http://acme.com/, bad example - acme.com. Defaults to router.request_context.host parameter'
             )
             ->addOption(
                 'gzip',
@@ -54,13 +59,7 @@ class DumpSitemapsCommand extends ContainerAwareCommand
     }
 
     /**
-     * Code to execute for the command
-     *
-     * @param InputInterface   $input  Input object from the console
-     * @param OutputInterface $output Output object for the console
-     *
-     * @throws \InvalidArgumentException
-     * @return void
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -70,7 +69,25 @@ class DumpSitemapsCommand extends ContainerAwareCommand
         $dumper = $container->get('presta_sitemap.dumper');
         /* @var $dumper DumperInterface */
 
-        $baseUrl = $this->getBaseUrl();
+        if ($baseUrl = $input->getOption('base-url')) {
+            $baseUrl = rtrim($baseUrl, '/') . '/';
+
+            //sanity check
+            if (!parse_url($baseUrl, PHP_URL_HOST)) {
+                throw new \InvalidArgumentException(
+                    'Invalid base url. Use fully qualified base url, e.g. http://acme.com/',
+                    -1
+                );
+            }
+
+            // Set Router's host used for generating URLs from configuration param
+            // There is no other way to manage domain in CLI
+            $request = Request::create($baseUrl);
+            $container->set('request', $request);
+            $container->get('router')->getContext()->fromRequest($request);
+        } else {
+            $baseUrl = $this->getBaseUrl();
+        }
 
         if ($input->getOption('section')) {
             $output->writeln(
