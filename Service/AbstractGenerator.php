@@ -50,7 +50,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
     /**
      * @var array
      */
-    private $defaults = array();
+    private $defaults;
 
     /**
      * @param EventDispatcherInterface $dispatcher
@@ -58,9 +58,14 @@ abstract class AbstractGenerator implements UrlContainerInterface
     public function __construct(EventDispatcherInterface $dispatcher, $itemsBySet = null)
     {
         $this->dispatcher = $dispatcher;
-        // We add one to LIMIT_ITEMS because it was used as an index, not a
-        // quantity
+        // We add one to LIMIT_ITEMS because it was used as an index, not a quantity
         $this->itemsBySet = ($itemsBySet === null) ? Sitemapindex::LIMIT_ITEMS + 1 : $itemsBySet;
+
+        $this->defaults = array(
+            'priority' => 1,
+            'changefreq' => UrlConcrete::CHANGEFREQ_DAILY,
+            'lastmod' => new \DateTime()
+        );
     }
 
     /**
