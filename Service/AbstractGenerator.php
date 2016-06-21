@@ -15,6 +15,7 @@ use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap\DumpingUrlset;
 use Presta\SitemapBundle\Sitemap\Sitemapindex;
 use Presta\SitemapBundle\Sitemap\Url\Url;
+use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Presta\SitemapBundle\Sitemap\Urlset;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -47,14 +48,32 @@ abstract class AbstractGenerator implements UrlContainerInterface
     protected $itemsBySet;
 
     /**
+     * @var array
+     */
+    private $defaults;
+
+    /**
      * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(EventDispatcherInterface $dispatcher, $itemsBySet = null)
     {
         $this->dispatcher = $dispatcher;
-        // We add one to LIMIT_ITEMS because it was used as an index, not a
-        // quantity
+        // We add one to LIMIT_ITEMS because it was used as an index, not a quantity
         $this->itemsBySet = ($itemsBySet === null) ? Sitemapindex::LIMIT_ITEMS + 1 : $itemsBySet;
+
+        $this->defaults = array(
+            'priority' => 1,
+            'changefreq' => UrlConcrete::CHANGEFREQ_DAILY,
+            'lastmod' => 'now'
+        );
+    }
+
+    /**
+     * @param array $defaults
+     */
+    public function setDefaults($defaults)
+    {
+        $this->defaults = $defaults;
     }
 
     /**
@@ -74,6 +93,18 @@ abstract class AbstractGenerator implements UrlContainerInterface
 
         if (count($urlset) >= $this->itemsBySet || $urlset->isFull()) {
             throw new \RuntimeException('The limit of sitemapindex has been exceeded');
+        }
+
+        if ($url instanceof UrlConcrete) {
+            if (null === $url->getLastmod()) {
+                $url->setLastmod(new \DateTime($this->defaults['lastmod']));
+            }
+            if (null === $url->getChangefreq()) {
+                $url->setChangefreq($this->defaults['changefreq']);
+            }
+            if (null === $url->getPriority()) {
+                $url->setPriority($this->defaults['priority']);
+            }
         }
 
         $urlset->addUrl($url);

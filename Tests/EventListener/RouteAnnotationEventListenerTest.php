@@ -55,9 +55,9 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('priority', $result);
         $this->assertArrayHasKey('changefreq', $result);
         $this->assertArrayHasKey('lastmod', $result);
-        $this->assertEquals(1, $result['priority']);
-        $this->assertEquals(UrlConcrete::CHANGEFREQ_DAILY, $result['changefreq']);
-        $this->assertInstanceOf('\DateTime', $result['lastmod']);
+        $this->assertNull($result['priority']);
+        $this->assertNull($result['changefreq']);
+        $this->assertNull($result['lastmod']);
     }
 
     /**
