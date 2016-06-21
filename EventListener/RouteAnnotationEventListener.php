@@ -46,18 +46,11 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
     protected $router;
 
     /**
-     * @var array
-     */
-    private $defaults;
-
-    /**
      * @param RouterInterface $router
-     * @param array           $defaults
      */
-    public function __construct(RouterInterface $router, array $defaults)
+    public function __construct(RouterInterface $router)
     {
         $this->router = $router;
-        $this->defaults = $defaults;
     }
 
     /**
@@ -150,7 +143,11 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
             return null;
         }
 
-        $options = $this->defaults;
+        $options = [
+            'lastmod' => null,
+            'changefreq' => null,
+            'priority' => null,
+        ];
         if (is_array($option)) {
             $options = array_merge($options, $option);
         }

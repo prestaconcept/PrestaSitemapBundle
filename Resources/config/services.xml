@@ -16,6 +16,9 @@
             <argument id="doctrine_cache.providers.presta_sitemap" type="service" on-invalid="ignore"/>
             <argument>%presta_sitemap.timetolive%</argument>
             <argument>%presta_sitemap.items_by_set%</argument>
+            <call method="setDefaults">
+                <argument>%presta_sitemap.defaults%</argument>
+            </call>
         </service>
 
         <service id="presta_sitemap.dumper_default" class="%presta_sitemap.dumper.class%">
@@ -23,6 +26,9 @@
             <argument id="filesystem" type="service" />
             <argument>%presta_sitemap.sitemap_file_prefix%</argument>
             <argument>%presta_sitemap.items_by_set%</argument>
+            <call method="setDefaults">
+                <argument>%presta_sitemap.defaults%</argument>
+            </call>
         </service>
     </services>
 
