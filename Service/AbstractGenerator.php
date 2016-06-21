@@ -64,7 +64,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
         $this->defaults = array(
             'priority' => 1,
             'changefreq' => UrlConcrete::CHANGEFREQ_DAILY,
-            'lastmod' => new \DateTime()
+            'lastmod' => 'now'
         );
     }
 
