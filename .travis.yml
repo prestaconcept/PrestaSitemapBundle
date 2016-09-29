@@ -36,6 +36,7 @@ before_install:
     - if [ "$PHPCS" = "yes" ]; then pear install pear/PHP_CodeSniffer; fi
     - if [ "$PHPCS" = "yes" ]; then phpenv rehash; fi
     - if [ "$PHPCS" != "yes"]; then composer selfupdate; fi
+    - if [ "$SYMFONY_VERSION" = "3.2.*@dev" ]; then composer require --no-update twig/twig:~2.0@dev; fi
     - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony:${SYMFONY_VERSION}; fi
 
 install: if [ "$PHPCS" != "yes" ]; then composer update --prefer-dist; fi

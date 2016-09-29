@@ -89,6 +89,5 @@ class GoogleVideoUrlDecoratorTest extends \PHPUnit_Framework_TestCase
     {
         $category = $this->xml->getElementsByTagName('category')->item(0)->nodeValue;
         $this->assertEquals($category, 'Testing w/ spécial chars');
-
     }
 }

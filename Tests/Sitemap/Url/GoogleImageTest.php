@@ -38,6 +38,5 @@ class GoogleImageTest extends \PHPUnit_Framework_TestCase
             array('<image:image><image:loc>http://acme.com/logo.jpg</image:loc><image:caption><![CDATA[this is about logo]]></image:caption><image:geo_location><![CDATA[Lyon, France]]></image:geo_location><image:title><![CDATA[The Acme logo]]></image:title><image:license><![CDATA[WTFPL]]></image:license></image:image>', 'http://acme.com/logo.jpg', 'this is about logo', 'Lyon, France', 'The Acme logo', 'WTFPL'),
             array('<image:image><image:loc>http://acme.com/logo.jpg?a=&amp;b=c</image:loc><image:caption><![CDATA[this is about <strong>logo</strong>]]></image:caption></image:image>', 'http://acme.com/logo.jpg?a=&b=c', 'this is about <strong>logo</strong>'),
         );
-
     }
 }
