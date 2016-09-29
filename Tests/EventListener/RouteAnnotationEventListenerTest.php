@@ -11,6 +11,8 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 use Presta\SitemapBundle\EventListener\RouteAnnotationEventListener;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
@@ -21,6 +23,18 @@ use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 */
 class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
 {
+    protected $dispatcher;
+
+    public function setUp()
+    {
+        if (method_exists($this, 'createMock')) {
+            $this->dispatcher = $this->createMock('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface');
+        } else {
+            $this->dispatcher = $this->getMock('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface');
+        }
+        
+    }
+    
     /**
      * test no "sitemap" annotation
      */
@@ -131,6 +145,7 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
     private function getListener()
     {
         $listener = new RouteAnnotationEventListener(
+            $this->dispatcher,
             $this->getRouter(),
             array(
                 'priority' => 1,

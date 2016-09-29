@@ -12,6 +12,7 @@
 namespace Presta\SitemapBundle\EventListener;
 
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
+use Presta\SitemapBundle\Event\SitemapRouteEvent;
 use Presta\SitemapBundle\Service\SitemapListenerInterface;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
@@ -19,6 +20,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class RouteAnnotationEventListener
@@ -41,16 +43,23 @@ use Symfony\Component\Routing\RouterInterface;
 class RouteAnnotationEventListener implements SitemapListenerInterface
 {
     /**
+     * @var EventDispatcherInterface
+     */
+    protected $dispatcher;
+
+    /**
      * @var RouterInterface
      */
     protected $router;
 
     /**
-     * @param RouterInterface $router
+     * @param EventDispatcherInterface $dispatcher
+     * @param RouterInterface          $router
      */
-    public function __construct(RouterInterface $router)
+    public function __construct(EventDispatcherInterface $dispatcher, RouterInterface $router)
     {
-        $this->router = $router;
+        $this->dispatcher = $dispatcher;
+        $this->router     = $router;
     }
 
     /**
@@ -181,7 +190,7 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
     protected function getUrlConcrete($name, $options)
     {
         try {
-            return new UrlConcrete(
+            $url = new UrlConcrete(
                 $this->getRouteUri($name),
                 $options['lastmod'],
                 $options['changefreq'],
@@ -198,6 +207,11 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
                 $e
             );
         }
+
+        $event = new SitemapRouteEvent($url, $name, $options);
+        $this->dispatcher->dispatch(SitemapRouteEvent::ON_SITEMAP_ROUTE, $event);
+        
+        return $event->getUrl();
     }
 
     /**

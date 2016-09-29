@@ -24,6 +24,9 @@ interface SitemapListenerInterface
      * using $event->getUrlContainer()->addUrl(\Presta\SitemapBundle\Sitemap\Url\Url $url, $section)
      * if $event->getSection() is null or matches the listener's section
      *
+     * For each Url, a SitemapRouteEvent should be dispatched to let the chance to any third-party
+     * to decorate the Url and add any suitable extension to the Sitemap.
+     *
      * @param SitemapPopulateEvent $event
      */
     public function populateSitemap(SitemapPopulateEvent $event);
