@@ -17,6 +17,10 @@ use \Presta\SitemapBundle\Event\SitemapPopulateEvent;
  * Inteface for sitemap event listeners
  *
  * @author Konstantin Tjuterev <kostik.lv@gmail.com>
+ *
+ * @deprecated This class has been deprecated in favor of Symfony standard event listener and subscriber.
+ *             Please see documentation if you are in trouble.
+ *             To be removed in next major release : 2.0
  */
 interface SitemapListenerInterface
 {

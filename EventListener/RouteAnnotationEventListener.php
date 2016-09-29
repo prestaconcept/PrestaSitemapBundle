@@ -12,8 +12,8 @@
 namespace Presta\SitemapBundle\EventListener;
 
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
-use Presta\SitemapBundle\Service\SitemapListenerInterface;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Route;
@@ -21,8 +21,6 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
- * Class RouteAnnotationEventListener
- *
  * this listener allows you to use annotations to include routes in the Sitemap, just like
  * https://github.com/dreipunktnull/DpnXmlSitemapBundle
  *
@@ -36,9 +34,8 @@ use Symfony\Component\Routing\RouterInterface;
  * Route("/", name="homepage", options={"sitemap" = true })
  *
  * @author Tony Piper (tpiper@tpiper.com)
- * @license see prestaConcept license
  */
-class RouteAnnotationEventListener implements SitemapListenerInterface
+class RouteAnnotationEventListener implements EventSubscriberInterface
 {
     /**
      * @var RouterInterface
@@ -56,7 +53,17 @@ class RouteAnnotationEventListener implements SitemapListenerInterface
     /**
      * @inheritdoc
      */
-    public function populateSitemap(SitemapPopulateEvent $event)
+    public static function getSubscribedEvents()
+    {
+        return [
+            SitemapPopulateEvent::ON_SITEMAP_POPULATE => ['registerRouteAnnotation', 0],
+        ];
+    }
+
+    /**
+     * @param SitemapPopulateEvent $event
+     */
+    public function registerRouteAnnotation(SitemapPopulateEvent $event)
     {
         $section = $event->getSection();
 

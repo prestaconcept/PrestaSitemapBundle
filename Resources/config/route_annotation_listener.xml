@@ -9,8 +9,8 @@
 
     <services>
         <service id="presta_sitemap.eventlistener.route_annotation" class="%presta_sitemap.eventlistener.route_annotation.class%">
-            <tag name="presta.sitemap.listener"/>
             <argument type="service" id="router"/>
+            <tag name="kernel.event_subscriber"/>
         </service>
     </services>
 

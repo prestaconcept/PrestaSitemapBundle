@@ -1,75 +1,110 @@
-# Usage Sitemap Event Listeners
+# Sitemap Events Usage
 
-You can also register your sitemap event listeners by creating service classes implementing
-`Presta\SitemapBundle\Service\SitemapListenerInterface` and tagging these services with `presta.sitemap.listener`
-tag in your `Resources/config/services.xml`. This way the services will be lazy-loaded by Symfony's event dispatcher, only when the event is dispatched:
+You can also register event listeners (or subscribers) to populate your sitemap(s).
 
-```xml
-<parameters>
-    <parameter key="acme_demo.sitemap.listener.class">Acme\DemoBundle\EventListener\SitemapListener</parameter>
-</parameters>
+Imagine that your application is (or has) a blog, and that you want to add to your sitemap
+all blog posts that your administrator has created.
 
-<services>
-    <service id="my.sitemap.listener" class="%acme_demo.sitemap.listener.class%">
-        <tag name="presta.sitemap.listener" />
-        <argument type="service" id="router"/>
-    </service>
-</services>
-```
+**note :** we choose an `event subscriber` as example, but you can also do it with an `event listener`.
 
-or in yaml:
 
-```yaml
-parameters:
-    acme_demo.sitemap.listener.class: Acme\DemoBundle\EventListener\SitemapListener
+## Service configuration
 
-services:
-    my.sitemap.listener:
-        class: "%acme_demo.sitemap.listener.class%"
-        arguments: ["@router"]
-        tags: [{name: "presta.sitemap.listener"}]
-```
-
-Sitemap listener example `Acme/DemoBundle/EventListener/SitemapListener.php`:
+Implementation example `AppBundle/EventListener/SitemapBlogPostSubscriber.php`:
 
 ```php
 <?php
-namespace Acme\DemoBundle\EventListener;
 
+namespace AppBundle\EventListener;
+
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
-use Presta\SitemapBundle\Service\SitemapListenerInterface;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
-class SitemapListener implements SitemapListenerInterface
+class SitemapBlogPostSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var RouterInterface
+     */
     private $router;
 
-    public function __construct(RouterInterface $router)
+    /**
+     * @var EntityManager
+     */
+    private $manager;
+
+    /**
+     * @param RouterInterface $router
+     * @param EntityManager   $manager
+     */
+    public function __construct(RouterInterface $router, EntityManager $manager)
     {
         $this->router = $router;
+        $this->manager = $manager;
     }
 
-    public function populateSitemap(SitemapPopulateEvent $event)
+    /**
+     * @inheritdoc
+     */
+    public static function getSubscribedEvents()
     {
-        $section = $event->getSection();
-        if (is_null($section) || $section == 'default') {
-            //get absolute homepage url
-            $url = $this->router->generate('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+        return [
+            SitemapPopulateEvent::ON_SITEMAP_POPULATE => 'registerBlogPostsPages',
+        ];
+    }
 
-            //add homepage url to the urlset named default
+    /**
+     * @param SitemapPopulateEvent $event
+     */
+    public function registerBlogPostsPages(SitemapPopulateEvent $event)
+    {
+        $posts = $this->manager->getRepository('AppBundle:BlogPost')->findAll();
+
+        foreach ($posts as $post) {
             $event->getUrlContainer()->addUrl(
                 new UrlConcrete(
-                    $url,
-                    new \DateTime(),
-                    UrlConcrete::CHANGEFREQ_HOURLY,
-                    1
+                    $this->router->generate(
+                        'blog_post',
+                        ['slug' => $post->getSlug()],
+                        RouterInterface::ABSOLUTE_URL
+                    )
                 ),
-                'default'
+                'blog'
             );
         }
     }
 }
 ```
+
+
+## Service configuration
+
+**XML**
+
+Service registering example `app/config/services.xml`
+
+```xml
+<services>
+    <service id="app.sitemap.blog_post_subscriber" class="AppBundle\EventListener\SitemapBlogPostSubscriber">
+        <argument type="service" id="router"/>
+        <tag name="kernel.event_subscriber" priority="100"/>
+    </service>
+</services>
+```
+
+**YAML**
+
+Service registering example `app/config/services.yml`
+
+```yaml
+services:
+    app.sitemap.blog_post_subscriber:
+        class:     AppBundle\EventListener\SitemapBlogPostSubscriber
+        arguments: ["@router"]
+        tags:
+            - { name: "kernel.event_subscriber", priority: 100 }
+```
+
+**note :** choosing a priority for your event listener is up to you.
