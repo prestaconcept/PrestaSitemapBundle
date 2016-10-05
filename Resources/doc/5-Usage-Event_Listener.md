@@ -78,7 +78,7 @@ class SitemapBlogPostSubscriber implements EventSubscriberInterface
 }
 ```
 
-**note :** you may not use this snippet as is. With large dataset, `findAll` is not a good idead. 
+**note :** you should not use this snippet as is. With large dataset, `findAll` is not a good idead. 
            Please read Doctrine documentation, to learn about iterator and array hydrate.
 
 
