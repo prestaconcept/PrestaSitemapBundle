@@ -17,31 +17,31 @@ Implementation example `AppBundle/EventListener/SitemapBlogPostSubscriber.php`:
 
 namespace AppBundle\EventListener;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
 class SitemapBlogPostSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var RouterInterface
+     * @var UrlGeneratorInterface
      */
-    private $router;
+    private $urlGenerator;
 
     /**
-     * @var EntityManager
+     * @var ObjectManager
      */
     private $manager;
 
     /**
-     * @param RouterInterface $router
-     * @param EntityManager   $manager
+     * @param UrlGeneratorInterface $urlGenerator
+     * @param ObjectManager         $manager
      */
-    public function __construct(RouterInterface $router, EntityManager $manager)
+    public function __construct(UrlGeneratorInterface $urlGenerator, ObjectManager $manager)
     {
-        $this->router = $router;
+        $this->urlGenerator = $urlGenerator;
         $this->manager = $manager;
     }
 
@@ -65,10 +65,10 @@ class SitemapBlogPostSubscriber implements EventSubscriberInterface
         foreach ($posts as $post) {
             $event->getUrlContainer()->addUrl(
                 new UrlConcrete(
-                    $this->router->generate(
+                    $this->urlGenerator->generate(
                         'blog_post',
                         ['slug' => $post->getSlug()],
-                        RouterInterface::ABSOLUTE_URL
+                        UrlGeneratorInterface::ABSOLUTE_URL
                     )
                 ),
                 'blog'
@@ -77,6 +77,9 @@ class SitemapBlogPostSubscriber implements EventSubscriberInterface
     }
 }
 ```
+
+**note :** you may not use this snippet as is. With large dataset, `findAll` is not a good idead. 
+           Please read Doctrine documentation, to learn about iterator and array hydrate.
 
 
 ## Service configuration
@@ -89,6 +92,7 @@ Service registering example `app/config/services.xml`
 <services>
     <service id="app.sitemap.blog_post_subscriber" class="AppBundle\EventListener\SitemapBlogPostSubscriber">
         <argument type="service" id="router"/>
+        <argument type="service" id="doctrine.orm.entity_manager"/>
         <tag name="kernel.event_subscriber" priority="100"/>
     </service>
 </services>
@@ -102,7 +106,9 @@ Service registering example `app/config/services.yml`
 services:
     app.sitemap.blog_post_subscriber:
         class:     AppBundle\EventListener\SitemapBlogPostSubscriber
-        arguments: ["@router"]
+        arguments: 
+            - "@router"
+            - "@doctrine.orm.entity_manager"
         tags:
             - { name: "kernel.event_subscriber", priority: 100 }
 ```

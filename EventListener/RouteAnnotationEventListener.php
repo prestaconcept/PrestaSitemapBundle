@@ -55,9 +55,9 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return [
+        return array(
             SitemapPopulateEvent::ON_SITEMAP_POPULATE => ['registerRouteAnnotation', 0],
-        ];
+        );
     }
 
     /**

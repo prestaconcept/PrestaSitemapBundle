@@ -18,7 +18,7 @@ use \Presta\SitemapBundle\Event\SitemapPopulateEvent;
  *
  * @author Konstantin Tjuterev <kostik.lv@gmail.com>
  *
- * @deprecated This class has been deprecated in favor of Symfony standard event listener and subscriber.
+ * @deprecated This interface has been deprecated in favor of Symfony standard event listener and subscriber.
  *             Please see documentation if you are in trouble.
  *             To be removed in next major release : 2.0
  */
