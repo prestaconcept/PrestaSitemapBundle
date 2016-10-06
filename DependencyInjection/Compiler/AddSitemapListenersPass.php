@@ -36,6 +36,8 @@ class AddSitemapListenersPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds('presta.sitemap.listener') as $id => $tags) {
             $class = $container->getDefinition($id)->getClass();
 
+            @trigger_error('The service "'.$id.'" was tagged with "presta.sitemap.listener", which is deprecated. Use Symfony event listeners/subscribers instead.', E_USER_DEPRECATED);
+
             $refClass = new \ReflectionClass($class);
             $interface = 'Presta\SitemapBundle\Service\SitemapListenerInterface';
             if (!$refClass->implementsInterface($interface)) {
