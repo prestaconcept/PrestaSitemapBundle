@@ -13,7 +13,7 @@ The command always creates `sitemap.xml` file as sitemaps index. The other files
 you provide, when adding URLs in your `SitemapPopulateEvent` event listeners.
 
 ```bash
-$ app/console presta:sitemap:dump
+$ app/console presta:sitemaps:dump
 Dumping all sections of sitemaps into web directory
 Created the following sitemap files
     main.xml
@@ -50,7 +50,7 @@ You can overwrite default host if you need to generate several sitemaps with dif
 Consider following example:
 
 ```bash
-$ app/console presta:sitemap:dump --base-url=http://es.mysite.com/ es/
+$ app/console presta:sitemaps:dump --base-url=http://es.mysite.com/ es/
 Dumping all sections of sitemaps into web directory
 Created the following sitemap files
     main.xml
@@ -61,7 +61,7 @@ Created the following sitemap files
 The dumper command support gzip compression as described in [sitemaps protocol][1] :
 
 ```bash
-$ app/console presta:sitemap:dump --gzip
+$ app/console presta:sitemaps:dump --gzip
 Dumping all sections of sitemaps into tmp4 directory
 Created/Updated the following sitemap files:
     sitemap.default.xml.gz
