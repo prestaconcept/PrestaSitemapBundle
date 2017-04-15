@@ -1,3 +1,6 @@
+test travis
+
+
 # PrestaSitemapBundle
 
 [![Build Status](https://secure.travis-ci.org/prestaconcept/PrestaSitemapBundle.png)](http://travis-ci.org/prestaconcept/PrestaSitemapBundle)
