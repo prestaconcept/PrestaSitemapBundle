@@ -20,8 +20,6 @@ class AppKernel extends Kernel
             // Dependencies
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
-            //new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            //new JMS\SerializerBundle\JMSSerializerBundle($this),
             new Presta\SitemapBundle\PrestaSitemapBundle(),
         );
 
