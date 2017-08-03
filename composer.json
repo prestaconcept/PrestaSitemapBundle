@@ -35,6 +35,11 @@
             "Presta\\SitemapBundle\\": ""
         }
     },
+    "autoload-dev": {
+        "files": [
+            "Tests/app/AppKernel.php"
+        ]
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.5.x-dev"
