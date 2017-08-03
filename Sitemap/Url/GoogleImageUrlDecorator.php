@@ -32,7 +32,7 @@ class GoogleImageUrlDecorator extends UrlDecorator
     public function addImage(GoogleImage $image)
     {
         if ($this->isFull()) {
-            throw new Exception\GoogleImageUrlDecorator('The image limit has been exceeded');
+            throw new Exception\GoogleImageException('The image limit has been exceeded');
         }
 
         $this->imageXml .= $image->toXml();
