@@ -16,6 +16,6 @@ namespace Presta\SitemapBundle\Exception;
  *
  * @author David Epely <depely@prestaconcept.net>
  */
-class GoogleImageException extends Exception
+class GoogleImageUrlDecorator extends Exception
 {
 }
