@@ -24,7 +24,8 @@
         "symfony/symfony": "~2.2|~3.0"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "~2.7|~3.0"
+        "symfony/phpunit-bridge": "~2.7|~3.0",
+        "phpunit/phpunit": "4.*"
     },
     "suggest": {
         "doctrine/doctrine-cache-bundle" : "Allows to store sitemaps in cache"
@@ -33,6 +34,11 @@
         "psr-4": {
             "Presta\\SitemapBundle\\": ""
         }
+    },
+    "autoload-dev": {
+        "files": [
+            "Tests/app/AppKernel.php"
+        ]
     },
     "extra": {
         "branch-alias": {

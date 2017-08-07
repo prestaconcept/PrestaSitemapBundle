@@ -128,7 +128,7 @@ class DumpSitemapsCommand extends ContainerAwareCommand
      */
     private function getBaseUrl()
     {
-        $context = $this->getContainer()->get('router.request_context');
+        $context = $this->getContainer()->get('router')->getContext();
 
         if ('' === $host = $context->getHost()) {
             throw new \RuntimeException(

@@ -34,6 +34,7 @@ class GeneratorTest extends WebTestCase
     {
         try {
             $this->generator->generate();
+            $this->assertTrue(true, 'No exception was thrown');
         } catch (\RuntimeException $e) {
             $this->fail('No exception must be thrown');
         }
@@ -49,6 +50,7 @@ class GeneratorTest extends WebTestCase
     {
         try {
             $this->generator->addUrl(new Sitemap\Url\UrlConcrete('http://acme.com/'), 'default');
+            $this->assertTrue(true, 'No exception was thrown');
         } catch (\RuntimeException $e) {
             $this->fail('No exception must be thrown');
         }
