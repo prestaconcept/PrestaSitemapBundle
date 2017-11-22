@@ -18,15 +18,16 @@ namespace Presta\SitemapBundle\Sitemap\Url;
  */
 interface Url
 {
-
     /**
-     * render element as xml
+     * Render element as xml
+     *
      * @return string
      */
     public function toXml();
 
     /**
-     * list of used namespaces
+     * List of used namespaces
+     *
      * @return array - [{ns} => {location}]
      */
     public function getCustomNamespaces();

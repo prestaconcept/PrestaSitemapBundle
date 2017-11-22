@@ -11,6 +11,9 @@
 
 namespace Presta\SitemapBundle\Sitemap;
 
+use DateTime;
+use Presta\SitemapBundle\Sitemap\Url\Url;
+
 /**
  * Representation of url list
  *
@@ -20,19 +23,34 @@ class Urlset extends XmlConstraint
 {
     const TAG = 'sitemap';
 
+    /**
+     * @var string
+     */
     protected $loc;
+
+    /**
+     * @var DateTime
+     */
     protected $lastmod;
+
+    /**
+     * @var string
+     */
     protected $urlsXml = '';
+
+    /**
+     * @var array
+     */
     protected $customNamespaces = array();
 
     /**
-     * @param string    $loc
-     * @param \DateTime $lastmod
+     * @param string         $loc
+     * @param DateTime|null $lastmod
      */
-    public function __construct($loc, \DateTime $lastmod = null)
+    public function __construct($loc, DateTime $lastmod = null)
     {
         $this->loc = $loc;
-        $this->lastmod = $lastmod ? $lastmod : new \DateTime();
+        $this->lastmod = $lastmod ? $lastmod : new DateTime();
     }
 
     /**
@@ -44,7 +62,7 @@ class Urlset extends XmlConstraint
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastmod()
     {
@@ -54,11 +72,11 @@ class Urlset extends XmlConstraint
     /**
      * add url to pool and check limits
      *
-     * @param Url\Url $url
+     * @param Url $url
+     *
      * @throws \RuntimeException
-     * @return void
      */
-    public function addUrl(Url\Url $url)
+    public function addUrl(Url $url)
     {
         if ($this->isFull()) {
             throw new \RuntimeException('The urlset limit has been exceeded');
@@ -91,7 +109,7 @@ class Urlset extends XmlConstraint
     /**
      * Appends URL's XML to internal string buffer
      *
-     * @param $urlXml
+     * @param string $urlXml
      */
     protected function appendXML($urlXml)
     {
@@ -119,7 +137,7 @@ class Urlset extends XmlConstraint
     }
 
     /**
-     * @see parent::toXml()
+     * @inheritdoc
      */
     public function toXml()
     {

@@ -21,8 +21,8 @@ interface DumperInterface extends UrlContainerInterface
     /**
      * Dumps sitemaps and sitemap index into provided directory
      *
-     * @param string      $targetDir Directory where to save sitemap files
-     * @param string      $host      The current host base URL
+     * @param string|null $targetDir Directory where to save sitemap files
+     * @param string|null $host      The current host base URL
      * @param string|null $section   Optional section name - only sitemaps of this section will be updated
      * @param array       $options   Possible options: gzip
      *

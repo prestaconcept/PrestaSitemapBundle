@@ -21,7 +21,6 @@ class DumpingUrlset extends Urlset
 {
     /**
      * Temporary file holding the body of the sitemap
-     *
      * @var resource
      */
     private $bodyFile;
@@ -31,7 +30,7 @@ class DumpingUrlset extends Urlset
      * Basename of sitemap location is used (as they should always match)
      *
      * @param string $targetDir Directory where file should be saved
-     * @param Boolean $gzip
+     * @param bool   $gzip
      */
     public function save($targetDir, $gzip = false)
     {
@@ -79,7 +78,7 @@ class DumpingUrlset extends Urlset
     /**
      * Append URL's XML (to temporary file)
      *
-     * @param $urlXml
+     * @param string $urlXml
      */
     protected function appendXML($urlXml)
     {
