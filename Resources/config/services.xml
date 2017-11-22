@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <container xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
-    <parameters>
-        <parameter key="presta_sitemap.generator.class">Presta\SitemapBundle\Service\Generator</parameter>
-        <parameter key="presta_sitemap.dumper.class">Presta\SitemapBundle\Service\Dumper</parameter>
-        <parameter key="presta_sitemap.routing_loader.class">Presta\SitemapBundle\Routing\SitemapRoutingLoader</parameter>
-    </parameters>
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="presta_sitemap.generator_default" class="%presta_sitemap.generator.class%">
-            <argument id="event_dispatcher" type="service" />
-            <argument id="router" type="service" />
+        <service id="presta_sitemap.generator_default" class="Presta\SitemapBundle\Service\Generator">
+            <argument id="event_dispatcher" type="service"/>
+            <argument id="router" type="service"/>
             <argument id="doctrine_cache.providers.presta_sitemap" type="service" on-invalid="ignore"/>
             <argument>%presta_sitemap.timetolive%</argument>
             <argument>%presta_sitemap.items_by_set%</argument>
@@ -21,14 +15,25 @@
             </call>
         </service>
 
-        <service id="presta_sitemap.dumper_default" class="%presta_sitemap.dumper.class%">
-            <argument id="event_dispatcher" type="service" />
-            <argument id="filesystem" type="service" />
+        <service id="presta_sitemap.dumper_default" class="Presta\SitemapBundle\Service\Dumper">
+            <argument id="event_dispatcher" type="service"/>
+            <argument id="filesystem" type="service"/>
             <argument>%presta_sitemap.sitemap_file_prefix%</argument>
             <argument>%presta_sitemap.items_by_set%</argument>
             <call method="setDefaults">
                 <argument>%presta_sitemap.defaults%</argument>
             </call>
+        </service>
+
+        <service id="presta_sitemap.controller" class="Presta\SitemapBundle\Controller\SitemapController" public="true">
+            <argument id="presta_sitemap.generator" type="service"/>
+            <argument>%presta_sitemap.timetolive%</argument>
+        </service>
+
+        <service id="presta_sitemap.dump_command" class="Presta\SitemapBundle\Command\DumpSitemapsCommand" public="true">
+            <argument id="presta_sitemap.dumper" type="service"/>
+            <argument id="router" type="service"/>
+            <argument id="request_stack" type="service"/>
         </service>
     </services>
 

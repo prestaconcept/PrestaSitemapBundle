@@ -11,12 +11,13 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap\Url;
 
+use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap;
 
 /**
  * @author David Epely <depely@prestaconcept.net>
  */
-class GoogleImageUrlDecoratorTest extends \PHPUnit_Framework_TestCase
+class GoogleImageUrlDecoratorTest extends TestCase
 {
     public function testAddImage()
     {
@@ -24,6 +25,8 @@ class GoogleImageUrlDecoratorTest extends \PHPUnit_Framework_TestCase
 
         try {
             $url->addImage(new Sitemap\Url\GoogleImage('http://acme.com/logo.jpg'));
+
+            $this->assertTrue(true, 'No exception thrown');
         } catch (\RuntimeException $e) {
             $this->fail('An exception must not be thrown');
         }

@@ -11,6 +11,8 @@
 
 namespace Presta\SitemapBundle\Sitemap;
 
+use Presta\SitemapBundle\Sitemap\Url\Url;
+
 /**
  * Representation of url list
  *
@@ -20,16 +22,31 @@ class Urlset extends XmlConstraint
 {
     const TAG = 'sitemap';
 
+    /**
+     * @var string
+     */
     protected $loc;
-    protected $lastmod;
-    protected $urlsXml = '';
-    protected $customNamespaces = array();
 
     /**
-     * @param string    $loc
-     * @param \DateTime $lastmod
+     * @var \DateTime
      */
-    public function __construct($loc, \DateTime $lastmod = null)
+    protected $lastmod;
+
+    /**
+     * @var string
+     */
+    protected $urlsXml = '';
+
+    /**
+     * @var array
+     */
+    protected $customNamespaces = [];
+
+    /**
+     * @param string         $loc
+     * @param \DateTime|null $lastmod
+     */
+    public function __construct(string $loc, \DateTime $lastmod = null)
     {
         $this->loc = $loc;
         $this->lastmod = $lastmod ? $lastmod : new \DateTime();
@@ -38,7 +55,7 @@ class Urlset extends XmlConstraint
     /**
      * @return string
      */
-    public function getLoc()
+    public function getLoc(): string
     {
         return $this->loc;
     }
@@ -46,7 +63,7 @@ class Urlset extends XmlConstraint
     /**
      * @return \DateTime
      */
-    public function getLastmod()
+    public function getLastmod(): \DateTime
     {
         return $this->lastmod;
     }
@@ -54,11 +71,11 @@ class Urlset extends XmlConstraint
     /**
      * add url to pool and check limits
      *
-     * @param Url\Url $url
+     * @param Url $url
+     *
      * @throws \RuntimeException
-     * @return void
      */
-    public function addUrl(Url\Url $url)
+    public function addUrl(Url $url)
     {
         if ($this->isFull()) {
             throw new \RuntimeException('The urlset limit has been exceeded');
@@ -91,9 +108,9 @@ class Urlset extends XmlConstraint
     /**
      * Appends URL's XML to internal string buffer
      *
-     * @param $urlXml
+     * @param string $urlXml
      */
-    protected function appendXML($urlXml)
+    protected function appendXML(string $urlXml)
     {
         $this->urlsXml .= $urlXml;
     }
@@ -103,7 +120,7 @@ class Urlset extends XmlConstraint
      *
      * @return string
      */
-    protected function getStructureXml()
+    protected function getStructureXml(): string
     {
         $struct = '<?xml version="1.0" encoding="UTF-8"?>';
         $struct .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" NAMESPACES>URLS</urlset>';
@@ -119,9 +136,9 @@ class Urlset extends XmlConstraint
     }
 
     /**
-     * @see parent::toXml()
+     * @inheritdoc
      */
-    public function toXml()
+    public function toXml(): string
     {
         return str_replace('URLS', $this->urlsXml, $this->getStructureXml());
     }

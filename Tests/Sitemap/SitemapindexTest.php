@@ -11,6 +11,7 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap;
 
+use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap;
 
 /**
@@ -18,7 +19,7 @@ use Presta\SitemapBundle\Sitemap;
  *
  * @author David Epely <depely@prestaconcept.net>
  */
-class SitemapindexTest extends \PHPUnit_Framework_TestCase
+class SitemapindexTest extends TestCase
 {
     public function testAddSitemap()
     {
@@ -26,6 +27,8 @@ class SitemapindexTest extends \PHPUnit_Framework_TestCase
 
         try {
             $sitemapindex->addSitemap(new Sitemap\Urlset('http://acme.com'));
+
+            $this->assertTrue(true, 'No exception thrown');
         } catch (\RuntimeException $e) {
             $this->fail('An exception must not be thrown');
         }

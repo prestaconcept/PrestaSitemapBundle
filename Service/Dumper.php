@@ -12,10 +12,11 @@
 namespace Presta\SitemapBundle\Service;
 
 use Presta\SitemapBundle\DependencyInjection\Configuration;
+use Presta\SitemapBundle\Sitemap\DumpingUrlset;
+use Presta\SitemapBundle\Sitemap\Urlset;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Presta\SitemapBundle\Sitemap\DumpingUrlset;
 
 /**
  * Service for dumping sitemaps into static files
@@ -27,14 +28,12 @@ class Dumper extends AbstractGenerator implements DumperInterface
 {
     /**
      * Path to folder where temporary files will be created
-     *
      * @var string
      */
     protected $tmpFolder;
 
     /**
      * Base URL where dumped sitemap files can be accessed (we can't guess that from console)
-     *
      * @var string
      */
     protected $baseUrl;
@@ -51,17 +50,18 @@ class Dumper extends AbstractGenerator implements DumperInterface
 
     /**
      * @param EventDispatcherInterface $dispatcher Symfony's EventDispatcher
-     * @param Filesystem $filesystem Symfony's Filesystem
-     * @param $sitemapFilePrefix
-     * @param int $itemsBySet
+     * @param Filesystem               $filesystem Symfony's Filesystem
+     * @param string                   $sitemapFilePrefix
+     * @param int|null                 $itemsBySet
      */
     public function __construct(
         EventDispatcherInterface $dispatcher,
         Filesystem $filesystem,
-        $sitemapFilePrefix = Configuration::DEFAULT_FILENAME,
-        $itemsBySet = null
+        string $sitemapFilePrefix = Configuration::DEFAULT_FILENAME,
+        int $itemsBySet = null
     ) {
         parent::__construct($dispatcher, $itemsBySet);
+
         $this->filesystem = $filesystem;
         $this->sitemapFilePrefix = $sitemapFilePrefix;
     }
@@ -69,9 +69,9 @@ class Dumper extends AbstractGenerator implements DumperInterface
     /**
      * @inheritdoc
      */
-    public function dump($targetDir, $host, $section = null, array $options = array())
+    public function dump(string $targetDir, string $host, string $section = null, array $options = []): array
     {
-        $options = array_merge(array('gzip' => false), $options);
+        $options = array_merge(['gzip' => false], $options);
 
         $this->baseUrl = $host;
         // we should prepare temp folder each time, because dump may be called several times (with different sections)
@@ -85,18 +85,21 @@ class Dumper extends AbstractGenerator implements DumperInterface
         if (!count($this->urlsets)) {
             $this->cleanup();
 
-            return false;
+            return [];
         }
 
         foreach ($this->urlsets as $urlset) {
-            $urlset->save($this->tmpFolder, $options['gzip']);
+            if ($urlset instanceof DumpingUrlset) {
+                $urlset->save($this->tmpFolder, $options['gzip']);
+            }
             $filenames[] = basename($urlset->getLoc());
         }
 
         if (null !== $section) {
             // Load current SitemapIndex file and add all sitemaps except those,
             // matching section currently being regenerated to root
-            foreach ($this->loadCurrentSitemapIndex($targetDir . '/' . $this->sitemapFilePrefix . '.xml') as $key => $urlset) {
+            $index = $this->loadCurrentSitemapIndex($targetDir . '/' . $this->sitemapFilePrefix . '.xml');
+            foreach ($index as $key => $urlset) {
                 // cut possible _X, to compare base section name
                 $baseKey = preg_replace('/(.*?)(_\d+)?/', '\1', $key);
                 if ($baseKey !== $section) {
@@ -137,24 +140,24 @@ class Dumper extends AbstractGenerator implements DumperInterface
     {
         $this->filesystem->remove($this->tmpFolder);
         $this->root = null;
-        $this->urlsets = array();
+        $this->urlsets = [];
     }
 
     /**
      * Loads sitemap index XML file and returns array of Urlset objects
      *
-     * @param $filename
+     * @param string $filename
      *
-     * @return array
+     * @return Urlset[]
      * @throws \InvalidArgumentException
      */
-    protected function loadCurrentSitemapIndex($filename)
+    protected function loadCurrentSitemapIndex(string $filename): array
     {
         if (!file_exists($filename)) {
-            return array();
+            return [];
         }
 
-        $urlsets = array();
+        $urlsets = [];
         $index = simplexml_load_file($filename);
         foreach ($index->children() as $child) {
             if ($child->getName() == 'sitemap') {
@@ -163,7 +166,11 @@ class Dumper extends AbstractGenerator implements DumperInterface
                         "One of referenced sitemaps in $filename doesn't contain 'loc' attribute"
                     );
                 }
-                $basename = preg_replace('/^' . preg_quote($this->sitemapFilePrefix) . '\.(.+)\.xml(?:\.gz)?$/', '\1', basename($child->loc)); // cut .xml|.xml.gz
+                $basename = preg_replace(
+                    '/^' . preg_quote($this->sitemapFilePrefix) . '\.(.+)\.xml(?:\.gz)?$/',
+                    '\1',
+                    basename($child->loc)
+                ); // cut .xml|.xml.gz
 
                 if (!isset($child->lastmod)) {
                     throw new \InvalidArgumentException(
@@ -185,7 +192,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
      *
      * @throws \RuntimeException
      */
-    protected function activate($targetDir)
+    protected function activate(string $targetDir)
     {
         if (!is_dir($targetDir)) {
             mkdir($targetDir, 0777, true);
@@ -193,21 +200,23 @@ class Dumper extends AbstractGenerator implements DumperInterface
 
         if (!is_writable($targetDir)) {
             $this->cleanup();
-            throw new \RuntimeException(sprintf('Can\'t move sitemaps to "%s" - directory is not writeable', $targetDir));
+            throw new \RuntimeException(
+                sprintf('Can\'t move sitemaps to "%s" - directory is not writeable', $targetDir)
+            );
         }
         $this->deleteExistingSitemaps($targetDir);
 
         // no need to delete the root file as it always exists, it will be overwritten
-        $this->filesystem->mirror($this->tmpFolder, $targetDir, null, array('override' => true));
+        $this->filesystem->mirror($this->tmpFolder, $targetDir, null, ['override' => true]);
         $this->cleanup();
     }
 
     /**
      * Deletes sitemap files matching filename patterns of newly generated files
      *
-     * @param $targetDir string
+     * @param string $targetDir
      */
-    protected function deleteExistingSitemaps($targetDir)
+    protected function deleteExistingSitemaps(string $targetDir)
     {
         foreach ($this->urlsets as $urlset) {
             $basename = basename($urlset->getLoc());
@@ -224,15 +233,9 @@ class Dumper extends AbstractGenerator implements DumperInterface
     }
 
     /**
-     * Factory method for creating Urlset objects
-     *
-     * @param string $name
-     *
-     * @param \DateTime $lastmod
-     *
-     * @return DumpingUrlset
+     * @inheritdoc
      */
-    protected function newUrlset($name, \DateTime $lastmod = null)
+    protected function newUrlset(string $name, \DateTime $lastmod = null): Urlset
     {
         return new DumpingUrlset($this->baseUrl . $this->sitemapFilePrefix . '.' . $name . '.xml', $lastmod);
     }

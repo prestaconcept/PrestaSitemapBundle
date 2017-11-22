@@ -55,9 +55,9 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             SitemapPopulateEvent::ON_SITEMAP_POPULATE => ['registerRouteAnnotation', 0],
-        );
+        ];
     }
 
     /**
@@ -85,7 +85,7 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
         foreach ($collection->all() as $name => $route) {
             $options = $this->getOptions($name, $route);
 
-            if (!$options) {
+            if (empty($options)) {
                 continue;
             }
 
@@ -104,7 +104,7 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     /**
      * @return RouteCollection
      */
-    protected function getRouteCollection()
+    protected function getRouteCollection(): RouteCollection
     {
         return $this->router->getRouteCollection();
     }
@@ -116,12 +116,12 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function getOptions($name, Route $route)
+    public function getOptions(string $name, Route $route): array
     {
         $option = $route->getOption('sitemap');
 
         if ($option === null) {
-            return null;
+            return [];
         }
 
         if (is_string($option)) {
@@ -147,7 +147,7 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
         }
 
         if (!$option) {
-            return null;
+            return [];
         }
 
         $options = [
@@ -185,7 +185,7 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
      * @return UrlConcrete
      * @throws \InvalidArgumentException
      */
-    protected function getUrlConcrete($name, $options)
+    protected function getUrlConcrete(string $name, array $options): UrlConcrete
     {
         try {
             return new UrlConcrete(
@@ -194,15 +194,14 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
                 $options['changefreq'],
                 $options['priority']
             );
-        } catch (\Exception $e) {
-            throw new \InvalidArgumentException(
+        } catch (\Exception $exception) {
+            throw $this->wrapException(
                 sprintf(
                     'Invalid argument for route "%s": %s',
                     $name,
-                    $e->getMessage()
+                    $exception->getMessage()
                 ),
-                0,
-                $e
+                $exception
             );
         }
     }
@@ -214,21 +213,31 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
      * @return string
      * @throws \InvalidArgumentException
      */
-    protected function getRouteUri($name, $params = array())
+    protected function getRouteUri(string $name, array $params = [])
     {
         // If the route needs additional parameters, we can't add it
         try {
             return $this->router->generate($name, $params, UrlGeneratorInterface::ABSOLUTE_URL);
-        } catch (MissingMandatoryParametersException $e) {
-            throw new \InvalidArgumentException(
+        } catch (MissingMandatoryParametersException $exception) {
+            throw $this->wrapException(
                 sprintf(
                     'The route "%s" cannot have the sitemap option because it requires parameters other than "%s"',
                     $name,
                     implode('", "', array_keys($params))
                 ),
-                0,
-                $e
+                $exception
             );
         }
+    }
+
+    /**
+     * @param string     $message
+     * @param \Exception $exception
+     *
+     * @return \InvalidArgumentException
+     */
+    private function wrapException(string $message, \Exception $exception): \InvalidArgumentException
+    {
+        return new \InvalidArgumentException($message, 0, $exception);
     }
 }

@@ -12,20 +12,51 @@
 namespace Presta\SitemapBundle\Command;
 
 use Presta\SitemapBundle\Service\DumperInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Command to dump the sitemaps to provided directory
  *
  * @author Konstantin Tjuterev <kostik.lv@gmail.com>
  */
-class DumpSitemapsCommand extends ContainerAwareCommand
+class DumpSitemapsCommand extends Command
 {
+    /**
+     * @var DumperInterface
+     */
+    private $dumper;
+
+    /**
+     * @var RouterInterface
+     */
+    private $router;
+
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+    /**
+     * @param DumperInterface $dumper
+     * @param RouterInterface $router
+     * @param RequestStack    $requestStack
+     */
+    public function __construct(DumperInterface $dumper, RouterInterface $router, RequestStack $requestStack)
+    {
+        parent::__construct(null);
+
+        $this->dumper = $dumper;
+        $this->router = $router;
+        $this->requestStack = $requestStack;
+    }
+
     /**
      * @inheritdoc
      */
@@ -66,10 +97,6 @@ class DumpSitemapsCommand extends ContainerAwareCommand
     {
         $targetDir = rtrim($input->getArgument('target'), '/');
 
-        $container = $this->getContainer();
-        $dumper = $container->get('presta_sitemap.dumper');
-        /* @var $dumper DumperInterface */
-
         if ($baseUrl = $input->getOption('base-url')) {
             $baseUrl = rtrim($baseUrl, '/') . '/';
 
@@ -84,8 +111,8 @@ class DumpSitemapsCommand extends ContainerAwareCommand
             // Set Router's host used for generating URLs from configuration param
             // There is no other way to manage domain in CLI
             $request = Request::create($baseUrl);
-            $container->set('request', $request);
-            $container->get('router')->getContext()->fromRequest($request);
+            $this->requestStack->push($request);
+            $this->router->getContext()->fromRequest($request);
         } else {
             $baseUrl = $this->getBaseUrl();
         }
@@ -106,13 +133,15 @@ class DumpSitemapsCommand extends ContainerAwareCommand
                 )
             );
         }
-        $options = array(
+        $options = [
             'gzip' => (Boolean)$input->getOption('gzip'),
-        );
-        $filenames = $dumper->dump($targetDir, $baseUrl, $input->getOption('section'), $options);
+        ];
+        $filenames = $this->dumper->dump($targetDir, $baseUrl, $input->getOption('section'), $options);
 
-        if ($filenames === false) {
-            $output->writeln("<error>No URLs were added to sitemap by EventListeners</error> - this may happen when provided section is invalid");
+        if (empty($filenames)) {
+            $output->writeln(
+                "<error>No URLs were added to sitemap by EventListeners</error> - this may happen when provided section is invalid"
+            );
 
             return;
         }
@@ -126,9 +155,9 @@ class DumpSitemapsCommand extends ContainerAwareCommand
     /**
      * @return string
      */
-    private function getBaseUrl()
+    private function getBaseUrl(): string
     {
-        $context = $this->getContainer()->get('router')->getContext();
+        $context = $this->router->getContext();
 
         if ('' === $host = $context->getHost()) {
             throw new \RuntimeException(
@@ -140,9 +169,9 @@ class DumpSitemapsCommand extends ContainerAwareCommand
         $port = '';
 
         if ('http' === $scheme && 80 != $context->getHttpPort()) {
-            $port = ':'.$context->getHttpPort();
+            $port = ':' . $context->getHttpPort();
         } elseif ('https' === $scheme && 443 != $context->getHttpsPort()) {
-            $port = ':'.$context->getHttpsPort();
+            $port = ':' . $context->getHttpsPort();
         }
 
         return rtrim($scheme . '://' . $host . $port, '/') . '/';

@@ -11,10 +11,10 @@
 
 namespace Presta\SitemapBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -32,10 +32,11 @@ class PrestaSitemapExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
 
-        $container->setParameter($this->getAlias() . '.timetolive', $config['timetolive']);
-        $container->setParameter($this->getAlias() . '.sitemap_file_prefix', $config['sitemap_file_prefix']);
-        $container->setParameter($this->getAlias() . '.items_by_set', $config['items_by_set']);
-        $container->setParameter($this->getAlias() . '.defaults', $config['defaults']);
+        $alias = $this->getAlias();
+        $container->setParameter($alias . '.timetolive', $config['timetolive']);
+        $container->setParameter($alias . '.sitemap_file_prefix', $config['sitemap_file_prefix']);
+        $container->setParameter($alias . '.items_by_set', $config['items_by_set']);
+        $container->setParameter($alias . '.defaults', $config['defaults']);
 
         if (true === $config['route_annotation_listener']) {
             $loader->load('route_annotation_listener.xml');

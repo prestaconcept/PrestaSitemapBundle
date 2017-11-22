@@ -11,6 +11,7 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap;
 
+use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap\Utils;
 use Presta\SitemapBundle\Exception\Exception;
 
@@ -19,7 +20,7 @@ use Presta\SitemapBundle\Exception\Exception;
  *
  * @author David Epely <depely@prestaconcept.net>
  */
-class UtilsTest extends \PHPUnit_Framework_TestCase
+class UtilsTest extends TestCase
 {
 
     /**

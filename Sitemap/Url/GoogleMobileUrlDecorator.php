@@ -23,16 +23,13 @@ class GoogleMobileUrlDecorator extends UrlDecorator
     /**
      * @var array
      */
-    protected $customNamespaces = array('mobile' => 'http://www.google.com/schemas/sitemap-mobile/1.0');
+    protected $customNamespaces = ['mobile' => 'http://www.google.com/schemas/sitemap-mobile/1.0'];
 
     /**
-     * add mobile element before the closing tag
-     *
-     * @return string
+     * @inheritdoc
      */
-    public function toXml()
+    public function toXml(): string
     {
-        $baseXml = $this->urlDecorated->toXml();
-        return str_replace('</url>', '<mobile:mobile/></url>', $baseXml);
+        return str_replace('</url>', '<mobile:mobile/></url>', $this->urlDecorated->toXml());
     }
 }

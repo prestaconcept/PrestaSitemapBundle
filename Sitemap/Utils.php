@@ -25,13 +25,14 @@ if (!defined('ENT_SUBSTITUTE')) {
 class Utils
 {
     /**
-     * verify method affiliated to given param
+     * Verify method affiliated to given param
      *
+     * @param object $object
      * @param string $name
+     *
      * @return string
-     * @throws Exception
      */
-    public static function getSetMethod($object, $name)
+    public static function getSetMethod($object, string $name): string
     {
         $methodName = 'set' . self::camelize($name);
 
@@ -43,13 +44,15 @@ class Utils
     }
 
     /**
-     * verify method affiliated to given param
+     * Verify method affiliated to given param
      *
+     * @param object $object
      * @param string $name
+     *
      * @return string
      * @throws Exception
      */
-    public static function getGetMethod($object, $name)
+    public static function getGetMethod($object, $name): string
     {
         $methodName = 'get' . self::camelize($name);
 
@@ -63,10 +66,11 @@ class Utils
     /**
      * Render a string as CDATA section
      *
-     * @param str $string
-     * @return str
+     * @param string $string
+     *
+     * @return string
      */
-    public static function render($string)
+    public static function render(string $string): string
     {
         return '<![CDATA[' . $string . ']]>';
     }
@@ -74,20 +78,23 @@ class Utils
     /**
      * Encode special chars
      *
-     * @param type $string
-     * @return type
+     * @param string $string
+     *
+     * @return string
      */
-    public static function encode($string)
+    public static function encode(string $string)
     {
         return htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
     /**
-     * uppercase first letter after a space or underscore
-     * @param type $string
-     * @return type
+     * Uppercase first letter after a space or underscore
+     *
+     * @param string $string
+     *
+     * @return string
      */
-    public static function camelize($string)
+    public static function camelize(string $string)
     {
         return str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
     }

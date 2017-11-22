@@ -48,18 +48,6 @@ class SitemapPopulateEvent extends Event
     }
 
     /**
-     * @deprecated in favor of `Presta\SitemapBundle\Event\SitemapPopulateEvent::getUrlContainer()`
-     *
-     * @return UrlContainerInterface
-     */
-    public function getGenerator()
-    {
-        @trigger_error('getGenerator is deprecated since 1.5. Use getUrlContainer instead', E_USER_DEPRECATED);
-
-        return $this->urlContainer;
-    }
-
-    /**
      * @return UrlContainerInterface
      */
     public function getUrlContainer()
