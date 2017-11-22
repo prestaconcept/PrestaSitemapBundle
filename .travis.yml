@@ -7,15 +7,15 @@ php:
 matrix:
     include:
         - php: 7.0
-          env: SYMFONY_VERSION=3.4.*@beta SYMFONY_DEPRECATIONS_HELPER=strict
+          env: SYMFONY_VERSION=3.4.*@beta
         - php: 7.1
-          env: SYMFONY_VERSION=3.4.*@beta SYMFONY_DEPRECATIONS_HELPER=strict
+          env: SYMFONY_VERSION=3.4.*@beta
         - php: 7.1
-          env: SYMFONY_VERSION=4.0.*@beta SYMFONY_DEPRECATIONS_HELPER=strict
+          env: SYMFONY_VERSION=4.0.*@beta
 
 env:
     global:
-        - SYMFONY_DEPRECATIONS_HELPER=weak
+        - SYMFONY_DEPRECATIONS_HELPER=strict
 
 sudo: false
 
@@ -32,7 +32,7 @@ before_install:
 install: if [ "$PHPCS" != "yes" ]; then composer update --prefer-dist; fi
 
 script:
-    - if [ "$PHPCS" != "yes" ]; then phpunit --coverage-text; fi
+    - if [ "$PHPCS" != "yes" ]; then vendor/bin/phpunit --coverage-text; fi
     - if [ "$PHPCS" = "yes" ]; then phpcs --ignore=/vendor/*,/Tests/app/* --extensions=php --encoding=utf-8 --standard=PSR2 -np .; fi
 
 notifications:
