@@ -157,7 +157,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @return string|null
      */
-    public function getAccess(): ?string
+    public function getAccess()
     {
         return $this->access;
     }
@@ -288,7 +288,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @return string|null
      */
-    public function getGeoLocations(): ?string
+    public function getGeoLocations()
     {
         return $this->geoLocations;
     }

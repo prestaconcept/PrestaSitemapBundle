@@ -49,7 +49,7 @@ class Urlset extends XmlConstraint
     public function __construct(string $loc, \DateTime $lastmod = null)
     {
         $this->loc = $loc;
-        $this->lastmod = $lastmod ? $lastmod : new \DateTime();
+        $this->lastmod = $lastmod ?: new \DateTime();
     }
 
     /**

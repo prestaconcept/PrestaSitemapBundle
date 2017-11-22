@@ -105,7 +105,7 @@ class UrlConcrete implements Url
     /**
      * @return DateTime|null
      */
-    public function getLastmod(): ?DateTime
+    public function getLastmod()
     {
         return $this->lastmod;
     }
@@ -148,7 +148,7 @@ class UrlConcrete implements Url
      *
      * @return string|null
      */
-    public function getChangefreq(): ?string
+    public function getChangefreq()
     {
         return $this->changefreq;
     }
@@ -183,7 +183,7 @@ class UrlConcrete implements Url
     /**
      * @return float|null
      */
-    public function getPriority(): ?float
+    public function getPriority()
     {
         return $this->priority;
     }

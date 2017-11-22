@@ -94,7 +94,7 @@ class GoogleImage
      *
      * @return GoogleImage
      */
-    public function setCaption(?string $caption): GoogleImage
+    public function setCaption($caption): GoogleImage
     {
         $this->caption = $caption;
 
@@ -104,7 +104,7 @@ class GoogleImage
     /**
      * @return null|string
      */
-    public function getCaption(): ?string
+    public function getCaption()
     {
         return $this->caption;
     }
@@ -114,7 +114,7 @@ class GoogleImage
      *
      * @return GoogleImage
      */
-    public function setGeoLocation(?string $geo_location): GoogleImage
+    public function setGeoLocation($geo_location): GoogleImage
     {
         $this->geo_location = $geo_location;
 
@@ -124,7 +124,7 @@ class GoogleImage
     /**
      * @return null|string
      */
-    public function getGeoLocation(): ?string
+    public function getGeoLocation()
     {
         return $this->geo_location;
     }
@@ -134,7 +134,7 @@ class GoogleImage
      *
      * @return GoogleImage
      */
-    public function setTitle(?string $title): GoogleImage
+    public function setTitle($title): GoogleImage
     {
         $this->title = $title;
 
@@ -144,7 +144,7 @@ class GoogleImage
     /**
      * @return null|string
      */
-    public function getTitle(): ?string
+    public function getTitle()
     {
         return $this->title;
     }
@@ -154,7 +154,7 @@ class GoogleImage
      *
      * @return GoogleImage
      */
-    public function setLicense(?string $license): GoogleImage
+    public function setLicense($license): GoogleImage
     {
         $this->license = $license;
 
@@ -164,7 +164,7 @@ class GoogleImage
     /**
      * @return null|string
      */
-    public function getLicense(): ?string
+    public function getLicense()
     {
         return $this->license;
     }

@@ -17,7 +17,7 @@ use Presta\SitemapBundle\Sitemap\Utils;
 /**
  * Help to generate video url
  *
- * @see guidelines at http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472
+ * @see    guidelines at http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472
  *
  * @author David Epely <depely@prestaconcept.net>
  */
@@ -78,12 +78,14 @@ class GoogleVideoUrlDecorator extends UrlDecorator
 
     /**
      * allow google to embed video in search results
+     *
      * @var string
      */
     protected $player_loc_allow_embed;
 
     /**
      * user defined string for flashvar parameters in embed tag (e.g. autoplay="ap=1")
+     *
      * @var string
      */
     protected $player_loc_autoplay;
@@ -175,12 +177,14 @@ class GoogleVideoUrlDecorator extends UrlDecorator
 
     /**
      * multiple prices can be added, see self::addPrice()
+     *
      * @var array
      */
     protected $prices = [];
 
     /**
      * multiple tags can be added, see self::addTag()
+     *
      * @var array
      */
     protected $tags = [];
@@ -297,7 +301,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @return string|null
      */
-    public function getPlayerLoc(): ?string
+    public function getPlayerLoc()
     {
         return $this->player_loc;
     }
@@ -616,7 +620,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @return null|string
      */
-    public function getPlatformRelationship(): ?string
+    public function getPlatformRelationship()
     {
         return $this->platform_relationship;
     }
@@ -652,7 +656,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @return null|string
      */
-    public function getContentLoc(): ?string
+    public function getContentLoc()
     {
         return $this->content_loc;
     }
@@ -660,7 +664,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @return int|null
      */
-    public function getDuration(): ?int
+    public function getDuration()
     {
         return $this->duration;
     }
@@ -668,7 +672,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @return \DateTime|null
      */
-    public function getExpirationDate(): ?\DateTime
+    public function getExpirationDate()
     {
         return $this->expiration_date;
     }
@@ -676,7 +680,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @return int|null
      */
-    public function getRating(): ?int
+    public function getRating()
     {
         return $this->rating;
     }
@@ -684,7 +688,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @return int|null
      */
-    public function getViewCount(): ?int
+    public function getViewCount()
     {
         return $this->view_count;
     }
@@ -692,7 +696,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @return \DateTime|null
      */
-    public function getPublicationDate(): ?\DateTime
+    public function getPublicationDate()
     {
         return $this->publication_date;
     }
@@ -700,7 +704,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @return null|string
      */
-    public function getFamilyFriendly(): ?string
+    public function getFamilyFriendly()
     {
         return $this->family_friendly;
     }
@@ -708,7 +712,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @return null|string
      */
-    public function getCategory(): ?string
+    public function getCategory()
     {
         return $this->category;
     }
@@ -716,7 +720,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @return null|string
      */
-    public function getGalleryLoc(): ?string
+    public function getGalleryLoc()
     {
         return $this->gallery_loc;
     }
@@ -724,7 +728,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @return null|string
      */
-    public function getGalleryLocTitle(): ?string
+    public function getGalleryLocTitle()
     {
         return $this->gallery_loc_title;
     }
@@ -732,7 +736,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @return null|string
      */
-    public function getRequiresSubscription(): ?string
+    public function getRequiresSubscription()
     {
         return $this->requires_subscription;
     }
@@ -740,7 +744,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @return null|string
      */
-    public function getUploader(): ?string
+    public function getUploader()
     {
         return $this->uploader;
     }
@@ -748,7 +752,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @return null|string
      */
-    public function getUploaderInfo(): ?string
+    public function getUploaderInfo()
     {
         return $this->uploader_info;
     }
@@ -756,7 +760,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @return string|null
      */
-    public function getLive(): ?string
+    public function getLive()
     {
         return $this->live;
     }
@@ -771,8 +775,12 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      *
      * @return GoogleVideoUrlDecorator
      */
-    public function addPrice(float $amount, string $currency, string $type = null, string $resolution = null)
-    {
+    public function addPrice(
+        float $amount,
+        string $currency,
+        string $type = null,
+        string $resolution = null
+    ): GoogleVideoUrlDecorator {
         $this->prices[] = [
             'amount' => $amount,
             'currency' => $currency,
@@ -799,7 +807,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * @return GoogleVideoUrlDecorator
      * @throws Exception\GoogleVideoUrlTagException
      */
-    public function addTag(string $tag)
+    public function addTag(string $tag): GoogleVideoUrlDecorator
     {
         if (count($this->tags) >= self::TAG_ITEMS_LIMIT) {
             throw new Exception\GoogleVideoUrlTagException(
@@ -815,7 +823,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @return array
      */
-    public function getTags()
+    public function getTags(): array
     {
         return $this->tags;
     }

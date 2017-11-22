@@ -86,7 +86,7 @@ class Generator extends AbstractGenerator implements GeneratorInterface
     /**
      * @inheritdoc
      */
-    public function fetch(string $name): ?XmlConstraint
+    public function fetch(string $name)
     {
         if ($this->cache && $this->cache->contains($name)) {
             return $this->cache->fetch($name);
