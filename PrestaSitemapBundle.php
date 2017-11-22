@@ -12,9 +12,6 @@
 namespace Presta\SitemapBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Compiler\PassConfig;
-use Presta\SitemapBundle\DependencyInjection\Compiler\AddSitemapListenersPass;
 
 /**
  * Bundle that provides tools to render application sitemap according to
@@ -25,11 +22,4 @@ use Presta\SitemapBundle\DependencyInjection\Compiler\AddSitemapListenersPass;
  */
 class PrestaSitemapBundle extends Bundle
 {
-    /**
-     * @inheritdoc
-     */
-    public function build(ContainerBuilder $container)
-    {
-        $container->addCompilerPass(new AddSitemapListenersPass(), PassConfig::TYPE_OPTIMIZE);
-    }
 }

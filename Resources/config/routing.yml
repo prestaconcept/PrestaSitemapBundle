@@ -1,11 +1,11 @@
 PrestaSitemapBundle_index:
     path:     "/%presta_sitemap.sitemap_file_prefix%.{_format}"
-    defaults: { _controller: PrestaSitemapBundle:Sitemap:index }
+    defaults: { _controller: "presta_sitemap.controller:root" }
     requirements:
         _format: xml
 
 PrestaSitemapBundle_section:
     path:     "/%presta_sitemap.sitemap_file_prefix%.{name}.{_format}"
-    defaults: { _controller: PrestaSitemapBundle:Sitemap:section }
+    defaults: { _controller: "presta_sitemap.controller:section" }
     requirements:
         _format: xml

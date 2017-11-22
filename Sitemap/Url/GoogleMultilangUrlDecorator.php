@@ -15,7 +15,8 @@ use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
  * Decorate w/ google alternate language url guidelines
- * @see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=2620865
+ *
+ * @see    http://support.google.com/webmasters/bin/answer.py?hl=en&answer=2620865
  *
  * @author David Epely <depely@prestaconcept.net>
  */
@@ -26,7 +27,7 @@ class GoogleMultilangUrlDecorator extends UrlDecorator
     /**
      * @var array
      */
-    protected $customNamespaces = array('xhtml' => 'http://www.w3.org/1999/xhtml');
+    protected $customNamespaces = ['xhtml' => 'http://www.w3.org/1999/xhtml'];
 
     /**
      * @var string
@@ -36,43 +37,48 @@ class GoogleMultilangUrlDecorator extends UrlDecorator
     /**
      * add an alternative language to the url
      *
-     * @param string $href - valid url of the translated page
-     * @param string $hreflang - valid language code @see http://www.w3.org/TR/xhtml-modularization/abstraction.html#dt_LanguageCode
-     * @param string $rel (default is alternate) - valid link type @see http://www.w3.org/TR/xhtml-modularization/abstraction.html#dt_LinkTypes
+     * @param string      $href     Valid url of the translated page
+     * @param string      $hreflang Valid language code @see
+     *                              http://www.w3.org/TR/xhtml-modularization/abstraction.html#dt_LanguageCode
+     * @param string|null $rel      (default is alternate) - valid link type @see
+     *                              http://www.w3.org/TR/xhtml-modularization/abstraction.html#dt_LinkTypes
+     *
+     * @return GoogleMultilangUrlDecorator
      */
-    public function addLink($href, $hreflang, $rel = null)
+    public function addLink(string $href, string $hreflang, string $rel = null): GoogleMultilangUrlDecorator
     {
         $this->linkXml .= $this->generateLinkXml($href, $hreflang, $rel);
+
         return $this;
     }
 
     /**
-     * @param string $href
-     * @param string $hreflang
-     * @param string $rel
+     * @param string      $href
+     * @param string      $hreflang
+     * @param string|null $rel
+     *
      * @return string
      */
-    protected function generateLinkXml($href, $hreflang, $rel = null)
+    protected function generateLinkXml(string $href, string $hreflang, string $rel = null)
     {
         if (null == $rel) {
             $rel = self::REL_ALTERNATE;
         }
 
         $xml = '<xhtml:link rel="' . $rel
-                . '" hreflang="' . $hreflang
-                . '" href="' . Utils::encode($href) . '" />';
+            . '" hreflang="' . $hreflang
+            . '" href="' . Utils::encode($href) . '" />';
 
         return $xml;
     }
 
     /**
-     * add link elements before the closing tag
-     *
-     * @return string
+     * @inheritdoc
      */
-    public function toXml()
+    public function toXml(): string
     {
         $baseXml = $this->urlDecorated->toXml();
+
         return str_replace('</url>', $this->linkXml . '</url>', $baseXml);
     }
 }

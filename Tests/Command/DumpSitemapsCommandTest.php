@@ -17,11 +17,12 @@ use Presta\SitemapBundle\Sitemap\Url\GoogleVideoUrlDecorator;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Alex Vasilenko
@@ -33,16 +34,19 @@ class DumpSitemapsCommandTest extends WebTestCase
      */
     private $container;
 
-    private $fixturesDir;
+    private static $fixturesDir;
 
-    private $webDir;
+    private static $webDir;
+
+    public static function setUpBeforeClass()
+    {
+        self::$fixturesDir = realpath(__DIR__ . '/../fixtures');
+        self::$webDir = realpath(__DIR__ . '/../web');
+    }
 
     protected function setUp()
     {
-        $this->fixturesDir = realpath(__DIR__ . '/../fixtures');
-        $this->webDir = realpath(__DIR__ . '/../web');
-
-        self::createClient();
+        self::bootKernel(['debug' => false]);
         $this->container = self::$kernel->getContainer();
         $router = $this->container->get('router');
         /* @var $router RouterInterface */
@@ -53,13 +57,13 @@ class DumpSitemapsCommandTest extends WebTestCase
             ->addListener(
                 SitemapPopulateEvent::ON_SITEMAP_POPULATE,
                 function (SitemapPopulateEvent $event) use ($router) {
-                    $base_url   = $router->generate('PrestaDemoBundle_homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+                    $base_url = $router->generate('PrestaDemoBundle_homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
                     $urlVideo = new GoogleVideoUrlDecorator(
                         new UrlConcrete($base_url . 'page_video1/'),
                         $base_url . 'page_video1/thumbnail_loc?a=b&b=c',
                         'Title & spécial chars',
                         'The description & spécial chars',
-                        array('content_loc' => $base_url . 'page_video1/content?format=mov&a=b')
+                        ['content_loc' => $base_url . 'page_video1/content?format=mov&a=b']
                     );
 
                     $urlVideo
@@ -74,47 +78,47 @@ class DumpSitemapsCommandTest extends WebTestCase
     protected function tearDown()
     {
         parent::tearDown();
-        foreach (glob($this->webDir . '/*{.xml,.xml.gz}', GLOB_BRACE) as $file) {
+        foreach (glob(self::$webDir . '/*{.xml,.xml.gz}', GLOB_BRACE) as $file) {
             unlink($file);
         }
     }
 
     public function testSitemapDumpWithGzip()
     {
-        $res = $this->executeDumpWithOptions(array('target' => $this->webDir, '--gzip' => true));
+        $res = $this->executeDumpWithOptions(['target' => self::$webDir, '--gzip' => true]);
         $this->assertEquals(0, $res, 'Command exited with error');
 
-        $xml = gzinflate(substr(file_get_contents($this->webDir . '/sitemap.video.xml.gz'), 10, -8));
-        $this->assertXmlStringEqualsXmlFile($this->fixturesDir . '/sitemap.video.xml', $xml);
+        $xml = gzinflate(substr(file_get_contents(self::$webDir . '/sitemap.video.xml.gz'), 10, -8));
+        $this->assertXmlStringEqualsXmlFile(self::$fixturesDir . '/sitemap.video.xml', $xml);
 
-        $expectedSitemaps = array('http://sitemap.php54.local/sitemap.video.xml.gz');
-        $this->assertSitemapIndexEquals($this->webDir . '/sitemap.xml', $expectedSitemaps);
+        $expectedSitemaps = ['http://sitemap.php54.local/sitemap.video.xml.gz'];
+        $this->assertSitemapIndexEquals(self::$webDir . '/sitemap.xml', $expectedSitemaps);
     }
 
     public function testSitemapDumpUpdateExistingIndex()
     {
-        copy($this->fixturesDir . '/sitemap.xml', $this->webDir . '/sitemap.xml');
+        copy(self::$fixturesDir . '/sitemap.xml', self::$webDir . '/sitemap.xml');
 
         $this->executeDumpWithOptions(
-            array(
-                'target' => $this->webDir,
+            [
+                'target' => self::$webDir,
                 '--section' => 'video',
-                '--gzip' => true
-            )
+                '--gzip' => true,
+            ]
         );
 
-        $expectedSitemaps = array(
+        $expectedSitemaps = [
             'http://sitemap.php54.local/sitemap.audio.xml',
-            'http://sitemap.php54.local/sitemap.video.xml.gz'
-        );
+            'http://sitemap.php54.local/sitemap.video.xml.gz',
+        ];
 
-        $this->assertSitemapIndexEquals($this->webDir . '/sitemap.xml', $expectedSitemaps);
+        $this->assertSitemapIndexEquals(self::$webDir . '/sitemap.xml', $expectedSitemaps);
     }
 
     private function assertSitemapIndexEquals($sitemapFile, array $expectedSitemaps)
     {
         $xml = simplexml_load_file($sitemapFile);
-        $sitemaps = array();
+        $sitemaps = [];
         foreach ($xml->sitemap as $sitemap) {
             $sitemaps[] = (string)$sitemap->loc;
         }
@@ -123,15 +127,15 @@ class DumpSitemapsCommandTest extends WebTestCase
         $this->assertEquals($expectedSitemaps, $sitemaps);
     }
 
-    private function executeDumpWithOptions(array $input = array())
+    private function executeDumpWithOptions(array $input = [])
     {
         $application = new Application(self::$kernel);
-        $application->add(new DumpSitemapsCommand());
+        $application->add($this->container->get('presta_sitemap.dump_command'));
 
         $command = $application->find('presta:sitemaps:dump');
         $commandTester = new CommandTester($command);
-        $input = array_merge(array('command' => $command->getName()), $input);
+        $input = array_merge(['command' => $command->getName()], $input);
 
-        return $commandTester->execute($input);
+        return $commandTester->execute($input, ['verbosity' => OutputInterface::VERBOSITY_QUIET]);
     }
 }

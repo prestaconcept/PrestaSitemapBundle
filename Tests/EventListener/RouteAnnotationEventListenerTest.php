@@ -11,6 +11,7 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap;
 
+use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\EventListener\RouteAnnotationEventListener;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
@@ -19,22 +20,23 @@ use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 *
 * @author David Epely <depely@prestaconcept.net>
 */
-class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
+class RouteAnnotationEventListenerTest extends TestCase
 {
     /**
      * test no "sitemap" annotation
      */
     public function testNoAnnotation()
     {
-        $this->assertEquals(null, $this->getListener()->getOptions('route1', $this->getRoute(null)), 'sitemap = null returns null');
+        $this->assertEquals([], $this->getListener()->getOptions('route1', $this->getRoute(null)), 'sitemap = null returns []');
     }
 
     /**
      * test "sitemap"="anything" annotation
+     *
+     * @expectedException \InvalidArgumentException
      */
     public function testInvalidSitemapArbitrary()
     {
-        $this->setExpectedException('InvalidArgumentException');
         $this->assertEquals(-1, $this->getListener()->getOptions('route1', $this->getRoute('anything')), 'sitemap = "anything" throws an exception');
     }
 
@@ -43,7 +45,7 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSitemapFalse()
     {
-        $this->assertNull($this->getListener()->getOptions('route1', $this->getRoute(false)), 'sitemap = false returns null');
+        $this->assertEquals([], $this->getListener()->getOptions('route1', $this->getRoute(false)), 'sitemap = false returns []');
     }
 
     /**
@@ -89,10 +91,11 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * test "sitemap = {"lastmod" = "unknown"}
+     *
+     * @expectedException \InvalidArgumentException
      */
     public function testInvalidLastmod()
     {
-        $this->setExpectedException('InvalidArgumentException');
         $this->getListener()->getOptions('route1', $this->getRoute(array('lastmod'=>'unknown')));
     }
 
@@ -115,30 +118,12 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Symfony\Component\Routing\RouterInterface
-     */
-    private function getRouter()
-    {
-        $router = $this->getMockBuilder('Symfony\Component\Routing\RouterInterface')
-        ->getMock();
-
-        return $router;
-    }
-
-    /**
      * @return RouteAnnotationEventListener
      */
     private function getListener()
     {
-        $listener = new RouteAnnotationEventListener(
-            $this->getRouter(),
-            array(
-                'priority' => 1,
-                'changefreq' => UrlConcrete::CHANGEFREQ_DAILY,
-                'lastmod' => 'now',
-            )
-        );
+        $router = $this->getMockBuilder('Symfony\Component\Routing\RouterInterface')->getMock();
 
-        return $listener;
+        return new RouteAnnotationEventListener($router);
     }
 }

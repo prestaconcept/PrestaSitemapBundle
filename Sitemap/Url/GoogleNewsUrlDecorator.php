@@ -30,59 +30,59 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     const DATE_FORMAT_DATE_TIME = \DateTime::W3C;
 
     /**
-     * @var array $customNamespaces
+     * @var array
      */
-    protected $customNamespaces = array('news' => 'http://www.google.com/schemas/sitemap-news/0.9');
+    protected $customNamespaces = ['news' => 'http://www.google.com/schemas/sitemap-news/0.9'];
 
     /**
-     * @var string $publicationName
+     * @var string
      */
     private $publicationName;
 
     /**
-     * @var string $publicationLanguage
+     * @var string
      */
     private $publicationLanguage;
 
     /**
-     * @var string $access
+     * @var string|null
      */
     private $access;
 
     /**
-     * @var array $genres
+     * @var array
      */
-    private $genres;
+    private $genres = [];
 
     /**
-     * @var \DateTime $publicationDate
+     * @var \DateTime
      */
     private $publicationDate;
 
     /**
-     * @var string $publicationDateFormat
+     * @var string
      */
     private $publicationDateFormat = self::DATE_FORMAT_DATE_TIME;
 
     /**
-     * @var string $title
+     * @var string
      */
     private $title;
 
     /**
-     * @var string $geoLocations
+     * @var string|null
      */
     private $geoLocations;
 
     /**
-     * @var array $keywords
+     * @var array
      */
-    private $keywords = array();
+    private $keywords = [];
 
     /**
-     * @var array $stockTickers
+     * @var array
      */
-    private $stockTickers = array();
+    private $stockTickers = [];
 
     /**
      * @param Url       $urlDecorated
@@ -93,13 +93,21 @@ class GoogleNewsUrlDecorator extends UrlDecorator
      *
      * @throws Exception\GoogleNewsUrlException
      */
-    public function __construct(Url $urlDecorated, $publicationName, $publicationLanguage, \DateTime $publicationDate, $title)
-    {
+    public function __construct(
+        Url $urlDecorated,
+        string $publicationName,
+        string $publicationLanguage,
+        \DateTime $publicationDate,
+        string $title
+    ) {
         parent::__construct($urlDecorated);
 
         $this->publicationName = $publicationName;
         if (strlen($publicationLanguage) > 5) {
-            throw new Exception\GoogleNewsUrlException('Use a 2 oder 3 character long ISO 639 language code. Except for chinese use zh-cn or zh-tw. See https://support.google.com/webmasters/answer/74288?hl=en&ref_topic=10078');
+            throw new Exception\GoogleNewsUrlException(
+                'Use a 2 oder 3 character long ISO 639 language code. Except for chinese use zh-cn or zh-tw.' .
+                'See https://support.google.com/webmasters/answer/74288?hl=en&ref_topic=10078'
+            );
         }
         $this->publicationLanguage = $publicationLanguage;
         $this->publicationDate = $publicationDate;
@@ -109,37 +117,45 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @return string
      */
-    public function getPublicationName()
+    public function getPublicationName(): string
     {
         return $this->publicationName;
     }
 
     /**
      * @param string $publicationName
+     *
+     * @return GoogleNewsUrlDecorator
      */
-    public function setPublicationName($publicationName)
+    public function setPublicationName(string $publicationName): GoogleNewsUrlDecorator
     {
         $this->publicationName = $publicationName;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getPublicationLanguage()
+    public function getPublicationLanguage(): string
     {
         return $this->publicationLanguage;
     }
 
     /**
      * @param string $publicationLanguage
+     *
+     * @return GoogleNewsUrlDecorator
      */
-    public function setPublicationLanguage($publicationLanguage)
+    public function setPublicationLanguage(string $publicationLanguage): GoogleNewsUrlDecorator
     {
         $this->publicationLanguage = $publicationLanguage;
+
+        return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getAccess()
     {
@@ -149,60 +165,80 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @param string $access
      *
+     * @return GoogleNewsUrlDecorator
      * @throws Exception\GoogleNewsUrlException
      */
-    public function setAccess($access)
+    public function setAccess(string $access): GoogleNewsUrlDecorator
     {
-        if ($access && !in_array($access, array(self::ACCESS_REGISTRATION, self::ACCESS_SUBSCRIPTION))) {
-            throw new Exception\GoogleNewsUrlException(sprintf('The parameter %s must be a valid access. See https://support.google.com/webmasters/answer/74288?hl=en&ref_topic=10078', $access));
+        if ($access && !in_array($access, [self::ACCESS_REGISTRATION, self::ACCESS_SUBSCRIPTION])) {
+            throw new Exception\GoogleNewsUrlException(
+                sprintf(
+                    'The parameter %s must be a valid access. See https://support.google.com/webmasters/answer/74288?hl=en&ref_topic=10078',
+                    $access
+                )
+            );
         }
         $this->access = $access;
+
+        return $this;
     }
 
     /**
      * @return array
      */
-    public function getGenres()
+    public function getGenres(): array
     {
         return $this->genres;
     }
 
     /**
      * @param array $genres
+     *
+     * @return GoogleNewsUrlDecorator
      */
-    public function setGenres($genres)
+    public function setGenres(array $genres): GoogleNewsUrlDecorator
     {
         $this->genres = $genres;
+
+        return $this;
     }
 
     /**
      * @param string $genre
+     *
+     * @return GoogleNewsUrlDecorator
      */
-    public function addGenre($genre)
+    public function addGenre(string $genre): GoogleNewsUrlDecorator
     {
         $this->genres[] = $genre;
+
+        return $this;
     }
 
     /**
      * @return \DateTime
      */
-    public function getPublicationDate()
+    public function getPublicationDate(): \DateTime
     {
         return $this->publicationDate;
     }
 
     /**
      * @param \DateTime $publicationDate
+     *
+     * @return GoogleNewsUrlDecorator
      */
-    public function setPublicationDate($publicationDate)
+    public function setPublicationDate(\DateTime $publicationDate): GoogleNewsUrlDecorator
     {
         $this->publicationDate = $publicationDate;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getPublicationDateFormat()
+    public function getPublicationDateFormat(): string
     {
         return $this->publicationDateFormat;
     }
@@ -210,34 +246,47 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @param string $publicationDateFormat
      *
+     * @return GoogleNewsUrlDecorator
      * @throws Exception\GoogleNewsUrlException
      */
-    public function setPublicationDateFormat($publicationDateFormat)
+    public function setPublicationDateFormat(string $publicationDateFormat): GoogleNewsUrlDecorator
     {
-        if ($publicationDateFormat && !in_array($publicationDateFormat, array(self::DATE_FORMAT_DATE, self::DATE_FORMAT_DATE_TIME))) {
-            throw new Exception\GoogleNewsUrlException(sprintf('The parameter %s must be a valid date format. See https://support.google.com/webmasters/answer/74288?hl=en', $publicationDateFormat));
+        $formats = [self::DATE_FORMAT_DATE, self::DATE_FORMAT_DATE_TIME];
+        if ($publicationDateFormat && !in_array($publicationDateFormat, $formats)) {
+            throw new Exception\GoogleNewsUrlException(
+                sprintf(
+                    'The parameter %s must be a valid date format. See https://support.google.com/webmasters/answer/74288?hl=en',
+                    $publicationDateFormat
+                )
+            );
         }
         $this->publicationDateFormat = $publicationDateFormat;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
     /**
      * @param string $title
+     *
+     * @return GoogleNewsUrlDecorator
      */
-    public function setTitle($title)
+    public function setTitle(string $title): GoogleNewsUrlDecorator
     {
         $this->title = $title;
+
+        return $this;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getGeoLocations()
     {
@@ -247,45 +296,61 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @param string $geoLocations
      *
+     * @return GoogleNewsUrlDecorator
      * @throws Exception\GoogleNewsUrlException
      */
-    public function setGeoLocations($geoLocations)
+    public function setGeoLocations(string $geoLocations): GoogleNewsUrlDecorator
     {
         $locationParts = explode(', ', $geoLocations);
         if (count($locationParts) < 2) {
-            throw new Exception\GoogleNewsUrlException(sprintf('The parameter %s must be a valid geo_location. See https://support.google.com/news/publisher/answer/1662970?hl=en', $geoLocations));
+            throw new Exception\GoogleNewsUrlException(
+                sprintf(
+                    'The parameter %s must be a valid geo_location. See https://support.google.com/news/publisher/answer/1662970?hl=en',
+                    $geoLocations
+                )
+            );
         }
         $this->geoLocations = $geoLocations;
+
+        return $this;
     }
 
     /**
      * @return array
      */
-    public function getKeywords()
+    public function getKeywords(): array
     {
         return $this->keywords;
     }
 
     /**
      * @param array $keywords
+     *
+     * @return GoogleNewsUrlDecorator
      */
-    public function setKeywords($keywords)
+    public function setKeywords(array $keywords): GoogleNewsUrlDecorator
     {
         $this->keywords = $keywords;
+
+        return $this;
     }
 
     /**
      * @param string $keyword
+     *
+     * @return GoogleNewsUrlDecorator
      */
-    public function addKeyword($keyword)
+    public function addKeyword(string $keyword): GoogleNewsUrlDecorator
     {
         $this->keywords[] = $keyword;
+
+        return $this;
     }
 
     /**
      * @return array
      */
-    public function getStockTickers()
+    public function getStockTickers(): array
     {
         return $this->stockTickers;
     }
@@ -293,33 +358,43 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @param array $stockTickers
      *
+     * @return GoogleNewsUrlDecorator
      * @throws Exception\GoogleNewsUrlException If the stock ticker limit is reached
      */
-    public function setStockTickers($stockTickers)
+    public function setStockTickers(array $stockTickers): GoogleNewsUrlDecorator
     {
         if ($stockTickers && count($stockTickers) > 5) {
-            throw new Exception\GoogleNewsUrlException('The stock tickers are limited to 5. See https://support.google.com/webmasters/answer/74288?hl=en&ref_topic=10078');
+            throw new Exception\GoogleNewsUrlException(
+                'The stock tickers are limited to 5. See https://support.google.com/webmasters/answer/74288?hl=en&ref_topic=10078'
+            );
         }
         $this->stockTickers = $stockTickers;
+
+        return $this;
     }
 
     /**
      * @param string $stockTicker
      *
+     * @return GoogleNewsUrlDecorator
      * @throws Exception\GoogleNewsUrlException If the stock ticker limit is reached
      */
-    public function addStockTicker($stockTicker)
+    public function addStockTicker(string $stockTicker): GoogleNewsUrlDecorator
     {
         if ($this->stockTickers && count($this->stockTickers) == 5) {
-            throw new Exception\GoogleNewsUrlException('The stock tickers are limited to 5. See https://support.google.com/webmasters/answer/74288?hl=en&ref_topic=10078');
+            throw new Exception\GoogleNewsUrlException(
+                'The stock tickers are limited to 5. See https://support.google.com/webmasters/answer/74288?hl=en&ref_topic=10078'
+            );
         }
         $this->stockTickers[] = $stockTicker;
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function toXml()
+    public function toXml(): string
     {
         $newsXml = '<news:news>';
 
@@ -336,7 +411,9 @@ class GoogleNewsUrlDecorator extends UrlDecorator
             $newsXml .= '<news:genres>' . implode(', ', $this->getGenres()) . '</news:genres>';
         }
 
-        $newsXml .= '<news:publication_date>' . $this->getPublicationDate()->format($this->getPublicationDateFormat()) . '</news:publication_date>';
+        $newsXml .= '<news:publication_date>' . $this->getPublicationDate()->format(
+                $this->getPublicationDateFormat()
+            ) . '</news:publication_date>';
 
         $newsXml .= '<news:title>' . Utils::render($this->getTitle()) . '</news:title>';
 

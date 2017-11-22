@@ -11,15 +11,16 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap\Url;
 
+use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap;
 
 /**
  * @author David Epely <depely@prestaconcept.net>
  */
-class GoogleImageTest extends \PHPUnit_Framework_TestCase
+class GoogleImageTest extends TestCase
 {
     /**
-     * @dataProvider testToXmlProvider
+     * @dataProvider xmlProvider
      */
     public function testToXml($expectedXml, $loc, $caption = null, $geoLocalisation = null, $title = null, $license = null)
     {
@@ -32,7 +33,7 @@ class GoogleImageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedXml, $image->toXML());
     }
 
-    public function testToXmlProvider()
+    public function xmlProvider()
     {
         return array(
             array('<image:image><image:loc>http://acme.com/logo.jpg</image:loc><image:caption><![CDATA[this is about logo]]></image:caption><image:geo_location><![CDATA[Lyon, France]]></image:geo_location><image:title><![CDATA[The Acme logo]]></image:title><image:license><![CDATA[WTFPL]]></image:license></image:image>', 'http://acme.com/logo.jpg', 'this is about logo', 'Lyon, France', 'The Acme logo', 'WTFPL'),

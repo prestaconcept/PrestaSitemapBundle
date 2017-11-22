@@ -11,8 +11,7 @@
 
 namespace Presta\SitemapBundle\Service;
 
-use Presta\SitemapBundle\Sitemap\Sitemapindex;
-use Presta\SitemapBundle\Sitemap\Urlset;
+use Presta\SitemapBundle\Sitemap\XmlConstraint;
 
 /**
  * Interface for class that intend to generate a sitemap.
@@ -31,7 +30,7 @@ interface GeneratorInterface extends UrlContainerInterface
      *
      * @param string $name
      *
-     * @return Sitemapindex|Urlset|null
+     * @return XmlConstraint|null
      */
-    public function fetch($name);
+    public function fetch(string $name);
 }

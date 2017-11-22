@@ -12,7 +12,6 @@
 namespace Presta\SitemapBundle\Service;
 
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
-use Presta\SitemapBundle\Sitemap\DumpingUrlset;
 use Presta\SitemapBundle\Sitemap\Sitemapindex;
 use Presta\SitemapBundle\Sitemap\Url\Url;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
@@ -37,9 +36,9 @@ abstract class AbstractGenerator implements UrlContainerInterface
     protected $root;
 
     /**
-     * @var Urlset[]|DumpingUrlset[]
+     * @var Urlset[]
      */
-    protected $urlsets = array();
+    protected $urlsets = [];
 
     /**
      * The maximum number of item generated in a sitemap
@@ -54,24 +53,25 @@ abstract class AbstractGenerator implements UrlContainerInterface
 
     /**
      * @param EventDispatcherInterface $dispatcher
+     * @param int|null                 $itemsBySet
      */
-    public function __construct(EventDispatcherInterface $dispatcher, $itemsBySet = null)
+    public function __construct(EventDispatcherInterface $dispatcher, int $itemsBySet = null)
     {
         $this->dispatcher = $dispatcher;
         // We add one to LIMIT_ITEMS because it was used as an index, not a quantity
         $this->itemsBySet = ($itemsBySet === null) ? Sitemapindex::LIMIT_ITEMS + 1 : $itemsBySet;
 
-        $this->defaults = array(
+        $this->defaults = [
             'priority' => 1,
             'changefreq' => UrlConcrete::CHANGEFREQ_DAILY,
-            'lastmod' => 'now'
-        );
+            'lastmod' => 'now',
+        ];
     }
 
     /**
      * @param array $defaults
      */
-    public function setDefaults($defaults)
+    public function setDefaults(array $defaults)
     {
         $this->defaults = $defaults;
     }
@@ -79,7 +79,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
     /**
      * @inheritdoc
      */
-    public function addUrl(Url $url, $section)
+    public function addUrl(Url $url, string $section)
     {
         $urlset = $this->getUrlset($section);
 
@@ -117,7 +117,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
      *
      * @return Urlset
      */
-    public function getUrlset($name)
+    public function getUrlset(string $name): Urlset
     {
         if (!isset($this->urlsets[$name])) {
             $this->urlsets[$name] = $this->newUrlset($name);
@@ -134,14 +134,14 @@ abstract class AbstractGenerator implements UrlContainerInterface
      *
      * @return Urlset
      */
-    abstract protected function newUrlset($name, \DateTime $lastmod = null);
+    abstract protected function newUrlset(string $name, \DateTime $lastmod = null): Urlset;
 
     /**
      * Dispatches SitemapPopulate Event - the listeners should use it to add their URLs to the sitemap
      *
      * @param string|null $section
      */
-    protected function populate($section = null)
+    protected function populate(string $section = null)
     {
         $event = new SitemapPopulateEvent($this, $section);
         $this->dispatcher->dispatch(SitemapPopulateEvent::ON_SITEMAP_POPULATE, $event);
@@ -150,7 +150,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
     /**
      * @return Sitemapindex
      */
-    protected function getRoot()
+    protected function getRoot(): Sitemapindex
     {
         if (null === $this->root) {
             $this->root = new Sitemapindex();

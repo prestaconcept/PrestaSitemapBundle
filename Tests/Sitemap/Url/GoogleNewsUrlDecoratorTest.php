@@ -11,18 +11,20 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap\Url;
 
+use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Exception\GoogleNewsUrlException;
 use Presta\SitemapBundle\Service\Generator;
 use Presta\SitemapBundle\Sitemap\Url\GoogleNewsUrlDecorator;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Presta\SitemapBundle\Sitemap\Url\Url;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Tests the GoogleNewsUrlDecorator
  *
  * @author Christoph Foehrdes
  */
-class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
+class GoogleNewsUrlDecoratorTest extends TestCase
 {
     /**
      * Tests if the news specific tags can be found.
@@ -224,11 +226,15 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
      */
     private function generateXml(Url $url)
     {
+        $dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $router = $this->getMockBuilder('Symfony\Component\Routing\RouterInterface')->getMock();
+        $router->expects($this->any())
+            ->method('generate')
+            ->with('PrestaSitemapBundle_section', ['name' => 'default', '_format' => 'xml'], UrlGeneratorInterface::ABSOLUTE_URL)
+            ->willReturn('http://site.com/default.xml');
+
         $section = 'default';
-        $generator = new Generator(
-            $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'),
-            $this->getMock('Symfony\Component\Routing\RouterInterface')
-        );
+        $generator = new Generator($dispatcher, $router);
         $generator->addUrl($url, 'default');
 
         return $generator->fetch($section)->toXml();

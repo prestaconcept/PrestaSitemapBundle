@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="./Tests/bootstrap.php" colors="true">
     <php>
-        <server name="KERNEL_DIR" value="Tests/app" />
+        <server name="KERNEL_CLASS" value="AppKernel"/>
     </php>
     <testsuites>
         <testsuite name="PrestaSitemapBundle test suite">

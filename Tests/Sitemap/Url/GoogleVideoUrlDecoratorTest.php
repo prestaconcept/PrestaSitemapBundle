@@ -11,6 +11,7 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap\Url;
 
+use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Presta\SitemapBundle\Sitemap\Url\GoogleVideoUrlDecorator;
@@ -18,7 +19,7 @@ use Presta\SitemapBundle\Sitemap\Url\GoogleVideoUrlDecorator;
 /**
  * @author David Epely <depely@prestaconcept.net>
  */
-class GoogleVideoUrlDecoratorTest extends \PHPUnit_Framework_TestCase
+class GoogleVideoUrlDecoratorTest extends TestCase
 {
     /**
      * @var string

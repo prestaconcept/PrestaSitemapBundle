@@ -23,13 +23,33 @@ use Symfony\Component\HttpFoundation\Response;
 class SitemapController extends Controller
 {
     /**
+     * @var GeneratorInterface
+     */
+    private $generator;
+
+    /**
+     * @var int
+     */
+    private $ttl;
+
+    /**
+     * @param GeneratorInterface $generator
+     * @param int                $ttl
+     */
+    public function __construct(GeneratorInterface $generator, int $ttl)
+    {
+        $this->generator = $generator;
+        $this->ttl = $ttl;
+    }
+
+    /**
      * list sitemaps
      *
      * @return Response
      */
-    public function indexAction()
+    public function root(): Response
     {
-        $sitemapindex = $this->getGenerator()->fetch('root');
+        $sitemapindex = $this->generator->fetch('root');
 
         if (!$sitemapindex) {
             throw $this->createNotFoundException();
@@ -37,7 +57,7 @@ class SitemapController extends Controller
 
         $response = Response::create($sitemapindex->toXml());
         $response->setPublic();
-        $response->setClientTtl($this->getTtl());
+        $response->setClientTtl($this->ttl);
 
         return $response;
     }
@@ -49,9 +69,9 @@ class SitemapController extends Controller
      *
      * @return Response
      */
-    public function sectionAction($name)
+    public function section(string $name): Response
     {
-        $section = $this->getGenerator()->fetch($name);
+        $section = $this->generator->fetch($name);
 
         if (!$section) {
             throw $this->createNotFoundException();
@@ -59,26 +79,8 @@ class SitemapController extends Controller
 
         $response = Response::create($section->toXml());
         $response->setPublic();
-        $response->setClientTtl($this->getTtl());
+        $response->setClientTtl($this->ttl);
 
         return $response;
-    }
-
-    /**
-     * Time to live of the response in seconds
-     *
-     * @return int
-     */
-    protected function getTtl()
-    {
-        return $this->container->getParameter('presta_sitemap.timetolive');
-    }
-
-    /**
-     * @return GeneratorInterface
-     */
-    private function getGenerator()
-    {
-        return $this->get('presta_sitemap.generator');
     }
 }

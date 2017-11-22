@@ -11,38 +11,24 @@
 
 namespace Presta\SitemapBundle\Tests\Controller;
 
-use Presta\SitemapBundle\Controller;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
-use Presta\SitemapBundle\Service\Generator;
 use Presta\SitemapBundle\Sitemap\Url;
+use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class SitemapControllerTest extends WebTestCase
 {
     /**
-     * @var Controller\SitemapController
+     * @var Client
      */
-    private $controller;
+    private $client;
 
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    public function setUp()
+    protected function setUp()
     {
-        //boot appKernel
-        self::createClient();
-        $this->container  = static::$kernel->getContainer();
-
-        //set controller to test
-        $this->controller = new Controller\SitemapController();
-        $this->controller->setContainer($this->container);
-
-        //-------------------
+        $this->client = static::createClient(['debug' => false]);
         // add url to sitemap
-        $this->container->get('event_dispatcher')
+        $container = static::$kernel->getContainer();
+        $container->get('event_dispatcher')
             ->addListener(
                 SitemapPopulateEvent::ON_SITEMAP_POPULATE,
                 function (SitemapPopulateEvent $event) {
@@ -57,26 +43,27 @@ class SitemapControllerTest extends WebTestCase
                     );
                 }
             );
-        //-------------------
     }
 
-    public function testIndexAction()
+    public function testRoot()
     {
-        $response = $this->controller->indexAction();
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
+        $crawler = $this->client->request('GET', '/sitemap.xml');
+
+        $this->assertRegExp('{http://localhost/sitemap.default.xml}', $crawler->html());
     }
 
-    public function testValidSectionAction()
+    public function testDefaultSection()
     {
-        $response = $this->controller->sectionAction('default');
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
+        $crawler = $this->client->request('GET', '/sitemap.default.xml');
+
+        $this->assertRegExp('{http://acme.com/static-page.html}', $crawler->html());
     }
 
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function testNotFoundSectionAction()
+    public function testNotFoundSection()
     {
-        $this->controller->sectionAction('void');
+        $this->client->request('GET', '/sitemap.not-found.xml');
     }
 }

@@ -18,8 +18,15 @@ namespace Presta\SitemapBundle\Sitemap\Url;
  */
 abstract class UrlDecorator implements Url
 {
+    /**
+     * @var Url
+     */
     protected $urlDecorated;
-    protected $customNamespaces = array();
+
+    /**
+     * @var array
+     */
+    protected $customNamespaces = [];
 
     /**
      * @param Url $urlDecorated
@@ -30,9 +37,9 @@ abstract class UrlDecorator implements Url
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
-    public function getCustomNamespaces()
+    public function getCustomNamespaces(): array
     {
         return array_merge($this->urlDecorated->getCustomNamespaces(), $this->customNamespaces);
     }

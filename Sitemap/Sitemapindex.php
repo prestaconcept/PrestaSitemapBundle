@@ -14,12 +14,18 @@ namespace Presta\SitemapBundle\Sitemap;
 /**
  * Representation of sitemap (urlset) list
  *
- * @author  David Epely
+ * @author David Epely
  */
 class Sitemapindex extends XmlConstraint
 {
+    /**
+     * @var string
+     */
     protected $sitemapsXml = '';
 
+    /**
+     * @param Urlset $urlset
+     */
     public function addSitemap(Urlset $urlset)
     {
         if ($this->isFull()) {
@@ -50,13 +56,14 @@ class Sitemapindex extends XmlConstraint
      * Render urlset as sitemap in xml
      *
      * @param Urlset $urlset
+     *
      * @return string
      */
-    protected function getSitemapXml(Urlset $urlset)
+    protected function getSitemapXml(Urlset $urlset): string
     {
         return '<sitemap><loc>' . $urlset->getLoc()
-                . '</loc><lastmod>' . $urlset->getLastmod()->format('c')
-                . '</lastmod></sitemap>';
+            . '</loc><lastmod>' . $urlset->getLastmod()->format('c')
+            . '</lastmod></sitemap>';
     }
 
     /**
@@ -64,7 +71,7 @@ class Sitemapindex extends XmlConstraint
      *
      * @return string
      */
-    protected function getStructureXml()
+    protected function getStructureXml(): string
     {
         $struct = '<?xml version="1.0" encoding="UTF-8"?>';
         $struct .= '<sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"';
@@ -75,12 +82,10 @@ class Sitemapindex extends XmlConstraint
     }
 
     /**
-     * @see parent::toXml()
+     * @inheritdoc
      */
-    public function toXml()
+    public function toXml(): string
     {
-        $xml = $this->getStructureXml();
-
-        return str_replace('SITEMAPS', $this->sitemapsXml, $xml);
+        return str_replace('SITEMAPS', $this->sitemapsXml, $this->getStructureXml());
     }
 }
