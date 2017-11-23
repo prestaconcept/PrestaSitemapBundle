@@ -42,7 +42,7 @@ class DumpSitemapsCommandTest extends WebTestCase
         $this->fixturesDir = realpath(__DIR__ . '/../fixtures');
         $this->webDir = realpath(__DIR__ . '/../web');
 
-        self::bootKernel(['debug' => false]);
+        self::createClient(['debug' => false]);
         $this->container = self::$kernel->getContainer();
         $router = $this->container->get('router');
         /* @var $router RouterInterface */
