@@ -24,7 +24,7 @@ class GeneratorTest extends WebTestCase
 
     public function setUp()
     {
-        self::createClient();
+        self::createClient(['debug' => false]);
         $container  = static::$kernel->getContainer();
 
         $this->generator = new Generator($container->get('event_dispatcher'), $container->get('router'), null, null, 1);
