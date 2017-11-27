@@ -226,8 +226,8 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
     {
         $section = 'default';
         $generator = new Generator(
-            $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface'),
-            $this->getMock('Symfony\Component\Routing\RouterInterface')
+            $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock(),
+            $this->getMockBuilder('Symfony\Component\Routing\RouterInterface')->getMock()
         );
         $generator->addUrl($url, 'default');
 

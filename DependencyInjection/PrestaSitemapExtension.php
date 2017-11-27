@@ -41,7 +41,14 @@ class PrestaSitemapExtension extends Extension
             $loader->load('route_annotation_listener.xml');
         }
 
-        $container->setAlias('presta_sitemap.generator', $config['generator']);
-        $container->setAlias('presta_sitemap.dumper', $config['dumper']);
+        $generator = $container->setAlias('presta_sitemap.generator', $config['generator']);
+        if ($generator !== null) {
+            $generator->setPublic(true); // in Symfony >=3.4.0 aliases are private
+        }
+
+        $dumper = $container->setAlias('presta_sitemap.dumper', $config['dumper']);
+        if ($dumper !== null) {
+            $dumper->setPublic(true); // in Symfony >=3.4.0 aliases are private
+        }
     }
 }

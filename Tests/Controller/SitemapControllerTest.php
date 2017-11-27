@@ -33,7 +33,7 @@ class SitemapControllerTest extends WebTestCase
     public function setUp()
     {
         //boot appKernel
-        self::createClient();
+        self::createClient(['debug' => false]);
         $this->container  = static::$kernel->getContainer();
 
         //set controller to test

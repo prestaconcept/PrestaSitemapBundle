@@ -21,11 +21,11 @@
     },
     "require": {
         "php": ">=5.3.0",
-        "symfony/symfony": "~2.2|~3.0"
+        "symfony/symfony": "~2.2|~3.0|~4.0"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "~2.7|~3.0",
-        "phpunit/phpunit": "4.*"
+        "symfony/phpunit-bridge": "~2.7|~3.0|~4.0",
+        "phpunit/phpunit": "5.*"
     },
     "suggest": {
         "doctrine/doctrine-cache-bundle" : "Allows to store sitemaps in cache"
