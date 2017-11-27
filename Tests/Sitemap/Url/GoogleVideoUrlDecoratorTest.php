@@ -11,9 +11,8 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap\Url;
 
-use Presta\SitemapBundle\Sitemap;
-use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Presta\SitemapBundle\Sitemap\Url\GoogleVideoUrlDecorator;
+use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
 /**
  * @author David Epely <depely@prestaconcept.net>

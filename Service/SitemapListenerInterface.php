@@ -11,7 +11,7 @@
 
 namespace Presta\SitemapBundle\Service;
 
-use \Presta\SitemapBundle\Event\SitemapPopulateEvent;
+use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 
 /**
  * Inteface for sitemap event listeners

@@ -14,8 +14,8 @@ namespace Presta\SitemapBundle\Test\Sitemap\Url;
 use Presta\SitemapBundle\Exception\GoogleNewsUrlException;
 use Presta\SitemapBundle\Service\Generator;
 use Presta\SitemapBundle\Sitemap\Url\GoogleNewsUrlDecorator;
-use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Presta\SitemapBundle\Sitemap\Url\Url;
+use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
 /**
  * Tests the GoogleNewsUrlDecorator

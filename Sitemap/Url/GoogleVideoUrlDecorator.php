@@ -769,12 +769,12 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      */
     public function addPrice($amount, $currency, $type = null, $resolution = null)
     {
-        $this->prices[] = [
+        $this->prices[] = array(
             'amount' => $amount,
             'currency' => $currency,
             'type' => $type,
             'resolution' => $resolution,
-        ];
+        );
 
         return $this;
     }
