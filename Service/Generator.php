@@ -13,10 +13,8 @@ namespace Presta\SitemapBundle\Service;
 
 use Doctrine\Common\Cache\Cache;
 use Presta\SitemapBundle\Sitemap\Urlset;
-use Presta\SitemapBundle\Sitemap\XmlConstraint;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Sitemap Manager service
@@ -28,7 +26,7 @@ use Symfony\Component\Routing\RouterInterface;
 class Generator extends AbstractGenerator implements GeneratorInterface
 {
     /**
-     * @var RouterInterface
+     * @var UrlGeneratorInterface
      */
     protected $router;
 
@@ -44,14 +42,14 @@ class Generator extends AbstractGenerator implements GeneratorInterface
 
     /**
      * @param EventDispatcherInterface $dispatcher
-     * @param RouterInterface          $router
+     * @param UrlGeneratorInterface    $router
      * @param Cache|null               $cache
      * @param int|null                 $cacheTtl
      * @param int|null                 $itemsBySet
      */
     public function __construct(
         EventDispatcherInterface $dispatcher,
-        RouterInterface $router,
+        UrlGeneratorInterface $router,
         Cache $cache = null,
         $cacheTtl = null,
         $itemsBySet = null
