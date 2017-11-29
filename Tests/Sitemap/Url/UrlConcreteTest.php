@@ -11,7 +11,6 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap\Url;
 
-use Presta\SitemapBundle\Sitemap;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
 /**

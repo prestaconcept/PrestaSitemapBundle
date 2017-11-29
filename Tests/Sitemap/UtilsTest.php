@@ -11,8 +11,8 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap;
 
-use Presta\SitemapBundle\Sitemap\Utils;
 use Presta\SitemapBundle\Exception\Exception;
+use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
  * Description of Utils

@@ -12,7 +12,6 @@
 namespace Presta\SitemapBundle\Service;
 
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
-use Presta\SitemapBundle\Sitemap\DumpingUrlset;
 use Presta\SitemapBundle\Sitemap\Sitemapindex;
 use Presta\SitemapBundle\Sitemap\Url\Url;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
@@ -37,7 +36,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
     protected $root;
 
     /**
-     * @var Urlset[]|DumpingUrlset[]
+     * @var Urlset[]
      */
     protected $urlsets = array();
 
@@ -54,6 +53,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
 
     /**
      * @param EventDispatcherInterface $dispatcher
+     * @param int|null                 $itemsBySet
      */
     public function __construct(EventDispatcherInterface $dispatcher, $itemsBySet = null)
     {
@@ -61,17 +61,17 @@ abstract class AbstractGenerator implements UrlContainerInterface
         // We add one to LIMIT_ITEMS because it was used as an index, not a quantity
         $this->itemsBySet = ($itemsBySet === null) ? Sitemapindex::LIMIT_ITEMS + 1 : $itemsBySet;
 
-        $this->defaults = array(
+        $this->defaults = [
             'priority' => 1,
             'changefreq' => UrlConcrete::CHANGEFREQ_DAILY,
-            'lastmod' => 'now'
-        );
+            'lastmod' => 'now',
+        ];
     }
 
     /**
      * @param array $defaults
      */
-    public function setDefaults($defaults)
+    public function setDefaults(array $defaults)
     {
         $this->defaults = $defaults;
     }
@@ -129,8 +129,8 @@ abstract class AbstractGenerator implements UrlContainerInterface
     /**
      * Factory method for create Urlsets
      *
-     * @param string    $name
-     * @param \DateTime $lastmod
+     * @param string         $name
+     * @param \DateTime|null $lastmod
      *
      * @return Urlset
      */

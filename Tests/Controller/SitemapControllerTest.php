@@ -13,7 +13,6 @@ namespace Presta\SitemapBundle\Tests\Controller;
 
 use Presta\SitemapBundle\Controller;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
-use Presta\SitemapBundle\Service\Generator;
 use Presta\SitemapBundle\Sitemap\Url;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
