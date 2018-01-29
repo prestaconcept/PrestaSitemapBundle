@@ -76,4 +76,47 @@ class GeneratorTest extends WebTestCase
         $this->assertEquals(count($fullUrlset), 1);
         $this->assertEquals(count($emptyUrlset), 0);
     }
+
+    public function testDefaults()
+    {
+        $this->generator->setDefaults([
+            'priority' => 1,
+            'changefreq' => Sitemap\Url\UrlConcrete::CHANGEFREQ_DAILY,
+            'lastmod' => 'now',
+        ]);
+
+        $url = new Sitemap\Url\UrlConcrete('http://acme.com/');
+
+        $this->assertEquals(null, $url->getPriority());
+        $this->assertEquals(null, $url->getChangefreq());
+        $this->assertEquals(null, $url->getLastmod());
+
+        $this->generator->addUrl($url, 'default');
+
+        // knowing that the generator changes the url instance, we check its properties here
+        $this->assertEquals(1, $url->getPriority());
+        $this->assertEquals(Sitemap\Url\UrlConcrete::CHANGEFREQ_DAILY, $url->getChangefreq());
+        $this->assertInstanceOf('DateTime', $url->getLastmod());
+    }
+
+    public function testNullableDefaults()
+    {
+        $this->generator->setDefaults([
+            'priority' => null,
+            'changefreq' => null,
+            'lastmod' => null,
+        ]);
+
+        $url = new Sitemap\Url\UrlConcrete('http://acme.com/');
+
+        $this->assertEquals(null, $url->getPriority());
+        $this->assertEquals(null, $url->getChangefreq());
+        $this->assertEquals(null, $url->getLastmod());
+
+        $this->generator->addUrl($url, 'default');
+
+        $this->assertEquals(null, $url->getPriority());
+        $this->assertEquals(null, $url->getChangefreq());
+        $this->assertEquals(null, $url->getLastmod());
+    }
 }
