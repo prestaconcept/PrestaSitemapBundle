@@ -96,7 +96,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
         }
 
         if ($url instanceof UrlConcrete) {
-            if (null === $url->getLastmod()) {
+            if (null === $url->getLastmod() && null !== $this->defaults['lastmod']) {
                 $url->setLastmod(new \DateTime($this->defaults['lastmod']));
             }
             if (null === $url->getChangefreq()) {
