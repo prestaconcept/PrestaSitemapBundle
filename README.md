@@ -38,7 +38,7 @@ However, like Symfony, we do not provide support for Symfony's version that reac
 You will find the detailed documentation in the following links :
 
 * [Installation](Resources/doc/1-installation.md)
-* [Configuration.md](Resources/doc/2-configuration.md)
+* [Configuration](Resources/doc/2-configuration.md)
 * [Static routes usage](Resources/doc/3-static-routes-usage.md)
 * [Dynamic routes usage](Resources/doc/4-dynamic-routes-usage.md)
 * [Decorating URLs](Resources/doc/5-decorating-urls.md)
