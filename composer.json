@@ -1,19 +1,13 @@
 {
     "name": "presta/sitemap-bundle",
-    "description": "A symfony 2 bundle that provides tools to build your application sitemap.",
-    "keywords": ["symfony2", "bundle", "sitemap", "xml", "prestaconcept"],
+    "description": "A symfony bundle that provides tools to build your application sitemap.",
+    "keywords": ["symfony", "bundle", "sitemap", "xml", "prestaconcept"],
     "type": "symfony-bundle",
     "license": "MIT",
     "authors": [
         {
-            "name": "David Epely",
-            "homepage": "http://www.prestaconcept.net/",
-            "role": "Initial developer"
-        },
-        {
-            "name": "Alain Flaus",
-            "homepage": "http://www.prestaconcept.net/",
-            "role": "Maintainer, Developer"
+            "name": "Prestaconcept",
+            "homepage": "http://www.prestaconcept.net/"
         }
     ],
     "support": {

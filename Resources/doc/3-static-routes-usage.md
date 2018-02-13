@@ -1,19 +1,26 @@
-# Usage Routing Configuration
+# Static routes usage
 
-You can use annotations to configure any route which does not use parameters (e.g. your static pages such as '/about',
-'/faq').
+
+You just need to configure an option to your route, so the bundle knows you want to expose it.
 
 The supported sitemap parameters are:
 
- * section: a text string that represent the section in which to store the URL
- * lastmod: a text string that can be parsed by \DateTime (default: 'now')
- * changefreq: a text string that matches a constant defined in UrlConcrete (default: 'daily')
- * priority: a number between 0 and 1 (default: 1)
+ * `"section"`: string that represent the section identifier in which to store the URL (default: `"default"`)
+ * `"lastmod"`: a valid datetime as string (default: `"now"`)
+ * `"changefreq"`: change frequency of your resource, 
+ one of `"always"`, `"hourly"`, `"daily"`, `"weekly"`, `"monthly"`, `"yearly"`, `"never"` (default: `"daily"`)
+ * `"priority"`: a number between `0` and `1` (default: `1`)
+
 
 ## Annotation
 
 ```php
 <?php
+
+namespace App\Controller;
+
+use Symfony\Component\HttpKernel\Tests\Controller;
+use Symfony\Component\Routing\Route;
 
 class DefaultController extends Controller
 {
@@ -59,25 +66,26 @@ class DefaultController extends Controller
 }
 ```
 
+
 ## YAML
 
 ```yml
 homepage:
     path:     /
-    defaults: { _controller: AppBundle:Default:index }
+    defaults: { _controller: App\Controller\DefaultController::index }
     options:
         sitemap: true
 
 faq:
     path:     /faq
-    defaults: { _controller: AppBundle:Default:faq }
+    defaults: { _controller: App\Controller\DefaultController::faq }
     options:
         sitemap:
             priority: 0.7
 
 about:
     path:     /about
-    defaults: { _controller: AppBundle:Default:about }
+    defaults: { _controller: App\Controller\DefaultController::about }
     options:
         sitemap:
             priority: 0.7
@@ -85,13 +93,14 @@ about:
 
 contact:
     path:     /contact
-    defaults: { _controller: AppBundle:Default:contact }
+    defaults: { _controller: App\Controller\DefaultController::contact }
     options:
         sitemap:
             priority: 0.7
             changefreq: weekly
             section: misc
 ```
+
 
 ## XML
 
@@ -103,26 +112,26 @@ contact:
         xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
     <route id="homepage" path="/">
-        <default key="_controller">AppBundle:Default:index</default>
+        <default key="_controller">App\Controller\DefaultController::index</default>
         <option key="sitemap">true</option>
     </route>
 
     <route id="faq" path="/faq">
-        <default key="_controller">AppBundle:Default:faq</default>
+        <default key="_controller">App\Controller\DefaultController::faq</default>
         <option key="sitemap">
             {"priority":"0.7"}
         </option>
     </route>
 
     <route id="about" path="/about">
-        <default key="_controller">AppBundle:Default:about</default>
+        <default key="_controller">App\Controller\DefaultController::about</default>
         <option key="sitemap">
             {"priority":"0.7", "changefreq":"weekly"}
         </option>
     </route>
 
     <route id="contact" path="/contact">
-        <default key="_controller">AppBundle:Default:contact</default>
+        <default key="_controller">App\Controller\DefaultController::contact</default>
         <option key="sitemap">
             {"priority":"0.7", "changefreq":"weekly", "section":"misc"}
         </option>
@@ -130,3 +139,8 @@ contact:
 
 </routes>
 ```
+
+
+---
+
+« [Configuration](2-configuration.md) • [Dynamic routes usage](4-dynamic-routes-usage.md) »
