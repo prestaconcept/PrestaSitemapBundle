@@ -89,7 +89,7 @@ Using the news decorator.
 <?php
 use Presta\SitemapBundle\Sitemap\Url as Sitemap;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-//...
+
 /** @var $urlGenerator UrlGeneratorInterface */
 $url = new Sitemap\UrlConcrete($urlGenerator->generate('homepage'));
 $decoratedUrl = new Sitemap\GoogleNewsUrlDecorator(

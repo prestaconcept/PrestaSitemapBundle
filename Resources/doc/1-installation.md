@@ -3,20 +3,39 @@
 Require the bundle as a dependency.
 
 ```bash
-composer require presta/sitemap-bundle
+$ composer require presta/sitemap-bundle
 ```
 
 Enable it in your application Kernel.
 
 ```php
-    //app/AppKernel.php
+<?php
+// config/bundles.php
+return [
+    //...
+    Presta\SitemapBundle\PrestaSitemapBundle::class => ['all' => true],
+];
+```
+
+Or in your legacy application.
+
+```php
+<?php
+// app/AppKernel.php
+class AppKernel
+{
     public function registerBundles()
     {
         $bundles = [
             //...
             new Presta\SitemapBundle\PrestaSitemapBundle(),
         ];
+
+        //...
+
+        return $bundles;
     }
+}
 ```
 
 Import routing.

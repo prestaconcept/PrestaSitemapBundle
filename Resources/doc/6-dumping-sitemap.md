@@ -64,8 +64,10 @@ For example :
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap\Url as Sitemap;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 /** @var SitemapPopulateEvent $event */
 /** @var UrlGeneratorInterface $urlGenerator */
+
 if (in_array($event->getSection(), [null, 'mysection'], true)) {
     $event->getUrlContainer()->addUrl(
         new Sitemap\UrlConcrete($urlGenerator->generate('route_in_my_section')),
@@ -82,7 +84,7 @@ You can override Symfony's routing context host if you need to generate several 
 For example :
 
 ```bash
-$ bin/console presta:sitemaps:dump --base-url=http://es.mysite.com/ es/
+$ bin/console presta:sitemaps:dump web/sitemap/es/ --base-url=http://es.mysite.com/
 Dumping all sections of sitemaps into web directory
 Created the following sitemap files
     main.xml
