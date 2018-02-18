@@ -10,7 +10,7 @@ It cover the minimal requirement for a sitemap XML node.
 >           instances for the static routes you configured in your app.
 >           To use the following decorators, you must register the URLs all by yourself.
 
-However this bundle provide several implementation of this interface : 
+However this bundle provides several implementations of this interface: 
 
 - `Presta\SitemapBundle\Sitemap\Url\GoogleImageUrlDecorator`
 - `Presta\SitemapBundle\Sitemap\Url\GoogleMobileUrlDecorator`
@@ -144,21 +144,21 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /** @var $urlGenerator UrlGeneratorInterface */
 $url = new Sitemap\UrlConcrete($urlGenerator->generate('mobile_homepage', [], UrlGeneratorInterface::ABSOLUTE_URL));
 
-// 1st wrap : mobile
+// 1st wrap: mobile
 $url = new Sitemap\GoogleMobileUrlDecorator($url);
 
-// 2nd wrap : images
+// 2nd wrap: images
 $url = new Sitemap\GoogleImageUrlDecorator($url);
 $url->addImage(new Sitemap\GoogleImage('/assets/carousel/php.gif'));
 $url->addImage(new Sitemap\GoogleImage('/assets/carousel/symfony.jpg'));
 $url->addImage(new Sitemap\GoogleImage('/assets/carousel/love.png'));
 
-// 3rd wrap : multilang
+// 3rd wrap: multilang
 $url = new Sitemap\GoogleMultilangUrlDecorator($url);
 $url->addLink($urlGenerator->generate('mobile_homepage_fr'), 'fr');
 $url->addLink($urlGenerator->generate('mobile_homepage_de'), 'de');
 
-// 4th wrap : video
+// 4th wrap: video
 $url = new Sitemap\GoogleVideoUrlDecorator(
     $url,
     'https://img.youtube.com/vi/j6IKRxH8PTg/0.jpg',
@@ -183,21 +183,21 @@ But there is some cases for which it will just block you from doing forbidden th
 
 - **Registering more than `1000` images for an URL**
 
-Exception thrown : `Presta\SitemapBundle\Exception\GoogleImageException`
+Exception thrown: `Presta\SitemapBundle\Exception\GoogleImageException`
 
 [see related documentation](https://support.google.com/webmasters/answer/178636)
 
 
 - **Registering more than `32` tags for a video**
 
-Exception thrown : `Presta\SitemapBundle\Exception\GoogleVideoUrlTagException`
+Exception thrown: `Presta\SitemapBundle\Exception\GoogleVideoUrlTagException`
 
 [see related documentation](https://developers.google.com/webmasters/videosearch/sitemaps)
 
 
 - **Registering more than `5` stock tickers for a news**
 
-Exception thrown : `Presta\SitemapBundle\Exception\GoogleNewsUrlException`
+Exception thrown: `Presta\SitemapBundle\Exception\GoogleNewsUrlException`
 
 [see the related documentation](https://support.google.com/webmasters/answer/74288)
 
