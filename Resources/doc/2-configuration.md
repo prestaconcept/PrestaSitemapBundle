@@ -2,7 +2,7 @@
 
 ## Changing the defaults
 
-You may want to change the `UrlConcrete` default values :
+You may want to change the `UrlConcrete` default values:
 
 ```yaml
 # config/packages/presta_sitemap.yaml
@@ -40,7 +40,7 @@ parameters:
     router.request_context.scheme: http
 ```
 
-> **Note :** You may noticed that there is nothing specific to this bundle.
+> **Note:** You may noticed that there is nothing specific to this bundle.
 > In fact, doing this you just allowed your whole application to generate URLs from the command line.
 > Please have a look to Symfony's [official documentation](https://symfony.com/doc/current/console/request_context.html) 
 > for more information.
@@ -81,7 +81,7 @@ You need to install the bundle and specify what kind of cache system to use with
  * Follow the instruction to install [DoctrineCacheBundle](http://packagist.org/packages/doctrine/doctrine-cache-bundle).
  * Configure a provider for this bundle.
 
-For example :
+For example:
 
 ```yaml
 # config/packages/doctrine_cache.yaml
@@ -95,7 +95,7 @@ doctrine_cache:
 
 ## Changing default services
 
-Both sitemap generator and sitemap dumper services can be changed within the documentation.
+Both sitemap generator and sitemap dumper services can be changed within the configuration.
 
 ```yaml
 # config/packages/presta_sitemap.yaml

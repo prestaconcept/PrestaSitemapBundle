@@ -28,14 +28,14 @@ However, like Symfony, we do not provide support for Symfony's version that reac
 
  * Sitemapindex
  * Google images, video, mobile and multilang urls
- * Respect constraints (50k items / 10mB per files)
+ * Respect constraints (50k items / 10MB per file)
  * No database required
- * Optionnal caching (using `DoctrineCacheBundle`)
+ * Optional caching (using `DoctrineCacheBundle`)
 
 
 ## Documentation
 
-You will find the detailed documentation in the following links :
+You will find the detailed documentation in the following links:
 
 * [Installation](Resources/doc/1-installation.md)
 * [Configuration](Resources/doc/2-configuration.md)

@@ -1,20 +1,20 @@
 # Dumping the sitemap
 
-Back to the [installation](1-installation.md) instructions, you may have noticed that this bundle is declaring routes :
+Back to the [installation](1-installation.md) instructions, you may have noticed that this bundle is declaring routes:
 `/sitemap.xml` and `/sitemap.{section}.xml`.
 
-That mean the, whenever the sitemap is requested, it is built on demand
+That means that, whenever the sitemap is requested, it is built on demand
 (or build from cache if you [configured](2-configuration.md) an adapter for the bundle).
 
 For small sites, it is fast enough to be a good option.
-But as your site grows (and so your sitemap), this option start being a very bad one.
+But as your site grows (and so your sitemap), this option starts being a very bad one.
 
-So, there is an other option : saving your sitemap as an XML file in the public directory, 
+So, there is another option: saving your sitemap as an XML file in the public directory, 
 so your HTTP server will serve it directly without asking the app to build it.
 
 This is called a sitemap **dump**. 
 
-> **Important note :** For this method to work, 
+> **Important note:** For this method to work, 
 > you will have to configure your router to be able to generate absolute URL from the command line.
 > Have a look to the [configuration](2-configuration.md).
 
@@ -37,7 +37,7 @@ Created the following sitemap files
 ```
 
 
-## What happened ?
+## What happened?
 
 Command first creates all sitemap files in a temporary location.
 Once all of the files are created, it deletes matching (by section names) files from your target directory 
@@ -54,13 +54,14 @@ In order to do that you have to supply `--section=name` option to the command.
 It will regenerate only sections with that name and update corresponding part of sitemap index file, 
 leaving other sitemap references intact.
 
-If you whish to use this feature, you **must** wrap all your custom url registering 
+If you wish to use this feature, you **must** wrap all your custom url registering 
 with a condition about the section being dumped.
 
-For example :
+For example:
 
 ```php
 <?php
+
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap\Url as Sitemap;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -81,7 +82,7 @@ if (in_array($event->getSection(), [null, 'mysection'], true)) {
 
 You can override Symfony's routing context host if you need to generate several sitemaps with different hosts.
 
-For example :
+For example:
 
 ```bash
 $ bin/console presta:sitemaps:dump web/sitemap/es/ --base-url=http://es.mysite.com/
@@ -95,7 +96,7 @@ Created the following sitemap files
 
 ## Compressing the sitemap files
 
-The command support `gzip` compression :
+The command supports `gzip` compression:
 
 ```bash
 $ bin/console presta:sitemaps:dump --gzip

@@ -6,7 +6,7 @@ You can also register event listeners (or subscribers) to populate your sitemap(
 Imagine that your application is (or has) a blog, and that you want to add to your sitemap
 all blog posts that your administrator has created.
 
-> **Note :** We choose an `event subscriber` as example, but you can also do it with an `event listener`.
+> **Note:** We choose an `event subscriber` as example, but you can also do it with an `event listener`.
 
 If you are not familiar with the concept of event listener/subscriber/dispatcher, 
 please have a look to Symfony's [official documentation](http://symfony.com/doc/current/event_dispatcher.html).
@@ -90,7 +90,7 @@ class SitemapSubscriber implements EventSubscriberInterface
 }
 ```
 
-> **Note :** you should not use this snippet as is. With large dataset, `findAll` is not a good idead. 
+> **Note:** you should not use this snippet as is. With large dataset, `findAll` is not a good idead. 
 >            Please read Doctrine documentation, to learn about iterator and array hydrate.
 
 
@@ -125,7 +125,7 @@ services:
             - { name: "kernel.event_subscriber", priority: 100 }
 ```
 
-> **Note :** Choosing a priority for your event listener is up to you.
+> **Note:** Choosing a priority for your event listener is up to you.
 
 
 ---
