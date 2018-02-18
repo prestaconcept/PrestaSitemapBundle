@@ -68,10 +68,9 @@ class GeneratorTest extends WebTestCase
         $url = new Sitemap\Url\UrlConcrete('http://acme.com/');
 
         $this->generator->addUrl($url, 'default');
-        $this->generator->addUrl($url, 'default');
 
-        $fullUrlset  = $this->generator->getUrlset('default_0');
-        $emptyUrlset = $this->generator->getUrlset('default_1');
+        $fullUrlset  = $this->generator->getUrlset('default');
+        $emptyUrlset = $this->generator->getUrlset('default_0');
 
         $this->assertEquals(count($fullUrlset), 1);
         $this->assertEquals(count($emptyUrlset), 0);

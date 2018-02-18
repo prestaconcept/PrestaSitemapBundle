@@ -42,7 +42,7 @@ class Generator extends AbstractGenerator implements GeneratorInterface
     protected $cacheTtl;
 
     /**
-     * @var int|null
+     * @var string|null
      */
     protected $cacheNamespace;
 
