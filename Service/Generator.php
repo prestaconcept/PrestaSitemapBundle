@@ -11,8 +11,9 @@
 
 namespace Presta\SitemapBundle\Service;
 
-use Doctrine\Common\Cache\Cache;
 use Presta\SitemapBundle\Sitemap\Urlset;
+use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -31,7 +32,7 @@ class Generator extends AbstractGenerator implements GeneratorInterface
     protected $router;
 
     /**
-     * @var Cache|null
+     * @var AdapterInterface|null
      */
     protected $cache;
 
@@ -41,24 +42,34 @@ class Generator extends AbstractGenerator implements GeneratorInterface
     protected $cacheTtl;
 
     /**
+     * @var int|null
+     */
+    protected $cacheNamespace;
+
+    /**
      * @param EventDispatcherInterface $dispatcher
      * @param UrlGeneratorInterface    $router
-     * @param Cache|null               $cache
-     * @param int|null                 $cacheTtl
      * @param int|null                 $itemsBySet
+     * @param int|null                 $cacheTtl
+     * @param int|null                 $cacheNamespace
      */
     public function __construct(
         EventDispatcherInterface $dispatcher,
         UrlGeneratorInterface $router,
-        Cache $cache = null,
+        $itemsBySet = null,
         $cacheTtl = null,
-        $itemsBySet = null
+        $cacheNamespace = null
     ) {
         parent::__construct($dispatcher, $itemsBySet);
 
         $this->router = $router;
-        $this->cache = $cache;
         $this->cacheTtl = $cacheTtl;
+        $this->cacheNamespace = $cacheNamespace;
+    }
+
+    public function setCachePool(AdapterInterface $cache)
+    {
+        $this->cache = $cache;
     }
 
     /**
@@ -72,11 +83,13 @@ class Generator extends AbstractGenerator implements GeneratorInterface
         //---------------------
         // cache management
         if ($this->cache) {
-            $this->cache->save('root', $this->getRoot(), $this->cacheTtl);
+            $this->cacheSaveDeferred('root', $this->getRoot());
 
             foreach ($this->urlsets as $name => $urlset) {
-                $this->cache->save($name, $urlset, $this->cacheTtl);
+                $this->cacheSaveDeferred($name, $urlset);
             }
+
+            $this->cache->commit();
         }
         //---------------------
     }
@@ -86,8 +99,11 @@ class Generator extends AbstractGenerator implements GeneratorInterface
      */
     public function fetch($name)
     {
-        if ($this->cache && $this->cache->contains($name)) {
-            return $this->cache->fetch($name);
+        if ($this->cache) {
+            $sitemap = $this->cacheFetch($name);
+            if (!is_null($sitemap)) {
+                return $sitemap;
+            }
         }
 
         $this->generate();
@@ -116,5 +132,56 @@ class Generator extends AbstractGenerator implements GeneratorInterface
             ),
             $lastmod
         );
+    }
+
+    /**
+     * Deferred save of a name/value in the cache
+     *
+     * @param $name
+     * @param $value
+     */
+    private function cacheSaveDeferred($name, $value)
+    {
+        $key = $this->getNamespacedKey($name);
+        $cacheItem = $this->cache->getItem($key);
+        $cacheItem->set($value);
+        $cacheItem->expiresAfter($this->cacheTtl);
+        $this->cache->saveDeferred($cacheItem);
+    }
+
+    /**
+     * Fetch a value from the cache by its name
+     *
+     * @param $name
+     *
+     * @return mixed|null
+     */
+    private function cacheFetch($name)
+    {
+        $key = $this->getNamespacedKey($name);
+        try {
+            if ($this->cache->hasItem($key)) {
+                $cacheItem = $this->cache->getItem($key);
+                if ($cacheItem->isHit()) {
+                    return $cacheItem->get();
+                }
+            }
+        } catch (InvalidArgumentException $e) {
+            return null;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get namespaced key by its name
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    private function getNamespacedKey($name)
+    {
+        return sprintf('%s.%s', $this->cacheNamespace ?: 'presta_sitemap', $name);
     }
 }

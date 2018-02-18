@@ -35,6 +35,9 @@ class PrestaSitemapExtension extends Extension
         $container->setParameter($this->getAlias() . '.timetolive', $config['timetolive']);
         $container->setParameter($this->getAlias() . '.sitemap_file_prefix', $config['sitemap_file_prefix']);
         $container->setParameter($this->getAlias() . '.items_by_set', $config['items_by_set']);
+        $container->setParameter($this->getAlias() . '.cache.pool', $config['cache']['pool']);
+        $container->setParameter($this->getAlias() . '.cache.timetolive', $config['cache']['timetolive']);
+        $container->setParameter($this->getAlias() . '.cache.namespace', $config['cache']['namespace']);
         $container->setParameter($this->getAlias() . '.defaults', $config['defaults']);
 
         if (true === $config['route_annotation_listener']) {

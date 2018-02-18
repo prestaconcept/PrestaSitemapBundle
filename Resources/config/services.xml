@@ -14,9 +14,9 @@
         <service id="presta_sitemap.generator_default" class="%presta_sitemap.generator.class%">
             <argument id="event_dispatcher" type="service" />
             <argument id="router" type="service" />
-            <argument id="doctrine_cache.providers.presta_sitemap" type="service" on-invalid="ignore"/>
-            <argument>%presta_sitemap.timetolive%</argument>
             <argument>%presta_sitemap.items_by_set%</argument>
+            <argument>%presta_sitemap.cache.timetolive%</argument>
+            <argument>%presta_sitemap.cache.namespace%</argument>
             <call method="setDefaults">
                 <argument>%presta_sitemap.defaults%</argument>
             </call>
@@ -33,7 +33,7 @@
         </service>
 
         <service id="presta_sitemap.dump_command" class="Presta\SitemapBundle\Command\DumpSitemapsCommand" public="true">
-            <tag name="console.command"/>
+            <tag name="console.command" />
         </service>
     </services>
 

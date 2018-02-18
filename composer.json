@@ -35,7 +35,7 @@
         "doctrine/annotations": "~1.0"
     },
     "suggest": {
-        "doctrine/doctrine-cache-bundle" : "Allows to store sitemaps in cache"
+        "symfony/cache" : "Allows to store sitemaps in cache"
     },
     "autoload": {
         "psr-4": {

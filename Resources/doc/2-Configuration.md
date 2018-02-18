@@ -49,20 +49,30 @@ presta_sitemap:
 
 ## Cache [optional]
 
-Each sitemaps can be stored in your cache system :
+Each sitemap can be stored in your cache system:
 
-PrestaSitemapBundle uses DoctrineCacheBundle to store Cache.
-This bundle provides an abstract access to any Doctrine Common Cache classes.
-You need to install DoctrineCacheBundle and specify what kind of cache
-system to use with PrestaSitemap.
+PrestaSitemapBundle uses Symfony Cache component to store Cache. This component
+provides an extended PSR-6 implementation as well as a PSR-16 "Simple Cache" implementation
+with ready to use adapters for the most common caching backends. You need to install
+Symfony Cache and specify what pool cache to use with PrestaSitemap.
 
- * Follow the instruction to install [DoctrineCacheBundle](http://packagist.org/packages/doctrine/doctrine-cache-bundle).
- * Configure a service for PrestaSitemap, this is an exemple in `app/config/config.yml` with php-apc :
+ * Follow the instructions to install [Symfony Cache](https://symfony.com/doc/current/components/cache.html#installation).
+ * Configure a Symfony Cache pool for PrestaSitemap.
+   Symfony Cache comes with a predefined cache pool named `cache.app`.
+   This is an example in `app/config/config.yml` with it:
 
 ```yaml
-doctrine_cache:
-    providers:
-        presta_sitemap:
-            type: array #or anything your project might use (please see [DoctrineCacheBundle documentation](http://packagist.org/packages/doctrine/doctrine-cache-bundle))
-            namespace: presta_sitemap
+presta_sitemap:
+    cache:
+        pool: cache.app
+```
+
+You can also specify a time to live and a namespace for its elements like this:
+
+```yaml
+presta_sitemap:
+    cache:
+        pool: cache.app
+        timetolive: 3600
+        namespace: presta_sitemap
 ```
