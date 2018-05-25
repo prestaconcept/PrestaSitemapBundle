@@ -47,7 +47,7 @@ presta_sitemap:
 ```
 
 > **Note** you may not be required to import routing if you would only rely on dumped sitemaps.
-> Jump to [dedicated documentation](7-dump-sitemap.md) for more information.
+> Jump to [dedicated documentation](6-dumping-sitemap.md) for more information.
 
 
 ---
