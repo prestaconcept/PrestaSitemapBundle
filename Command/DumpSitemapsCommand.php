@@ -55,7 +55,7 @@ class DumpSitemapsCommand extends ContainerAwareCommand
                 'target',
                 InputArgument::OPTIONAL,
                 'Location where to dump sitemaps. Generated urls will not be related to this folder.',
-                'web'
+                'public'
             );
     }
 
