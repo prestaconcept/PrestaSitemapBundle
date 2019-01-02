@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Command to dump the sitemaps to provided directory
@@ -55,7 +56,7 @@ class DumpSitemapsCommand extends ContainerAwareCommand
                 'target',
                 InputArgument::OPTIONAL,
                 'Location where to dump sitemaps. Generated urls will not be related to this folder.',
-                'web'
+                version_compare(Kernel::VERSION, '4.0') >= 0 ? 'public' : 'web'
             );
     }
 
