@@ -35,6 +35,8 @@
         <service id="presta_sitemap.dump_command" class="Presta\SitemapBundle\Command\DumpSitemapsCommand" public="true">
             <tag name="console.command"/>
         </service>
+
+        <service id="Presta\SitemapBundle\Service\DumperInterface" alias="presta_sitemap.dumper_default" />
     </services>
 
 </container>
