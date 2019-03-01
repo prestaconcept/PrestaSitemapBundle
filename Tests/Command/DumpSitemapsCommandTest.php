@@ -47,6 +47,7 @@ class DumpSitemapsCommandTest extends WebTestCase
         if (self::$container === null) {
             self::$container = self::$kernel->getContainer();
         }
+
         $router = self::$container->get('router');
         /* @var $router RouterInterface */
 
@@ -77,6 +78,7 @@ class DumpSitemapsCommandTest extends WebTestCase
     protected function tearDown()
     {
         parent::tearDown();
+        self::$container = null;
         foreach (glob($this->webDir . '/*{.xml,.xml.gz}', GLOB_BRACE) as $file) {
             unlink($file);
         }
@@ -131,8 +133,8 @@ class DumpSitemapsCommandTest extends WebTestCase
         $application = new Application(self::$kernel);
         $application->add(
             new DumpSitemapsCommand(
-                $this->container->get('router'),
-                new Dumper($this->container->get('event_dispatcher'), $this->container->get('filesystem')),
+                self::$container->get('router'),
+                new Dumper(self::$container->get('event_dispatcher'), self::$container->get('filesystem')),
                 'public'
             )
         );

@@ -15,6 +15,7 @@ use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Service\Generator;
 use Presta\SitemapBundle\Sitemap;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -49,6 +50,12 @@ class GeneratorTest extends WebTestCase
             null,
             1
         );
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+        self::$container = null;
     }
 
     public function testGenerate()
