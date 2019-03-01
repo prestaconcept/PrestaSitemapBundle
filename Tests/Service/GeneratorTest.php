@@ -14,6 +14,7 @@ namespace Presta\SitemapBundle\Test\Sitemap;
 use Presta\SitemapBundle\Service\Generator;
 use Presta\SitemapBundle\Sitemap;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @author David Epely <depely@prestaconcept.net>
@@ -44,6 +45,12 @@ class GeneratorTest extends WebTestCase
             null,
             1
         );
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+        self::$container = null;
     }
 
     public function testGenerate()

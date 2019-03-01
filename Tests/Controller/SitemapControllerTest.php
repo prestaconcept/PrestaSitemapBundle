@@ -61,6 +61,12 @@ class SitemapControllerTest extends WebTestCase
         //-------------------
     }
 
+    protected function tearDown()
+    {
+        parent::tearDown();
+        self::$container = null;
+    }
+
     public function testIndexAction()
     {
         $response = $this->controller->indexAction();
