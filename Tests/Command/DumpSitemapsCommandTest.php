@@ -13,6 +13,7 @@ namespace Presta\SitemapBundle\Tests\Command;
 
 use Presta\SitemapBundle\Command\DumpSitemapsCommand;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
+use Presta\SitemapBundle\Service\Dumper;
 use Presta\SitemapBundle\Sitemap\Url\GoogleVideoUrlDecorator;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -126,7 +127,7 @@ class DumpSitemapsCommandTest extends WebTestCase
     private function executeDumpWithOptions(array $input = array())
     {
         $application = new Application(self::$kernel);
-        $application->add(new DumpSitemapsCommand());
+        $application->add(new DumpSitemapsCommand($this->container->get('router'), new Dumper($this->container->get('event_dispatcher'), $this->container->get('filesystem'))));
 
         $command = $application->find('presta:sitemaps:dump');
         $commandTester = new CommandTester($command);
