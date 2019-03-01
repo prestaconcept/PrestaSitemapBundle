@@ -22,8 +22,8 @@ matrix:
           env: SYMFONY_VERSION=4.0.*
         - php: 7.2
           env: SYMFONY_VERSION=3.4.* SYMFONY_DEPRECATIONS_HELPER=weak
-        - php: 7.2
-          env: SYMFONY_VERSION=4.0.* SYMFONY_DEPRECATIONS_HELPER=weak
+        - php: 7.3
+          env: SYMFONY_VERSION=4.2.* SYMFONY_DEPRECATIONS_HELPER=weak
 
 env:
     global:
@@ -40,7 +40,7 @@ before_install:
     - if [ "$PHPCS" = "yes" ]; then phpenv rehash; fi
     - if [ "$PHPCS" != "yes"]; then composer selfupdate; fi
     - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony:${SYMFONY_VERSION}; fi
-    - if [ "$SYMFONY_VERSION" = "3.4.*" ] || [ "$SYMFONY_VERSION" = "4.0.*" ]; then rm -f phpunit.xml; cp phpunit.sf4.xml.dist phpunit.xml; fi
+    - if [ "$SYMFONY_VERSION" = "3.4.*" ] || [ "$SYMFONY_VERSION" = "4.2.*" ]; then rm -f phpunit.xml; cp phpunit.sf4.xml.dist phpunit.xml; fi
 
 install: php -d memory_limit=-1 $(phpenv which composer) update --no-suggest --prefer-dist
 

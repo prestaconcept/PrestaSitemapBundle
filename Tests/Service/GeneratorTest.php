@@ -20,14 +20,30 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 class GeneratorTest extends WebTestCase
 {
+    /**
+     * @var Generator
+     */
     protected $generator;
+
+    /**
+     * @var ContainerInterface
+     */
+    protected static $container;
 
     public function setUp()
     {
         self::createClient(['debug' => false]);
-        $container  = static::$kernel->getContainer();
+        if (self::$container === null) {
+            self::$container = self::$kernel->getContainer();
+        }
 
-        $this->generator = new Generator($container->get('event_dispatcher'), $container->get('router'), null, null, 1);
+        $this->generator = new Generator(
+            self::$container->get('event_dispatcher'),
+            self::$container->get('router'),
+            null,
+            null,
+            1
+        );
     }
 
     public function testGenerate()
