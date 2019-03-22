@@ -11,9 +11,11 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap;
 
+use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Service\Generator;
 use Presta\SitemapBundle\Sitemap;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @author David Epely <depely@prestaconcept.net>
@@ -21,13 +23,16 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class GeneratorTest extends WebTestCase
 {
     protected $generator;
+    /** @var EventDispatcherInterface */
+    private $eventDispatcher;
 
     public function setUp()
     {
         self::createClient(['debug' => false]);
         $container  = static::$kernel->getContainer();
+        $this->eventDispatcher = $container->get('event_dispatcher');
 
-        $this->generator = new Generator($container->get('event_dispatcher'), $container->get('router'), null, null, 1);
+        $this->generator = new Generator($this->eventDispatcher, $container->get('router'), null, null, 1);
     }
 
     public function testGenerate()
@@ -44,6 +49,16 @@ class GeneratorTest extends WebTestCase
     {
         $section = $this->generator->generate('void');
         $this->assertNull($section);
+
+        $triggered = false;
+        $listener = function (SitemapPopulateEvent $event) use (&$triggered) {
+            $this->assertEquals($event->getSection(), 'foo');
+            $triggered = true;
+        };
+        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, $listener);
+
+        $this->generator->fetch('foo');
+        $this->assertTrue($triggered);
     }
 
     public function testAddUrl()

@@ -90,7 +90,7 @@ class Generator extends AbstractGenerator implements GeneratorInterface
             return $this->cache->fetch($name);
         }
 
-        $this->generate();
+        $this->populate($name);
 
         if ('root' == $name) {
             return $this->getRoot();
