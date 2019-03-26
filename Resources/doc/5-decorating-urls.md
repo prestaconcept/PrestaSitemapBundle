@@ -16,7 +16,7 @@ However this bundle provides several implementations of this interface:
 - `Presta\SitemapBundle\Sitemap\Url\GoogleMobileUrlDecorator`
 - `Presta\SitemapBundle\Sitemap\Url\GoogleMultilangUrlDecorator`
 - `Presta\SitemapBundle\Sitemap\Url\GoogleNewsUrlDecorator`
-- `Presta\SitemapBundle\Sitemap\Url\GoogleVideoDecorator`
+- `Presta\SitemapBundle\Sitemap\Url\GoogleVideoUrlDecorator`
 
 All these implementations are using the [decorator pattern](https://en.wikipedia.org/wiki/Decorator_pattern).
 Using this pattern you will be able to nest urls and then add some information at nesting each level.
