@@ -40,6 +40,11 @@
         </service>
 
         <service id="Presta\SitemapBundle\Service\DumperInterface" alias="presta_sitemap.dumper_default" />
+
+        <service id="presta_sitemap.controller" class="Presta\SitemapBundle\Controller\SitemapController">
+            <argument type="service" id="presta_sitemap.generator" />
+            <argument>%presta_sitemap.timetolive</argument>
+        </service>
     </services>
 
 </container>

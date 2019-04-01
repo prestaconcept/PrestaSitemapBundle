@@ -38,8 +38,10 @@ class SitemapControllerTest extends WebTestCase
         }
 
         //set controller to test
-        $this->controller = new Controller\SitemapController();
-        $this->controller->setContainer(self::$container);
+        $this->controller = new Controller\SitemapController(
+            self::$container->get('presta_sitemap.generator'),
+            3600
+        );
 
         //-------------------
         // add url to sitemap
