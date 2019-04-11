@@ -22,19 +22,27 @@ This is called a sitemap **dump**.
 ## Command usage
 
 Command accepts a single argument which is the folder where to dump sitemaps to.
-It defaults to `web`, since most of the people keep the sitemaps in the root of their sites.
+It defaults to `public`, since most of the people keep the sitemaps in the root of their sites.
 
 The command always creates `sitemap.xml` file as sitemaps index.
 Other files are named according to section names you registered.
 
 ```bash
 $ bin/console presta:sitemaps:dump
-Dumping all sections of sitemaps into web directory
+Dumping all sections of sitemaps into public directory
 Created the following sitemap files
     main.xml
     main_0.xml
     sitemap.xml
 ```
+
+> **Note:** Default directory can also be configured in the bundle configuration.
+> ```yaml
+>  # config/packages/presta_sitemap.yaml
+> presta_sitemap:
+>     dump_directory: some/dir
+> ```
+
 
 
 ## What happened?
@@ -85,8 +93,8 @@ You can override Symfony's routing context host if you need to generate several 
 For example:
 
 ```bash
-$ bin/console presta:sitemaps:dump web/sitemap/es/ --base-url=http://es.mysite.com/
-Dumping all sections of sitemaps into web directory
+$ bin/console presta:sitemaps:dump public/sitemap/es/ --base-url=http://es.mysite.com/
+Dumping all sections of sitemaps into public/sitemap/es/ directory
 Created the following sitemap files
     main.xml
     main_0.xml
@@ -100,7 +108,7 @@ The command supports `gzip` compression:
 
 ```bash
 $ bin/console presta:sitemaps:dump --gzip
-Dumping all sections of sitemaps into tmp4 directory
+Dumping all sections of sitemaps into public directory
 Created/Updated the following sitemap files:
     sitemap.default.xml.gz
     sitemap.image.xml.gz

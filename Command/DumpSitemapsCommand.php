@@ -18,7 +18,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -38,12 +37,18 @@ class DumpSitemapsCommand extends Command
      */
     private $dumper;
 
-    public function __construct(RouterInterface $router, DumperInterface $dumper)
+    /**
+     * @var string
+     */
+    private $defaultTarget;
+
+    public function __construct(RouterInterface $router, DumperInterface $dumper, $defaultTarget)
     {
         parent::__construct(null);
 
         $this->router = $router;
         $this->dumper = $dumper;
+        $this->defaultTarget = $defaultTarget;
     }
 
     /**
@@ -75,7 +80,7 @@ class DumpSitemapsCommand extends Command
                 'target',
                 InputArgument::OPTIONAL,
                 'Location where to dump sitemaps. Generated urls will not be related to this folder.',
-                version_compare(Kernel::VERSION, '4.0') >= 0 ? 'public' : 'web'
+                $this->defaultTarget
             );
     }
 
