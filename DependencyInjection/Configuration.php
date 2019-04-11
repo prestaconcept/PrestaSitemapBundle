@@ -63,6 +63,10 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('lastmod')->defaultValue('now')->end()
                     ->end()
                 ->end()
+                ->scalarNode('default_section')
+                    ->defaultValue('default')
+                    ->info('The default section in which static routes are registered.')
+                ->end()
             ->end()
         ;
 
