@@ -19,8 +19,7 @@ please have a look to Symfony's [official documentation](http://symfony.com/doc/
 
 namespace App\EventListener;
 
-use App\Entity\BlogPost;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use App\Repository\BlogPostRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
@@ -35,18 +34,18 @@ class SitemapSubscriber implements EventSubscriberInterface
     private $urlGenerator;
 
     /**
-     * @var ManagerRegistry
+     * @var BlogPostRepository
      */
-    private $doctrine;
+    private $blogPostRepository;
 
     /**
      * @param UrlGeneratorInterface $urlGenerator
-     * @param ManagerRegistry       $doctrine
+     * @param BlogPostRepository    $blogPostRepository
      */
-    public function __construct(UrlGeneratorInterface $urlGenerator, ManagerRegistry $doctrine)
+    public function __construct(UrlGeneratorInterface $urlGenerator, BlogPostRepository $blogPostRepository)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->doctrine = $doctrine;
+        $this->blogPostRepository = $blogPostRepository;
     }
 
     /**
@@ -72,7 +71,7 @@ class SitemapSubscriber implements EventSubscriberInterface
      */
     public function registerBlogPostsUrls(UrlContainerInterface $urls): void
     {
-        $posts = $this->doctrine->getRepository(BlogPost::class)->findAll();
+        $posts = $this->blogPostRepository->findAll();
 
         foreach ($posts as $post) {
             $urls->addUrl(
@@ -106,7 +105,7 @@ Otherwhise you will have to register it by hand.
 <services>
     <service id="app.sitemap.blog_post_subscriber" class="App\EventListener\SitemapSubscriber">
         <argument type="service" id="router"/>
-        <argument type="service" id="doctrine"/>
+        <argument type="service" id="<your repository service id>"/>
         <tag name="kernel.event_subscriber" priority="100"/>
     </service>
 </services>
@@ -120,7 +119,7 @@ services:
         class: App\EventListener\SitemapSubscriber
         arguments: 
             - "@router"
-            - "@doctrine"
+            - "@<your repository service id>"
         tags:
             - { name: "kernel.event_subscriber", priority: 100 }
 ```
