@@ -36,6 +36,7 @@ class PrestaSitemapExtension extends Extension
         $container->setParameter($this->getAlias() . '.sitemap_file_prefix', $config['sitemap_file_prefix']);
         $container->setParameter($this->getAlias() . '.items_by_set', $config['items_by_set']);
         $container->setParameter($this->getAlias() . '.defaults', $config['defaults']);
+        $container->setParameter($this->getAlias() . '.default_section', $config['default_section']);
 
         if (true === $config['route_annotation_listener']) {
             $loader->load('route_annotation_listener.xml');

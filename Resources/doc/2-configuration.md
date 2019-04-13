@@ -13,6 +13,14 @@ presta_sitemap:
         lastmod: now
 ```
 
+Or choose the default sections for static routes:
+
+```yaml
+# config/packages/presta_sitemap.yaml
+presta_sitemap:
+    default_section: default
+```
+
 ## Time to live
 
 You may want to change the default `3600` seconds max-age set when rendering the

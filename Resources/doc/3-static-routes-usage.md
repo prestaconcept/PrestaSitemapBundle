@@ -11,6 +11,9 @@ The supported sitemap parameters are:
  one of `"always"`, `"hourly"`, `"daily"`, `"weekly"`, `"monthly"`, `"yearly"`, `"never"` (default: `"daily"`)
  * `"priority"`: a number between `0` and `1` (default: `1`)
 
+> **Note** you can change defaults in the bundle configuration.
+> Jump to [dedicated documentation](2-configuration.md) for more information.
+
 
 ## Annotation
 

@@ -43,11 +43,18 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     protected $router;
 
     /**
-     * @param RouterInterface $router
+     * @var string
      */
-    public function __construct(RouterInterface $router)
+    private $defaultSection;
+
+    /**
+     * @param RouterInterface $router
+     * @param string          $defaultSection
+     */
+    public function __construct(RouterInterface $router, $defaultSection)
     {
         $this->router = $router;
+        $this->defaultSection = $defaultSection;
     }
 
     /**
@@ -67,7 +74,7 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     {
         $section = $event->getSection();
 
-        if (is_null($section) || $section == 'default') {
+        if (is_null($section) || $section === $this->defaultSection) {
             $this->addUrlsFromRoutes($event);
         }
     }
@@ -89,7 +96,7 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
                 continue;
             }
 
-            $section = $event->getSection() ?: 'default';
+            $section = $event->getSection() ?: $this->defaultSection;
             if (isset($options['section'])) {
                 $section = $options['section'];
             }
