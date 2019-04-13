@@ -55,6 +55,14 @@ class Configuration implements ConfigurationInterface
                     ->info('The maximum number of items allowed in single sitemap.')
                 ->end()
                 ->scalarNode('route_annotation_listener')->defaultTrue()->end()
+                ->scalarNode('dump_directory')
+                    ->info(
+                        'The directory to which the sitemap will be dumped. '.
+                        'It can be either absolute, or relative (to the place where the command will be triggered). '.
+                        'Default to Symfony\'s public dir.'
+                    )
+                    ->defaultValue(version_compare(Kernel::VERSION, '4.0') >= 0 ? 'public' : 'web')
+                ->end()
                 ->arrayNode('defaults')
                     ->addDefaultsIfNotSet()
                     ->children()

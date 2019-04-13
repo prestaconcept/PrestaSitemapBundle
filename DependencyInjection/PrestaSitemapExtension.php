@@ -32,6 +32,7 @@ class PrestaSitemapExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
 
+        $container->setParameter($this->getAlias() . '.dump_directory', $config['dump_directory']);
         $container->setParameter($this->getAlias() . '.timetolive', $config['timetolive']);
         $container->setParameter($this->getAlias() . '.sitemap_file_prefix', $config['sitemap_file_prefix']);
         $container->setParameter($this->getAlias() . '.items_by_set', $config['items_by_set']);

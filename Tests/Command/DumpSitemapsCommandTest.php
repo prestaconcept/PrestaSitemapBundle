@@ -127,7 +127,13 @@ class DumpSitemapsCommandTest extends WebTestCase
     private function executeDumpWithOptions(array $input = array())
     {
         $application = new Application(self::$kernel);
-        $application->add(new DumpSitemapsCommand($this->container->get('router'), new Dumper($this->container->get('event_dispatcher'), $this->container->get('filesystem'))));
+        $application->add(
+            new DumpSitemapsCommand(
+                $this->container->get('router'),
+                new Dumper($this->container->get('event_dispatcher'), $this->container->get('filesystem')),
+                'public'
+            )
+        );
 
         $command = $application->find('presta:sitemaps:dump');
         $commandTester = new CommandTester($command);
