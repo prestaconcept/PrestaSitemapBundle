@@ -44,11 +44,11 @@ class DumpSitemapsCommand extends Command
 
     public function __construct(RouterInterface $router, DumperInterface $dumper, $defaultTarget)
     {
-        parent::__construct(null);
-
         $this->router = $router;
         $this->dumper = $dumper;
         $this->defaultTarget = $defaultTarget;
+        
+        parent::__construct(null);
     }
 
     /**
