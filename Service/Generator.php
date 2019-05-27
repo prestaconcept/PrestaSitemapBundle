@@ -90,14 +90,21 @@ class Generator extends AbstractGenerator implements GeneratorInterface
             return $this->cache->fetch($name);
         }
 
-        $this->populate($name);
+        if ('root' === $name) {
+            $this->generate();
 
-        if ('root' == $name) {
             return $this->getRoot();
         }
 
+        $this->populate($name);
+
         if (array_key_exists($name, $this->urlsets)) {
-            return $this->urlsets[$name];
+            $urlset = $this->urlsets[$name];
+            if ($this->cache) {
+                $this->cache->save($name, $urlset, $this->cacheTtl);
+            }
+
+            return $urlset;
         }
 
         return null;
