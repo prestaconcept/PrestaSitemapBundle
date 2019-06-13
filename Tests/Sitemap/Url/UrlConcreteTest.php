@@ -29,7 +29,7 @@ class UrlConcreteTest extends \PHPUnit_Framework_TestCase
 
     public function testToXmlProvider()
     {
-        return array(
+        $cases = array(
             array('<url><loc>http://example.com/</loc></url>', 'http://example.com/'),
             array('<url><loc>http://example.com/abcd</loc></url>', 'http://example.com/abcd'),
             array('<url><loc>http://example.com/abcd/?a=1&amp;b=cdf</loc></url>', 'http://example.com/abcd/?a=1&b=cdf'),
@@ -47,5 +47,11 @@ class UrlConcreteTest extends \PHPUnit_Framework_TestCase
             array('<url><loc>http://example.com/abcd/?a=1&amp;b=cdf&amp;ghj=ijklmn</loc><lastmod>2012-01-01T00:00:00+00:00</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>', 'http://example.com/abcd/?a=1&b=cdf&ghj=ijklmn', new \DateTime('2012-1-1 00:00:00', new \DateTimeZone('Europe/London')), 'daily', 0.7),
             array('<url><loc>http://example.com/abcd/?a=1&amp;b=cdf&amp;ghj=ijklmn</loc><changefreq>daily</changefreq><priority>0.7</priority></url>', 'http://example.com/abcd/?a=1&b=cdf&ghj=ijklmn', null, 'daily', 0.7),
         );
+
+        if (\version_compare(\PHP_VERSION, '5.5.0', '>=')) {
+            $cases[] = array('<url><loc>http://example.com/abcd/?a=1&amp;b=cdf&amp;ghj=ijklmn</loc><lastmod>2010-02-13T00:00:00+00:00</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>', 'http://example.com/abcd/?a=1&b=cdf&ghj=ijklmn', new \DateTimeImmutable('2010-2-13 00:00:00', new \DateTimeZone('Europe/London')), 'daily', 0.7);
+        }
+
+        return $cases;
     }
 }

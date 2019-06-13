@@ -12,6 +12,7 @@
 namespace Presta\SitemapBundle\Sitemap\Url;
 
 use DateTime;
+use DateTimeInterface;
 use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
@@ -36,7 +37,7 @@ class UrlConcrete implements Url
     protected $loc;
 
     /**
-     * @var DateTime|null
+     * @var DateTimeInterface|DateTime|null
      */
     protected $lastmod;
 
@@ -53,12 +54,12 @@ class UrlConcrete implements Url
     /**
      * Construct a new basic url
      *
-     * @param string        $loc        Absolute url
-     * @param DateTime|null $lastmod    Last modification date
-     * @param string|null   $changefreq Change frequency
-     * @param float|null    $priority   Priority
+     * @param string                          $loc        Absolute url
+     * @param DateTimeInterface|DateTime|null $lastmod    Last modification date
+     * @param string|null                     $changefreq Change frequency
+     * @param float|null                      $priority   Priority
      */
-    public function __construct($loc, DateTime $lastmod = null, $changefreq = null, $priority = null)
+    public function __construct($loc, $lastmod = null, $changefreq = null, $priority = null)
     {
         $this->setLoc($loc);
         $this->setLastmod($lastmod);
@@ -87,19 +88,38 @@ class UrlConcrete implements Url
     }
 
     /**
-     * @param DateTime|null $lastmod
+     * @param DateTimeInterface|DateTime|null $lastmod
      *
      * @return UrlConcrete
      */
-    public function setLastmod(DateTime $lastmod = null)
+    public function setLastmod($lastmod = null)
     {
+        //First condition only triggers for PHP >=5.5, second one supports <5.5
+        if ($lastmod !== null && !($lastmod instanceof DateTimeInterface || $lastmod instanceof DateTime)) {
+            $type = is_object($lastmod) ? \get_class($lastmod) : \gettype($lastmod);
+
+            if (\PHP_MAJOR_VERSION >= 7) {
+                throw new \TypeError(
+                    'Argument 1 passed to ' . __METHOD__ .
+                    "() must be an instance of DateTimeInterface or null, '$type' given"
+                );
+            }
+
+            \trigger_error(
+                'Argument 1 passed to ' . __METHOD__ . "() must be an instance of DateTime or null, '$type' given",
+                \E_USER_ERROR
+            );
+
+            return $this;
+        }
+
         $this->lastmod = $lastmod;
 
         return $this;
     }
 
     /**
-     * @return DateTime|null
+     * @return DateTimeInterface|DateTime|null
      */
     public function getLastmod()
     {

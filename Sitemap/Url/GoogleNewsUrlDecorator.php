@@ -12,6 +12,7 @@
 namespace Presta\SitemapBundle\Sitemap\Url;
 
 use DateTime;
+use DateTimeInterface;
 use Presta\SitemapBundle\Exception;
 use Presta\SitemapBundle\Sitemap\Utils;
 
@@ -56,7 +57,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     private $genres = array();
 
     /**
-     * @var DateTime
+     * @var DateTimeInterface|DateTime
      */
     private $publicationDate;
 
@@ -86,11 +87,11 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     private $stockTickers = array();
 
     /**
-     * @param Url       $urlDecorated
-     * @param string    $publicationName
-     * @param string    $publicationLanguage
-     * @param DateTime $publicationDate
-     * @param string    $title
+     * @param Url                        $urlDecorated
+     * @param string                     $publicationName
+     * @param string                     $publicationLanguage
+     * @param DateTimeInterface|DateTime $publicationDate
+     * @param string                     $title
      *
      * @throws Exception\GoogleNewsUrlException
      */
@@ -98,7 +99,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
         Url $urlDecorated,
         $publicationName,
         $publicationLanguage,
-        DateTime $publicationDate,
+        $publicationDate,
         $title
     ) {
         parent::__construct($urlDecorated);
@@ -110,9 +111,10 @@ class GoogleNewsUrlDecorator extends UrlDecorator
                 'See https://support.google.com/webmasters/answer/74288?hl=en&ref_topic=10078'
             );
         }
-        $this->publicationLanguage = $publicationLanguage;
-        $this->publicationDate = $publicationDate;
-        $this->title = $title;
+
+        $this->setPublicationLanguage($publicationLanguage);
+        $this->setPublicationDate($publicationDate);
+        $this->setTitle($title);
     }
 
     /**
@@ -217,7 +219,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     }
 
     /**
-     * @return DateTime
+     * @return DateTimeInterface|DateTime
      */
     public function getPublicationDate()
     {
@@ -225,12 +227,31 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     }
 
     /**
-     * @param DateTime $publicationDate
+     * @param DateTimeInterface|DateTime $publicationDate
      *
      * @return GoogleNewsUrlDecorator
      */
-    public function setPublicationDate(DateTime $publicationDate)
+    public function setPublicationDate($publicationDate)
     {
+        //First condition only triggers for PHP >=5.5, second one supports <5.5
+        if (!($publicationDate instanceof DateTimeInterface || $publicationDate instanceof DateTime)) {
+            $type = is_object($publicationDate) ? \get_class($publicationDate) : \gettype($publicationDate);
+
+            if (\PHP_MAJOR_VERSION >= 7) {
+                throw new \TypeError(
+                    'Argument 1 passed to ' . __METHOD__ .
+                    "() must be an instance of DateTimeInterface, '$type' given"
+                );
+            }
+
+            \trigger_error(
+                'Argument 1 passed to ' . __METHOD__ . "() must be an instance of DateTime, '$type' given",
+                E_USER_ERROR
+            );
+
+            return $this;
+        }
+
         $this->publicationDate = $publicationDate;
 
         return $this;

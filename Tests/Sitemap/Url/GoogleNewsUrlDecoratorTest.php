@@ -76,6 +76,26 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test the \DateTimeImmutable support
+     * @requires PHP >= 5.5
+     */
+    public function testImmutableDateTime()
+    {
+        $date = new \DateTimeImmutable('2011-10-01 11:22:33');
+
+        // test date only format
+        $url = $this->createExampleUrl();
+        $url->setPublicationDate($date);
+        $url->setPublicationDateFormat(GoogleNewsUrlDecorator::DATE_FORMAT_DATE);
+        $dom = new \DOMDocument();
+        $dom->loadXML($this->generateXml($url));
+
+        $dateNodes = $dom->getElementsByTagNameNS('http://www.google.com/schemas/sitemap-news/0.9', 'publication_date');
+        $this->assertEquals(1, $dateNodes->length, 'Could not find news:publication_date tag');
+        $this->assertEquals($date->format('Y-m-d'), $dateNodes->item(0)->textContent, 'Date was not formatted properly');
+    }
+
+    /**
      * Tests if the news access property is validated properly.
      */
     public function testAccessPropertyValidation()
