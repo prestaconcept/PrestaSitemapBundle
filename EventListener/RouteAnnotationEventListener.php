@@ -14,6 +14,7 @@ namespace Presta\SitemapBundle\EventListener;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Routing\RouteOptionParser;
 use Presta\SitemapBundle\Service\UrlContainerInterface;
+use Presta\SitemapBundle\Sitemap\Url\GoogleMultilangUrlDecorator;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
@@ -50,13 +51,29 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     private $defaultSection;
 
     /**
+     * @var array
+     */
+    private $defaultOptions;
+
+    /**
      * @param RouterInterface $router
      * @param string          $defaultSection
+     * @param array           $defaultOptions
      */
-    public function __construct(RouterInterface $router, $defaultSection)
-    {
+    public function __construct(
+        RouterInterface $router,
+        $defaultSection,
+        $defaultOptions = [
+            'lastmod' => null,
+            'changefreq' => null,
+            'priority' => null,
+            'default_locale' => null,
+            'locales' => null,
+        ]
+    ) {
         $this->router = $router;
         $this->defaultSection = $defaultSection;
+        $this->defaultOptions = $defaultOptions;
     }
 
     /**
@@ -95,6 +112,14 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
             $routeSection = $options['section'] ?? $this->defaultSection;
             if ($section !== null && $routeSection !== $section) {
                 continue;
+            }
+
+            if ($this->defaultOptions['default_locale']) {
+                if (strpos($name, $this->defaultOptions['default_locale']) === false) {
+                    continue;
+                }
+
+                $name = preg_replace('/[a-z]+__RG__/', '', $name);
             }
 
             $container->addUrl(
@@ -146,12 +171,30 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     protected function getUrlConcrete($name, $options)
     {
         try {
-            return new UrlConcrete(
-                $this->getRouteUri($name),
+            $params = [];
+
+            if ($options['default_locale']) {
+                $params['_locale'] = $options['default_locale'];
+            }
+
+            $url = new UrlConcrete(
+                $this->getRouteUri($name, $params),
                 $options['lastmod'],
                 $options['changefreq'],
                 $options['priority']
             );
+
+            if ($options['locales'] && is_array($options['locales'])) {
+                $url = new GoogleMultilangUrlDecorator($url);
+
+                foreach ($options['locales'] as $locale) {
+                    $params['_locale'] = $locale;
+
+                    $url->addLink($this->getRouteUri($name, $params), $locale);
+                }
+            }
+
+            return $url;
         } catch (\Exception $e) {
             throw new \InvalidArgumentException(
                 sprintf(

@@ -11,6 +11,8 @@ presta_sitemap:
         priority: 1
         changefreq: daily
         lastmod: now
+        default_locale: 'en'
+        locales: ['en', 'it']
 ```
 
 Or choose the default sections for static routes:
