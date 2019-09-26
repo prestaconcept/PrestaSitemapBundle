@@ -2,10 +2,6 @@ language: php
 
 matrix:
     include:
-        - php: 5.6
-          env: SYMFONY_VERSION=2.7.*
-        - php: 5.6
-          env: SYMFONY_VERSION=2.8.*
         - php: 7.1
           env: SYMFONY_VERSION=3.4.*
         - php: 7.2
@@ -13,7 +9,7 @@ matrix:
         - php: 7.3
           env: SYMFONY_VERSION=3.4.*
         - php: 7.3
-          env: SYMFONY_VERSION=4.2.*
+          env: SYMFONY_VERSION=4.3.*
 
 env:
     global:
@@ -30,9 +26,9 @@ before_install:
     - if [ "$PHPCS" = "yes" ]; then phpenv rehash; fi
     - if [ "$PHPCS" != "yes"]; then composer selfupdate; fi
     - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony:${SYMFONY_VERSION}; fi
-    - if [ "$SYMFONY_VERSION" = "3.4.*" ] || [ "$SYMFONY_VERSION" = "4.2.*" ]; then rm -f phpunit.xml; cp phpunit.sf4.xml.dist phpunit.xml; fi
+    - if [ "$SYMFONY_VERSION" = "3.4.*" ] || [ "$SYMFONY_VERSION" = "4.3.*" ]; then rm -f phpunit.xml; cp phpunit.sf4.xml.dist phpunit.xml; fi
 
-install: php -d memory_limit=-1 $(phpenv which composer) update --no-suggest --prefer-dist
+install: COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install --prefer-dist --no-interaction
 
 script:
     - if [ "$PHPCS" != "yes" ]; then vendor/bin/phpunit --coverage-text; fi
