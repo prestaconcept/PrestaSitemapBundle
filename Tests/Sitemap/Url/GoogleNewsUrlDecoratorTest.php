@@ -11,6 +11,7 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap\Url;
 
+use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Exception\GoogleNewsUrlException;
 use Presta\SitemapBundle\Service\Generator;
 use Presta\SitemapBundle\Sitemap\Url\GoogleNewsUrlDecorator;
@@ -22,7 +23,7 @@ use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
  *
  * @author Christoph Foehrdes
  */
-class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
+class GoogleNewsUrlDecoratorTest extends TestCase
 {
     /**
      * Tests if the news specific tags can be found.
@@ -35,7 +36,7 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
 
         $newsTags = $dom->getElementsByTagNameNS('http://www.google.com/schemas/sitemap-news/0.9', '*');
 
-        $this->assertEquals(6, $newsTags->length, 'Could not find news specific tags');
+        self::assertEquals(6, $newsTags->length, 'Could not find news specific tags');
     }
 
     /**
@@ -52,8 +53,8 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
         $dom->loadXML($this->generateXml($url));
 
         $dateNodes = $dom->getElementsByTagNameNS('http://www.google.com/schemas/sitemap-news/0.9', 'publication_date');
-        $this->assertEquals(1, $dateNodes->length, 'Could not find news:publication_date tag');
-        $this->assertEquals($date->format(\DateTime::W3C), $dateNodes->item(0)->textContent, 'Date was not formatted properly');
+        self::assertEquals(1, $dateNodes->length, 'Could not find news:publication_date tag');
+        self::assertEquals($date->format(\DateTime::W3C), $dateNodes->item(0)->textContent, 'Date was not formatted properly');
     }
 
     /**
@@ -71,8 +72,8 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
         $dom->loadXML($this->generateXml($url));
 
         $dateNodes = $dom->getElementsByTagNameNS('http://www.google.com/schemas/sitemap-news/0.9', 'publication_date');
-        $this->assertEquals(1, $dateNodes->length, 'Could not find news:publication_date tag');
-        $this->assertEquals($date->format('Y-m-d'), $dateNodes->item(0)->textContent, 'Date was not formatted properly');
+        self::assertEquals(1, $dateNodes->length, 'Could not find news:publication_date tag');
+        self::assertEquals($date->format('Y-m-d'), $dateNodes->item(0)->textContent, 'Date was not formatted properly');
     }
 
     /**
@@ -88,7 +89,7 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
         } catch (GoogleNewsUrlException $e) {
             $failed = true;
         }
-        $this->assertTrue($failed, 'Setting an invalid access string did not fail');
+        self::assertTrue($failed, 'Setting an invalid access string did not fail');
 
         $failed = false;
         try {
@@ -96,13 +97,13 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
         } catch (GoogleNewsUrlException $e) {
             $failed = true;
         }
-        $this->assertFalse($failed, 'Setting a valid access failed');
+        self::assertFalse($failed, 'Setting a valid access failed');
 
         $dom = new \DOMDocument();
         $dom->loadXML($this->generateXml($url));
         $accessNodes = $dom->getElementsByTagNameNS('http://www.google.com/schemas/sitemap-news/0.9', 'access');
-        $this->assertEquals(1, $accessNodes->length, 'Could not find news:access tag');
-        $this->assertEquals('Registration', $accessNodes->item(0)->textContent, 'Acces tag did not contain the right value');
+        self::assertEquals(1, $accessNodes->length, 'Could not find news:access tag');
+        self::assertEquals('Registration', $accessNodes->item(0)->textContent, 'Acces tag did not contain the right value');
     }
 
     /**
@@ -118,7 +119,7 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
         } catch (GoogleNewsUrlException $e) {
             $failed = true;
         }
-        $this->assertTrue($failed, 'Setting an invalid location string did not fail');
+        self::assertTrue($failed, 'Setting an invalid location string did not fail');
 
         $failed = false;
         try {
@@ -127,13 +128,13 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
         } catch (GoogleNewsUrlException $e) {
             $failed = true;
         }
-        $this->assertFalse($failed, 'Setting a valid access failed');
+        self::assertFalse($failed, 'Setting a valid access failed');
 
         $dom = new \DOMDocument();
         $dom->loadXML($this->generateXml($url));
         $geoNodes = $dom->getElementsByTagNameNS('http://www.google.com/schemas/sitemap-news/0.9', 'geo_locations');
-        $this->assertEquals(1, $geoNodes->length, 'Could not find news:geo_locations tag');
-        $this->assertEquals('Detroit, Michigan, USA', $geoNodes->item(0)->textContent, 'Locations tag did not contain the right value');
+        self::assertEquals(1, $geoNodes->length, 'Could not find news:geo_locations tag');
+        self::assertEquals('Detroit, Michigan, USA', $geoNodes->item(0)->textContent, 'Locations tag did not contain the right value');
     }
 
     /**
@@ -158,7 +159,7 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
         } catch (GoogleNewsUrlException $e) {
             $failed = true;
         }
-        $this->assertTrue($failed, 'Setting to many stock tickers at once did not fail');
+        self::assertTrue($failed, 'Setting to many stock tickers at once did not fail');
 
         $failed = false;
         try {
@@ -174,7 +175,7 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
         } catch (GoogleNewsUrlException $e) {
             $failed = true;
         }
-        $this->assertFalse($failed, 'Setting a valid amount of stock tickers failed');
+        self::assertFalse($failed, 'Setting a valid amount of stock tickers failed');
 
         $failed = false;
         try {
@@ -182,7 +183,7 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
         } catch (GoogleNewsUrlException $e) {
             $failed = true;
         }
-        $this->assertTrue($failed, 'Setting to many stock tickers over the add method did not fail');
+        self::assertTrue($failed, 'Setting to many stock tickers over the add method did not fail');
 
         $url->setStockTickers(
             array(
@@ -193,8 +194,8 @@ class GoogleNewsUrlDecoratorTest extends \PHPUnit_Framework_TestCase
         $dom = new \DOMDocument();
         $dom->loadXML($this->generateXml($url));
         $stockNodes = $dom->getElementsByTagNameNS('http://www.google.com/schemas/sitemap-news/0.9', 'stock_tickers');
-        $this->assertEquals(1, $stockNodes->length, 'Could not find news:stock_tickers tag');
-        $this->assertEquals('NYSE:OWW, NASDAQ:GTAT', $stockNodes->item(0)->textContent, 'Stock tickers tag did not contain the right value');
+        self::assertEquals(1, $stockNodes->length, 'Could not find news:stock_tickers tag');
+        self::assertEquals('NYSE:OWW, NASDAQ:GTAT', $stockNodes->item(0)->textContent, 'Stock tickers tag did not contain the right value');
     }
 
     /**

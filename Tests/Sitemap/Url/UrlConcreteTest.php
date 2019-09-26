@@ -11,23 +11,24 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap\Url;
 
+use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
 /**
  * @author David Epely <depely@prestaconcept.net>
  */
-class UrlConcreteTest extends \PHPUnit_Framework_TestCase
+class UrlConcreteTest extends TestCase
 {
     /**
-     * @dataProvider testToXmlProvider
+     * @dataProvider toXmlProvider
      */
     public function testToXml($expectedXml, $loc, $lastmod = null, $changefreq = null, $priority = null)
     {
         $url = new UrlConcrete($loc, $lastmod, $changefreq, $priority);
-        $this->assertEquals($expectedXml, $url->toXml());
+        self::assertEquals($expectedXml, $url->toXml());
     }
 
-    public function testToXmlProvider()
+    public function toXmlProvider()
     {
         return array(
             array('<url><loc>http://example.com/</loc></url>', 'http://example.com/'),

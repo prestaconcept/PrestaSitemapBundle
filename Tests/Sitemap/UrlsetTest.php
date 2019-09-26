@@ -11,12 +11,13 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap;
 
+use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap;
 
 /**
  * @author David Epely <depely@prestaconcept.net>
  */
-class UrlsetTest extends \PHPUnit_Framework_TestCase
+class UrlsetTest extends TestCase
 {
     protected $urlset;
 
@@ -27,11 +28,14 @@ class UrlsetTest extends \PHPUnit_Framework_TestCase
 
     public function testAddUrl()
     {
+        $failed = false;
         try {
             $this->urlset->addUrl(new Sitemap\Url\UrlConcrete('http://acme.com/'));
         } catch (\RuntimeException $e) {
-            $this->fail('An exception must not be thrown');
+            $failed = true;
         }
+
+        self::assertFalse($failed, 'An exception must not be thrown');
     }
 
     public function testToXml()
@@ -41,6 +45,6 @@ class UrlsetTest extends \PHPUnit_Framework_TestCase
         $xml = new \DOMDocument;
         $xml->loadXML($this->urlset->toXml());
 
-        $this->assertEquals(1, $xml->getElementsByTagName('url')->length);
+        self::assertEquals(1, $xml->getElementsByTagName('url')->length);
     }
 }

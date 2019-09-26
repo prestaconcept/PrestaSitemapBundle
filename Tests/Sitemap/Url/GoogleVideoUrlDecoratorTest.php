@@ -11,13 +11,14 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap\Url;
 
+use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap\Url\GoogleVideoUrlDecorator;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
 /**
  * @author David Epely <depely@prestaconcept.net>
  */
-class GoogleVideoUrlDecoratorTest extends \PHPUnit_Framework_TestCase
+class GoogleVideoUrlDecoratorTest extends TestCase
 {
     /**
      * @var string
@@ -75,18 +76,18 @@ class GoogleVideoUrlDecoratorTest extends \PHPUnit_Framework_TestCase
     public function testCountNamespaces()
     {
         $namespaces = $this->xml->getElementsByTagNameNS('http://www.google.com/schemas/sitemap-video/1.1', '*');
-        $this->assertEquals(24, $namespaces->length);
+        self::assertEquals(24, $namespaces->length);
     }
 
     public function testEncodeUrl()
     {
         $playerLoc = $this->xml->getElementsByTagName('player_loc')->item(0)->nodeValue;
-        $this->assertEquals($playerLoc, 'http://acme.com/video/player.swf?a=b&c=d');
+        self::assertEquals($playerLoc, 'http://acme.com/video/player.swf?a=b&c=d');
     }
 
     public function testRenderCategory()
     {
         $category = $this->xml->getElementsByTagName('category')->item(0)->nodeValue;
-        $this->assertEquals($category, 'Testing w/ spécial chars');
+        self::assertEquals($category, 'Testing w/ spécial chars');
     }
 }

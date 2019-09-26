@@ -87,10 +87,10 @@ class DumpSitemapsCommandTest extends WebTestCase
     public function testSitemapDumpWithGzip()
     {
         $res = $this->executeDumpWithOptions(array('target' => $this->webDir, '--gzip' => true));
-        $this->assertEquals(0, $res, 'Command exited with error');
+        self::assertEquals(0, $res, 'Command exited with error');
 
         $xml = gzinflate(substr(file_get_contents($this->webDir . '/sitemap.video.xml.gz'), 10, -8));
-        $this->assertXmlStringEqualsXmlFile($this->fixturesDir . '/sitemap.video.xml', $xml);
+        self::assertXmlStringEqualsXmlFile($this->fixturesDir . '/sitemap.video.xml', $xml);
 
         $expectedSitemaps = array('http://sitemap.php54.local/sitemap.video.xml.gz');
         $this->assertSitemapIndexEquals($this->webDir . '/sitemap.xml', $expectedSitemaps);
@@ -125,7 +125,7 @@ class DumpSitemapsCommandTest extends WebTestCase
         }
         sort($expectedSitemaps);
         sort($sitemaps);
-        $this->assertEquals($expectedSitemaps, $sitemaps);
+        self::assertEquals($expectedSitemaps, $sitemaps);
     }
 
     private function executeDumpWithOptions(array $input = array())

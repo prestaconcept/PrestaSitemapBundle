@@ -2,10 +2,11 @@
 
 namespace Presta\SitemapBundle\Test\DependencyInjection;
 
+use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\DependencyInjection\PrestaSitemapExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
+class RouteAnnotationEventListenerTest extends TestCase
 {
     public function testDumperAliasIsSet()
     {
@@ -14,6 +15,6 @@ class RouteAnnotationEventListenerTest extends \PHPUnit_Framework_TestCase
         $extension = new PrestaSitemapExtension();
         $extension->load(array(), $containerBuilder);
 
-        $this->assertTrue($containerBuilder->hasAlias('Presta\SitemapBundle\Service\DumperInterface'));
+        self::assertTrue($containerBuilder->hasAlias('Presta\SitemapBundle\Service\DumperInterface'));
     }
 }
