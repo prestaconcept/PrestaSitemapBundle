@@ -53,7 +53,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @var array
      */
-    private $genres = array();
+    private $genres = [];
 
     /**
      * @var DateTime
@@ -78,12 +78,12 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @var array
      */
-    private $keywords = array();
+    private $keywords = [];
 
     /**
      * @var array
      */
-    private $stockTickers = array();
+    private $stockTickers = [];
 
     /**
      * @param Url       $urlDecorated

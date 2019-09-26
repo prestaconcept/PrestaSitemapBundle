@@ -147,14 +147,14 @@ class GoogleNewsUrlDecoratorTest extends TestCase
         $failed = false;
         try {
             $url->setStockTickers(
-                array(
+                [
                     'NYSE:OWW',
                     'NASDAQ:GTAT',
                     'NYSE:AOL',
                     'NASDAQ:ENDP',
                     'CVE:GTA',
                     'NASDAQ:IMGN'
-                )
+                ]
             );
         } catch (GoogleNewsUrlException $e) {
             $failed = true;
@@ -164,13 +164,13 @@ class GoogleNewsUrlDecoratorTest extends TestCase
         $failed = false;
         try {
             $url->setStockTickers(
-                array(
+                [
                     'NYSE:OWW',
                     'NASDAQ:GTAT',
                     'NYSE:AOL',
                     'NASDAQ:ENDP',
                     'CVE:GTA'
-                )
+                ]
             );
         } catch (GoogleNewsUrlException $e) {
             $failed = true;
@@ -186,10 +186,10 @@ class GoogleNewsUrlDecoratorTest extends TestCase
         self::assertTrue($failed, 'Setting to many stock tickers over the add method did not fail');
 
         $url->setStockTickers(
-            array(
+            [
                 'NYSE:OWW',
                 'NASDAQ:GTAT'
-            )
+            ]
         );
         $dom = new \DOMDocument();
         $dom->loadXML($this->generateXml($url));

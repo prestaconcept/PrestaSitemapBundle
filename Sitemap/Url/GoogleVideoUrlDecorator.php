@@ -127,12 +127,12 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @var array
      */
-    protected $restriction_allow = array();
+    protected $restriction_allow = [];
 
     /**
      * @var array
      */
-    protected $restriction_deny = array();
+    protected $restriction_deny = [];
 
     /**
      * @var string|null
@@ -162,7 +162,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @var array
      */
-    protected $platforms = array();
+    protected $platforms = [];
 
     /**
      * @var string|null
@@ -178,13 +178,13 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * multiple prices can be added, see self::addPrice()
      * @var array
      */
-    protected $prices = array();
+    protected $prices = [];
 
     /**
      * multiple tags can be added, see self::addTag()
      * @var array
      */
-    protected $tags = array();
+    protected $tags = [];
 
     /**
      * Decorate url with a video
@@ -198,7 +198,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      *
      * @throws Exception\GoogleVideoUrlException
      */
-    public function __construct(Url $urlDecorated, $thumnail_loc, $title, $description, array $parameters = array())
+    public function __construct(Url $urlDecorated, $thumnail_loc, $title, $description, array $parameters = [])
     {
         foreach ($parameters as $key => $param) {
             $method = Utils::getSetMethod($this, $key);
@@ -769,12 +769,12 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      */
     public function addPrice($amount, $currency, $type = null, $resolution = null)
     {
-        $this->prices[] = array(
+        $this->prices[] = [
             'amount' => $amount,
             'currency' => $currency,
             'type' => $type,
             'resolution' => $resolution,
-        );
+        ];
 
         return $this;
     }

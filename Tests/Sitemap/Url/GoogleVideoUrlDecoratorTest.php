@@ -32,7 +32,7 @@ class GoogleVideoUrlDecoratorTest extends TestCase
             'http://acme.com/video/thumbnail.jpg',
             'Acme video',
             'An acme video for testing purposes',
-            array(
+            [
                 'content_loc'   => 'http://acme.com/video/content.flv',
                 'player_loc'    => 'http://acme.com/video/player.swf?a=b&c=d',
                 'duration'      => '600',
@@ -42,17 +42,17 @@ class GoogleVideoUrlDecoratorTest extends TestCase
                 'publication_date'  => new \DateTime,
                 'family_friendly'   => GoogleVideoUrlDecorator::FAMILY_FRIENDLY_YES,
                 'category'          => 'Testing w/ spécial chars',
-                'restriction_allow' => array('FR', 'BE'),
-                'restriction_deny'  => array('GB'),
+                'restriction_allow' => ['FR', 'BE'],
+                'restriction_deny'  => ['GB'],
                 'gallery_loc'       => 'http://acme.com/video/gallery/?p=1&sort=desc',
                 'gallery_loc_title' => 'Gallery for testing purposes',
                 'requires_subscription' => GoogleVideoUrlDecorator::REQUIRES_SUBSCRIPTION_YES,
                 'uploader'          => 'depely',
                 'uploader_info'     => 'http://acme.com/video/users/1/',
-                'platforms'         => array(GoogleVideoUrlDecorator::PLATFORM_WEB, GoogleVideoUrlDecorator::PLATFORM_MOBILE),
+                'platforms'         => [GoogleVideoUrlDecorator::PLATFORM_WEB, GoogleVideoUrlDecorator::PLATFORM_MOBILE],
                 'platform_relationship' => GoogleVideoUrlDecorator::PLATFORM_RELATIONSHIP_ALLOW,
                 'live'              => GoogleVideoUrlDecorator::LIVE_NO,
-            )
+            ]
         );
 
         $url->addTag('acme');

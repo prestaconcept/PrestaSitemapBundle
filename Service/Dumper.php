@@ -69,7 +69,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
     /**
      * @inheritdoc
      */
-    public function dump($targetDir, $host, $section = null, array $options = array())
+    public function dump($targetDir, $host, $section = null, array $options = [])
     {
         $options = array_merge(['gzip' => false], $options);
 
@@ -140,7 +140,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
     {
         $this->filesystem->remove($this->tmpFolder);
         $this->root = null;
-        $this->urlsets = array();
+        $this->urlsets = [];
     }
 
     /**
@@ -154,10 +154,10 @@ class Dumper extends AbstractGenerator implements DumperInterface
     protected function loadCurrentSitemapIndex($filename)
     {
         if (!file_exists($filename)) {
-            return array();
+            return [];
         }
 
-        $urlsets = array();
+        $urlsets = [];
         $index = simplexml_load_file($filename);
         foreach ($index->children() as $child) {
             /** @var $child \SimpleXMLElement */
@@ -208,7 +208,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
         $this->deleteExistingSitemaps($targetDir);
 
         // no need to delete the root file as it always exists, it will be overwritten
-        $this->filesystem->mirror($this->tmpFolder, $targetDir, null, array('override' => true));
+        $this->filesystem->mirror($this->tmpFolder, $targetDir, null, ['override' => true]);
         $this->cleanup();
     }
 

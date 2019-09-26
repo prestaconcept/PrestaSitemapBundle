@@ -13,7 +13,6 @@ namespace Presta\SitemapBundle\Test\Sitemap;
 
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\EventListener\RouteAnnotationEventListener;
-use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
 /**
 * Manage sitemaps listing
@@ -66,7 +65,7 @@ class RouteAnnotationEventListenerTest extends TestCase
      */
     public function testValidPriority()
     {
-        $result=$this->getListener()->getOptions('route1', $this->getRoute(array('priority'=>0.5)));
+        $result=$this->getListener()->getOptions('route1', $this->getRoute(['priority' => 0.5]));
         self::assertEquals(0.5, $result['priority']);
     }
 
@@ -75,7 +74,7 @@ class RouteAnnotationEventListenerTest extends TestCase
      */
     public function testValidChangefreq()
     {
-        $result=$this->getListener()->getOptions('route1', $this->getRoute(array('changefreq'=>'weekly')));
+        $result=$this->getListener()->getOptions('route1', $this->getRoute(['changefreq' => 'weekly']));
         self::assertEquals('weekly', $result['changefreq']);
     }
 
@@ -84,7 +83,7 @@ class RouteAnnotationEventListenerTest extends TestCase
      */
     public function testValidLastmod()
     {
-        $result=$this->getListener()->getOptions('route1', $this->getRoute(array('lastmod'=>'2012-01-01 00:00:00')));
+        $result=$this->getListener()->getOptions('route1', $this->getRoute(['lastmod' => '2012-01-01 00:00:00']));
         self::assertEquals(new \DateTime('2012-01-01 00:00:00'), $result['lastmod']);
     }
 
@@ -94,7 +93,7 @@ class RouteAnnotationEventListenerTest extends TestCase
      */
     public function testInvalidLastmod()
     {
-        $this->getListener()->getOptions('route1', $this->getRoute(array('lastmod'=>'unknown')));
+        $this->getListener()->getOptions('route1', $this->getRoute(['lastmod' => 'unknown']));
     }
 
     /**
@@ -104,7 +103,7 @@ class RouteAnnotationEventListenerTest extends TestCase
     private function getRoute($option = null)
     {
         $route = $this->getMockBuilder('Symfony\Component\Routing\Route')
-            ->setMethods(array('getOption'))
+            ->setMethods(['getOption'])
             ->disableOriginalConstructor()
             ->getMock();
 

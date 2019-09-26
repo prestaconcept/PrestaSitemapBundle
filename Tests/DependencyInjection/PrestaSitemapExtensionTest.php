@@ -13,7 +13,7 @@ class RouteAnnotationEventListenerTest extends TestCase
         $containerBuilder = new ContainerBuilder();
 
         $extension = new PrestaSitemapExtension();
-        $extension->load(array(), $containerBuilder);
+        $extension->load([], $containerBuilder);
 
         self::assertTrue($containerBuilder->hasAlias('Presta\SitemapBundle\Service\DumperInterface'));
     }

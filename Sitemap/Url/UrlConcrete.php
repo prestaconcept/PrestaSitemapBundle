@@ -213,6 +213,6 @@ class UrlConcrete implements Url
      */
     public function getCustomNamespaces()
     {
-        return array(); // basic url has no namespace. see decorated urls
+        return []; // basic url has no namespace. see decorated urls
     }
 }
