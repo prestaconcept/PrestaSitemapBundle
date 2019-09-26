@@ -134,7 +134,7 @@ class GeneratorTest extends WebTestCase
         // knowing that the generator changes the url instance, we check its properties here
         self::assertEquals(1, $url->getPriority());
         self::assertEquals(Sitemap\Url\UrlConcrete::CHANGEFREQ_DAILY, $url->getChangefreq());
-        self::assertInstanceOf('DateTime', $url->getLastmod());
+        self::assertInstanceOf('DateTimeInterface', $url->getLastmod());
     }
 
     public function testNullableDefaults()

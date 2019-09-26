@@ -168,7 +168,7 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
 
         if (is_string($options['lastmod'])) {
             try {
-                $options['lastmod'] = new \DateTime($options['lastmod']);
+                $options['lastmod'] = new \DateTimeImmutable($options['lastmod']);
             } catch (\Exception $e) {
                 throw new \InvalidArgumentException(
                     sprintf(

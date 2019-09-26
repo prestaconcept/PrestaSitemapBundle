@@ -113,7 +113,7 @@ class Generator extends AbstractGenerator implements GeneratorInterface
     /**
      * @inheritdoc
      */
-    protected function newUrlset($name, \DateTime $lastmod = null)
+    protected function newUrlset($name, \DateTimeInterface $lastmod = null)
     {
         return new Urlset(
             $this->router->generate(

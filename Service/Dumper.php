@@ -178,7 +178,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
                         "One of referenced sitemaps in $filename doesn't contain 'lastmod' attribute"
                     );
                 }
-                $lastmod = new \DateTime($child->lastmod);
+                $lastmod = new \DateTimeImmutable($child->lastmod);
                 $urlsets[$basename] = $this->newUrlset($basename, $lastmod);
             }
         }
@@ -236,7 +236,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
     /**
      * @inheritdoc
      */
-    protected function newUrlset($name, \DateTime $lastmod = null)
+    protected function newUrlset($name, \DateTimeInterface $lastmod = null)
     {
         return new DumpingUrlset($this->baseUrl . $this->sitemapFilePrefix . '.' . $name . '.xml', $lastmod);
     }

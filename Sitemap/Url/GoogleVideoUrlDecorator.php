@@ -11,7 +11,7 @@
 
 namespace Presta\SitemapBundle\Sitemap\Url;
 
-use DateTime;
+use DateTimeInterface;
 use Presta\SitemapBundle\Exception;
 use Presta\SitemapBundle\Sitemap\Utils;
 
@@ -95,7 +95,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     protected $duration;
 
     /**
-     * @var DateTime|null
+     * @var DateTimeInterface|null
      */
     protected $expiration_date;
 
@@ -110,7 +110,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     protected $view_count;
 
     /**
-     * @var DateTime|null
+     * @var DateTimeInterface|null
      */
     protected $publication_date;
 
@@ -366,11 +366,11 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     }
 
     /**
-     * @param DateTime $expiration_date
+     * @param DateTimeInterface $expiration_date
      *
      * @return GoogleVideoUrlDecorator
      */
-    public function setExpirationDate(DateTime $expiration_date)
+    public function setExpirationDate(DateTimeInterface $expiration_date)
     {
         $this->expiration_date = $expiration_date;
 
@@ -411,11 +411,11 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     }
 
     /**
-     * @param DateTime $publication_date
+     * @param DateTimeInterface $publication_date
      *
      * @return GoogleVideoUrlDecorator
      */
-    public function setPublicationDate(DateTime $publication_date)
+    public function setPublicationDate(DateTimeInterface $publication_date)
     {
         $this->publication_date = $publication_date;
 
@@ -662,7 +662,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     }
 
     /**
-     * @return DateTime|null
+     * @return DateTimeInterface|null
      */
     public function getExpirationDate()
     {
@@ -686,7 +686,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     }
 
     /**
-     * @return DateTime|null
+     * @return DateTimeInterface|null
      */
     public function getPublicationDate()
     {

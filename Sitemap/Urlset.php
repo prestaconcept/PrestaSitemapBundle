@@ -11,7 +11,7 @@
 
 namespace Presta\SitemapBundle\Sitemap;
 
-use DateTime;
+use DateTimeInterface;
 use Presta\SitemapBundle\Sitemap\Url\Url;
 
 /**
@@ -29,7 +29,7 @@ class Urlset extends XmlConstraint
     protected $loc;
 
     /**
-     * @var DateTime
+     * @var DateTimeInterface
      */
     protected $lastmod;
 
@@ -45,12 +45,12 @@ class Urlset extends XmlConstraint
 
     /**
      * @param string         $loc
-     * @param DateTime|null $lastmod
+     * @param DateTimeInterface|null $lastmod
      */
-    public function __construct($loc, DateTime $lastmod = null)
+    public function __construct($loc, DateTimeInterface $lastmod = null)
     {
         $this->loc = $loc;
-        $this->lastmod = $lastmod ? $lastmod : new DateTime();
+        $this->lastmod = $lastmod ? $lastmod : new \DateTimeImmutable();
     }
 
     /**
@@ -62,7 +62,7 @@ class Urlset extends XmlConstraint
     }
 
     /**
-     * @return DateTime
+     * @return DateTimeInterface
      */
     public function getLastmod()
     {
