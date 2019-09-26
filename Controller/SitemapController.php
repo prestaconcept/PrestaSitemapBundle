@@ -12,16 +12,37 @@
 namespace Presta\SitemapBundle\Controller;
 
 use Presta\SitemapBundle\Service\GeneratorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Provides action to render sitemap files
  *
  * @author David Epely <depely@prestaconcept.net>
  */
-class SitemapController extends Controller
+class SitemapController
 {
+    /**
+     * @var GeneratorInterface
+     */
+    private $generator;
+
+    /**
+     * Time to live of the response in seconds
+     *
+     * @var int
+     */
+    private $ttl;
+
+    /**
+     * @param int $ttl
+     */
+    public function __construct(GeneratorInterface $generator, $ttl)
+    {
+        $this->generator = $generator;
+        $this->ttl = $ttl;
+    }
+
     /**
      * list sitemaps
      *
@@ -29,15 +50,15 @@ class SitemapController extends Controller
      */
     public function indexAction()
     {
-        $sitemapindex = $this->getGenerator()->fetch('root');
+        $sitemapindex = $this->generator->fetch('root');
 
         if (!$sitemapindex) {
-            throw $this->createNotFoundException();
+            throw new NotFoundHttpException('Not found');
         }
 
         $response = Response::create($sitemapindex->toXml());
         $response->setPublic();
-        $response->setClientTtl($this->getTtl());
+        $response->setClientTtl($this->ttl);
 
         return $response;
     }
@@ -51,15 +72,15 @@ class SitemapController extends Controller
      */
     public function sectionAction($name)
     {
-        $section = $this->getGenerator()->fetch($name);
+        $section = $this->generator->fetch($name);
 
         if (!$section) {
-            throw $this->createNotFoundException();
+            throw new NotFoundHttpException('Not found');
         }
 
         $response = Response::create($section->toXml());
         $response->setPublic();
-        $response->setClientTtl($this->getTtl());
+        $response->setClientTtl($this->ttl);
 
         return $response;
     }
@@ -71,14 +92,6 @@ class SitemapController extends Controller
      */
     protected function getTtl()
     {
-        return $this->container->getParameter('presta_sitemap.timetolive');
-    }
-
-    /**
-     * @return GeneratorInterface
-     */
-    private function getGenerator()
-    {
-        return $this->get('presta_sitemap.generator');
+        return $this->ttl;
     }
 }

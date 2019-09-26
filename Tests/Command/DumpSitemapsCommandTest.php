@@ -32,7 +32,7 @@ class DumpSitemapsCommandTest extends WebTestCase
     /**
      * @var ContainerInterface
      */
-    private $container;
+    protected static $container;
 
     private $fixturesDir;
 
@@ -44,13 +44,16 @@ class DumpSitemapsCommandTest extends WebTestCase
         $this->webDir = realpath(__DIR__ . '/../web');
 
         self::createClient(['debug' => false]);
-        $this->container = self::$kernel->getContainer();
-        $router = $this->container->get('router');
+        if (self::$container === null) {
+            self::$container = self::$kernel->getContainer();
+        }
+
+        $router = self::$container->get('router');
         /* @var $router RouterInterface */
 
         $router->getContext()->fromRequest(Request::create('http://sitemap.php54.local'));
 
-        $this->container->get('event_dispatcher')
+        self::$container->get('event_dispatcher')
             ->addListener(
                 SitemapPopulateEvent::ON_SITEMAP_POPULATE,
                 function (SitemapPopulateEvent $event) use ($router) {
@@ -75,6 +78,7 @@ class DumpSitemapsCommandTest extends WebTestCase
     protected function tearDown()
     {
         parent::tearDown();
+        self::$container = null;
         foreach (glob($this->webDir . '/*{.xml,.xml.gz}', GLOB_BRACE) as $file) {
             unlink($file);
         }
@@ -129,8 +133,8 @@ class DumpSitemapsCommandTest extends WebTestCase
         $application = new Application(self::$kernel);
         $application->add(
             new DumpSitemapsCommand(
-                $this->container->get('router'),
-                new Dumper($this->container->get('event_dispatcher'), $this->container->get('filesystem')),
+                self::$container->get('router'),
+                new Dumper(self::$container->get('event_dispatcher'), self::$container->get('filesystem')),
                 'public'
             )
         );

@@ -27,21 +27,25 @@ class SitemapControllerTest extends WebTestCase
     /**
      * @var ContainerInterface
      */
-    private $container;
+    protected static $container;
 
     public function setUp()
     {
         //boot appKernel
         self::createClient(['debug' => false]);
-        $this->container  = static::$kernel->getContainer();
+        if (self::$container === null) {
+            self::$container = self::$kernel->getContainer();
+        }
 
         //set controller to test
-        $this->controller = new Controller\SitemapController();
-        $this->controller->setContainer($this->container);
+        $this->controller = new Controller\SitemapController(
+            self::$container->get('presta_sitemap.generator'),
+            3600
+        );
 
         //-------------------
         // add url to sitemap
-        $this->container->get('event_dispatcher')
+        self::$container->get('event_dispatcher')
             ->addListener(
                 SitemapPopulateEvent::ON_SITEMAP_POPULATE,
                 function (SitemapPopulateEvent $event) {
@@ -57,6 +61,12 @@ class SitemapControllerTest extends WebTestCase
                 }
             );
         //-------------------
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+        self::$container = null;
     }
 
     public function testIndexAction()

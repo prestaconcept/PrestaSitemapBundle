@@ -4,4 +4,4 @@ PrestaSitemapBundle:
 
 PrestaDemoBundle_homepage:
     path:     /
-    defaults: { _controller: PrestaSitemapBundle:Sitemap:index }
+    defaults: { _controller: Presta\SitemapBundle\Controller\SitemapController::indexAction }

@@ -15,6 +15,7 @@ use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Service\Generator;
 use Presta\SitemapBundle\Sitemap;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -22,17 +23,39 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class GeneratorTest extends WebTestCase
 {
+    /**
+     * @var Generator
+     */
     protected $generator;
     /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
+    /**
+     * @var ContainerInterface
+     */
+    protected static $container;
+
     public function setUp()
     {
         self::createClient(['debug' => false]);
-        $container  = static::$kernel->getContainer();
-        $this->eventDispatcher = $container->get('event_dispatcher');
+        if (self::$container === null) {
+            self::$container = self::$kernel->getContainer();
+        }
+        $this->eventDispatcher = self::$container->get('event_dispatcher');
 
-        $this->generator = new Generator($this->eventDispatcher, $container->get('router'), null, null, 1);
+        $this->generator = new Generator(
+            $this->eventDispatcher,
+            self::$container->get('router'),
+            null,
+            null,
+            1
+        );
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+        self::$container = null;
     }
 
     public function testGenerate()
