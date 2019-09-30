@@ -26,7 +26,7 @@ abstract class UrlDecorator implements Url
     /**
      * @var array
      */
-    protected $customNamespaces = array();
+    protected $customNamespaces = [];
 
     /**
      * @param Url $urlDecorated

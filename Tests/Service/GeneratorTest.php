@@ -62,7 +62,7 @@ class GeneratorTest extends WebTestCase
     {
         try {
             $this->generator->generate();
-            $this->assertTrue(true, 'No exception was thrown');
+            self::assertTrue(true, 'No exception was thrown');
         } catch (\RuntimeException $e) {
             $this->fail('No exception must be thrown');
         }
@@ -71,24 +71,24 @@ class GeneratorTest extends WebTestCase
     public function testFetch()
     {
         $section = $this->generator->generate('void');
-        $this->assertNull($section);
+        self::assertNull($section);
 
         $triggered = false;
         $listener = function (SitemapPopulateEvent $event) use (&$triggered) {
-            $this->assertEquals($event->getSection(), 'foo');
+            self::assertEquals($event->getSection(), 'foo');
             $triggered = true;
         };
         $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, $listener);
 
         $this->generator->fetch('foo');
-        $this->assertTrue($triggered);
+        self::assertTrue($triggered);
     }
 
     public function testAddUrl()
     {
         try {
             $this->generator->addUrl(new Sitemap\Url\UrlConcrete('http://acme.com/'), 'default');
-            $this->assertTrue(true, 'No exception was thrown');
+            self::assertTrue(true, 'No exception was thrown');
         } catch (\RuntimeException $e) {
             $this->fail('No exception must be thrown');
         }
@@ -98,7 +98,7 @@ class GeneratorTest extends WebTestCase
     {
         $urlset = $this->generator->getUrlset('default');
 
-        $this->assertInstanceOf('Presta\\SitemapBundle\\Sitemap\\Urlset', $urlset);
+        self::assertInstanceOf('Presta\\SitemapBundle\\Sitemap\\Urlset', $urlset);
     }
 
     public function testItemsBySet()
@@ -111,8 +111,8 @@ class GeneratorTest extends WebTestCase
         $fullUrlset  = $this->generator->getUrlset('default_0');
         $emptyUrlset = $this->generator->getUrlset('default_1');
 
-        $this->assertEquals(count($fullUrlset), 1);
-        $this->assertEquals(count($emptyUrlset), 0);
+        self::assertEquals(count($fullUrlset), 1);
+        self::assertEquals(count($emptyUrlset), 0);
     }
 
     public function testDefaults()
@@ -125,16 +125,16 @@ class GeneratorTest extends WebTestCase
 
         $url = new Sitemap\Url\UrlConcrete('http://acme.com/');
 
-        $this->assertEquals(null, $url->getPriority());
-        $this->assertEquals(null, $url->getChangefreq());
-        $this->assertEquals(null, $url->getLastmod());
+        self::assertEquals(null, $url->getPriority());
+        self::assertEquals(null, $url->getChangefreq());
+        self::assertEquals(null, $url->getLastmod());
 
         $this->generator->addUrl($url, 'default');
 
         // knowing that the generator changes the url instance, we check its properties here
-        $this->assertEquals(1, $url->getPriority());
-        $this->assertEquals(Sitemap\Url\UrlConcrete::CHANGEFREQ_DAILY, $url->getChangefreq());
-        $this->assertInstanceOf('DateTime', $url->getLastmod());
+        self::assertEquals(1, $url->getPriority());
+        self::assertEquals(Sitemap\Url\UrlConcrete::CHANGEFREQ_DAILY, $url->getChangefreq());
+        self::assertInstanceOf('DateTimeInterface', $url->getLastmod());
     }
 
     public function testNullableDefaults()
@@ -147,14 +147,14 @@ class GeneratorTest extends WebTestCase
 
         $url = new Sitemap\Url\UrlConcrete('http://acme.com/');
 
-        $this->assertEquals(null, $url->getPriority());
-        $this->assertEquals(null, $url->getChangefreq());
-        $this->assertEquals(null, $url->getLastmod());
+        self::assertEquals(null, $url->getPriority());
+        self::assertEquals(null, $url->getChangefreq());
+        self::assertEquals(null, $url->getLastmod());
 
         $this->generator->addUrl($url, 'default');
 
-        $this->assertEquals(null, $url->getPriority());
-        $this->assertEquals(null, $url->getChangefreq());
-        $this->assertEquals(null, $url->getLastmod());
+        self::assertEquals(null, $url->getPriority());
+        self::assertEquals(null, $url->getChangefreq());
+        self::assertEquals(null, $url->getLastmod());
     }
 }

@@ -11,32 +11,46 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap\Url;
 
+use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap;
 
 /**
  * @author David Epely <depely@prestaconcept.net>
  */
-class GoogleImageTest extends \PHPUnit_Framework_TestCase
+class GoogleImageTest extends TestCase
 {
     /**
-     * @dataProvider testToXmlProvider
+     * @dataProvider toXmlProvider
      */
     public function testToXml($expectedXml, $loc, $caption = null, $geoLocalisation = null, $title = null, $license = null)
     {
+        $failed = false;
         try {
             $image = new Sitemap\Url\GoogleImage($loc, $caption, $geoLocalisation, $title, $license);
         } catch (\RuntimeException $e) {
-            $this->fail('An exception must not be thrown');
+            $failed = true;
         }
 
-        $this->assertEquals($expectedXml, $image->toXML());
+        self::assertFalse($failed, 'An exception must not be thrown');
+        self::assertEquals($expectedXml, $image->toXML());
     }
 
-    public function testToXmlProvider()
+    public function toXmlProvider()
     {
-        return array(
-            array('<image:image><image:loc>http://acme.com/logo.jpg</image:loc><image:caption><![CDATA[this is about logo]]></image:caption><image:geo_location><![CDATA[Lyon, France]]></image:geo_location><image:title><![CDATA[The Acme logo]]></image:title><image:license><![CDATA[WTFPL]]></image:license></image:image>', 'http://acme.com/logo.jpg', 'this is about logo', 'Lyon, France', 'The Acme logo', 'WTFPL'),
-            array('<image:image><image:loc>http://acme.com/logo.jpg?a=&amp;b=c</image:loc><image:caption><![CDATA[this is about <strong>logo</strong>]]></image:caption></image:image>', 'http://acme.com/logo.jpg?a=&b=c', 'this is about <strong>logo</strong>'),
-        );
+        return [
+            [
+                '<image:image><image:loc>http://acme.com/logo.jpg</image:loc><image:caption><![CDATA[this is about logo]]></image:caption><image:geo_location><![CDATA[Lyon, France]]></image:geo_location><image:title><![CDATA[The Acme logo]]></image:title><image:license><![CDATA[WTFPL]]></image:license></image:image>',
+                'http://acme.com/logo.jpg',
+                'this is about logo',
+                'Lyon, France',
+                'The Acme logo',
+                'WTFPL'
+            ],
+            [
+                '<image:image><image:loc>http://acme.com/logo.jpg?a=&amp;b=c</image:loc><image:caption><![CDATA[this is about <strong>logo</strong>]]></image:caption></image:image>',
+                'http://acme.com/logo.jpg?a=&b=c',
+                'this is about <strong>logo</strong>'
+            ],
+        ];
     }
 }

@@ -72,13 +72,13 @@ class SitemapControllerTest extends WebTestCase
     public function testIndexAction()
     {
         $response = $this->controller->indexAction();
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
+        self::assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
     }
 
     public function testValidSectionAction()
     {
         $response = $this->controller->sectionAction('default');
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
+        self::assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
     }
 
     /**

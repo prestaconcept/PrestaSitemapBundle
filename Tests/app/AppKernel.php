@@ -16,12 +16,12 @@ class AppKernel extends Kernel
 {
     public function registerBundles()
     {
-        $bundles = array(
+        $bundles = [
             // Dependencies
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Presta\SitemapBundle\PrestaSitemapBundle(),
-        );
+        ];
 
         return $bundles;
     }

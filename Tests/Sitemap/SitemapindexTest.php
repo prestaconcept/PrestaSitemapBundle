@@ -11,6 +11,7 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap;
 
+use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap;
 
 /**
@@ -18,17 +19,19 @@ use Presta\SitemapBundle\Sitemap;
  *
  * @author David Epely <depely@prestaconcept.net>
  */
-class SitemapindexTest extends \PHPUnit_Framework_TestCase
+class SitemapindexTest extends TestCase
 {
     public function testAddSitemap()
     {
         $sitemapindex = new Sitemap\Sitemapindex();
 
+        $failed = false;
         try {
             $sitemapindex->addSitemap(new Sitemap\Urlset('http://acme.com'));
         } catch (\RuntimeException $e) {
-            $this->fail('An exception must not be thrown');
+            $failed = true;
         }
+        self::assertFalse($failed, 'An exception must not be thrown');
     }
 
     public function testGetSitemapXml()
@@ -39,7 +42,7 @@ class SitemapindexTest extends \PHPUnit_Framework_TestCase
 
         $getSitemapXmlMethod = self::getMethod($sitemapindex, 'getSitemapXml');
 
-        $this->assertXmlStringEqualsXmlString(
+        self::assertXmlStringEqualsXmlString(
             '<sitemap><loc>' . $loc . '</loc><lastmod>' . $today->format('c') . '</lastmod></sitemap>',
             $getSitemapXmlMethod->invoke($sitemapindex, new Sitemap\Urlset($loc, $today)),
             '->getSitemapXml() render xml'
@@ -50,7 +53,7 @@ class SitemapindexTest extends \PHPUnit_Framework_TestCase
     {
         $sitemapindex   = new Sitemap\Sitemapindex();
         $xml = $sitemapindex->toXml();
-        $this->assertXmlStringEqualsXmlString(
+        self::assertXmlStringEqualsXmlString(
             '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>',
             $xml
         );
