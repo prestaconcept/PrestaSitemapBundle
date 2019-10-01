@@ -53,27 +53,17 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     /**
      * @var array
      */
-    private $defaultOptions;
+    private $alternateSection;
 
     /**
      * @param RouterInterface $router
      * @param string          $defaultSection
-     * @param array           $defaultOptions
      */
-    public function __construct(
-        RouterInterface $router,
-        $defaultSection,
-        $defaultOptions = [
-            'lastmod' => null,
-            'changefreq' => null,
-            'priority' => null,
-            'default_locale' => null,
-            'locales' => null,
-        ]
-    ) {
+    public function __construct(RouterInterface $router, $defaultSection, $alternateSection)
+    {
         $this->router = $router;
         $this->defaultSection = $defaultSection;
-        $this->defaultOptions = $defaultOptions;
+        $this->alternateSection = $alternateSection;
     }
 
     /**
@@ -91,11 +81,16 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
      */
     public function registerRouteAnnotation(SitemapPopulateEvent $event)
     {
-        $this->addUrlsFromRoutes($event->getUrlContainer(), $event->getSection());
+        if ($this->alternateSection) {
+            $this->addAlternateUrlsFromRoutes($event->getUrlContainer(), $event->getSection());
+        } else {
+            $this->addUrlsFromRoutes($event->getUrlContainer(), $event->getSection());
+        }
     }
 
     /**
-     * @param SitemapPopulateEvent $event
+     * @param UrlContainerInterface $container
+     * @param string|null           $section
      *
      * @throws \InvalidArgumentException
      */
@@ -114,17 +109,50 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
                 continue;
             }
 
-            if ($this->defaultOptions['default_locale']) {
-                if (strpos($name, $this->defaultOptions['default_locale']) === false) {
-                    continue;
-                }
-
-                $name = preg_replace('/[a-z]+__RG__/', '', $name);
-            }
-
             $container->addUrl(
                 $this->getUrlConcrete($name, $options),
                 $routeSection
+            );
+        }
+    }
+
+    /**
+     * @param UrlContainerInterface $container
+     * @param string|null           $section
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function addAlternateUrlsFromRoutes(UrlContainerInterface $container, ?string $section)
+    {
+        $collection = $this->getRouteCollection();
+
+        foreach ($collection->all() as $name => $route) {
+            $options = $this->getOptions($name, $route);
+
+            if (!$options) {
+                continue;
+            }
+
+            $routeSection = $options['section'] ?? $this->defaultSection;
+            if ($section !== null && $routeSection !== $section) {
+                continue;
+            }
+
+            if ($this->alternateSection['default_locale']) {
+                if (strpos($name, $this->alternateSection['default_locale']) === false) {
+                    continue;
+                }
+
+                if ($this->alternateSection['normalize_url_regex']) {
+                    $name = preg_replace($this->alternateSection['normalize_url_regex'], '', $name);
+                }
+            }
+
+            $options = array_merge($options, $this->alternateSection);
+
+            $container->addUrl(
+                $this->getMultilangUrl($name, $options),
+                $section
             );
         }
     }
@@ -169,6 +197,35 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
      * @throws \InvalidArgumentException
      */
     protected function getUrlConcrete($name, $options)
+    {
+        try {
+            return new UrlConcrete(
+                $this->getRouteUri($name),
+                $options['lastmod'],
+                $options['changefreq'],
+                $options['priority']
+            );
+        } catch (\Exception $e) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Invalid argument for route "%s": %s',
+                    $name,
+                    $e->getMessage()
+                ),
+                0,
+                $e
+            );
+        }
+    }
+
+    /**
+     * @param string $name    Route name
+     * @param array  $options Node options
+     *
+     * @throws \InvalidArgumentException
+     * @return UrlConcrete
+     */
+    protected function getMultilangUrl($name, $options)
     {
         try {
             $params = [];

@@ -13,6 +13,7 @@ namespace Presta\SitemapBundle\DependencyInjection;
 
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Presta\SitemapBundle\Sitemap\XmlConstraint;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\HttpKernel\Kernel;
@@ -71,6 +72,28 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('priority')->defaultValue(0.5)->end()
                         ->scalarNode('changefreq')->defaultValue(UrlConcrete::CHANGEFREQ_DAILY)->end()
                         ->scalarNode('lastmod')->defaultValue('now')->end()
+                    ->end()
+                ->end()
+                ->scalarNode('default_section')
+                    ->defaultValue('default')
+                    ->info('The default section in which static routes are registered.')
+                ->end()
+            ->end()
+        ;
+
+        $this->addAlternateSection($rootNode);
+
+        return $treeBuilder;
+    }
+
+    private function addAlternateSection(ArrayNodeDefinition $rootNode)
+    {
+        $rootNode
+            ->children()
+                ->arrayNode('alternate')
+                    ->info('Section can be enabled to generate alternate (hreflang) urls')
+                    ->canBeEnabled()
+                    ->children()
                         ->scalarNode('default_locale')
                             ->defaultNull()
                             ->info('The default locale used by url loc')
@@ -85,13 +108,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-                ->scalarNode('default_section')
-                    ->defaultValue('default')
-                    ->info('The default section in which static routes are registered.')
-                ->end()
             ->end()
         ;
-
-        return $treeBuilder;
     }
 }
