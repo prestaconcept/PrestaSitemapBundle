@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <container xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
         <parameter key="presta_sitemap.eventlistener.route_annotation.class">Presta\SitemapBundle\EventListener\RouteAnnotationEventListener</parameter>
@@ -11,7 +11,7 @@
         <service id="presta_sitemap.eventlistener.route_annotation" class="%presta_sitemap.eventlistener.route_annotation.class%">
             <argument type="service" id="router"/>
             <argument>%presta_sitemap.default_section%</argument>
-            <argument>%presta_sitemap.defaults%</argument>
+            <argument type="collection">%presta_sitemap.alternate%</argument>
             <tag name="kernel.event_subscriber"/>
         </service>
     </services>

@@ -4,4 +4,3 @@ composer.lock
 phpunit.xml
 vendor/
 Tests/web
-.idea/

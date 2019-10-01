@@ -11,8 +11,16 @@ presta_sitemap:
         priority: 1
         changefreq: daily
         lastmod: now
+```
+
+optionally you can add a section `alternate` to generate alternate (hreflang) urls
+
+```yaml
+presta_sitemap:
+    alternate:
         default_locale: 'en'
         locales: ['en', 'it']
+        normalize_url_regex: "/[a-z]+__RG__/"
 ```
 
 Or choose the default sections for static routes:
