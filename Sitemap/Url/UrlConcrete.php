@@ -11,7 +11,7 @@
 
 namespace Presta\SitemapBundle\Sitemap\Url;
 
-use DateTime;
+use DateTimeInterface;
 use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
@@ -36,7 +36,7 @@ class UrlConcrete implements Url
     protected $loc;
 
     /**
-     * @var DateTime|null
+     * @var DateTimeInterface|null
      */
     protected $lastmod;
 
@@ -53,12 +53,12 @@ class UrlConcrete implements Url
     /**
      * Construct a new basic url
      *
-     * @param string        $loc        Absolute url
-     * @param DateTime|null $lastmod    Last modification date
-     * @param string|null   $changefreq Change frequency
-     * @param float|null    $priority   Priority
+     * @param string                 $loc        Absolute url
+     * @param DateTimeInterface|null $lastmod    Last modification date
+     * @param string|null            $changefreq Change frequency
+     * @param float|null             $priority   Priority
      */
-    public function __construct($loc, DateTime $lastmod = null, $changefreq = null, $priority = null)
+    public function __construct($loc, DateTimeInterface $lastmod = null, $changefreq = null, $priority = null)
     {
         $this->setLoc($loc);
         $this->setLastmod($lastmod);
@@ -87,11 +87,11 @@ class UrlConcrete implements Url
     }
 
     /**
-     * @param DateTime|null $lastmod
+     * @param DateTimeInterface|null $lastmod
      *
      * @return UrlConcrete
      */
-    public function setLastmod(DateTime $lastmod = null)
+    public function setLastmod(DateTimeInterface $lastmod = null)
     {
         $this->lastmod = $lastmod;
 
@@ -99,7 +99,7 @@ class UrlConcrete implements Url
     }
 
     /**
-     * @return DateTime|null
+     * @return DateTimeInterface|null
      */
     public function getLastmod()
     {
@@ -213,6 +213,6 @@ class UrlConcrete implements Url
      */
     public function getCustomNamespaces()
     {
-        return array(); // basic url has no namespace. see decorated urls
+        return []; // basic url has no namespace. see decorated urls
     }
 }

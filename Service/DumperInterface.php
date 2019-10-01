@@ -28,5 +28,5 @@ interface DumperInterface extends UrlContainerInterface
      *
      * @return array|bool
      */
-    public function dump($targetDir, $host, $section = null, array $options = array());
+    public function dump($targetDir, $host, $section = null, array $options = []);
 }

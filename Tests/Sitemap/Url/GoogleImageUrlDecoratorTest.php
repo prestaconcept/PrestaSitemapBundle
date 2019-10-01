@@ -11,28 +11,32 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap\Url;
 
+use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap;
 
 /**
  * @author David Epely <depely@prestaconcept.net>
  */
-class GoogleImageUrlDecoratorTest extends \PHPUnit_Framework_TestCase
+class GoogleImageUrlDecoratorTest extends TestCase
 {
     public function testAddImage()
     {
         $url = new Sitemap\Url\GoogleImageUrlDecorator(new Sitemap\Url\UrlConcrete('http://acme.com'));
 
+        $failed = false;
         try {
             $url->addImage(new Sitemap\Url\GoogleImage('http://acme.com/logo.jpg'));
         } catch (\RuntimeException $e) {
-            $this->fail('An exception must not be thrown');
+            $failed = true;
         }
+
+        self::assertFalse($failed, 'An exception must not be thrown');
     }
 
     public function testIsFull()
     {
         $url = new Sitemap\Url\GoogleImageUrlDecorator(new Sitemap\Url\UrlConcrete('http://acme.com'));
-        $this->assertFalse($url->isFull());
+        self::assertFalse($url->isFull());
     }
 
     public function testToXml()
@@ -41,7 +45,7 @@ class GoogleImageUrlDecoratorTest extends \PHPUnit_Framework_TestCase
 
         $xml = $url->toXml();
 
-        $this->assertXmlStringEqualsXmlString(
+        self::assertXmlStringEqualsXmlString(
             '<url><loc>http://acme.com</loc></url>',
             $xml
         );

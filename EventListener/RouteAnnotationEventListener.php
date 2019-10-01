@@ -79,9 +79,9 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             SitemapPopulateEvent::ON_SITEMAP_POPULATE => ['registerRouteAnnotation', 0],
-        );
+        ];
     }
 
     /**
@@ -190,7 +190,7 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
 
         if (is_string($options['lastmod'])) {
             try {
-                $options['lastmod'] = new \DateTime($options['lastmod']);
+                $options['lastmod'] = new \DateTimeImmutable($options['lastmod']);
             } catch (\Exception $e) {
                 throw new \InvalidArgumentException(
                     sprintf(
@@ -261,7 +261,7 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
      * @return string
      * @throws \InvalidArgumentException
      */
-    protected function getRouteUri($name, $params = array())
+    protected function getRouteUri($name, $params = [])
     {
         // If the route needs additional parameters, we can't add it
         try {

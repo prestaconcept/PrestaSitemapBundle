@@ -47,7 +47,7 @@ class DumpSitemapsCommand extends Command
         $this->router = $router;
         $this->dumper = $dumper;
         $this->defaultTarget = $defaultTarget;
-        
+
         parent::__construct(null);
     }
 
@@ -126,9 +126,9 @@ class DumpSitemapsCommand extends Command
                 )
             );
         }
-        $options = array(
+        $options = [
             'gzip' => (Boolean)$input->getOption('gzip'),
-        );
+        ];
         $filenames = $this->dumper->dump($targetDir, $baseUrl, $input->getOption('section'), $options);
 
         if ($filenames === false) {

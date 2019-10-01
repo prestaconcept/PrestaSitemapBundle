@@ -16,12 +16,12 @@ class AppKernel extends Kernel
 {
     public function registerBundles()
     {
-        $bundles = array(
+        $bundles = [
             // Dependencies
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Presta\SitemapBundle\PrestaSitemapBundle(),
-        );
+        ];
 
         return $bundles;
     }
@@ -29,8 +29,8 @@ class AppKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         // We dont need that Environment stuff, just one config
-        if (version_compare(self::VERSION, '3.4.0-RC1', '>=')) {
-            $loader->load(__DIR__.'/config.sf4.yml');
+        if (version_compare(self::VERSION, '3.4.0-RC1', '>=') && version_compare(self::VERSION, '4.1', '<')) {
+            $loader->load(__DIR__.'/config.sf3.yml');
         } else {
             $loader->load(__DIR__.'/config.yml');
         }

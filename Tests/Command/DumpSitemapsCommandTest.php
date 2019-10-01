@@ -32,7 +32,7 @@ class DumpSitemapsCommandTest extends WebTestCase
     /**
      * @var ContainerInterface
      */
-    private $container;
+    protected static $container;
 
     private $fixturesDir;
 
@@ -44,23 +44,26 @@ class DumpSitemapsCommandTest extends WebTestCase
         $this->webDir = realpath(__DIR__ . '/../web');
 
         self::createClient(['debug' => false]);
-        $this->container = self::$kernel->getContainer();
-        $router = $this->container->get('router');
+        if (self::$container === null) {
+            self::$container = self::$kernel->getContainer();
+        }
+
+        $router = self::$container->get('router');
         /* @var $router RouterInterface */
 
         $router->getContext()->fromRequest(Request::create('http://sitemap.php54.local'));
 
-        $this->container->get('event_dispatcher')
+        self::$container->get('event_dispatcher')
             ->addListener(
                 SitemapPopulateEvent::ON_SITEMAP_POPULATE,
                 function (SitemapPopulateEvent $event) use ($router) {
-                    $base_url   = $router->generate('PrestaDemoBundle_homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+                    $base_url   = $router->generate('PrestaDemoBundle_homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
                     $urlVideo = new GoogleVideoUrlDecorator(
                         new UrlConcrete($base_url . 'page_video1/'),
                         $base_url . 'page_video1/thumbnail_loc?a=b&b=c',
                         'Title & spécial chars',
                         'The description & spécial chars',
-                        array('content_loc' => $base_url . 'page_video1/content?format=mov&a=b')
+                        ['content_loc' => $base_url.'page_video1/content?format=mov&a=b']
                     );
 
                     $urlVideo
@@ -75,6 +78,7 @@ class DumpSitemapsCommandTest extends WebTestCase
     protected function tearDown()
     {
         parent::tearDown();
+        self::$container = null;
         foreach (glob($this->webDir . '/*{.xml,.xml.gz}', GLOB_BRACE) as $file) {
             unlink($file);
         }
@@ -82,13 +86,13 @@ class DumpSitemapsCommandTest extends WebTestCase
 
     public function testSitemapDumpWithGzip()
     {
-        $res = $this->executeDumpWithOptions(array('target' => $this->webDir, '--gzip' => true));
-        $this->assertEquals(0, $res, 'Command exited with error');
+        $res = $this->executeDumpWithOptions(['target' => $this->webDir, '--gzip' => true]);
+        self::assertEquals(0, $res, 'Command exited with error');
 
         $xml = gzinflate(substr(file_get_contents($this->webDir . '/sitemap.video.xml.gz'), 10, -8));
-        $this->assertXmlStringEqualsXmlFile($this->fixturesDir . '/sitemap.video.xml', $xml);
+        self::assertXmlStringEqualsXmlFile($this->fixturesDir . '/sitemap.video.xml', $xml);
 
-        $expectedSitemaps = array('http://sitemap.php54.local/sitemap.video.xml.gz');
+        $expectedSitemaps = ['http://sitemap.php54.local/sitemap.video.xml.gz'];
         $this->assertSitemapIndexEquals($this->webDir . '/sitemap.xml', $expectedSitemaps);
     }
 
@@ -97,17 +101,17 @@ class DumpSitemapsCommandTest extends WebTestCase
         copy($this->fixturesDir . '/sitemap.xml', $this->webDir . '/sitemap.xml');
 
         $this->executeDumpWithOptions(
-            array(
+            [
                 'target' => $this->webDir,
                 '--section' => 'video',
                 '--gzip' => true
-            )
+            ]
         );
 
-        $expectedSitemaps = array(
+        $expectedSitemaps = [
             'http://sitemap.php54.local/sitemap.audio.xml',
-            'http://sitemap.php54.local/sitemap.video.xml.gz'
-        );
+            'http://sitemap.php54.local/sitemap.video.xml.gz',
+        ];
 
         $this->assertSitemapIndexEquals($this->webDir . '/sitemap.xml', $expectedSitemaps);
     }
@@ -115,29 +119,29 @@ class DumpSitemapsCommandTest extends WebTestCase
     private function assertSitemapIndexEquals($sitemapFile, array $expectedSitemaps)
     {
         $xml = simplexml_load_file($sitemapFile);
-        $sitemaps = array();
+        $sitemaps = [];
         foreach ($xml->sitemap as $sitemap) {
             $sitemaps[] = (string)$sitemap->loc;
         }
         sort($expectedSitemaps);
         sort($sitemaps);
-        $this->assertEquals($expectedSitemaps, $sitemaps);
+        self::assertEquals($expectedSitemaps, $sitemaps);
     }
 
-    private function executeDumpWithOptions(array $input = array())
+    private function executeDumpWithOptions(array $input = [])
     {
         $application = new Application(self::$kernel);
         $application->add(
             new DumpSitemapsCommand(
-                $this->container->get('router'),
-                new Dumper($this->container->get('event_dispatcher'), $this->container->get('filesystem')),
+                self::$container->get('router'),
+                new Dumper(self::$container->get('event_dispatcher'), self::$container->get('filesystem')),
                 'public'
             )
         );
 
         $command = $application->find('presta:sitemaps:dump');
         $commandTester = new CommandTester($command);
-        $input = array_merge(array('command' => $command->getName()), $input);
+        $input = array_merge(['command' => $command->getName()], $input);
 
         return $commandTester->execute($input);
     }

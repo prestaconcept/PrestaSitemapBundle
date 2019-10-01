@@ -11,12 +11,13 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap\Url;
 
+use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap;
 
 /**
  * @author David Epely <depely@prestaconcept.net>
  */
-class GoogleMobileUrlDecoratorTest extends \PHPUnit_Framework_TestCase
+class GoogleMobileUrlDecoratorTest extends TestCase
 {
     public function testToXml()
     {
@@ -24,7 +25,7 @@ class GoogleMobileUrlDecoratorTest extends \PHPUnit_Framework_TestCase
 
         $xml = $url->toXml();
 
-        $this->assertTrue(
+        self::assertTrue(
             '<url><loc>http://m.acme.com</loc><mobile:mobile/></url>' == $xml
         );
     }

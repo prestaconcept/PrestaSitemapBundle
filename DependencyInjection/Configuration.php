@@ -66,7 +66,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('defaults')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('priority')->defaultValue(1)->end()
+                        ->scalarNode('priority')->defaultValue(0.5)->end()
                         ->scalarNode('changefreq')->defaultValue(UrlConcrete::CHANGEFREQ_DAILY)->end()
                         ->scalarNode('lastmod')->defaultValue('now')->end()
                         ->scalarNode('default_locale')

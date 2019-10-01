@@ -12,6 +12,7 @@
 namespace Presta\SitemapBundle\Sitemap\Url;
 
 use DateTime;
+use DateTimeInterface;
 use Presta\SitemapBundle\Exception;
 use Presta\SitemapBundle\Sitemap\Utils;
 
@@ -53,10 +54,10 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @var array
      */
-    private $genres = array();
+    private $genres = [];
 
     /**
-     * @var DateTime
+     * @var DateTimeInterface
      */
     private $publicationDate;
 
@@ -78,19 +79,19 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @var array
      */
-    private $keywords = array();
+    private $keywords = [];
 
     /**
      * @var array
      */
-    private $stockTickers = array();
+    private $stockTickers = [];
 
     /**
-     * @param Url       $urlDecorated
-     * @param string    $publicationName
-     * @param string    $publicationLanguage
-     * @param DateTime $publicationDate
-     * @param string    $title
+     * @param Url               $urlDecorated
+     * @param string            $publicationName
+     * @param string            $publicationLanguage
+     * @param DateTimeInterface $publicationDate
+     * @param string            $title
      *
      * @throws Exception\GoogleNewsUrlException
      */
@@ -98,7 +99,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
         Url $urlDecorated,
         $publicationName,
         $publicationLanguage,
-        DateTime $publicationDate,
+        DateTimeInterface $publicationDate,
         $title
     ) {
         parent::__construct($urlDecorated);
@@ -217,7 +218,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     }
 
     /**
-     * @return DateTime
+     * @return DateTimeInterface
      */
     public function getPublicationDate()
     {
@@ -225,11 +226,11 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     }
 
     /**
-     * @param DateTime $publicationDate
+     * @param DateTimeInterface $publicationDate
      *
      * @return GoogleNewsUrlDecorator
      */
-    public function setPublicationDate(DateTime $publicationDate)
+    public function setPublicationDate(DateTimeInterface $publicationDate)
     {
         $this->publicationDate = $publicationDate;
 

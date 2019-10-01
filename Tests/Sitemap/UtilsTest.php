@@ -11,6 +11,7 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap;
 
+use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Exception\Exception;
 use Presta\SitemapBundle\Sitemap\Utils;
 
@@ -19,7 +20,7 @@ use Presta\SitemapBundle\Sitemap\Utils;
  *
  * @author David Epely <depely@prestaconcept.net>
  */
-class UtilsTest extends \PHPUnit_Framework_TestCase
+class UtilsTest extends TestCase
 {
 
     /**
@@ -44,19 +45,19 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         $actual = Utils::render('data w/ cdata section');
-        $this->assertEquals('<![CDATA[data w/ cdata section]]>', $actual);
+        self::assertEquals('<![CDATA[data w/ cdata section]]>', $actual);
     }
 
     public function testEncode()
     {
         $actual = Utils::encode('data & spécial chars>');
-        $this->assertEquals('data &amp; spécial chars&gt;', $actual);
+        self::assertEquals('data &amp; spécial chars&gt;', $actual);
     }
 
 
     public function testCamelize()
     {
         $actual = Utils::camelize('data to_camelize');
-        $this->assertEquals('DataToCamelize', $actual);
+        self::assertEquals('DataToCamelize', $actual);
     }
 }

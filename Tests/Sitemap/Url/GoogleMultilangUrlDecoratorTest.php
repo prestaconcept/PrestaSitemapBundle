@@ -11,12 +11,13 @@
 
 namespace Presta\SitemapBundle\Test\Sitemap\Url;
 
+use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap;
 
 /**
  * @author David Epely <depely@prestaconcept.net>
  */
-class GoogleMultilangUrlDecoratorTest extends \PHPUnit_Framework_TestCase
+class GoogleMultilangUrlDecoratorTest extends TestCase
 {
     public function testAddLink()
     {
@@ -26,7 +27,7 @@ class GoogleMultilangUrlDecoratorTest extends \PHPUnit_Framework_TestCase
 
         $xml = $url->toXml();
 
-        $this->assertTrue(
+        self::assertTrue(
             '<url><loc>http://acme.com</loc><xhtml:link rel="alternate" hreflang="fr" href="http://fr.acme.com/" /></url>' ==
             $xml
         );

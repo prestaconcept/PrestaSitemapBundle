@@ -39,7 +39,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
     /**
      * @var Urlset[]
      */
-    protected $urlsets = array();
+    protected $urlsets = [];
 
     /**
      * The maximum number of item generated in a sitemap
@@ -98,7 +98,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
 
         if ($url instanceof UrlConcrete) {
             if (null === $url->getLastmod() && null !== $this->defaults['lastmod']) {
-                $url->setLastmod(new \DateTime($this->defaults['lastmod']));
+                $url->setLastmod(new \DateTimeImmutable($this->defaults['lastmod']));
             }
             if (null === $url->getChangefreq()) {
                 $url->setChangefreq($this->defaults['changefreq']);
@@ -130,12 +130,12 @@ abstract class AbstractGenerator implements UrlContainerInterface
     /**
      * Factory method for create Urlsets
      *
-     * @param string         $name
-     * @param \DateTime|null $lastmod
+     * @param string                  $name
+     * @param \DateTimeInterface|null $lastmod
      *
      * @return Urlset
      */
-    abstract protected function newUrlset($name, \DateTime $lastmod = null);
+    abstract protected function newUrlset($name, \DateTimeInterface $lastmod = null);
 
     /**
      * Dispatches SitemapPopulate Event - the listeners should use it to add their URLs to the sitemap
