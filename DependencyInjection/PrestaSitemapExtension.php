@@ -44,13 +44,9 @@ class PrestaSitemapExtension extends Extension
         }
 
         $generator = $container->setAlias('presta_sitemap.generator', $config['generator']);
-        if ($generator !== null) {
-            $generator->setPublic(true); // in Symfony >=3.4.0 aliases are private
-        }
+        $generator->setPublic(true);
 
         $dumper = $container->setAlias('presta_sitemap.dumper', $config['dumper']);
-        if ($dumper !== null) {
-            $dumper->setPublic(true); // in Symfony >=3.4.0 aliases are private
-        }
+        $dumper->setPublic(true);
     }
 }
