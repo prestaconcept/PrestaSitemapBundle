@@ -41,9 +41,9 @@
 
         <service id="Presta\SitemapBundle\Service\DumperInterface" alias="presta_sitemap.dumper_default" />
 
-        <service id="presta_sitemap.controller" class="Presta\SitemapBundle\Controller\SitemapController">
+        <service id="presta_sitemap.controller" class="Presta\SitemapBundle\Controller\SitemapController" public="true">
             <argument type="service" id="presta_sitemap.generator" />
-            <argument>%presta_sitemap.timetolive</argument>
+            <argument>%presta_sitemap.timetolive%</argument>
         </service>
     </services>
 
