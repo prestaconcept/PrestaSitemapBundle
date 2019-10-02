@@ -99,14 +99,16 @@ class Configuration implements ConfigurationInterface
                         ->arrayNode('locales')
                             ->beforeNormalization()
                             ->ifString()
-                                ->then(function($v) { return preg_split('/\s*,\s*/', $v); })
+                                ->then(function ($v) { return preg_split('/\s*,\s*/', $v); })
                             ->end()
                             ->prototype('scalar')->end()
                             ->info('Array of locales to generate alternate (hreflang) urls')
                         ->end()
+                        ->scalarNode('normalize_url_regex')
+                            ->defaultNull()
+                            ->info('Regex for obtain a "canonical_url" from a route name (eg. it__RG__about -> about')
                     ->end()
                 ->end()
-            ->end()
-        ;
+            ->end();
     }
 }
