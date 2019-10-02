@@ -104,9 +104,10 @@ class Configuration implements ConfigurationInterface
                             ->prototype('scalar')->end()
                             ->info('Array of locales to generate alternate (hreflang) urls')
                         ->end()
-                        ->scalarNode('normalize_url_regex')
-                            ->defaultNull()
-                            ->info('Regex for obtain a "canonical_url" from a route name (eg. it__RG__about -> about')
+                        ->enumNode('i18n')
+                            ->defaultValue('symfony')
+                            ->values(['symfony', 'jms'])
+                            ->info('Name of project bundle to create i18n routes. Possible values are symfony or jms')
                     ->end()
                 ->end()
             ->end();
