@@ -20,8 +20,15 @@ presta_sitemap:
     alternate:
         default_locale: 'en'
         locales: ['en', 'it']
-        normalize_url_regex: "/[a-z]+__RG__/"
+        i18n: jms
 ```
+
+where:
+
+* `default_locale` is project default locale
+* `locales` is the array of all i18n routes
+* `i18n` is the name of project bundle to create i18n routes. Possible values are [symfony](https://symfony.com/doc/current/routing.html#localized-routes-i18n) or [jms](http://jmsyst.com/bundles/JMSI18nRoutingBundle)
+
 
 Or choose the default sections for static routes:
 

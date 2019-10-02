@@ -143,8 +143,15 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
                     continue;
                 }
 
-                if ($this->alternateSection['normalize_url_regex']) {
-                    $name = preg_replace($this->alternateSection['normalize_url_regex'], '', $name);
+                switch ($this->alternateSection['i18n']) {
+                    case 'symfony':
+                        // Replace route_name.en or route_name.it into route_name
+                        $name = preg_replace("/\.[a-z]+/", '', $name);
+                        break;
+                    case 'jms':
+                        // Replace en__RG__route_name or it__RG__route_name into route_name
+                        $name = preg_replace("/[a-z]+__RG__/", '', $name);
+                        break;
                 }
             }
 
