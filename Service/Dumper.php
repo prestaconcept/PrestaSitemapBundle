@@ -161,7 +161,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
         $index = simplexml_load_file($filename);
         foreach ($index->children() as $child) {
             /** @var $child \SimpleXMLElement */
-            if ($child->getName() == 'sitemap') {
+            if ($child->getName() === 'sitemap') {
                 if (!isset($child->loc)) {
                     throw new \InvalidArgumentException(
                         "One of referenced sitemaps in $filename doesn't contain 'loc' attribute"
@@ -228,7 +228,9 @@ class Dumper extends AbstractGenerator implements DumperInterface
             $basename = preg_replace('/\.xml(?:\.gz)?$/', '', $basename); // cut .xml|.xml.gz
             $pattern = '/' . preg_quote($basename, '/') . '(_\d+)?\.xml(?:\.gz)?$/';
             foreach (Finder::create()->in($targetDir)->depth(0)->name($pattern)->files() as $file) {
-                $this->filesystem->remove($file);
+                if (!$this->filesystem->exists($this->tmpFolder.'/'.$file->getFilename())) {
+                    $this->filesystem->remove($file);
+                }
             }
         }
     }
