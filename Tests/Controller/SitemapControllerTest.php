@@ -63,12 +63,14 @@ class SitemapControllerTest extends WebTestCase
     {
         $response = $this->controller->indexAction();
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
+        $this->assertEquals('text/xml', $response->headers->get('Content-Type'));
     }
 
     public function testValidSectionAction()
     {
         $response = $this->controller->sectionAction('default');
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
+        $this->assertEquals('text/xml', $response->headers->get('Content-Type'));
     }
 
     /**
