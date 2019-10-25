@@ -32,12 +32,12 @@ class PrestaSitemapExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
 
-        $container->setParameter($this->getAlias() . '.dump_directory', $config['dump_directory']);
-        $container->setParameter($this->getAlias() . '.timetolive', $config['timetolive']);
-        $container->setParameter($this->getAlias() . '.sitemap_file_prefix', $config['sitemap_file_prefix']);
-        $container->setParameter($this->getAlias() . '.items_by_set', $config['items_by_set']);
+        $container->setParameter($this->getAlias() . '.dump_directory', (string)$config['dump_directory']);
+        $container->setParameter($this->getAlias() . '.timetolive', (int)$config['timetolive']);
+        $container->setParameter($this->getAlias() . '.sitemap_file_prefix', (string)$config['sitemap_file_prefix']);
+        $container->setParameter($this->getAlias() . '.items_by_set', (int)$config['items_by_set']);
         $container->setParameter($this->getAlias() . '.defaults', $config['defaults']);
-        $container->setParameter($this->getAlias() . '.default_section', $config['default_section']);
+        $container->setParameter($this->getAlias() . '.default_section', (string)$config['default_section']);
 
         if ($this->isConfigEnabled($container, $config['alternate'])) {
             $container->setParameter($this->getAlias() . '.alternate', $config['alternate']);
@@ -48,13 +48,9 @@ class PrestaSitemapExtension extends Extension
         }
 
         $generator = $container->setAlias('presta_sitemap.generator', $config['generator']);
-        if ($generator !== null) {
-            $generator->setPublic(true); // in Symfony >=3.4.0 aliases are private
-        }
+        $generator->setPublic(true);
 
         $dumper = $container->setAlias('presta_sitemap.dumper', $config['dumper']);
-        if ($dumper !== null) {
-            $dumper->setPublic(true); // in Symfony >=3.4.0 aliases are private
-        }
+        $dumper->setPublic(true);
     }
 }
