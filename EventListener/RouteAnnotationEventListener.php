@@ -58,8 +58,9 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     /**
      * @param RouterInterface $router
      * @param string          $defaultSection
+     * @param array           $alternateSection
      */
-    public function __construct(RouterInterface $router, $defaultSection, $alternateSection)
+    public function __construct(RouterInterface $router, ?string $defaultSection, ?array $alternateSection = null)
     {
         $this->router = $router;
         $this->defaultSection = $defaultSection;
@@ -81,11 +82,7 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
      */
     public function registerRouteAnnotation(SitemapPopulateEvent $event)
     {
-        if ($this->alternateSection) {
-            $this->addAlternateUrlsFromRoutes($event->getUrlContainer(), $event->getSection());
-        } else {
-            $this->addUrlsFromRoutes($event->getUrlContainer(), $event->getSection());
-        }
+        $this->addUrlsFromRoutes($event->getUrlContainer(), $event->getSection());
     }
 
     /**
@@ -109,58 +106,36 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
                 continue;
             }
 
-            $container->addUrl(
-                $this->getUrlConcrete($name, $options),
-                $routeSection
-            );
-        }
-    }
+            if ($this->alternateSection) {
+                if ($this->alternateSection['default_locale']) {
+                    if (strpos($name, $this->alternateSection['default_locale']) === false) {
+                        continue;
+                    }
 
-    /**
-     * @param UrlContainerInterface $container
-     * @param string|null           $section
-     *
-     * @throws \InvalidArgumentException
-     */
-    private function addAlternateUrlsFromRoutes(UrlContainerInterface $container, ?string $section)
-    {
-        $collection = $this->getRouteCollection();
-
-        foreach ($collection->all() as $name => $route) {
-            $options = $this->getOptions($name, $route);
-
-            if (!$options) {
-                continue;
-            }
-
-            $routeSection = $options['section'] ?? $this->defaultSection;
-            if ($section !== null && $routeSection !== $section) {
-                continue;
-            }
-
-            if ($this->alternateSection['default_locale']) {
-                if (strpos($name, $this->alternateSection['default_locale']) === false) {
-                    continue;
+                    switch ($this->alternateSection['i18n']) {
+                        case 'symfony':
+                            // Replace route_name.en or route_name.it into route_name
+                            $name = preg_replace("/\.[a-z]+/", '', $name);
+                            break;
+                        case 'jms':
+                            // Replace en__RG__route_name or it__RG__route_name into route_name
+                            $name = preg_replace("/[a-z]+__RG__/", '', $name);
+                            break;
+                    }
                 }
 
-                switch ($this->alternateSection['i18n']) {
-                    case 'symfony':
-                        // Replace route_name.en or route_name.it into route_name
-                        $name = preg_replace("/\.[a-z]+/", '', $name);
-                        break;
-                    case 'jms':
-                        // Replace en__RG__route_name or it__RG__route_name into route_name
-                        $name = preg_replace("/[a-z]+__RG__/", '', $name);
-                        break;
-                }
+                $options = array_merge($options, $this->alternateSection);
+
+                $container->addUrl(
+                    $this->getMultilangUrl($name, $options),
+                    $section
+                );
+            } else {
+                $container->addUrl(
+                    $this->getUrlConcrete($name, $options),
+                    $section
+                );
             }
-
-            $options = array_merge($options, $this->alternateSection);
-
-            $container->addUrl(
-                $this->getMultilangUrl($name, $options),
-                $section
-            );
         }
     }
 
@@ -199,15 +174,15 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     /**
      * @param string $name    Route name
      * @param array  $options Node options
+     * @param array  $params  Optional route params
      *
      * @return UrlConcrete
-     * @throws \InvalidArgumentException
      */
-    protected function getUrlConcrete($name, $options)
+    protected function getUrlConcrete($name, $options, $params = [])
     {
         try {
             return new UrlConcrete(
-                $this->getRouteUri($name),
+                $this->getRouteUri($name, $params),
                 $options['lastmod'],
                 $options['changefreq'],
                 $options['priority']
@@ -234,42 +209,25 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
      */
     protected function getMultilangUrl($name, $options)
     {
-        try {
-            $params = [];
+        $params = [];
 
-            if ($options['default_locale']) {
-                $params['_locale'] = $options['default_locale'];
-            }
-
-            $url = new UrlConcrete(
-                $this->getRouteUri($name, $params),
-                $options['lastmod'],
-                $options['changefreq'],
-                $options['priority']
-            );
-
-            if ($options['locales'] && is_array($options['locales'])) {
-                $url = new GoogleMultilangUrlDecorator($url);
-
-                foreach ($options['locales'] as $locale) {
-                    $params['_locale'] = $locale;
-
-                    $url->addLink($this->getRouteUri($name, $params), $locale);
-                }
-            }
-
-            return $url;
-        } catch (\Exception $e) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Invalid argument for route "%s": %s',
-                    $name,
-                    $e->getMessage()
-                ),
-                0,
-                $e
-            );
+        if ($options['default_locale']) {
+            $params['_locale'] = $options['default_locale'];
         }
+
+        $url = $this->getUrlConcrete($name, $options, $params);
+
+        if ($options['locales'] && is_array($options['locales'])) {
+            $url = new GoogleMultilangUrlDecorator($url);
+
+            foreach ($options['locales'] as $locale) {
+                $params['_locale'] = $locale;
+
+                $url->addLink($this->getRouteUri($name, $params), $locale);
+            }
+        }
+
+        return $url;
     }
 
     /**
