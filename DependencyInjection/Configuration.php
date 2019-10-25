@@ -108,8 +108,10 @@ class Configuration implements ConfigurationInterface
                             ->defaultValue('symfony')
                             ->values(['symfony', 'jms'])
                             ->info('Name of project bundle to create i18n routes. Possible values are symfony or jms')
+                        ->end()
                     ->end()
                 ->end()
-            ->end();
+            ->end()
+        ;
     }
 }
