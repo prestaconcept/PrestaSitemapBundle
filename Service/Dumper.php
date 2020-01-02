@@ -238,11 +238,10 @@ class Dumper extends AbstractGenerator implements DumperInterface
     /**
      * Create new DumpingUrlset with gz option
      *
-     * @param string file name 
-     * @param DateTime|null date of last modify
-     * @param bool gx extension option
-     *
-     * @return DumpingUrlset
+     * @param string $name The urlset name
+     * @param \DateTimeInterface|null $lastmod The urlset last modification date
+     * @param bool $gzExtension Whether the urlset is gzipped
+     * @return DumpingUrlset|Urlset
      */
     protected function newUrlset($name, \DateTimeInterface $lastmod = null, bool $gzExtension = false)
     {
