@@ -173,7 +173,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
                     $matches
                 ); // cut .xml|.xml.gz and check gz files
                 $basename = $matches[1];
-                $gzOption = isset($matches[2]) ? true : false;
+                $gzOption = isset($matches[2]);
 
                 if (!isset($child->lastmod)) {
                     throw new \InvalidArgumentException(
