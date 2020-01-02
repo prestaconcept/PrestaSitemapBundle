@@ -250,6 +250,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
         if ($gzExtention) {
             $url .= '.gz';
         }
+
         return new DumpingUrlset($url, $lastmod);
     }
 }
