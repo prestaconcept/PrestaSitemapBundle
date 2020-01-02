@@ -240,14 +240,14 @@ class Dumper extends AbstractGenerator implements DumperInterface
      *
      * @param string file name 
      * @param DateTime|null date of last modify
-     * @param bool gx extention option
+     * @param bool gx extension option
      *
      * @return DumpingUrlset
      */
-    protected function newUrlset($name, \DateTimeInterface $lastmod = null, bool $gzExtention = false): DumpingUrlset
+    protected function newUrlset($name, \DateTimeInterface $lastmod = null, bool $gzExtension = false): DumpingUrlset
     {
         $url = $this->baseUrl . $this->sitemapFilePrefix . '.' . $name . '.xml';
-        if ($gzExtention) {
+        if ($gzExtension) {
             $url .= '.gz';
         }
 
