@@ -244,7 +244,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
      *
      * @return DumpingUrlset
      */
-    protected function newUrlset($name, \DateTimeInterface $lastmod = null, bool $gzExtension = false): DumpingUrlset
+    protected function newUrlset($name, \DateTimeInterface $lastmod = null, bool $gzExtension = false)
     {
         $url = $this->baseUrl . $this->sitemapFilePrefix . '.' . $name . '.xml';
         if ($gzExtension) {
