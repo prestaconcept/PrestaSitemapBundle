@@ -26,6 +26,9 @@ class SitemapZgipOptionTest extends WebTestCase
 
     public function setUp()
     {
+        if (self::$kernel) {
+            static::ensureKernelShutdown();
+        }
         self::createClient(['debug' => false]);
         if (self::$container === null) {
             self::$container = self::$kernel->getContainer();
