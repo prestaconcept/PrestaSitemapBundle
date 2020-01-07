@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\DependencyInjection\PrestaSitemapExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class RouteAnnotationEventListenerTest extends TestCase
+class PrestaSitemapExtensionTest extends TestCase
 {
     public function testDumperAliasIsSet()
     {

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Presta\SitemapBundle\Tests\Sitemap;
+namespace Presta\SitemapBundle\Tests\Service;
 
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Service\Generator;
