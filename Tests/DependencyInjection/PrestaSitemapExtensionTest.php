@@ -1,6 +1,6 @@
 <?php
 
-namespace Presta\SitemapBundle\Test\DependencyInjection;
+namespace Presta\SitemapBundle\Tests\DependencyInjection;
 
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\DependencyInjection\PrestaSitemapExtension;
