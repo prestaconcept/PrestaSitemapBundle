@@ -35,7 +35,10 @@
     "autoload": {
         "psr-4": {
             "Presta\\SitemapBundle\\": ""
-        }
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
     },
     "autoload-dev": {
         "files": [

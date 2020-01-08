@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Presta\SitemapBundle\Test\Sitemap;
+namespace Presta\SitemapBundle\Tests\EventListener;
 
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\EventListener\RouteAnnotationEventListener;

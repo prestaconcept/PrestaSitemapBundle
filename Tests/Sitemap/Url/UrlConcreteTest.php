@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Presta\SitemapBundle\Test\Sitemap\Url;
+namespace Presta\SitemapBundle\Tests\Sitemap\Url;
 
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
