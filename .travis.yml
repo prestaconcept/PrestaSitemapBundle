@@ -2,7 +2,7 @@ language: php
 
 matrix:
     include:
-        - php: 7.0
+        - php: 7.1
           env: SYMFONY_VERSION=3.4.*
         - php: 7.4
           env: SYMFONY_VERSION=3.4.*
@@ -29,7 +29,8 @@ before_install:
     - if [ "$PHPCS" = "yes" ]; then pear install pear/PHP_CodeSniffer; fi
     - if [ "$PHPCS" = "yes" ]; then phpenv rehash; fi
     - if [ "$PHPCS" != "yes"]; then composer selfupdate; fi
-    - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/framework-bundle:${SYMFONY_VERSION} symfony/console:${SYMFONY_VERSION}; fi
+    - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony:${SYMFONY_VERSION}; fi
+    - if [ "$SYMFONY_VERSION" = "3.4.*" ] || [ "$SYMFONY_VERSION" = "4.4.*" ] || [ "$SYMFONY_VERSION" = "5.0.*" ]; then rm -f phpunit.xml; cp phpunit.sf4.xml.dist phpunit.xml; fi
 
 install: COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install --prefer-dist --no-interaction
 
