@@ -16,6 +16,7 @@ use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap\Url;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class SitemapControllerTest extends WebTestCase
 {
@@ -71,6 +72,10 @@ class SitemapControllerTest extends WebTestCase
 
     public function testIndexAction()
     {
+        $controller = $this->getController('PrestaSitemapBundle_index', ['_format' => 'xml']);
+        self::assertInstanceOf(Controller\SitemapController::class, $controller[0]);
+        self::assertSame('indexAction', $controller[1]);
+
         $response = $this->controller->indexAction();
         self::assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
         self::assertEquals('text/xml', $response->headers->get('Content-Type'));
@@ -78,6 +83,10 @@ class SitemapControllerTest extends WebTestCase
 
     public function testValidSectionAction()
     {
+        $controller = $this->getController('PrestaSitemapBundle_section', ['name' => 'default', '_format' => 'xml']);
+        self::assertInstanceOf(Controller\SitemapController::class, $controller[0]);
+        self::assertSame('sectionAction', $controller[1]);
+
         $response = $this->controller->sectionAction('default');
         self::assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
         self::assertEquals('text/xml', $response->headers->get('Content-Type'));
@@ -89,5 +98,14 @@ class SitemapControllerTest extends WebTestCase
     public function testNotFoundSectionAction()
     {
         $this->controller->sectionAction('void');
+    }
+
+    private function getController(string $route, array $parameters): array
+    {
+        $url = self::$container->get('router')->generate($route, $parameters);
+        $attributes = self::$container->get('router')->match($url);
+        $request = Request::create($url)->duplicate(null, null, $attributes);
+
+        return self::$container->get('controller_resolver')->getController($request);
     }
 }
