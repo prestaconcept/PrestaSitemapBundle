@@ -40,6 +40,7 @@
         </service>
 
         <service id="Presta\SitemapBundle\Service\DumperInterface" alias="presta_sitemap.dumper_default" />
+        <service id="Presta\SitemapBundle\Controller\SitemapController" alias="presta_sitemap.controller" public="true" />
 
         <service id="presta_sitemap.controller" class="Presta\SitemapBundle\Controller\SitemapController" public="true">
             <argument type="service" id="presta_sitemap.generator" />
