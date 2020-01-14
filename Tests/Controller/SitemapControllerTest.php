@@ -14,8 +14,6 @@ namespace Presta\SitemapBundle\Tests\Controller;
 use Presta\SitemapBundle\Controller;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap\Url;
-use Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser;
-use Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -109,7 +107,7 @@ class SitemapControllerTest extends WebTestCase
         $url = $router->generate($route, $parameters);
         $attributes = $router->match($url);
         $request = Request::create($url)->duplicate(null, null, $attributes);
-        $resolver = new ControllerResolver(self::$container, new ControllerNameParser(self::$kernel));
+        $resolver = new ContainerControllerResolver(self::$container);
 
         return $resolver->getController($request);
     }
