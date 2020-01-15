@@ -41,9 +41,11 @@
         ]
     },
     "autoload-dev": {
-        "files": [
-            "Tests/app/AppKernel.php"
-        ]
+        "psr-4": {
+            "Presta\\SitemapBundle\\Tests\\Unit\\": "Tests/Unit",
+            "Presta\\SitemapBundle\\Tests\\Integration\\Tests\\": "Tests/Integration/tests",
+            "Presta\\SitemapBundle\\Tests\\Integration\\": "Tests/Integration/src"
+        }
     },
     "extra": {
         "branch-alias": {

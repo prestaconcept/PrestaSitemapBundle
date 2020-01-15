@@ -1,0 +1,6 @@
+yaml:
+  path: /yaml
+  defaults: { _controller: \Presta\SitemapBundle\Tests\Integration\Controller\FormatController::yaml }
+  options:
+    sitemap:
+      section: static
