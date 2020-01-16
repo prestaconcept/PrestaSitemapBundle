@@ -51,12 +51,6 @@ class GeneratorTest extends WebTestCase
         });
     }
 
-    protected function tearDown(): void
-    {
-        $this->eventDispatcher =
-        $this->router = null;
-    }
-
     public function testGenerate()
     {
         $this->generator()->generate();

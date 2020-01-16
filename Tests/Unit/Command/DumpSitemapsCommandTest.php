@@ -43,12 +43,6 @@ class DumpSitemapsCommandTest extends TestCase
         $this->dumper = $this->prophesize(DumperInterface::class);
     }
 
-    protected function tearDown(): void
-    {
-        $this->router =
-        $this->dumper = null;
-    }
-
     /**
      * @dataProvider dump
      */

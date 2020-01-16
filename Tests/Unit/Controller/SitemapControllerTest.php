@@ -33,11 +33,6 @@ class SitemapControllerTest extends TestCase
         $this->generator = $this->prophesize(GeneratorInterface::class);
     }
 
-    protected function tearDown(): void
-    {
-        $this->generator = null;
-    }
-
     public function testIndexSuccesful()
     {
         /** @var Sitemapindex|ObjectProphecy $index */
