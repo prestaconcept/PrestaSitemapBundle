@@ -15,13 +15,6 @@ class Kernel extends BaseKernel
 
     const CONFIG_EXTS = '.{php,xml,yaml,yml}';
 
-    /**
-     * Non standard static var used to force "var" dir to be removed the first time this kernel boot
-     *
-     * @var bool
-     */
-    private static $cleanVarDirectory = true;
-
     public function getCacheDir(): string
     {
         return $this->getProjectDir() . '/var/cache/' . $this->environment;
@@ -66,12 +59,15 @@ class Kernel extends BaseKernel
 
     public function boot()
     {
-        if (self::$cleanVarDirectory === true) {
+        /* force "var" dir to be removed the first time this kernel boot */
+        static $cleanVarDirectory = true;
+
+        if ($cleanVarDirectory === true) {
             $varDirectory = $this->getProjectDir() . '/var';
             if (is_dir($varDirectory)) {
                 (new Filesystem())->remove($varDirectory);
             }
-            self::$cleanVarDirectory = false;
+            $cleanVarDirectory = false;
         }
 
         parent::boot();
