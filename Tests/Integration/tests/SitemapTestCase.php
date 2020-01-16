@@ -27,7 +27,10 @@ abstract class SitemapTestCase extends WebTestCase
     protected static function assertBlogSection(string $xml)
     {
         self::assertSectionContainsPath($xml, 'blog', '/blog');
-        self::assertSectionContainsPath($xml, 'blog', '/blog/foo');
+        self::assertSectionContainsPath($xml, 'blog', '/blog/post-without-media');
+        self::assertSectionContainsPath($xml, 'blog', '/blog/post-with-one-image');
+        self::assertSectionContainsPath($xml, 'blog', '/blog/post-with-a-video');
+        self::assertSectionContainsPath($xml, 'blog', '/blog/post-with-multimedia');
         //todo more assertions
     }
 

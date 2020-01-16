@@ -16,10 +16,28 @@ final class SitemapListener implements EventSubscriberInterface
 {
     private const BLOG = [
         [
-            'title' => 'Foo',
-            'slug' => 'foo',
+            'title' => 'Post without media',
+            'slug' => 'post-without-media',
             'images' => [],
             'video' => null,
+        ],
+        [
+            'title' => 'Post with one image',
+            'slug' => 'post-with-one-image',
+            'images' => ['http://lorempixel.com/400/200/technics/1'],
+            'video' => null,
+        ],
+        [
+            'title' => 'Post with a video',
+            'slug' => 'post-with-a-video',
+            'images' => [],
+            'video' => 'https://www.youtube.com/watch?v=j6IKRxH8PTg',
+        ],
+        [
+            'title' => 'Post with multimedia',
+            'slug' => 'post-with-multimedia',
+            'images' => ['http://lorempixel.com/400/200/technics/2', 'http://lorempixel.com/400/200/technics/3'],
+            'video' => 'https://www.youtube.com/watch?v=JugaMuswrmk',
         ],
     ];
 
@@ -37,12 +55,12 @@ final class SitemapListener implements EventSubscriberInterface
         ];
     }
 
-    public function populate(SitemapPopulateEvent $event)
+    public function populate(SitemapPopulateEvent $event): void
     {
         $this->blog($event->getUrlContainer());
     }
 
-    private function blog(UrlContainerInterface $sitemap)
+    private function blog(UrlContainerInterface $sitemap): void
     {
         $sitemap->addUrl(
             new UrlConcrete($this->routing->generate('blog_read', [], UrlGeneratorInterface::ABSOLUTE_URL)),
@@ -58,7 +76,7 @@ final class SitemapListener implements EventSubscriberInterface
                 )
             );
 
-            if (count($post['images'] ?? []) > 0) {
+            if (count($post['images']) > 0) {
                 $url = new GoogleImageUrlDecorator($url);
                 foreach ($post['images'] as $idx => $image) {
                     $url->addImage(
@@ -67,7 +85,7 @@ final class SitemapListener implements EventSubscriberInterface
                 }
             }
 
-            if (($post['video'] ?? null) !== null) {
+            if ($post['video'] !== null) {
                 $parameters = parse_str($post['video']);
                 $url = new GoogleVideoUrlDecorator(
                     $url,
