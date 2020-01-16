@@ -1,19 +1,13 @@
 <?php
 
-namespace Presta\SitemapBundle\Tests\Integration\Tests\Sitemap;
+namespace Presta\SitemapBundle\Tests\Integration\Tests;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-final class LiveTest extends WebTestCase
+final class HttpTest extends SitemapTestCase
 {
     private const GET = Request::METHOD_GET;
     private const XML = 'text/xml; charset=UTF-8';
-
-    protected function setUp(): void
-    {
-        DumpUtil::clean();
-    }
 
     public function testAccessSitemapWithHttp()
     {
@@ -26,7 +20,7 @@ final class LiveTest extends WebTestCase
         self::assertEquals(self::XML, $index->headers->get('Content-Type'),
             'Sitemap index response is XML'
         );
-        AssertUtil::assertIndex($index->getContent());
+        self::assertIndex($index->getContent());
 
         // get sitemap "static" section content via HTTP
         $web->request(self::GET, '/sitemap.static.xml');
@@ -35,7 +29,7 @@ final class LiveTest extends WebTestCase
         self::assertEquals(self::XML, $static->headers->get('Content-Type'),
             'Sitemap "static" section response is XML'
         );
-        AssertUtil::assertStaticSection($static->getContent());
+        self::assertStaticSection($static->getContent());
 
         // get sitemap "blog" section content via HTTP
         $web->request(self::GET, '/sitemap.blog.xml');
@@ -44,6 +38,6 @@ final class LiveTest extends WebTestCase
         self::assertEquals(self::XML, $blog->headers->get('Content-Type'),
             'Sitemap "blog" section response is XML'
         );
-        AssertUtil::assertBlogSection($blog->getContent());
+        self::assertBlogSection($blog->getContent());
     }
 }

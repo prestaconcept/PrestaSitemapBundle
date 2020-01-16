@@ -1,21 +1,22 @@
 <?php
 
-namespace Presta\SitemapBundle\Tests\Integration\Tests\Sitemap;
+namespace Presta\SitemapBundle\Tests\Integration\Tests;
 
 use PHPUnit\Framework\Assert;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-final class AssertUtil
+abstract class SitemapTestCase extends WebTestCase
 {
     private const BASE_URL = 'http://localhost';
 
-    public static function assertIndex(string $xml)
+    protected static function assertIndex(string $xml)
     {
         self::assertIndexContainsSectionLink($xml, 'static');
         self::assertIndexContainsSectionLink($xml, 'blog');
         //todo more assertions
     }
 
-    public static function assertStaticSection(string $xml)
+    protected static function assertStaticSection(string $xml)
     {
         self::assertSectionContainsPath($xml, 'static', '/annotation');
         self::assertSectionContainsPath($xml, 'static', '/yaml');
@@ -23,7 +24,7 @@ final class AssertUtil
         //todo more assertions
     }
 
-    public static function assertBlogSection(string $xml)
+    protected static function assertBlogSection(string $xml)
     {
         self::assertSectionContainsPath($xml, 'blog', '/blog');
         self::assertSectionContainsPath($xml, 'blog', '/blog/foo');
@@ -32,11 +33,8 @@ final class AssertUtil
 
     private static function assertIndexContainsSectionLink(string $xml, string $name)
     {
-        $loc = preg_quote(sprintf('%s/sitemap.%s.xml', self::BASE_URL, $name), '#');
-        $lastmod = self::approximatedDateAsRegex();
-
-        Assert::assertRegExp(
-            sprintf('#<sitemap><loc>%s</loc><lastmod>%s</lastmod></sitemap>#', $loc, $lastmod),
+        Assert::assertStringContainsString(
+            sprintf('<loc>%s/sitemap.%s.xml</loc>', self::BASE_URL, $name),
             $xml,
             'Sitemap index contains a link to "' . $name . '" section'
         );
@@ -44,18 +42,10 @@ final class AssertUtil
 
     private static function assertSectionContainsPath(string $xml, string $section, string $path)
     {
-        $loc = preg_quote(sprintf('%s%s', self::BASE_URL, $path), '#');
-        $lastmod = self::approximatedDateAsRegex();
-
-        Assert::assertRegExp(
-            sprintf('#<url><loc>%s</loc><lastmod>%s</lastmod>#', $loc, $lastmod),
+        Assert::assertStringContainsString(
+            sprintf('<loc>%s%s</loc>', self::BASE_URL, $path),
             $xml,
             'Sitemap section "' . $section . '" contains a link to "' . $path . '"'
         );
-    }
-
-    private static function approximatedDateAsRegex(): string
-    {
-        return str_replace('s', '[0-9]{2}', preg_quote(date('Y-m-d\TH:i:\sP'), '#'));
     }
 }
