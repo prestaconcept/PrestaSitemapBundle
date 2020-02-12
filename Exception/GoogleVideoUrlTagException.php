@@ -11,11 +11,15 @@
 
 namespace Presta\SitemapBundle\Exception;
 
+@trigger_error(sprintf("%s is deprecated. Use %s instead", GoogleVideoUrlTagException::class, GoogleVideoTagException::class));
+
 /**
  * Exception used when limit is reached on adding tag to video
  *
  * @author David Epely <depely@prestaconcept.net>
+ *
+ * @deprecated Use \Presta\SitemapBundle\Exception\GoogleVideoTagException instead.
  */
-class GoogleVideoTagException extends GoogleVideoUrlTagException
+class GoogleVideoUrlTagException extends Exception
 {
 }
