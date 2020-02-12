@@ -1,16 +1,16 @@
 # Decorating URLs
 
-The `Presta\SitemapBundle\Service\UrlContainerInterface::addUrl` method first argument accepts 
+The `Presta\SitemapBundle\Service\UrlContainerInterface::addUrl` method first argument accepts
 an instance of `Presta\SitemapBundle\Sitemap\Url\Url`, which is a interface.
 
 In the examples you've seen in that doc, we used only `Presta\SitemapBundle\Sitemap\Url\UrlConcrete`.
 It cover the minimal requirement for a sitemap XML node.
 
-> **Note:** This bundle is only registering `Presta\SitemapBundle\Sitemap\Url\UrlConcrete` 
+> **Note:** This bundle is only registering `Presta\SitemapBundle\Sitemap\Url\UrlConcrete`
 >           instances for the static routes you configured in your app.
 >           To use the following decorators, you must register the URLs all by yourself.
 
-However this bundle provides several implementations of this interface: 
+However this bundle provides several implementations of this interface:
 
 - `Presta\SitemapBundle\Sitemap\Url\GoogleImageUrlDecorator`
 - `Presta\SitemapBundle\Sitemap\Url\GoogleMobileUrlDecorator`
@@ -116,16 +116,17 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /** @var $urlGenerator UrlGeneratorInterface */
 $url = new Sitemap\UrlConcrete($urlGenerator->generate('mobile_homepage'));
-$decoratedUrl = new Sitemap\GoogleVideoUrlDecorator(
-    $url,
+$video = new Sitemap\GoogleVideo(
     'https://img.youtube.com/vi/j6IKRxH8PTg/0.jpg',
     'How to use PrestaSitemapBundle in Symfony 2.6 [1/2]',
     'In this video you will learn how to use PrestaSitemapBundle in your Symfony 2.6 projects',
     ['content_loc' => 'https://www.youtube.com/watch?v=j6IKRxH8PTg']
 );
-$decoratedUrl->addTag('php')
+$video->addTag('php')
     ->addTag('symfony')
     ->addTag('sitemap');
+$decoratedUrl = new Sitemap\GoogleVideoUrlDecorator($url);
+$decoratedUrl->addVideo($video);
 
 /** @var $urls \Presta\SitemapBundle\Service\UrlContainerInterface */
 $urls->addUrl($decoratedUrl, 'default');

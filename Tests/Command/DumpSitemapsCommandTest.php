@@ -14,6 +14,7 @@ namespace Presta\SitemapBundle\Tests\Command;
 use Presta\SitemapBundle\Command\DumpSitemapsCommand;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Service\Dumper;
+use Presta\SitemapBundle\Sitemap\Url\GoogleVideo;
 use Presta\SitemapBundle\Sitemap\Url\GoogleVideoUrlDecorator;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -58,17 +59,18 @@ class DumpSitemapsCommandTest extends WebTestCase
                 SitemapPopulateEvent::ON_SITEMAP_POPULATE,
                 function (SitemapPopulateEvent $event) use ($router) {
                     $base_url   = $router->generate('PrestaDemoBundle_homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
-                    $urlVideo = new GoogleVideoUrlDecorator(
-                        new UrlConcrete($base_url . 'page_video1/'),
+                    $video = new GoogleVideo(
                         $base_url . 'page_video1/thumbnail_loc?a=b&b=c',
                         'Title & spécial chars',
                         'The description & spécial chars',
                         ['content_loc' => $base_url.'page_video1/content?format=mov&a=b']
                     );
-
-                    $urlVideo
+                    $video
                         ->setGalleryLoc($base_url . 'page_video1/gallery_loc/?p=1&sort=desc')
                         ->setGalleryLocTitle('Gallery title & spécial chars');
+
+                    $urlVideo = new GoogleVideoUrlDecorator(new UrlConcrete($base_url . 'page_video1/'));
+                    $urlVideo->addVideo($video);
 
                     $event->getUrlContainer()->addUrl($urlVideo, 'video');
                 }
