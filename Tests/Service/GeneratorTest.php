@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Presta\SitemapBundle\Test\Sitemap;
+namespace Presta\SitemapBundle\Tests\Service;
 
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Service\Generator;
@@ -52,7 +52,7 @@ class GeneratorTest extends WebTestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown() : void
     {
         parent::tearDown();
         self::$container = null;

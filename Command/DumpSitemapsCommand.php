@@ -87,7 +87,7 @@ class DumpSitemapsCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $targetDir = rtrim($input->getArgument('target'), '/');
 
@@ -134,13 +134,15 @@ class DumpSitemapsCommand extends Command
         if ($filenames === false) {
             $output->writeln("<error>No URLs were added to sitemap by EventListeners</error> - this may happen when provided section is invalid");
 
-            return;
+            return 1;
         }
 
         $output->writeln("<info>Created/Updated the following sitemap files:</info>");
         foreach ($filenames as $filename) {
             $output->writeln("    <comment>$filename</comment>");
         }
+
+        return 0;
     }
 
     /**

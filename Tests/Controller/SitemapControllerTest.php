@@ -63,7 +63,7 @@ class SitemapControllerTest extends WebTestCase
         //-------------------
     }
 
-    protected function tearDown()
+    protected function tearDown() : void
     {
         parent::tearDown();
         self::$container = null;
@@ -73,12 +73,14 @@ class SitemapControllerTest extends WebTestCase
     {
         $response = $this->controller->indexAction();
         self::assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
+        self::assertEquals('text/xml', $response->headers->get('Content-Type'));
     }
 
     public function testValidSectionAction()
     {
         $response = $this->controller->sectionAction('default');
         self::assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
+        self::assertEquals('text/xml', $response->headers->get('Content-Type'));
     }
 
     /**
