@@ -167,11 +167,13 @@ class Dumper extends AbstractGenerator implements DumperInterface
                         "One of referenced sitemaps in $filename doesn't contain 'loc' attribute"
                     );
                 }
-                $basename = preg_replace(
-                    '/^' . preg_quote($this->sitemapFilePrefix) . '\.(.+)\.xml(?:\.gz)?$/',
-                    '\1',
-                    basename($child->loc)
-                ); // cut .xml|.xml.gz
+                preg_match(
+                    '/^' . preg_quote($this->sitemapFilePrefix) . '\.(.+)\.xml(\.gz)?$/',
+                    basename($child->loc),
+                    $matches
+                ); // cut .xml|.xml.gz and check gz files
+                $basename = $matches[1];
+                $gzOption = isset($matches[2]);
 
                 if (!isset($child->lastmod)) {
                     throw new \InvalidArgumentException(
@@ -179,7 +181,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
                     );
                 }
                 $lastmod = new \DateTimeImmutable($child->lastmod);
-                $urlsets[$basename] = $this->newUrlset($basename, $lastmod);
+                $urlsets[$basename] = $this->newUrlset($basename, $lastmod, $gzOption);
             }
         }
 
@@ -234,10 +236,20 @@ class Dumper extends AbstractGenerator implements DumperInterface
     }
 
     /**
-     * @inheritdoc
+     * Create new DumpingUrlset with gz option
+     *
+     * @param string $name The urlset name
+     * @param \DateTimeInterface|null $lastmod The urlset last modification date
+     * @param bool $gzExtension Whether the urlset is gzipped
+     * @return DumpingUrlset|Urlset
      */
-    protected function newUrlset($name, \DateTimeInterface $lastmod = null)
+    protected function newUrlset($name, \DateTimeInterface $lastmod = null, bool $gzExtension = false)
     {
-        return new DumpingUrlset($this->baseUrl . $this->sitemapFilePrefix . '.' . $name . '.xml', $lastmod);
+        $url = $this->baseUrl . $this->sitemapFilePrefix . '.' . $name . '.xml';
+        if ($gzExtension) {
+            $url .= '.gz';
+        }
+
+        return new DumpingUrlset($url, $lastmod);
     }
 }

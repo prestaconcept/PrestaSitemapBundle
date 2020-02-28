@@ -116,6 +116,25 @@ class DumpSitemapsCommandTest extends WebTestCase
         $this->assertSitemapIndexEquals($this->webDir . '/sitemap.xml', $expectedSitemaps);
     }
 
+    public function testSitemapWithDifferentSectionWithGzipOption()
+    {
+        copy($this->fixturesDir . '/sitemap_with_gz.xml', $this->webDir . '/sitemap.xml');
+
+        $this->executeDumpWithOptions(
+            [
+                'target' => $this->webDir,
+                '--section' => 'video',
+                '--gzip' => true
+            ]
+        );
+
+        $expectedSitemaps = [
+            'http://sitemap.php54.local/sitemap.audio.xml.gz',
+            'http://sitemap.php54.local/sitemap.video.xml.gz',
+        ];
+        $this->assertSitemapIndexEquals($this->webDir . '/sitemap.xml', $expectedSitemaps);
+    }
+
     private function assertSitemapIndexEquals($sitemapFile, array $expectedSitemaps)
     {
         $xml = simplexml_load_file($sitemapFile);
