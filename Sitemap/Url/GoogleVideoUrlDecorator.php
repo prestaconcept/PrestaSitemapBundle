@@ -11,9 +11,7 @@
 
 namespace Presta\SitemapBundle\Sitemap\Url;
 
-use DateTimeInterface;
 use Presta\SitemapBundle\Exception;
-use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
  * Help to generate video url
@@ -24,26 +22,7 @@ use Presta\SitemapBundle\Sitemap\Utils;
  */
 class GoogleVideoUrlDecorator extends UrlDecorator
 {
-    const PLAYER_LOC_ALLOW_EMBED_YES = 'yes';
-    const PLAYER_LOC_ALLOW_EMBED_NO = 'no';
-    const FAMILY_FRIENDLY_YES = 'yes';
-    const FAMILY_FRIENDLY_NO = 'no';
-    const RELATIONSHIP_ALLOW = 'allow';
-    const RELATIONSHIP_DENY = 'deny';
-    const PRICE_TYPE_RENT = 'rent';
-    const PRICE_TYPE_OWN = 'own';
-    const PRICE_RESOLUTION_HD = 'HD';
-    const PRICE_RESOLUTION_SD = 'SD';
-    const REQUIRES_SUBSCRIPTION_YES = 'yes';
-    const REQUIRES_SUBSCRIPTION_NO = 'no';
-    const PLATFORM_WEB = 'web';
-    const PLATFORM_MOBILE = 'mobile';
-    const PLATFORM_TV = 'tv';
-    const PLATFORM_RELATIONSHIP_ALLOW = 'allow';
-    const PLATFORM_RELATIONSHIP_DENY = 'deny';
-    const LIVE_YES = 'yes';
-    const LIVE_NO = 'no';
-    const TAG_ITEMS_LIMIT = 32;
+    const LIMIT_ITEMS = 1000;
 
     /**
      * @var array
@@ -53,138 +32,165 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @var string
      */
-    protected $thumbnail_loc;
+    protected $videoXml = '';
 
     /**
-     * @var string
+     * @var bool
      */
-    protected $title;
+    protected $limitItemsReached = false;
 
     /**
-     * @var string
+     * @var int
      */
-    protected $description;
-
-    //list of optional parameters
+    protected $countItems = 0;
 
     /**
-     * @var string|null
+     * @param GoogleVideo $video
+     *
+     * @return GoogleVideoUrlDecorator
      */
-    protected $content_loc;
+    public function addVideo(GoogleVideo $video)
+    {
+        if ($this->isFull()) {
+            throw new Exception\GoogleVideoException('The video limit has been exceeded');
+        }
+
+        $this->videoXml .= $video->toXml();
+
+        //---------------------
+        //Check limits
+        if (++$this->countItems >= self::LIMIT_ITEMS) {
+            $this->limitItemsReached = true;
+        }
+
+        return $this;
+    }
 
     /**
-     * @var string|null
+     * @inheritdoc
      */
-    protected $player_loc;
+    public function toXml()
+    {
+        $baseXml = $this->urlDecorated->toXml();
+
+        if ($this->video) {
+            $this->addVideo($this->video);
+        }
+
+        return str_replace('</url>', $this->videoXml . '</url>', $baseXml);
+    }
 
     /**
-     * allow google to embed video in search results
-     * @var string
+     * @return bool
      */
-    protected $player_loc_allow_embed;
+    public function isFull()
+    {
+        return $this->limitItemsReached;
+    }
+
+    // BC Compatibility layer
 
     /**
-     * user defined string for flashvar parameters in embed tag (e.g. autoplay="ap=1")
-     * @var string
+     * @deprecated Use GoogleVideo::PLAYER_LOC_ALLOW_EMBED_YES instead
      */
-    protected $player_loc_autoplay;
+    const PLAYER_LOC_ALLOW_EMBED_YES = 'yes';
 
     /**
-     * @var int|null
+     * @deprecated Use GoogleVideo::PLAYER_LOC_ALLOW_EMBED_NO instead
      */
-    protected $duration;
+    const PLAYER_LOC_ALLOW_EMBED_NO = 'no';
 
     /**
-     * @var DateTimeInterface|null
+     * @deprecated Use GoogleVideo::FAMILY_FRIENDLY_YES instead
      */
-    protected $expiration_date;
+    const FAMILY_FRIENDLY_YES = 'yes';
 
     /**
-     * @var int|null
+     * @deprecated Use GoogleVideo::FAMILY_FRIENDLY_NO instead
      */
-    protected $rating;
+    const FAMILY_FRIENDLY_NO = 'no';
 
     /**
-     * @var int|null
+     * @deprecated Use GoogleVideo::RELATIONSHIP_ALLOW instead
      */
-    protected $view_count;
+    const RELATIONSHIP_ALLOW = 'allow';
 
     /**
-     * @var DateTimeInterface|null
+     * @deprecated Use GoogleVideo::RELATIONSHIP_DENY instead
      */
-    protected $publication_date;
+    const RELATIONSHIP_DENY = 'deny';
 
     /**
-     * @var string|null
+     * @deprecated Use GoogleVideo::PRICE_TYPE_RENT instead
      */
-    protected $family_friendly;
+    const PRICE_TYPE_RENT = 'rent';
 
     /**
-     * @var string|null
+     * @deprecated Use GoogleVideo::PRICE_TYPE_OWN instead
      */
-    protected $category;
+    const PRICE_TYPE_OWN = 'own';
 
     /**
-     * @var array
+     * @deprecated Use GoogleVideo::PRICE_RESOLUTION_HD instead
      */
-    protected $restriction_allow = [];
+    const PRICE_RESOLUTION_HD = 'HD';
 
     /**
-     * @var array
+     * @deprecated Use GoogleVideo::PRICE_RESOLUTION_SD instead
      */
-    protected $restriction_deny = [];
+    const PRICE_RESOLUTION_SD = 'SD';
 
     /**
-     * @var string|null
+     * @deprecated Use GoogleVideo::REQUIRES_SUBSCRIPTION_YES instead
      */
-    protected $gallery_loc;
+    const REQUIRES_SUBSCRIPTION_YES = 'yes';
 
     /**
-     * @var string|null
+     * @deprecated Use GoogleVideo::REQUIRES_SUBSCRIPTION_NO instead
      */
-    protected $gallery_loc_title;
+    const REQUIRES_SUBSCRIPTION_NO = 'no';
 
     /**
-     * @var string|null
+     * @deprecated Use GoogleVideo::PLATFORM_WEB instead
      */
-    protected $requires_subscription;
+    const PLATFORM_WEB = 'web';
 
     /**
-     * @var string|null
+     * @deprecated Use GoogleVideo::PLATFORM_MOBILE instead
      */
-    protected $uploader;
+    const PLATFORM_MOBILE = 'mobile';
 
     /**
-     * @var string|null
+     * @deprecated Use GoogleVideo::PLATFORM_TV instead
      */
-    protected $uploader_info;
+    const PLATFORM_TV = 'tv';
 
     /**
-     * @var array
+     * @deprecated Use GoogleVideo::PLATFORM_RELATIONSHIP_ALLOW instead
      */
-    protected $platforms = [];
+    const PLATFORM_RELATIONSHIP_ALLOW = 'allow';
 
     /**
-     * @var string|null
+     * @deprecated Use GoogleVideo::PLATFORM_RELATIONSHIP_DENY instead
      */
-    protected $platform_relationship;
+    const PLATFORM_RELATIONSHIP_DENY = 'deny';
 
     /**
-     * @var string|null
+     * @deprecated Use GoogleVideo::LIVE_YES instead
      */
-    protected $live;
+    const LIVE_YES = 'yes';
 
     /**
-     * multiple prices can be added, see self::addPrice()
-     * @var array
+     * @deprecated Use GoogleVideo::LIVE_NO instead
      */
-    protected $prices = [];
+    const LIVE_NO = 'no';
 
     /**
-     * multiple tags can be added, see self::addTag()
-     * @var array
+     * @deprecated Use GoogleVideo::TAG_ITEMS_LIMIT instead
      */
-    protected $tags = [];
+    const TAG_ITEMS_LIMIT = 32;
+
+    private $video = null;
 
     /**
      * Decorate url with a video
@@ -198,58 +204,88 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      *
      * @throws Exception\GoogleVideoUrlException
      */
-    public function __construct(Url $urlDecorated, $thumnail_loc, $title, $description, array $parameters = [])
+    public function __construct(Url $urlDecorated, $thumnail_loc = null, $title = null, $description = null, array $parameters = null)
     {
-        foreach ($parameters as $key => $param) {
-            $method = Utils::getSetMethod($this, $key);
-            $this->$method($param);
-        }
-
-        $this->setThumbnailLoc($thumnail_loc);
-        $this->setTitle($title);
-        $this->setDescription($description);
-
-        if (!$this->content_loc && !$this->player_loc) {
-            throw new Exception\GoogleVideoUrlException('The parameter content_loc or player_loc is required');
-        }
-
-        if (count($this->platforms) && !$this->platform_relationship) {
-            throw new Exception\GoogleVideoUrlException(
-                'The parameter platform_relationship is required when platform is set'
-            );
-        }
-
         parent::__construct($urlDecorated);
+
+        if ($thumnail_loc !== null || $title !== null || $description !== null || $parameters !== null) {
+            @trigger_error('Using other arguments than $urlDecorated in constructor is deprecated. Create a GoogleVideo object instead.', E_USER_DEPRECATED);
+
+            $this->video = new GoogleVideo($thumnail_loc, $title, $description, $parameters ?: []);
+        }
+    }
+
+    /**
+     * Checker and deprecation triggerer for backward compatibility
+     *
+     * @param string $methodName
+     */
+    private function bc(string $methodName): void
+    {
+        switch (substr($methodName, 0, 3)) {
+            case 'set':
+                $text = 'Using %s::%s is deprecated. Create a GoogleVideo object instead.';
+                break;
+            case 'get':
+                $text = 'Using %s::%s is deprecated. Retrieve it from GoogleVideo object instead.';
+                break;
+            case 'add':
+                $text = 'Using %s::%s is deprecated. Add it to GoogleVideo object instead.';
+                break;
+            default:
+                $text = 'Using %s::%s is deprecated.';
+        }
+
+        @trigger_error(
+            sprintf($text, __CLASS__, $methodName),
+            E_USER_DEPRECATED
+        );
+
+        if (!$this->video) {
+            throw new Exception\GoogleVideoUrlException("thumnail_loc, title and description must be set");
+        }
     }
 
     /**
      * @param string $thumbnail_loc
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setThumbnailLoc($thumbnail_loc)
     {
-        $this->thumbnail_loc = $thumbnail_loc;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setThumbnailLoc($thumbnail_loc);
 
         return $this;
     }
 
     /**
      * @return string
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getThumbnailLoc()
     {
-        return $this->thumbnail_loc;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getThumbnailLoc();
     }
 
     /**
      * @param string $title
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setTitle($title)
     {
-        $this->title = $title;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setTitle($title);
 
         return $this;
     }
@@ -258,10 +294,14 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * @param string $description
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setDescription($description)
     {
-        $this->description = $description;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setDescription($description);
 
         return $this;
     }
@@ -270,10 +310,14 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * @param string $content_loc
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setContentLoc($content_loc)
     {
-        $this->content_loc = $content_loc;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setContentLoc($content_loc);
 
         return $this;
     }
@@ -282,65 +326,82 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * @param string $player_loc
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setPlayerLoc($player_loc)
     {
-        $this->player_loc = $player_loc;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setPlayerLoc($player_loc);
 
         return $this;
     }
 
     /**
      * @return string|null
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getPlayerLoc()
     {
-        return $this->player_loc;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getPlayerLoc();
     }
 
     /**
      * @param string $player_loc_allow_embed
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setPlayerLocAllowEmbed($player_loc_allow_embed)
     {
-        if (!in_array($player_loc_allow_embed, [self::PLAYER_LOC_ALLOW_EMBED_YES, self::PLAYER_LOC_ALLOW_EMBED_NO])) {
-            throw new Exception\GoogleVideoUrlException(
-                sprintf(
-                    'The parameter %s must be a valid player_loc_allow_embed.see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
-                    $player_loc_allow_embed
-                )
-            );
-        }
-        $this->player_loc_allow_embed = $player_loc_allow_embed;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setPlayerLocAllowEmbed($player_loc_allow_embed);
 
         return $this;
     }
 
     /**
      * @return string
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getPlayerLocAllowEmbed()
     {
-        return $this->player_loc_allow_embed;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getPlayerLocAllowEmbed();
     }
 
     /**
      * @param string $player_loc_autoplay
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setPlayerLocAutoplay($player_loc_autoplay)
     {
-        $this->player_loc_autoplay = $player_loc_autoplay;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setPlayerLocAutoplay($player_loc_autoplay);
 
         return $this;
     }
 
+    /**
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
+     */
     public function getPlayerLocAutoplay()
     {
-        return $this->player_loc_autoplay;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getPlayerLocAutoplay();
     }
 
     /**
@@ -348,19 +409,14 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      *
      * @return GoogleVideoUrlDecorator
      * @throws Exception\GoogleVideoUrlException
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setDuration($duration)
     {
-        if ($duration < 0 || $duration > 28800) {
-            throw new Exception\GoogleVideoUrlException(
-                sprintf(
-                    'The parameter %s must be a valid duration.see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
-                    $duration
-                )
-            );
-        }
+        $this->bc(__FUNCTION__);
 
-        $this->duration = $duration;
+        $this->video->setDuration($duration);
 
         return $this;
     }
@@ -369,10 +425,14 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * @param DateTimeInterface $expiration_date
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setExpirationDate(DateTimeInterface $expiration_date)
     {
-        $this->expiration_date = $expiration_date;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setExpirationDate($expiration_date);
 
         return $this;
     }
@@ -381,19 +441,14 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * @param float $rating
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setRating($rating)
     {
-        if ($rating < 0 || $rating > 5) {
-            throw new Exception\GoogleVideoUrlException(
-                sprintf(
-                    'The parameter %s must be a valid rating.see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
-                    $rating
-                )
-            );
-        }
+        $this->bc(__FUNCTION__);
 
-        $this->rating = $rating;
+        $this->video->setRating($rating);
 
         return $this;
     }
@@ -402,10 +457,14 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * @param int $view_count
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setViewCount($view_count)
     {
-        $this->view_count = $view_count;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setViewCount($view_count);
 
         return $this;
     }
@@ -414,10 +473,14 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * @param DateTimeInterface $publication_date
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setPublicationDate(DateTimeInterface $publication_date)
     {
-        $this->publication_date = $publication_date;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setPublicationDate($publication_date);
 
         return $this;
     }
@@ -426,23 +489,14 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * @param null|string $family_friendly
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setFamilyFriendly($family_friendly = null)
     {
-        if (null == $family_friendly) {
-            $family_friendly = self::FAMILY_FRIENDLY_YES;
-        }
+        $this->bc(__FUNCTION__);
 
-        if (!in_array($family_friendly, [self::FAMILY_FRIENDLY_YES, self::FAMILY_FRIENDLY_NO])) {
-            throw new Exception\GoogleVideoUrlException(
-                sprintf(
-                    'The parameter %s must be a valid family_friendly. see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
-                    $family_friendly
-                )
-            );
-        }
-
-        $this->family_friendly = $family_friendly;
+        $this->video->setFamilyFriendly($family_friendly);
 
         return $this;
     }
@@ -451,19 +505,14 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * @param string $category
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setCategory($category)
     {
-        if (strlen($category) > 256) {
-            throw new Exception\GoogleVideoUrlException(
-                sprintf(
-                    'The parameter %s must be a valid category. see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
-                    $category
-                )
-            );
-        }
+        $this->bc(__FUNCTION__);
 
-        $this->category = $category;
+        $this->video->setCategory($category);
 
         return $this;
     }
@@ -472,50 +521,70 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * @param array $countries
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setRestrictionAllow(array $countries)
     {
-        $this->restriction_allow = $countries;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setRestrictionAllow($countries);
 
         return $this;
     }
 
     /**
      * @return array
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getRestrictionAllow()
     {
-        return $this->restriction_allow;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getRestrictionAllow();
     }
 
     /**
      * @param array $countries
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setRestrictionDeny(array $countries)
     {
-        $this->restriction_deny = $countries;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setRestrictionDeny($countries);
 
         return $this;
     }
 
     /**
      * @return array
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getRestrictionDeny()
     {
-        return $this->restriction_deny;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getRestrictionDeny();
     }
 
     /**
      * @param string $gallery_loc
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setGalleryLoc($gallery_loc)
     {
-        $this->gallery_loc = $gallery_loc;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setGalleryLoc($gallery_loc);
 
         return $this;
     }
@@ -524,10 +593,14 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * @param string $gallery_loc_title
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setGalleryLocTitle($gallery_loc_title)
     {
-        $this->gallery_loc_title = $gallery_loc_title;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setGalleryLocTitle($gallery_loc_title);
 
         return $this;
     }
@@ -536,19 +609,14 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * @param string $requires_subscription
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setRequiresSubscription($requires_subscription)
     {
-        if (!in_array($requires_subscription, [self::REQUIRES_SUBSCRIPTION_YES, self::REQUIRES_SUBSCRIPTION_NO])) {
-            throw new Exception\GoogleVideoUrlException(
-                sprintf(
-                    'The parameter %s must be a valid requires_subscription.see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
-                    $requires_subscription
-                )
-            );
-        }
+        $this->bc(__FUNCTION__);
 
-        $this->requires_subscription = $requires_subscription;
+        $this->video->setRequiresSubscription($requires_subscription);
 
         return $this;
     }
@@ -557,10 +625,14 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * @param string $uploader
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setUploader($uploader)
     {
-        $this->uploader = $uploader;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setUploader($uploader);
 
         return $this;
     }
@@ -569,10 +641,14 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * @param string $uploader_info
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setUploaderInfo($uploader_info)
     {
-        $this->uploader_info = $uploader_info;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setUploaderInfo($uploader_info);
 
         return $this;
     }
@@ -581,180 +657,264 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * @param array $platforms
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setPlatforms(array $platforms)
     {
-        $this->platforms = $platforms;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setPlatforms($platforms);
 
         return $this;
     }
 
     /**
      * @return array
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getPlatforms()
     {
-        return $this->platforms;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getPlatforms();
     }
 
     /**
      * @param string $platform_relationship
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setPlatformRelationship($platform_relationship)
     {
-        $this->platform_relationship = $platform_relationship;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setPlatformRelationship($platform_relationship);
 
         return $this;
     }
 
     /**
      * @return null|string
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function getPlatformRelationship()
     {
-        return $this->platform_relationship;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getPlatformRelationship();
     }
 
     /**
      * @param string $live
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Create a GoogleVideo object instead.
      */
     public function setLive($live)
     {
-        $this->live = $live;
+        $this->bc(__FUNCTION__);
+
+        $this->video->setLive($live);
 
         return $this;
     }
 
     /**
      * @return string
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getTitle()
     {
-        return $this->title;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getTitle();
     }
 
     /**
      * @return string
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getDescription()
     {
-        return $this->description;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getDescription();
     }
 
     /**
      * @return null|string
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getContentLoc()
     {
-        return $this->content_loc;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getContentLoc();
     }
 
     /**
      * @return int|null
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getDuration()
     {
-        return $this->duration;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getDuration();
     }
 
     /**
      * @return DateTimeInterface|null
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getExpirationDate()
     {
-        return $this->expiration_date;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getExpirationDate();
     }
 
     /**
      * @return int|null
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getRating()
     {
-        return $this->rating;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getRating();
     }
 
     /**
      * @return int|null
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getViewCount()
     {
-        return $this->view_count;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getViewCount();
     }
 
     /**
      * @return DateTimeInterface|null
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getPublicationDate()
     {
-        return $this->publication_date;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getPublicationDate();
     }
 
     /**
      * @return null|string
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getFamilyFriendly()
     {
-        return $this->family_friendly;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getFamilyFriendly();
     }
 
     /**
      * @return null|string
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getCategory()
     {
-        return $this->category;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getCategory();
     }
 
     /**
      * @return null|string
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getGalleryLoc()
     {
-        return $this->gallery_loc;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getGalleryLoc();
     }
 
     /**
      * @return null|string
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getGalleryLocTitle()
     {
-        return $this->gallery_loc_title;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getGalleryLocTitle();
     }
 
     /**
      * @return null|string
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getRequiresSubscription()
     {
-        return $this->requires_subscription;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getRequiresSubscription();
     }
 
     /**
      * @return null|string
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getUploader()
     {
-        return $this->uploader;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getUploader();
     }
 
     /**
      * @return null|string
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getUploaderInfo()
     {
-        return $this->uploader_info;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getUploaderInfo();
     }
 
     /**
      * @return string|null
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getLive()
     {
-        return $this->live;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getLive();
     }
 
     /**
@@ -766,15 +926,14 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * @param string|null $resolution - hd or sd
      *
      * @return GoogleVideoUrlDecorator
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Add it to GoogleVideo object instead.
      */
     public function addPrice($amount, $currency, $type = null, $resolution = null)
     {
-        $this->prices[] = [
-            'amount' => $amount,
-            'currency' => $currency,
-            'type' => $type,
-            'resolution' => $resolution,
-        ];
+        $this->bc(__FUNCTION__);
+
+        $this->video->addPrice($amount, $currency, $type, $resolution);
 
         return $this;
     }
@@ -783,10 +942,14 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      * list of defined prices with price, currency, type and resolution
      *
      * @return array
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getPrices()
     {
-        return $this->prices;
+        $this->bc(__FUNCTION__);
+
+        return $this->video->getPrices();
     }
 
     /**
@@ -794,138 +957,27 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      *
      * @return GoogleVideoUrlDecorator
      * @throws Exception\GoogleVideoUrlTagException
+     *
+     * @deprecated Using setThumbnailLoc is deprecated. Add it to GoogleVideo object instead.
      */
     public function addTag($tag)
     {
-        if (count($this->tags) >= self::TAG_ITEMS_LIMIT) {
-            throw new Exception\GoogleVideoUrlTagException(
-                sprintf('The tags limit of %d items is exceeded.', self::TAG_ITEMS_LIMIT)
-            );
-        }
+        $this->bc(__FUNCTION__);
 
-        $this->tags[] = $tag;
+        $this->video->addTag($tag);
 
         return $this;
     }
 
     /**
      * @return array
+     *
+     * @deprecated Using getThumbnailLoc is deprecated. Retrieve it from GoogleVideo object instead.
      */
     public function getTags()
     {
-        return $this->tags;
-    }
+        $this->bc(__FUNCTION__);
 
-    /**
-     * @inheritdoc
-     */
-    public function toXml()
-    {
-        $videoXml = '<video:video>';
-
-        //----------------------
-        // required fields
-        $videoXml .= '<video:thumbnail_loc>' . Utils::encode($this->getThumbnailLoc()) . '</video:thumbnail_loc>';
-
-        foreach (['title', 'description'] as $paramName) {
-            $videoXml .= '<video:' . $paramName . '>' . Utils::render(
-                    $this->{Utils::getGetMethod($this, $paramName)}()
-                ) . '</video:' . $paramName . '>';
-        }
-        //----------------------
-        //----------------------
-        // simple optionnal fields
-        if ($this->getCategory()) {
-            $videoXml .= '<video:category>' . Utils::render($this->getCategory()) . '</video:category>';
-        }
-        if ($this->getContentLoc()) {
-            $videoXml .= '<video:content_loc>' . Utils::encode($this->getContentLoc()) . '</video:content_loc>';
-        }
-        foreach ([
-                     'duration',
-                     'rating',
-                     'view_count',
-                     'family_friendly',
-                     'requires_subscription',
-                     'live',
-                 ] as $paramName) {
-            $getMethod = Utils::getGetMethod($this, $paramName);
-            if ($this->$getMethod()) {
-                $videoXml .= '<video:' . $paramName . '>' . $this->$getMethod() . '</video:' . $paramName . '>';
-            }
-        }
-        //----------------------
-        //----------------------
-        // date based optionnal fields
-        foreach (['expiration_date', 'publication_date'] as $paramName) {
-            $getMethod = Utils::getGetMethod($this, $paramName);
-            if ($this->$getMethod()) {
-                $videoXml .= '<video:' . $paramName . '>' . $this->$getMethod()->format(
-                        'c'
-                    ) . '</video:' . $paramName . '>';
-            }
-        }
-        //----------------------
-        //----------------------
-        // moar complexe optionnal fields
-        if ($this->getPlayerLoc()) {
-            $allow_embed = ($this->getPlayerLocAllowEmbed()) ? ' allow_embed="' . $this->getPlayerLocAllowEmbed(
-                ) . '"' : '';
-            $autoplay = ($this->getPlayerLocAutoplay()) ? ' autoplay="' . $this->getPlayerLocAutoplay() . '"' : '';
-            $videoXml .= '<video:player_loc' . $allow_embed . $autoplay . '>' . Utils::encode(
-                    $this->getPlayerLoc()
-                ) . '</video:player_loc>';
-        }
-
-        if ($this->getRestrictionAllow()) {
-            $videoXml .= '<video:restriction relationship="allow">' . implode(
-                    ' ',
-                    $this->getRestrictionAllow()
-                ) . '</video:restriction>';
-        }
-
-        if ($this->getRestrictionDeny()) {
-            $videoXml .= '<video:restriction relationship="deny">' . implode(
-                    ' ',
-                    $this->getRestrictionDeny()
-                ) . '</video:restriction>';
-        }
-
-        if ($this->getGalleryLoc()) {
-            $title = ($this->getGalleryLocTitle()) ? ' title="' . Utils::encode($this->getGalleryLocTitle()) . '"' : '';
-            $videoXml .= '<video:gallery_loc' . $title . '>' . Utils::encode(
-                    $this->getGalleryLoc()
-                ) . '</video:gallery_loc>';
-        }
-
-        foreach ($this->getTags() as $tag) {
-            $videoXml .= '<video:tag>' . Utils::render($tag) . '</video:tag>';
-        }
-
-        foreach ($this->getPrices() as $price) {
-            $type = ($price['type']) ? ' type="' . $price['type'] . '"' : '';
-            $resolution = ($price['resolution']) ? ' resolution="' . $price['resolution'] . '"' : '';
-            $videoXml .= '<video:price currency="' . $price['currency'] . '"' . $type . $resolution . '>' . $price['amount'] . '</video:price>';
-        }
-
-        if ($this->getUploader()) {
-            $info = ($this->getUploaderInfo()) ? ' info="' . $this->getUploaderInfo() . '"' : '';
-            $videoXml .= '<video:uploader' . $info . '>' . $this->getUploader() . '</video:uploader>';
-        }
-
-        if (count($this->getPlatforms())) {
-            $relationship = $this->getPlatformRelationship();
-            $videoXml .= '<video:platform relationship="' . $relationship . '">' . implode(
-                    ' ',
-                    $this->getPlatforms()
-                ) . '</video:platform>';
-        }
-        //----------------------
-
-        $videoXml .= '</video:video>';
-
-        $baseXml = $this->urlDecorated->toXml();
-
-        return str_replace('</url>', $videoXml . '</url>', $baseXml);
+        return $this->video->getTags();
     }
 }
