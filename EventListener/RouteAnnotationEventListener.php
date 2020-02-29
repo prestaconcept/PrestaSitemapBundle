@@ -12,6 +12,7 @@
 namespace Presta\SitemapBundle\EventListener;
 
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
+use Presta\SitemapBundle\Service\UrlContainerInterface;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
@@ -72,11 +73,7 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
      */
     public function registerRouteAnnotation(SitemapPopulateEvent $event)
     {
-        $section = $event->getSection();
-
-        if (is_null($section) || $section === $this->defaultSection) {
-            $this->addUrlsFromRoutes($event);
-        }
+        $this->addUrlsFromRoutes($event->getUrlContainer(), $event->getSection());
     }
 
     /**
@@ -84,26 +81,24 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
      *
      * @throws \InvalidArgumentException
      */
-    private function addUrlsFromRoutes(SitemapPopulateEvent $event)
+    private function addUrlsFromRoutes(UrlContainerInterface $container, ?string $section)
     {
         $collection = $this->getRouteCollection();
-        $container = $event->getUrlContainer();
 
         foreach ($collection->all() as $name => $route) {
             $options = $this->getOptions($name, $route);
-
             if (!$options) {
                 continue;
             }
 
-            $section = $event->getSection() ?: $this->defaultSection;
-            if (isset($options['section'])) {
-                $section = $options['section'];
+            $routeSection = $options['section'] ?? $this->defaultSection;
+            if ($section !== null && $routeSection !== $section) {
+                continue;
             }
 
             $container->addUrl(
                 $this->getUrlConcrete($name, $options),
-                $section
+                $routeSection
             );
         }
     }
