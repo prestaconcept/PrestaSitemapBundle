@@ -6,6 +6,7 @@ use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Service\UrlContainerInterface;
 use Presta\SitemapBundle\Sitemap\Url\GoogleImage;
 use Presta\SitemapBundle\Sitemap\Url\GoogleImageUrlDecorator;
+use Presta\SitemapBundle\Sitemap\Url\GoogleVideo;
 use Presta\SitemapBundle\Sitemap\Url\GoogleVideoUrlDecorator;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -58,22 +59,14 @@ final class SitemapListener implements EventSubscriberInterface
     public function populate(SitemapPopulateEvent $event): void
     {
         $this->blog($event->getUrlContainer());
+        $this->archives($event->getUrlContainer());
     }
 
     private function blog(UrlContainerInterface $sitemap): void
     {
-        $sitemap->addUrl(
-            new UrlConcrete($this->routing->generate('blog_read', [], UrlGeneratorInterface::ABSOLUTE_URL)),
-            'blog'
-        );
-
         foreach (self::BLOG as $post) {
             $url = new UrlConcrete(
-                $this->routing->generate(
-                    'blog_post',
-                    ['slug' => $post['slug']],
-                    RouterInterface::ABSOLUTE_URL
-                )
+                $this->url('blog_post', ['slug' => $post['slug']])
             );
 
             if (count($post['images']) > 0) {
@@ -87,16 +80,31 @@ final class SitemapListener implements EventSubscriberInterface
 
             if ($post['video'] !== null) {
                 $parameters = parse_str($post['video']);
-                $url = new GoogleVideoUrlDecorator(
-                    $url,
-                    sprintf('https://img.youtube.com/vi/%s/0.jpg', $parameters['v']),
-                    $post['title'],
-                    $post['title'],
-                    ['content_loc' => $post['video']]
+                $url = new GoogleVideoUrlDecorator($url);
+                $url->addVideo(
+                    new GoogleVideo(
+                        sprintf('https://img.youtube.com/vi/%s/0.jpg', $parameters['v']),
+                        $post['title'],
+                        $post['title'],
+                        ['content_loc' => $post['video']]
+                    )
                 );
             }
 
             $sitemap->addUrl($url, 'blog');
         }
+    }
+
+    private function archives(UrlContainerInterface $sitemap): void
+    {
+        $url = $this->url('archive');
+        for ($i = 1; $i <= 20; $i++) {
+            $sitemap->addUrl(new UrlConcrete($url . '?i=' . $i), 'archives');
+        }
+    }
+
+    private function url(string $route, array $parameters = []): string
+    {
+        return $this->routing->generate($route, $parameters, RouterInterface::ABSOLUTE_URL);
     }
 }

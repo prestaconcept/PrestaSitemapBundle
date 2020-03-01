@@ -1,6 +1,6 @@
 yaml:
-  path: /yaml
-  defaults: { _controller: \Presta\SitemapBundle\Tests\Integration\Controller\FormatController::yaml }
+  path: /contact
+  defaults: { _controller: \Presta\SitemapBundle\Tests\Integration\Controller\StaticController::contact }
   options:
     sitemap:
       section: static

@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 final class BlogController
 {
     /**
-     * @Route("/blog", name="blog_read")
+     * @Route("/blog", name="blog_read", options={"sitemap"={"section"="blog"}})
      */
     public function read(): Response
     {

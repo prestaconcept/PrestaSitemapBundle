@@ -49,13 +49,22 @@ final class CliTest extends SitemapTestCase
         $blog = $this->section('blog');
         self::assertFileNotExists($blog, 'Sitemap "blog" section file does not exists before dump');
 
+        $archives = $this->section('archives');
+        $archives0 = $this->section('archives_0');
+        self::assertFileNotExists($archives, 'Sitemap "archive" section file does not exists before dump');
+        self::assertFileNotExists($archives0, 'Sitemap "archive_0" section file does not exists before dump');
+
         $commandTester = new CommandTester(
             (new Application(self::createKernel()))->find('presta:sitemaps:dump')
         );
         $commandTester->execute([]);
+        $output = $commandTester->getDisplay();
 
         self::assertSame(0, $commandTester->getStatusCode(), 'Sitemap dump command succeed');
-        //todo more assertions ?
+        self::assertStringContainsString('sitemap.static.xml', $output, '"sitemap.static.xml" was dumped');
+        self::assertStringContainsString('sitemap.static.xml', $output, '"sitemap.blog.xml" was dumped');
+        self::assertStringContainsString('sitemap.archives.xml', $output, '"sitemap.archives.xml" was dumped');
+        self::assertStringContainsString('sitemap.archives_0.xml', $output, '"sitemap.archives_0.xml" was dumped');
 
         // get sitemap index content via filesystem
         self::assertFileExists($index, 'Sitemap index file exists after dump');
@@ -71,5 +80,13 @@ final class CliTest extends SitemapTestCase
         self::assertFileExists($blog, 'Sitemap "blog" section file exists after dump');
         self::assertIsReadable($blog, 'Sitemap "blog" section file is readable');
         self::assertBlogSection(file_get_contents($blog));
+
+        // get sitemap "archives" section content via filesystem
+        self::assertFileExists($archives, 'Sitemap "archives" section file exists after dump');
+        self::assertIsReadable($archives, 'Sitemap "archives" section file is readable');
+        self::assertFileExists($archives0, 'Sitemap "archives_0" section file exists after dump');
+        self::assertIsReadable($archives0, 'Sitemap "archives_0" section file is readable');
+        self::assertArchivesSection(file_get_contents($archives));
+        self::assertArchivesSection(file_get_contents($archives0));
     }
 }
