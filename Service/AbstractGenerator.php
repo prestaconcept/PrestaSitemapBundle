@@ -15,6 +15,7 @@ use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap\Sitemapindex;
 use Presta\SitemapBundle\Sitemap\Url\Url;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
+use Presta\SitemapBundle\Sitemap\Url\UrlDecorator;
 use Presta\SitemapBundle\Sitemap\Urlset;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
@@ -96,15 +97,16 @@ abstract class AbstractGenerator implements UrlContainerInterface
             throw new \RuntimeException('The limit of sitemapindex has been exceeded');
         }
 
-        if ($url instanceof UrlConcrete) {
-            if (null === $url->getLastmod() && null !== $this->defaults['lastmod']) {
-                $url->setLastmod(new \DateTimeImmutable($this->defaults['lastmod']));
+        $concreteUrl = $this->getUrlConcrete($url);
+        if ($concreteUrl instanceof UrlConcrete) {
+            if (null === $concreteUrl->getLastmod() && null !== $this->defaults['lastmod']) {
+                $concreteUrl->setLastmod(new \DateTimeImmutable($this->defaults['lastmod']));
             }
-            if (null === $url->getChangefreq()) {
-                $url->setChangefreq($this->defaults['changefreq']);
+            if (null === $concreteUrl->getChangefreq()) {
+                $concreteUrl->setChangefreq($this->defaults['changefreq']);
             }
-            if (null === $url->getPriority()) {
-                $url->setPriority($this->defaults['priority']);
+            if (null === $concreteUrl->getPriority()) {
+                $concreteUrl->setPriority($this->defaults['priority']);
             }
         }
 
@@ -167,5 +169,23 @@ abstract class AbstractGenerator implements UrlContainerInterface
         }
 
         return $this->root;
+    }
+
+    /**
+     * @param Url $url
+     *
+     * @return Url|null
+     */
+    private function getUrlConcrete(Url $url)
+    {
+        if ($url instanceof UrlConcrete) {
+            return $url;
+        }
+
+        if ($url instanceof UrlDecorator) {
+            return $this->getUrlConcrete($url->getUrlDecorated());
+        }
+
+        return null;
     }
 }

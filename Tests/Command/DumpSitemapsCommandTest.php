@@ -69,7 +69,8 @@ class DumpSitemapsCommandTest extends WebTestCase
                         ->setGalleryLoc($base_url . 'page_video1/gallery_loc/?p=1&sort=desc')
                         ->setGalleryLocTitle('Gallery title & spécial chars');
 
-                    $urlVideo = new GoogleVideoUrlDecorator(new UrlConcrete($base_url . 'page_video1/'));
+                    $urlVideo = new GoogleVideoUrlDecorator($concrete = new UrlConcrete($base_url . 'page_video1/'));
+                    $concrete->setLastmod(new \DateTimeImmutable('2020-03-01T17:48:38+01:00'));
                     $urlVideo->addVideo($video);
 
                     $event->getUrlContainer()->addUrl($urlVideo, 'video');

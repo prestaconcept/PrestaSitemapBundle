@@ -3,6 +3,9 @@
         xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
     <loc>http://sitemap.php54.local/page_video1/</loc>
+    <lastmod>2020-03-01T17:48:38+01:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
     <video:video>
       <video:thumbnail_loc>http://sitemap.php54.local/page_video1/thumbnail_loc?a=b&amp;b=c</video:thumbnail_loc>
       <video:title><![CDATA[Title & spécial chars]]></video:title>
