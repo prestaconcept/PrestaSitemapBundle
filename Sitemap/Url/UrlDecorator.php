@@ -43,4 +43,12 @@ abstract class UrlDecorator implements Url
     {
         return array_merge($this->urlDecorated->getCustomNamespaces(), $this->customNamespaces);
     }
+
+    /**
+     * @return Url
+     */
+    public function getUrlDecorated()
+    {
+        return $this->urlDecorated;
+    }
 }

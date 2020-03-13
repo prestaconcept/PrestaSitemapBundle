@@ -157,4 +157,30 @@ class GeneratorTest extends WebTestCase
         self::assertEquals(null, $url->getChangefreq());
         self::assertEquals(null, $url->getLastmod());
     }
+
+    public function testDefaultsDecoratedUrl()
+    {
+        $this->generator->setDefaults([
+            'priority' => 1,
+            'changefreq' => Sitemap\Url\UrlConcrete::CHANGEFREQ_DAILY,
+            'lastmod' => 'now',
+        ]);
+
+        $url = new Sitemap\Url\GoogleMultilangUrlDecorator(
+            new Sitemap\Url\GoogleImageUrlDecorator(
+                $urlConcrete = new Sitemap\Url\UrlConcrete('http://acme.com/')
+            )
+        );
+
+        self::assertEquals(null, $urlConcrete->getPriority());
+        self::assertEquals(null, $urlConcrete->getChangefreq());
+        self::assertEquals(null, $urlConcrete->getLastmod());
+
+        $this->generator->addUrl($url, 'default');
+
+        // knowing that the generator changes the url instance, we check its properties here
+        self::assertEquals(1, $urlConcrete->getPriority());
+        self::assertEquals(Sitemap\Url\UrlConcrete::CHANGEFREQ_DAILY, $urlConcrete->getChangefreq());
+        self::assertInstanceOf('DateTimeInterface', $urlConcrete->getLastmod());
+    }
 }

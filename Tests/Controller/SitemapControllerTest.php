@@ -16,6 +16,8 @@ use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap\Url;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Controller\ContainerControllerResolver;
 
 class SitemapControllerTest extends WebTestCase
 {
@@ -71,6 +73,10 @@ class SitemapControllerTest extends WebTestCase
 
     public function testIndexAction()
     {
+        $controller = $this->getController('PrestaSitemapBundle_index', ['_format' => 'xml']);
+        self::assertInstanceOf(Controller\SitemapController::class, $controller[0]);
+        self::assertSame('indexAction', $controller[1]);
+
         $response = $this->controller->indexAction();
         self::assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
         self::assertEquals('text/xml', $response->headers->get('Content-Type'));
@@ -78,6 +84,10 @@ class SitemapControllerTest extends WebTestCase
 
     public function testValidSectionAction()
     {
+        $controller = $this->getController('PrestaSitemapBundle_section', ['name' => 'default', '_format' => 'xml']);
+        self::assertInstanceOf(Controller\SitemapController::class, $controller[0]);
+        self::assertSame('sectionAction', $controller[1]);
+
         $response = $this->controller->sectionAction('default');
         self::assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
         self::assertEquals('text/xml', $response->headers->get('Content-Type'));
@@ -89,5 +99,16 @@ class SitemapControllerTest extends WebTestCase
     public function testNotFoundSectionAction()
     {
         $this->controller->sectionAction('void');
+    }
+
+    private function getController(string $route, array $parameters): array
+    {
+        $router = self::$container->get('router');
+        $url = $router->generate($route, $parameters);
+        $attributes = $router->match($url);
+        $request = Request::create($url)->duplicate(null, null, $attributes);
+        $resolver = new ContainerControllerResolver(self::$container);
+
+        return $resolver->getController($request);
     }
 }
