@@ -152,18 +152,22 @@ class UrlConcrete implements Url
     /**
      * Define the priority of this entry
      *
-     * @param float|null $priority Define the priority
+     * @param float|string|int|null $priority Define the priority
      *
      * @return UrlConcrete
      */
     public function setPriority($priority = null)
     {
-        if (!$priority) {
+        if ($priority === null) {
             return $this;
         }
 
-        if ($priority && is_numeric($priority) && $priority >= 0 && $priority <= 1) {
-            $this->priority = number_format($priority, 1);
+        if (is_string($priority) || is_int($priority)) {
+            $priority = (float)$priority;
+        }
+
+        if (is_float($priority) && $priority >= 0 && $priority <= 1) {
+            $this->priority = round($priority, 1);
         } else {
             throw new \RuntimeException(
                 sprintf(
