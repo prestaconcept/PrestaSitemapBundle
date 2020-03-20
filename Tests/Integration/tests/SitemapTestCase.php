@@ -8,15 +8,15 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 abstract class SitemapTestCase extends WebTestCase
 {
-    protected static function assertIndex(string $xml)
+    protected static function assertIndex(string $xml, bool $gzip = false)
     {
         $index = simplexml_load_string($xml);
         $index->registerXPathNamespace('sm', 'http://www.sitemaps.org/schemas/sitemap/0.9');
 
-        self::assertIndexContainsSectionLink($index, 'static');
-        self::assertIndexContainsSectionLink($index, 'blog');
-        self::assertIndexContainsSectionLink($index, 'archives');
-        self::assertIndexContainsSectionLink($index, 'archives_0');
+        self::assertIndexContainsSectionLink($index, 'static', $gzip);
+        self::assertIndexContainsSectionLink($index, 'blog', $gzip);
+        self::assertIndexContainsSectionLink($index, 'archives', $gzip);
+        self::assertIndexContainsSectionLink($index, 'archives_0', $gzip);
     }
 
     protected static function assertStaticSection(string $xml)
@@ -67,9 +67,15 @@ abstract class SitemapTestCase extends WebTestCase
         }
     }
 
-    private static function assertIndexContainsSectionLink(SimpleXMLElement $xml, string $name): SimpleXMLElement
-    {
+    private static function assertIndexContainsSectionLink(
+        SimpleXMLElement $xml,
+        string $name,
+        bool $gzip = false
+    ): SimpleXMLElement {
         $loc = sprintf('http://localhost/sitemap.%s.xml', $name);
+        if ($gzip) {
+            $loc .= '.gz';
+        }
         $section = $xml->xpath(
             sprintf('//sm:sitemapindex/sm:sitemap[ sm:loc[ text() = "%s" ] ]', $loc)
         );
