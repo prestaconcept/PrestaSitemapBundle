@@ -14,6 +14,7 @@ namespace Presta\SitemapBundle\Tests\Unit\Command;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Command\DumpSitemapsCommand;
 use Presta\SitemapBundle\Service\DumperInterface;
+use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\HttpFoundation\Request;
@@ -80,6 +81,59 @@ class DumpSitemapsCommandTest extends TestCase
         self::assertSame(1, $status, 'Command returned an error code');
     }
 
+    /**
+     * @dataProvider baseUrls
+     */
+    public function testRouterHost(string $inUrl, string $expectedUrl): void
+    {
+        $this->router->getContext()->fromRequest(Request::create($inUrl));
+        $this->dumper->dump(self::TARGET_DIR, $expectedUrl, null, ['gzip' => false])
+            ->shouldBeCalledTimes(1)
+            ->willReturn([]);
+
+        [$status,] = $this->executeCommand(null, false);
+
+        self::assertSame(0, $status, 'Command succeed');
+    }
+
+    public function testRouterNoHost(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage(
+            'Router host must be configured to be able to dump the sitemap, please see documentation.'
+        );
+
+        $this->router->getContext()->setHost('');
+        $this->dumper->dump(Argument::any())
+            ->shouldNotBeCalled();
+
+        $this->executeCommand(null, false);
+    }
+
+    public function testBaseUrlOption(): void
+    {
+        $this->dumper->dump(self::TARGET_DIR, 'http://example.dev/', null, ['gzip' => false])
+            ->shouldBeCalledTimes(1)
+            ->willReturn([]);
+
+        [$status,] = $this->executeCommand(null, false, 'http://example.dev');
+
+        self::assertSame(0, $status, 'Command succeed');
+    }
+
+    public function testInvalidBaseUrlOption(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Invalid base url. Use fully qualified base url, e.g. http://acme.com/'
+        );
+
+        $this->dumper->dump(Argument::any())
+            ->shouldNotBeCalled();
+
+        $this->executeCommand(null, false, 'not an url');
+    }
+
     public function dump(): \Generator
     {
         yield 'Entire sitemap' => [null, false];
@@ -88,11 +142,24 @@ class DumpSitemapsCommandTest extends TestCase
         yield '"audio" sitemap with gzip' => ['audio', true];
     }
 
-    private function executeCommand(?string $section, bool $gzip): array
+    public function baseUrls(): \Generator
+    {
+        yield 'Standard http' => ['http://host.org', 'http://host.org/'];
+        yield 'Standard http with port' => ['http://host.org:80', 'http://host.org/'];
+        yield 'Custom http port' => ['http://host.org:8080', 'http://host.org:8080/'];
+        yield 'Standard https' => ['https://host.org', 'https://host.org/'];
+        yield 'Standard https with port' => ['https://host.org:443', 'https://host.org/'];
+        yield 'Custom https port' => ['https://host.org:8080', 'https://host.org:8080/'];
+    }
+
+    private function executeCommand(?string $section, bool $gzip, string $baseUrl = null): array
     {
         $options = ['target' => self::TARGET_DIR, '--gzip' => $gzip];
         if ($section !== null) {
             $options['--section'] = $section;
+        }
+        if ($baseUrl !== null) {
+            $options['--base-url'] = $baseUrl;
         }
 
         $command = new DumpSitemapsCommand($this->router, $this->dumper->reveal(), 'public');
