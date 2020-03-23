@@ -46,9 +46,13 @@ abstract class SitemapTestCase extends WebTestCase
         $postWithoutMedia = self::assertSectionContainsPath($blog, 'blog', '/blog/post-without-media');
         self::assertUrlConcrete($postWithoutMedia, 'blog', 0.5, 'daily');
         $postWithOneImage = self::assertSectionContainsPath($blog, 'blog', '/blog/post-with-one-image');
+        self::assertUrlHasImage($postWithOneImage, 'blog', 'http://lorempixel.com/400/200/technics/1');
         $postWithAVideo = self::assertSectionContainsPath($blog, 'blog', '/blog/post-with-a-video');
+        self::assertUrlHasVideo($postWithAVideo, 'blog', 'https://www.youtube.com/watch?v=j6IKRxH8PTg');
         $postWithMultimedia = self::assertSectionContainsPath($blog, 'blog', '/blog/post-with-multimedia');
-        //todo assertions on media : images & videos
+        self::assertUrlHasImage($postWithMultimedia, 'blog', 'http://lorempixel.com/400/200/technics/2');
+        self::assertUrlHasImage($postWithMultimedia, 'blog', 'http://lorempixel.com/400/200/technics/3');
+        self::assertUrlHasVideo($postWithMultimedia, 'blog', 'https://www.youtube.com/watch?v=JugaMuswrmk');
     }
 
     protected static function assertArchivesSection(string $xml)
@@ -140,26 +144,27 @@ abstract class SitemapTestCase extends WebTestCase
         );
     }
 
-    private static function assertUrlHasImage(
-        SimpleXMLElement $url,
-        string $section,
-        string $loc,
-        string $caption
-    ) {
+    private static function assertUrlHasImage(SimpleXMLElement $url, string $section, string $loc)
+    {
         $urlLoc = (string)$url->loc;
-        $locationMessage = 'Sitemap URL "' . $urlLoc . '" of section "' . $section . '"';
         Assert::assertCount(
             1,
             $images = $url->xpath(
                 sprintf('//image:image[ image:loc[ text() = "%s" ] ]', $loc)
             ),
-            $locationMessage . ' has image "' . $loc . '"'
+            'Sitemap URL "' . $urlLoc . '" of section "' . $section . '" has image "' . $loc . '"'
         );
-        $image = $images[0];
-        Assert::assertSame(
-            $caption,
-            (string)$image->caption,
-            $locationMessage . ' image "' . $loc . '" caption is "' . $caption . '".'
+    }
+
+    private static function assertUrlHasVideo(SimpleXMLElement $url, string $section, string $loc)
+    {
+        $urlLoc = (string)$url->loc;
+        Assert::assertCount(
+            1,
+            $videos = $url->xpath(
+                sprintf('//video:video[ video:content_loc[ text() = "%s" ] ]', $loc)
+            ),
+            'Sitemap URL "' . $urlLoc . '" of section "' . $section . '" has video "' . $loc . '"'
         );
     }
 }
