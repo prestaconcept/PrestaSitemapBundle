@@ -29,8 +29,7 @@ before_install:
     - if [ "$PHPCS" = "yes" ]; then pear install pear/PHP_CodeSniffer; fi
     - if [ "$PHPCS" = "yes" ]; then phpenv rehash; fi
     - if [ "$PHPCS" != "yes"]; then composer selfupdate; fi
-    - if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony:${SYMFONY_VERSION}; fi
-    - if [ "$SYMFONY_VERSION" = "3.4.*" ] || [ "$SYMFONY_VERSION" = "4.4.*" ] || [ "$SYMFONY_VERSION" = "5.0.*" ]; then rm -f phpunit.xml; cp phpunit.sf4.xml.dist phpunit.xml; fi
+    - if [ "$SYMFONY_VERSION" != "" ]; then composer require --dev --no-update symfony/symfony:${SYMFONY_VERSION}; fi
 
 install: COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install --prefer-dist --no-interaction
 

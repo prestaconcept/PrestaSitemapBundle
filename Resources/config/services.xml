@@ -39,7 +39,8 @@
             <tag name="console.command" />
         </service>
 
-        <service id="Presta\SitemapBundle\Service\DumperInterface" alias="presta_sitemap.dumper_default" />
+        <service id="Presta\SitemapBundle\Service\GeneratorInterface" alias="presta_sitemap.generator" />
+        <service id="Presta\SitemapBundle\Service\DumperInterface" alias="presta_sitemap.dumper" />
         <service id="Presta\SitemapBundle\Controller\SitemapController" alias="presta_sitemap.controller" public="true" />
 
         <service id="presta_sitemap.controller" class="Presta\SitemapBundle\Controller\SitemapController" public="true">

@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php" colors="true">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.5/phpunit.xsd"
+         backupGlobals="false"
+         colors="true"
+         bootstrap="vendor/autoload.php"
+>
     <php>
-        <server name="KERNEL_DIR" value="Tests/app" />
+        <server name="KERNEL_DIR" value="Tests/Integration/src"/>
+        <server name="KERNEL_CLASS" value="Presta\SitemapBundle\Tests\Integration\Kernel"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0&amp;max[direct]=0"/>
+        <env name="APP_SECRET" value="s$cretf0rt3st"/>
+        <env name="APP_ENV" value="test"/>
+        <env name="APP_DEBUG" value="false"/>
     </php>
     <testsuites>
-        <testsuite name="PrestaSitemapBundle test suite">
-            <directory suffix="Test.php">./Tests</directory>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./Tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory suffix="Test.php">./Tests/Integration/tests</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -19,4 +32,3 @@
         </whitelist>
     </filter>
 </phpunit>
-

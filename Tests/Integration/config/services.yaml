@@ -1,0 +1,13 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Presta\SitemapBundle\Tests\Integration\:
+    resource: '../src/*'
+    exclude: '../src/{Kernel.php}'
+
+  Presta\SitemapBundle\Tests\Integration\Controller\:
+    resource: '../src/Controller'
+    tags: ['controller.service_arguments']
