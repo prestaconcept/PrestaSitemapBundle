@@ -112,4 +112,25 @@ class UrlConcreteTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * @dataProvider setPriorityProvider
+     */
+    public function testSetPriority($assigned, ?float $expected)
+    {
+        $url = new UrlConcrete('http://example.com');
+        $url->setPriority($assigned);
+        self::assertSame($expected, $url->getPriority());
+    }
+
+    public function setPriorityProvider(): \Generator
+    {
+        yield [null, null];
+        yield [0, 0.0];
+        yield ['0', 0.0];
+        yield [0.555, 0.6];
+        yield ['0.5', 0.5];
+        yield [1, 1.0];
+        yield [1.00, 1.0];
+    }
 }
