@@ -1,4 +1,6 @@
 framework:
+    test: true
+
     secret: '%env(APP_SECRET)%'
     #csrf_protection: true
     #http_method_override: true
@@ -7,6 +9,7 @@ framework:
     # Remove or comment this section to explicitly disable session support.
     session:
         handler_id: null
+        storage_id: session.storage.mock_file
 
     #esi: true
     #fragments: true
