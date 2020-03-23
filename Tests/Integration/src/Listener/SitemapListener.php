@@ -79,7 +79,7 @@ final class SitemapListener implements EventSubscriberInterface
             }
 
             if ($post['video'] !== null) {
-                $parameters = parse_str($post['video']);
+                parse_str(parse_url($post['video'], PHP_URL_QUERY), $parameters);
                 $url = new GoogleVideoUrlDecorator($url);
                 $url->addVideo(
                     new GoogleVideo(
