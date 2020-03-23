@@ -58,8 +58,13 @@ final class SitemapListener implements EventSubscriberInterface
 
     public function populate(SitemapPopulateEvent $event): void
     {
-        $this->blog($event->getUrlContainer());
-        $this->archives($event->getUrlContainer());
+        if (in_array($event->getSection(), ['blog', null], true)) {
+            $this->blog($event->getUrlContainer());
+        }
+
+        if (in_array($event->getSection(), ['archives', null], true)) {
+            $this->archives($event->getUrlContainer());
+        }
     }
 
     private function blog(UrlContainerInterface $sitemap): void
