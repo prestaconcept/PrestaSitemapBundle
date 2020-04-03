@@ -1,7 +1,7 @@
 # Decorating URLs
 
 The `Presta\SitemapBundle\Service\UrlContainerInterface::addUrl` method first argument accepts
-an instance of `Presta\SitemapBundle\Sitemap\Url\Url`, which is a interface.
+an instance of `Presta\SitemapBundle\Sitemap\Url\Url`, which is an interface.
 
 In the examples you've seen in that doc, we used only `Presta\SitemapBundle\Sitemap\Url\UrlConcrete`.
 It cover the minimal requirement for a sitemap XML node.
