@@ -43,6 +43,7 @@ You will find the detailed documentation in the following links:
 * [Dynamic routes usage](Resources/doc/4-dynamic-routes-usage.md)
 * [Decorating URLs](Resources/doc/5-decorating-urls.md)
 * [Dumping sitemap](Resources/doc/6-dumping-sitemap.md)
+* [Messenger integration](Resources/doc/7-messenger-integration.md)
 
 
 ## Contributing
