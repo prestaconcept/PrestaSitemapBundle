@@ -12,7 +12,7 @@ final class BlogController
      */
     public function read(): Response
     {
-        return Response::create(__FUNCTION__);
+        return new Response(__FUNCTION__);
     }
 
     /**
@@ -20,6 +20,6 @@ final class BlogController
      */
     public function post(string $slug): Response
     {
-        return Response::create(__FUNCTION__ . ':' . $slug);
+        return new Response(__FUNCTION__ . ':' . $slug);
     }
 }

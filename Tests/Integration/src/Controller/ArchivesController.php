@@ -12,6 +12,6 @@ final class ArchivesController
      */
     public function archive(): Response
     {
-        return Response::create(__FUNCTION__);
+        return new Response(__FUNCTION__);
     }
 }

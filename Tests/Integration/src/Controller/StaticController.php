@@ -12,16 +12,16 @@ final class StaticController
      */
     public function home(): Response
     {
-        return Response::create(__FUNCTION__);
+        return new Response(__FUNCTION__);
     }
 
     public function contact(): Response
     {
-        return Response::create(__FUNCTION__);
+        return new Response(__FUNCTION__);
     }
 
     public function company(): Response
     {
-        return Response::create(__FUNCTION__);
+        return new Response(__FUNCTION__);
     }
 }
