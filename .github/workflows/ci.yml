@@ -23,9 +23,9 @@ jobs:
           - php-version: 7.4
             symfony-version: 4.4.*
           - php-version: 7.2
-            symfony-version: 5.0.*
+            symfony-version: 5.1.*
           - php-version: 7.4
-            symfony-version: 5.0.*
+            symfony-version: 5.1.*
 
     steps:
       - name: "Checkout"
