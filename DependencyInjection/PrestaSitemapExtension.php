@@ -15,6 +15,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -41,6 +42,10 @@ class PrestaSitemapExtension extends Extension
 
         if (true === $config['route_annotation_listener']) {
             $loader->load('route_annotation_listener.xml');
+        }
+
+        if (interface_exists(MessageHandlerInterface::class)) {
+            $loader->load('messenger.xml');
         }
 
         $generator = $container->setAlias('presta_sitemap.generator', $config['generator']);
