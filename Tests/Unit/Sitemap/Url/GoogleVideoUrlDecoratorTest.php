@@ -28,7 +28,7 @@ class GoogleVideoUrlDecoratorTest extends TestCase
      */
     protected $xml;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $url = new GoogleVideoUrlDecorator(new UrlConcrete('http://acme.com/'));
         for ($i=1; $i <=3; $i++) {
@@ -66,7 +66,7 @@ class GoogleVideoUrlDecoratorTest extends TestCase
             $url->addVideo($video);
         }
 
-        $this->xml = new \DOMDocument;
+        $this->xml = new \DOMDocument();
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"';
 
@@ -79,19 +79,19 @@ class GoogleVideoUrlDecoratorTest extends TestCase
         $this->xml->loadXML($xml);
     }
 
-    public function testCountNamespaces()
+    public function testCountNamespaces(): void
     {
         $namespaces = $this->xml->getElementsByTagNameNS('http://www.google.com/schemas/sitemap-video/1.1', '*');
         self::assertEquals(72, $namespaces->length);
     }
 
-    public function testEncodeUrl()
+    public function testEncodeUrl(): void
     {
         $playerLoc = $this->xml->getElementsByTagName('player_loc')->item(0)->nodeValue;
         self::assertEquals($playerLoc, 'http://acme.com/video/player.swf?a=b&c=d');
     }
 
-    public function testRenderCategory()
+    public function testRenderCategory(): void
     {
         $category = $this->xml->getElementsByTagName('category')->item(0)->nodeValue;
         self::assertEquals($category, 'Testing w/ spécial chars');
@@ -124,21 +124,21 @@ class GoogleVideoUrlDecoratorTest extends TestCase
         $xpath->registerNamespace('s', 'http://www.sitemaps.org/schemas/sitemap/0.9');
         $xpath->registerNamespace('v', 'http://www.google.com/schemas/sitemap-video/1.1');
 
-        $this->assertEquals('http://acme.com/video/thumbnail1.jpg', $xpath->evaluate('string(/s:urlset/s:url/v:video[1]/v:thumbnail_loc)'));
-        $this->assertEquals('http://acme.com/video/thumbnail2.jpg', $xpath->evaluate('string(/s:urlset/s:url/v:video[2]/v:thumbnail_loc)'));
-        $this->assertEquals('http://acme.com/video/thumbnail3.jpg', $xpath->evaluate('string(/s:urlset/s:url/v:video[3]/v:thumbnail_loc)'));
+        self::assertEquals('http://acme.com/video/thumbnail1.jpg', $xpath->evaluate('string(/s:urlset/s:url/v:video[1]/v:thumbnail_loc)'));
+        self::assertEquals('http://acme.com/video/thumbnail2.jpg', $xpath->evaluate('string(/s:urlset/s:url/v:video[2]/v:thumbnail_loc)'));
+        self::assertEquals('http://acme.com/video/thumbnail3.jpg', $xpath->evaluate('string(/s:urlset/s:url/v:video[3]/v:thumbnail_loc)'));
 
-        $this->assertEquals('Acme video 1', $xpath->evaluate('string(/s:urlset/s:url/v:video[1]/v:title)'));
-        $this->assertEquals('Acme video 2', $xpath->evaluate('string(/s:urlset/s:url/v:video[2]/v:title)'));
-        $this->assertEquals('Acme video 3', $xpath->evaluate('string(/s:urlset/s:url/v:video[3]/v:title)'));
+        self::assertEquals('Acme video 1', $xpath->evaluate('string(/s:urlset/s:url/v:video[1]/v:title)'));
+        self::assertEquals('Acme video 2', $xpath->evaluate('string(/s:urlset/s:url/v:video[2]/v:title)'));
+        self::assertEquals('Acme video 3', $xpath->evaluate('string(/s:urlset/s:url/v:video[3]/v:title)'));
 
-        $this->assertEquals('An acme video for testing purposes (1)', $xpath->evaluate('string(/s:urlset/s:url/v:video[1]/v:description)'));
-        $this->assertEquals('An acme video for testing purposes (2)', $xpath->evaluate('string(/s:urlset/s:url/v:video[2]/v:description)'));
-        $this->assertEquals('An acme video for testing purposes (3)', $xpath->evaluate('string(/s:urlset/s:url/v:video[3]/v:description)'));
+        self::assertEquals('An acme video for testing purposes (1)', $xpath->evaluate('string(/s:urlset/s:url/v:video[1]/v:description)'));
+        self::assertEquals('An acme video for testing purposes (2)', $xpath->evaluate('string(/s:urlset/s:url/v:video[2]/v:description)'));
+        self::assertEquals('An acme video for testing purposes (3)', $xpath->evaluate('string(/s:urlset/s:url/v:video[3]/v:description)'));
 
-        $this->assertEquals('http://acme.com/video/content1.flv', $xpath->evaluate('string(/s:urlset/s:url/v:video[1]/v:content_loc)'));
-        $this->assertEquals('http://acme.com/video/content2.flv', $xpath->evaluate('string(/s:urlset/s:url/v:video[2]/v:content_loc)'));
-        $this->assertEquals('http://acme.com/video/content3.flv', $xpath->evaluate('string(/s:urlset/s:url/v:video[3]/v:content_loc)'));
+        self::assertEquals('http://acme.com/video/content1.flv', $xpath->evaluate('string(/s:urlset/s:url/v:video[1]/v:content_loc)'));
+        self::assertEquals('http://acme.com/video/content2.flv', $xpath->evaluate('string(/s:urlset/s:url/v:video[2]/v:content_loc)'));
+        self::assertEquals('http://acme.com/video/content3.flv', $xpath->evaluate('string(/s:urlset/s:url/v:video[3]/v:content_loc)'));
     }
 
     private function setUpLegacy(): void
@@ -176,7 +176,7 @@ class GoogleVideoUrlDecoratorTest extends TestCase
         $url->addPrice(42, 'EUR', GoogleVideoUrlDecorator::PRICE_TYPE_OWN, GoogleVideoUrlDecorator::PRICE_RESOLUTION_HD);
         $url->addPrice(53, 'USD');
 
-        $this->xml = new \DOMDocument;
+        $this->xml = new \DOMDocument();
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"';
 
@@ -192,7 +192,7 @@ class GoogleVideoUrlDecoratorTest extends TestCase
     /**
      * @group legacy
      */
-    public function testCountNamespacesLegacy()
+    public function testCountNamespacesLegacy(): void
     {
         $this->setUpLegacy();
 
@@ -203,7 +203,7 @@ class GoogleVideoUrlDecoratorTest extends TestCase
     /**
      * @group legacy
      */
-    public function testEncodeUrlLegacy()
+    public function testEncodeUrlLegacy(): void
     {
         $this->setUpLegacy();
 
@@ -214,7 +214,7 @@ class GoogleVideoUrlDecoratorTest extends TestCase
     /**
      * @group legacy
      */
-    public function testRenderCategoryLegacy()
+    public function testRenderCategoryLegacy(): void
     {
         $this->setUpLegacy();
 

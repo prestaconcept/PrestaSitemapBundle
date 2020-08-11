@@ -64,7 +64,7 @@ class CliTest extends SitemapTestCase
     /**
      * @dataProvider gzip
      */
-    public function testDumpSitemapUsingCLI(bool $gzip)
+    public function testDumpSitemapUsingCLI(bool $gzip): void
     {
         $index = $this->index();
         self::assertFileNotExists($index, 'Sitemap index file does not exists before dump');

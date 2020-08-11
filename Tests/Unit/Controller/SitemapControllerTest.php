@@ -18,6 +18,7 @@ use Presta\SitemapBundle\Sitemap\Sitemapindex;
 use Presta\SitemapBundle\Sitemap\Urlset;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SitemapControllerTest extends TestCase
 {
@@ -33,7 +34,7 @@ class SitemapControllerTest extends TestCase
         $this->generator = $this->prophesize(GeneratorInterface::class);
     }
 
-    public function testIndexSuccesful()
+    public function testIndexSuccessful(): void
     {
         /** @var Sitemapindex|ObjectProphecy $index */
         $index = $this->prophesize(Sitemapindex::class);
@@ -49,11 +50,10 @@ class SitemapControllerTest extends TestCase
         self::assertSitemapResponse($response, '<index/>');
     }
 
-    /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     */
-    public function testIndexNotFound()
+    public function testIndexNotFound(): void
     {
+        $this->expectException(NotFoundHttpException::class);
+
         $this->generator->fetch('root')
             ->shouldBeCalledTimes(1)
             ->willReturn(null);
@@ -61,7 +61,7 @@ class SitemapControllerTest extends TestCase
         $this->controller()->indexAction();
     }
 
-    public function testSectionSuccessful()
+    public function testSectionSuccessful(): void
     {
         /** @var Urlset|ObjectProphecy $urlset */
         $urlset = $this->prophesize(Urlset::class);
@@ -77,11 +77,10 @@ class SitemapControllerTest extends TestCase
         self::assertSitemapResponse($response, '<urlset/>');
     }
 
-    /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     */
-    public function testSectionNotFound()
+    public function testSectionNotFound(): void
     {
+        $this->expectException(NotFoundHttpException::class);
+
         $this->generator->fetch('void')
             ->shouldBeCalledTimes(1)
             ->willReturn(null);
@@ -89,7 +88,7 @@ class SitemapControllerTest extends TestCase
         $this->controller()->sectionAction('void');
     }
 
-    private static function assertSitemapResponse($response, string $xml)
+    private static function assertSitemapResponse($response, string $xml): void
     {
         /** @var Response $response */
         self::assertInstanceOf(Response::class, $response,
@@ -98,11 +97,14 @@ class SitemapControllerTest extends TestCase
         self::assertEquals('text/xml', $response->headers->get('Content-Type'),
             'Controller returned an XML response'
         );
-        self::assertSame(true, $response->isCacheable(),
+        self::assertTrue($response->isCacheable(),
             'Controller returned a cacheable response'
         );
         self::assertSame(self::TTL, $response->getMaxAge(),
             'Controller returned a response cacheable for ' . self::TTL . ' seconds'
+        );
+        self::assertSame($xml, $response->getContent(),
+            'Controller returned expected content'
         );
     }
 

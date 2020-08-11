@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 abstract class SitemapTestCase extends WebTestCase
 {
-    protected static function assertIndex(string $xml, bool $gzip = false)
+    protected static function assertIndex(string $xml, bool $gzip = false): void
     {
         $index = simplexml_load_string($xml);
         $index->registerXPathNamespace('sm', 'http://www.sitemaps.org/schemas/sitemap/0.9');
@@ -19,7 +19,7 @@ abstract class SitemapTestCase extends WebTestCase
         self::assertIndexContainsSectionLink($index, 'archives_0', $gzip);
     }
 
-    protected static function assertStaticSection(string $xml)
+    protected static function assertStaticSection(string $xml): void
     {
         $static = simplexml_load_string($xml);
         $static->registerXPathNamespace('sm', 'http://www.sitemaps.org/schemas/sitemap/0.9');
@@ -33,7 +33,7 @@ abstract class SitemapTestCase extends WebTestCase
         self::assertUrlConcrete($yaml, 'static', 0.5, 'daily');
     }
 
-    protected static function assertBlogSection(string $xml)
+    protected static function assertBlogSection(string $xml): void
     {
         $blog = simplexml_load_string($xml);
         $blog->registerXPathNamespace('sm', 'http://www.sitemaps.org/schemas/sitemap/0.9');
@@ -55,7 +55,7 @@ abstract class SitemapTestCase extends WebTestCase
         self::assertUrlHasVideo($postWithMultimedia, 'blog', 'https://www.youtube.com/watch?v=JugaMuswrmk');
     }
 
-    protected static function assertArchivesSection(string $xml)
+    protected static function assertArchivesSection(string $xml): void
     {
         $archives = simplexml_load_string($xml);
         $archives->registerXPathNamespace('sm', 'http://www.sitemaps.org/schemas/sitemap/0.9');
@@ -92,7 +92,7 @@ abstract class SitemapTestCase extends WebTestCase
         return reset($section);
     }
 
-    private static function assertSectionContainsCountUrls(SimpleXMLElement $xml, string $section, int $count)
+    private static function assertSectionContainsCountUrls(SimpleXMLElement $xml, string $section, int $count): void
     {
         Assert::assertCount(
             $count,
@@ -124,7 +124,7 @@ abstract class SitemapTestCase extends WebTestCase
         string $section,
         float $priority,
         string $changefreq
-    ) {
+    ): void {
         $loc = (string)$url->loc;
         $locationMessage = 'Sitemap URL "' . $loc . '" of section "' . $section . '"';
         Assert::assertInstanceOf(
@@ -144,7 +144,7 @@ abstract class SitemapTestCase extends WebTestCase
         );
     }
 
-    private static function assertUrlHasImage(SimpleXMLElement $url, string $section, string $loc)
+    private static function assertUrlHasImage(SimpleXMLElement $url, string $section, string $loc): void
     {
         $urlLoc = (string)$url->loc;
         Assert::assertCount(
@@ -156,7 +156,7 @@ abstract class SitemapTestCase extends WebTestCase
         );
     }
 
-    private static function assertUrlHasVideo(SimpleXMLElement $url, string $section, string $loc)
+    private static function assertUrlHasVideo(SimpleXMLElement $url, string $section, string $loc): void
     {
         $urlLoc = (string)$url->loc;
         Assert::assertCount(

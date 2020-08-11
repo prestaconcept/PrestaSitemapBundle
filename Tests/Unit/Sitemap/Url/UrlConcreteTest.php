@@ -22,13 +22,13 @@ class UrlConcreteTest extends TestCase
     /**
      * @dataProvider toXmlProvider
      */
-    public function testToXml($expectedXml, $loc, $lastmod = null, $changefreq = null, $priority = null)
+    public function testToXml($expectedXml, $loc, $lastmod = null, $changefreq = null, $priority = null): void
     {
         $url = new UrlConcrete($loc, $lastmod, $changefreq, $priority);
         self::assertEquals($expectedXml, $url->toXml());
     }
 
-    public function toXmlProvider()
+    public function toXmlProvider(): array
     {
         return [
             ['<url><loc>http://example.com/</loc></url>', 'http://example.com/'],
@@ -116,7 +116,7 @@ class UrlConcreteTest extends TestCase
     /**
      * @dataProvider setPriorityProvider
      */
-    public function testSetPriority($assigned, ?float $expected)
+    public function testSetPriority($assigned, ?float $expected): void
     {
         $url = new UrlConcrete('http://example.com');
         $url->setPriority($assigned);

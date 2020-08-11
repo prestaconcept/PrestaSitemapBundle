@@ -19,7 +19,7 @@ use Presta\SitemapBundle\Sitemap;
  */
 class GoogleImageUrlDecoratorTest extends TestCase
 {
-    public function testAddImage()
+    public function testAddImage(): void
     {
         $url = new Sitemap\Url\GoogleImageUrlDecorator(new Sitemap\Url\UrlConcrete('http://acme.com'));
 
@@ -33,13 +33,13 @@ class GoogleImageUrlDecoratorTest extends TestCase
         self::assertFalse($failed, 'An exception must not be thrown');
     }
 
-    public function testIsFull()
+    public function testIsFull(): void
     {
         $url = new Sitemap\Url\GoogleImageUrlDecorator(new Sitemap\Url\UrlConcrete('http://acme.com'));
         self::assertFalse($url->isFull());
     }
 
-    public function testToXml()
+    public function testToXml(): void
     {
         $url = new Sitemap\Url\GoogleImageUrlDecorator(new Sitemap\Url\UrlConcrete('http://acme.com'));
 

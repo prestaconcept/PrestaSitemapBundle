@@ -19,7 +19,7 @@ use Presta\SitemapBundle\Sitemap;
  */
 class GoogleMultilangUrlDecoratorTest extends TestCase
 {
-    public function testAddLink()
+    public function testAddLink(): void
     {
         $url = new Sitemap\Url\GoogleMultilangUrlDecorator(new Sitemap\Url\UrlConcrete('http://acme.com'));
 
