@@ -12,6 +12,7 @@
 namespace Presta\SitemapBundle\EventListener;
 
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
+use Presta\SitemapBundle\Routing\RouteOptionParser;
 use Presta\SitemapBundle\Service\UrlContainerInterface;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -86,7 +87,7 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
         $collection = $this->getRouteCollection();
 
         foreach ($collection->all() as $name => $route) {
-            $options = $this->getOptions($name, $route);
+            $options = RouteOptionParser::parse($name, $route);
             if (!$options) {
                 continue;
             }
@@ -112,72 +113,27 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     }
 
     /**
+     * @deprecated since 2.3.0, use @link RouteOptionParser::parse instead
+     *
      * @param string $name
      * @param Route  $route
      *
-     * @return array
+     * @return array|null
      * @throws \InvalidArgumentException
      */
     public function getOptions($name, Route $route)
     {
-        $option = $route->getOption('sitemap');
+        @trigger_error(
+            sprintf(
+                '%s is deprecated since 2.3.0 and will be removed in 3.0.0, use %s::%s instead',
+                __METHOD__,
+                RouteOptionParser::class,
+                'parse'
+            ),
+            E_USER_DEPRECATED
+        );
 
-        if ($option === null) {
-            return null;
-        }
-
-        if (is_string($option)) {
-            $decoded = json_decode($option, true);
-            if (!json_last_error() && is_array($decoded)) {
-                $option = $decoded;
-            }
-        }
-
-        if (!is_array($option) && !is_bool($option)) {
-            $bool = filter_var($option, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-
-            if (null === $bool) {
-                throw new \InvalidArgumentException(
-                    sprintf(
-                        'The sitemap option must be of type "boolean" or "array", got "%s"',
-                        $option
-                    )
-                );
-            }
-
-            $option = $bool;
-        }
-
-        if (!$option) {
-            return null;
-        }
-
-        $options = [
-            'lastmod' => null,
-            'changefreq' => null,
-            'priority' => null,
-        ];
-        if (is_array($option)) {
-            $options = array_merge($options, $option);
-        }
-
-        if (is_string($options['lastmod'])) {
-            try {
-                $options['lastmod'] = new \DateTimeImmutable($options['lastmod']);
-            } catch (\Exception $e) {
-                throw new \InvalidArgumentException(
-                    sprintf(
-                        'The route %s has an invalid value "%s" specified for the "lastmod" option',
-                        $name,
-                        $options['lastmod']
-                    ),
-                    0,
-                    $e
-                );
-            }
-        }
-
-        return $options;
+        return RouteOptionParser::parse($name, $route);
     }
 
     /**
