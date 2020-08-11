@@ -11,12 +11,15 @@
 
 namespace Presta\SitemapBundle\Tests\Unit\Sitemap\Url;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Exception\GoogleNewsUrlException;
 use Presta\SitemapBundle\Service\Generator;
 use Presta\SitemapBundle\Sitemap\Url\GoogleNewsUrlDecorator;
 use Presta\SitemapBundle\Sitemap\Url\Url;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Tests the GoogleNewsUrlDecorator
@@ -28,7 +31,7 @@ class GoogleNewsUrlDecoratorTest extends TestCase
     /**
      * Tests if the news specific tags can be found.
      */
-    public function testCountNamespaces()
+    public function testCountNamespaces(): void
     {
         $url = $this->createExampleUrl();
         $dom = new \DOMDocument();
@@ -42,7 +45,7 @@ class GoogleNewsUrlDecoratorTest extends TestCase
     /**
      * Tests the default W3C format.
      */
-    public function testDefaultDateFormat()
+    public function testDefaultDateFormat(): void
     {
         $date = new \DateTime('2013-11-05 10:30:55');
 
@@ -60,7 +63,7 @@ class GoogleNewsUrlDecoratorTest extends TestCase
     /**
      * Test the custom date only format property.
      */
-    public function testCustomDateFormat()
+    public function testCustomDateFormat(): void
     {
         $date = new \DateTime('2013-11-05 10:30:55');
 
@@ -79,7 +82,7 @@ class GoogleNewsUrlDecoratorTest extends TestCase
     /**
      * Tests if the news access property is validated properly.
      */
-    public function testAccessPropertyValidation()
+    public function testAccessPropertyValidation(): void
     {
         $url = $this->createExampleUrl();
 
@@ -109,7 +112,7 @@ class GoogleNewsUrlDecoratorTest extends TestCase
     /**
      * Tests if the news geo location property is validated properly.
      */
-    public function testGeoLocationPropertyValidation()
+    public function testGeoLocationPropertyValidation(): void
     {
         $url = $this->createExampleUrl();
 
@@ -140,7 +143,7 @@ class GoogleNewsUrlDecoratorTest extends TestCase
     /**
      * Tests the limitation of the stock tickers
      */
-    public function testStockTickersLimit()
+    public function testStockTickersLimit(): void
     {
         $url = $this->createExampleUrl();
 
@@ -200,36 +203,29 @@ class GoogleNewsUrlDecoratorTest extends TestCase
 
     /**
      * Creates an example URL instance for the tests.
-     *
-     * @return GoogleNewsUrlDecorator
      */
-    private function createExampleUrl()
+    private function createExampleUrl(): GoogleNewsUrlDecorator
     {
-        $url = new GoogleNewsUrlDecorator(
+        return new GoogleNewsUrlDecorator(
             new UrlConcrete('http://acme.com/'),
             'The Example Times',
             'en',
             new \DateTime(),
             'An example news article'
         );
-
-        return $url;
     }
 
     /**
      * Generates the urlset XML for a given URL.
-     *
-     * @param Url $url
-     *
-     * @return string The rendered XML
      */
-    private function generateXml(Url $url)
+    private function generateXml(Url $url): string
     {
         $section = 'default';
-        $generator = new Generator(
-            $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock(),
-            $this->getMockBuilder('Symfony\Component\Routing\RouterInterface')->getMock()
-        );
+        /** @var EventDispatcherInterface|MockObject $eventDispatcher */
+        $eventDispatcher = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
+        /** @var RouterInterface|MockObject $router */
+        $router = $this->getMockBuilder(RouterInterface::class)->getMock();
+        $generator = new Generator($eventDispatcher, $router);
         $generator->addUrl($url, 'default');
 
         return $generator->fetch($section)->toXml();

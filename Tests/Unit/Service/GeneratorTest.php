@@ -51,13 +51,13 @@ class GeneratorTest extends WebTestCase
         });
     }
 
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $this->generator()->generate();
         self::assertTrue(true, 'No exception was thrown');
     }
 
-    public function testFetch()
+    public function testFetch(): void
     {
         $generator = $this->generator();
 
@@ -75,21 +75,21 @@ class GeneratorTest extends WebTestCase
         self::assertTrue($triggered, 'Event listener was triggered');
     }
 
-    public function testAddUrl()
+    public function testAddUrl(): void
     {
         $url = $this->acmeHome();
         $this->generator()->addUrl($url, 'default');
         self::assertTrue(true, 'No exception was thrown');
     }
 
-    public function testGetUrlset()
+    public function testGetUrlset(): void
     {
         $urlset = $this->generator()->getUrlset('default');
 
         self::assertInstanceOf(Urlset::class, $urlset);
     }
 
-    public function testItemsBySet()
+    public function testItemsBySet(): void
     {
         $url = $this->acmeHome();
         $generator = $this->generator();
@@ -104,7 +104,7 @@ class GeneratorTest extends WebTestCase
         self::assertEquals(count($emptyUrlset), 0);
     }
 
-    public function testDefaults()
+    public function testDefaults(): void
     {
         $url = $this->acmeHome();
         $generator = $this->generator();
@@ -127,7 +127,7 @@ class GeneratorTest extends WebTestCase
         self::assertInstanceOf('DateTimeInterface', $url->getLastmod());
     }
 
-    public function testNullableDefaults()
+    public function testNullableDefaults(): void
     {
         $url = $this->acmeHome();
         $generator = $this->generator();

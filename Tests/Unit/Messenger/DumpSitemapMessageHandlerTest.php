@@ -42,7 +42,7 @@ class DumpSitemapMessageHandlerTest extends TestCase
     protected function setUp(): void
     {
         if (!interface_exists(MessageBusInterface::class)) {
-            $this->markTestSkipped('Skipping messenger tests, because it is not installed.');
+            self::markTestSkipped('Skipping messenger tests, because it is not installed.');
 
             return;
         }

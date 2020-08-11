@@ -21,7 +21,7 @@ use Presta\SitemapBundle\Sitemap;
  */
 class SitemapindexTest extends TestCase
 {
-    public function testAddSitemap()
+    public function testAddSitemap(): void
     {
         $sitemapindex = new Sitemap\Sitemapindex();
 
@@ -34,9 +34,9 @@ class SitemapindexTest extends TestCase
         self::assertFalse($failed, 'An exception must not be thrown');
     }
 
-    public function testGetSitemapXml()
+    public function testGetSitemapXml(): void
     {
-        $today          = new \DateTime;
+        $today          = new \DateTime();
         $loc            = 'http://acme.com/';
         $sitemapindex   = new Sitemap\Sitemapindex();
 
@@ -49,9 +49,9 @@ class SitemapindexTest extends TestCase
         );
     }
 
-    public function testToXml()
+    public function testToXml(): void
     {
-        $sitemapindex   = new Sitemap\Sitemapindex();
+        $sitemapindex = new Sitemap\Sitemapindex();
         $xml = $sitemapindex->toXml();
         self::assertXmlStringEqualsXmlString(
             '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>',
@@ -62,11 +62,10 @@ class SitemapindexTest extends TestCase
     /**
      * get accessible method that was private or protected
      *
-     * @param mixed $obj - classname or instance
-     * @param type $name
-     * @return \ReflectionMethod
+     * @param mixed  $obj - classname or instance
+     * @param string $name
      */
-    protected static function getMethod($obj, $name)
+    protected static function getMethod($obj, $name): \ReflectionMethod
     {
         $method = new \ReflectionMethod($obj, $name);
         $method->setAccessible(true);

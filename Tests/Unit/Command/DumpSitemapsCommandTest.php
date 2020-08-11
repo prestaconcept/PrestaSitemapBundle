@@ -46,7 +46,7 @@ class DumpSitemapsCommandTest extends TestCase
     /**
      * @dataProvider dump
      */
-    public function testDumpSitemapSuccessful(?string $section, bool $gzip)
+    public function testDumpSitemapSuccessful(?string $section, bool $gzip): void
     {
         if ($section === null) {
             $files = ['sitemap.audio.xml', 'sitemap.video.xml'];
@@ -69,7 +69,7 @@ class DumpSitemapsCommandTest extends TestCase
     /**
      * @dataProvider dump
      */
-    public function testDumpSitemapFailed(?string $section, bool $gzip)
+    public function testDumpSitemapFailed(?string $section, bool $gzip): void
     {
         $this->dumper->dump(self::TARGET_DIR, self::BASE_URL, $section, ['gzip' => $gzip])
             ->shouldBeCalledTimes(1)

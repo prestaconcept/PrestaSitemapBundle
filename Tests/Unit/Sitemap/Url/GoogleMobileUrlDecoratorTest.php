@@ -19,7 +19,7 @@ use Presta\SitemapBundle\Sitemap;
  */
 class GoogleMobileUrlDecoratorTest extends TestCase
 {
-    public function testToXml()
+    public function testToXml(): void
     {
         $url = new Sitemap\Url\GoogleMobileUrlDecorator(new Sitemap\Url\UrlConcrete('http://m.acme.com'));
 

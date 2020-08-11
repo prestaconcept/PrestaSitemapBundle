@@ -22,7 +22,7 @@ class GoogleImageTest extends TestCase
     /**
      * @dataProvider toXmlProvider
      */
-    public function testToXml($expectedXml, $loc, $caption = null, $geoLocalisation = null, $title = null, $license = null)
+    public function testToXml($expectedXml, $loc, $caption = null, $geoLocalisation = null, $title = null, $license = null): void
     {
         $failed = false;
         try {
@@ -35,7 +35,7 @@ class GoogleImageTest extends TestCase
         self::assertEquals($expectedXml, $image->toXML());
     }
 
-    public function toXmlProvider()
+    public function toXmlProvider(): array
     {
         return [
             [

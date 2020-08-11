@@ -2,7 +2,6 @@
 
 namespace Presta\SitemapBundle\Tests\Integration\Tests;
 
-use Symfony\Component\BrowserKit\AbstractBrowser;
 use Symfony\Component\HttpFoundation\Request;
 
 class HttpTest extends SitemapTestCase
@@ -10,7 +9,7 @@ class HttpTest extends SitemapTestCase
     private const GET = Request::METHOD_GET;
     private const XML = 'text/xml; charset=UTF-8';
 
-    public function testAccessSitemapWithHttp()
+    public function testAccessSitemapWithHttp(): void
     {
         $web = self::createClient();
 

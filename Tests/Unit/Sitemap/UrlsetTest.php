@@ -21,12 +21,12 @@ class UrlsetTest extends TestCase
 {
     protected $urlset;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->urlset = new Sitemap\Urlset('http://acme.com/sitemap.default.xml');
     }
 
-    public function testAddUrl()
+    public function testAddUrl(): void
     {
         $failed = false;
         try {
@@ -38,11 +38,11 @@ class UrlsetTest extends TestCase
         self::assertFalse($failed, 'An exception must not be thrown');
     }
 
-    public function testToXml()
+    public function testToXml(): void
     {
         $this->urlset->addUrl(new Sitemap\Url\UrlConcrete('http://acme.com/'));
 
-        $xml = new \DOMDocument;
+        $xml = new \DOMDocument();
         $xml->loadXML($this->urlset->toXml());
 
         self::assertEquals(1, $xml->getElementsByTagName('url')->length);

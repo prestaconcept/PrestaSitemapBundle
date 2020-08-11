@@ -38,7 +38,7 @@ class PrestaSitemapExtensionTest extends TestCase
         ['presta_sitemap.defaults', self::DEFAULTS, 'Sitemap items default options'],
     ];
 
-    public function testLoadWithoutConfig()
+    public function testLoadWithoutConfig(): void
     {
         $container = new ContainerBuilder();
         $extension = new PrestaSitemapExtension();
