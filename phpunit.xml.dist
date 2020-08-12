@@ -8,7 +8,7 @@
     <php>
         <server name="KERNEL_DIR" value="Tests/Integration/src"/>
         <server name="KERNEL_CLASS" value="Presta\SitemapBundle\Tests\Integration\Kernel"/>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0&amp;max[indirect]=99"/>
         <env name="APP_SECRET" value="s$cretf0rt3st"/>
         <env name="APP_ENV" value="test"/>
         <env name="APP_DEBUG" value="false"/>
@@ -32,6 +32,13 @@
         </whitelist>
     </filter>
     <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener">
+            <arguments>
+                <array>
+                    <!-- disable the DebugClassLoader integration -->
+                    <element key="debug-class-loader"><integer>0</integer></element>
+                </array>
+            </arguments>
+        </listener>
     </listeners>
 </phpunit>
