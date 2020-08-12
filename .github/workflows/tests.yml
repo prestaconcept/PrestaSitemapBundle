@@ -1,4 +1,4 @@
-name: Continuous Integration
+name: "Tests"
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   phpunit:
-    name: "PHPUnit tests"
+    name: "PHPUnit"
     runs-on: ubuntu-latest
 
     strategy:
@@ -31,7 +31,7 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v2.0.0
 
-      - name: "Install PHP with extensions"
+      - name: "Setup PHP"
         uses: shivammathur/setup-php@2.4.2
         with:
           coverage: none
@@ -67,7 +67,7 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v2.0.0
 
-      - name: "Install PHP with extensions"
+      - name: "Setup PHP"
         uses: shivammathur/setup-php@2.4.2
         with:
           coverage: pcov
