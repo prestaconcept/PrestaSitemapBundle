@@ -67,7 +67,7 @@ jobs:
       - name: "Setup PHP"
         uses: shivammathur/setup-php@2.4.2
         with:
-          coverage: pcov
+          coverage: xdebug
           php-version: ${{ matrix.php-version }}
 
       - name: "Require symfony/messenger dependencies when possible"
