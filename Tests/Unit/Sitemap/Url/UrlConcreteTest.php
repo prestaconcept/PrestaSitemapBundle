@@ -133,4 +133,28 @@ class UrlConcreteTest extends TestCase
         yield [1, 1.0];
         yield [1.00, 1.0];
     }
+
+    /**
+     * @dataProvider setInvalidPriorityProvider
+     */
+    public function testSetInvalidPriority($value): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage(
+            "The value \"$value\" is not supported by the option priority, it must be a numeric between 0.0 and 1.0." .
+            " See http://www.sitemaps.org/protocol.html#xmlTagDefinitions"
+        );
+
+        $url = new UrlConcrete('http://example.com');
+        $url->setPriority($value);
+    }
+
+    public function setInvalidPriorityProvider(): \Generator
+    {
+        yield [true];
+        yield [-1];
+        yield [-0.01];
+        yield [-2];
+        yield [-1.01];
+    }
 }
