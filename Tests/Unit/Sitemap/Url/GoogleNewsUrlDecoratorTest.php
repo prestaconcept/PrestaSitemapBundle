@@ -250,17 +250,17 @@ class GoogleNewsUrlDecoratorTest extends TestCase
     public function toXml(): \Generator
     {
         yield [
-            '<url><loc>http://acme.com/</loc><news:news><news:publication><news:name><![CDATA[Symfony Sitemap]]></news:name><news:language>fr</news:language></news:publication><news:publication_date>2020-01-01T10:00:00+01:00</news:publication_date><news:title><![CDATA[Setup sitemap with Symfony]]></news:title></news:news></url>',
+            '<url><loc>http://acme.com/</loc><news:news><news:publication><news:name><![CDATA[Symfony Sitemap]]></news:name><news:language>fr</news:language></news:publication><news:publication_date>2020-01-01T10:00:00+00:00</news:publication_date><news:title><![CDATA[Setup sitemap with Symfony]]></news:title></news:news></url>',
             'Symfony Sitemap',
             'fr',
-            new DateTime('2020-01-01 10:00:00'),
+            new DateTime('2020-01-01T10:00:00+00:00'),
             'Setup sitemap with Symfony',
         ];
         yield [
-            '<url><loc>http://acme.com/</loc><news:news><news:publication><news:name><![CDATA[Symfony Sitemap]]></news:name><news:language>fr</news:language></news:publication><news:access>Registration</news:access><news:genres>Blog, Tech</news:genres><news:publication_date>2020-01-01T10:00:00+01:00</news:publication_date><news:title><![CDATA[Setup sitemap with Symfony]]></news:title><news:geo_locations>Lyon, France</news:geo_locations><news:keywords>symfony, sitemap</news:keywords><news:stock_tickers>NYSE:OWW, NASDAQ:GTAT</news:stock_tickers></news:news></url>',
+            '<url><loc>http://acme.com/</loc><news:news><news:publication><news:name><![CDATA[Symfony Sitemap]]></news:name><news:language>fr</news:language></news:publication><news:access>Registration</news:access><news:genres>Blog, Tech</news:genres><news:publication_date>2020-01-01T10:00:00+00:00</news:publication_date><news:title><![CDATA[Setup sitemap with Symfony]]></news:title><news:geo_locations>Lyon, France</news:geo_locations><news:keywords>symfony, sitemap</news:keywords><news:stock_tickers>NYSE:OWW, NASDAQ:GTAT</news:stock_tickers></news:news></url>',
             'Symfony Sitemap',
             'fr',
-            new DateTime('2020-01-01 10:00:00'),
+            new DateTime('2020-01-01T10:00:00+00:00'),
             'Setup sitemap with Symfony',
             GoogleNewsUrlDecorator::ACCESS_REGISTRATION,
             ['Blog', 'Tech'],
