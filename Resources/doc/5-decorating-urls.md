@@ -30,16 +30,19 @@ Using the image decorator.
 
 ```php
 <?php
+use Presta\SitemapBundle\Service\UrlContainerInterface;
 use Presta\SitemapBundle\Sitemap\Url as Sitemap;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-/** @var $urlGenerator UrlGeneratorInterface */
-$url = new Sitemap\UrlConcrete($urlGenerator->generate('homepage'));
+/** @var $router UrlGeneratorInterface */
+/** @var $urls UrlContainerInterface */
+
+$url = new Sitemap\UrlConcrete($router->generate('homepage'));
 $decoratedUrl = new Sitemap\GoogleImageUrlDecorator($url);
 $decoratedUrl->addImage(new Sitemap\GoogleImage('/assets/carousel/php.gif'));
 $decoratedUrl->addImage(new Sitemap\GoogleImage('/assets/carousel/symfony.jpg'));
 $decoratedUrl->addImage(new Sitemap\GoogleImage('/assets/carousel/love.png'));
 
-/** @var $urls \Presta\SitemapBundle\Service\UrlContainerInterface */
 $urls->addUrl($decoratedUrl, 'default');
 ```
 
@@ -50,13 +53,16 @@ Using the mobile decorator.
 
 ```php
 <?php
+use Presta\SitemapBundle\Service\UrlContainerInterface;
 use Presta\SitemapBundle\Sitemap\Url as Sitemap;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-/** @var $urlGenerator UrlGeneratorInterface */
-$url = new Sitemap\UrlConcrete($urlGenerator->generate('mobile_homepage'));
+/** @var $router UrlGeneratorInterface */
+/** @var $urls UrlContainerInterface */
+
+$url = new Sitemap\UrlConcrete($router->generate('mobile_homepage'));
 $decoratedUrl = new Sitemap\GoogleMobileUrlDecorator($url);
 
-/** @var $urls \Presta\SitemapBundle\Service\UrlContainerInterface */
 $urls->addUrl($decoratedUrl, 'default');
 ```
 
@@ -67,16 +73,18 @@ Using the multilang decorator.
 
 ```php
 <?php
+use Presta\SitemapBundle\Service\UrlContainerInterface;
 use Presta\SitemapBundle\Sitemap\Url as Sitemap;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-/** @var $urlGenerator UrlGeneratorInterface */
-$url = new Sitemap\UrlConcrete($urlGenerator->generate('homepage'));
-$decoratedUrl = new Sitemap\GoogleMultilangUrlDecorator($url);
-$decoratedUrl->addLink($urlGenerator->generate('homepage_fr'), 'fr');
-$decoratedUrl->addLink($urlGenerator->generate('homepage_de'), 'de');
+/** @var $router UrlGeneratorInterface */
+/** @var $urls UrlContainerInterface */
 
-/** @var $urls \Presta\SitemapBundle\Service\UrlContainerInterface */
+$url = new Sitemap\UrlConcrete($router->generate('homepage'));
+$decoratedUrl = new Sitemap\GoogleMultilangUrlDecorator($url);
+$decoratedUrl->addLink($router->generate('homepage_fr'), 'fr');
+$decoratedUrl->addLink($router->generate('homepage_de'), 'de');
+
 $urls->addUrl($decoratedUrl, 'default');
 ```
 
@@ -87,11 +95,14 @@ Using the news decorator.
 
 ```php
 <?php
+use Presta\SitemapBundle\Service\UrlContainerInterface;
 use Presta\SitemapBundle\Sitemap\Url as Sitemap;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-/** @var $urlGenerator UrlGeneratorInterface */
-$url = new Sitemap\UrlConcrete($urlGenerator->generate('homepage'));
+/** @var $router UrlGeneratorInterface */
+/** @var $urls UrlContainerInterface */
+
+$url = new Sitemap\UrlConcrete($router->generate('homepage'));
 $decoratedUrl = new Sitemap\GoogleNewsUrlDecorator(
     $url,
     'PrestaSitemapBundle News',
@@ -100,7 +111,6 @@ $decoratedUrl = new Sitemap\GoogleNewsUrlDecorator(
     'The docs were updated'
 );
 
-/** @var $urls \Presta\SitemapBundle\Service\UrlContainerInterface */
 $urls->addUrl($decoratedUrl, 'default');
 ```
 
@@ -111,11 +121,14 @@ Using the video decorator.
 
 ```php
 <?php
+use Presta\SitemapBundle\Service\UrlContainerInterface;
 use Presta\SitemapBundle\Sitemap\Url as Sitemap;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-/** @var $urlGenerator UrlGeneratorInterface */
-$url = new Sitemap\UrlConcrete($urlGenerator->generate('mobile_homepage'));
+/** @var $router UrlGeneratorInterface */
+/** @var $urls UrlContainerInterface */
+
+$url = new Sitemap\UrlConcrete($router->generate('homepage'));
 $video = new Sitemap\GoogleVideo(
     'https://img.youtube.com/vi/j6IKRxH8PTg/0.jpg',
     'How to use PrestaSitemapBundle in Symfony 2.6 [1/2]',
@@ -128,7 +141,6 @@ $video->addTag('php')
 $decoratedUrl = new Sitemap\GoogleVideoUrlDecorator($url);
 $decoratedUrl->addVideo($video);
 
-/** @var $urls \Presta\SitemapBundle\Service\UrlContainerInterface */
 $urls->addUrl($decoratedUrl, 'default');
 ```
 
@@ -139,11 +151,14 @@ Of course, you can nest all those decorators for a single URL.
 
 ```php
 <?php
+use Presta\SitemapBundle\Service\UrlContainerInterface;
 use Presta\SitemapBundle\Sitemap\Url as Sitemap;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-/** @var $urlGenerator UrlGeneratorInterface */
-$url = new Sitemap\UrlConcrete($urlGenerator->generate('mobile_homepage', [], UrlGeneratorInterface::ABSOLUTE_URL));
+/** @var $router UrlGeneratorInterface */
+/** @var $urls UrlContainerInterface */
+
+$url = new Sitemap\UrlConcrete($router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL));
 
 // 1st wrap: mobile
 $url = new Sitemap\GoogleMobileUrlDecorator($url);
@@ -156,22 +171,22 @@ $url->addImage(new Sitemap\GoogleImage('/assets/carousel/love.png'));
 
 // 3rd wrap: multilang
 $url = new Sitemap\GoogleMultilangUrlDecorator($url);
-$url->addLink($urlGenerator->generate('mobile_homepage_fr'), 'fr');
-$url->addLink($urlGenerator->generate('mobile_homepage_de'), 'de');
+$url->addLink($router->generate('homepage_fr'), 'fr');
+$url->addLink($router->generate('homepage_de'), 'de');
 
 // 4th wrap: video
-$url = new Sitemap\GoogleVideoUrlDecorator(
-    $url,
+$video = new Sitemap\GoogleVideo(
     'https://img.youtube.com/vi/j6IKRxH8PTg/0.jpg',
     'How to use PrestaSitemapBundle in Symfony 2.6 [1/2]',
     'In this video you will learn how to use PrestaSitemapBundle in your Symfony 2.6 projects',
     ['content_loc' => 'https://www.youtube.com/watch?v=j6IKRxH8PTg']
 );
-$url->addTag('php')
+$video->addTag('php')
     ->addTag('symfony')
     ->addTag('sitemap');
+$url = new Sitemap\GoogleVideoUrlDecorator($url);
+$url->addVideo($video);
 
-/** @var $urls \Presta\SitemapBundle\Service\UrlContainerInterface */
 $urls->addUrl($url, 'default');
 ```
 
@@ -191,7 +206,7 @@ Exception thrown: `Presta\SitemapBundle\Exception\GoogleImageException`
 
 - **Registering more than `32` tags for a video**
 
-Exception thrown: `Presta\SitemapBundle\Exception\GoogleVideoUrlTagException`
+Exception thrown: `Presta\SitemapBundle\Exception\GoogleVideoTagException`
 
 [see related documentation](https://developers.google.com/webmasters/videosearch/sitemaps)
 
