@@ -29,7 +29,7 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        if (version_compare(Kernel::VERSION, '4.2') >= 0) {
+        if (method_exists(TreeBuilder::class, 'getRootNode')) {
             $treeBuilder = new TreeBuilder('presta_sitemap');
             $rootNode = $treeBuilder->getRootNode();
         } else {
