@@ -46,7 +46,7 @@ class GoogleVideo
     /**
      * @var string
      */
-    protected $thumbnail_loc;
+    protected $thumbnailLocation;
 
     /**
      * @var string
@@ -63,24 +63,24 @@ class GoogleVideo
     /**
      * @var string|null
      */
-    protected $content_loc;
+    protected $contentLocation;
 
     /**
      * @var string|null
      */
-    protected $player_loc;
+    protected $playerLocation;
 
     /**
      * allow google to embed video in search results
      * @var string
      */
-    protected $player_loc_allow_embed;
+    protected $playerLocationAllowEmbed;
 
     /**
      * user defined string for flashvar parameters in embed tag (e.g. autoplay="ap=1")
      * @var string
      */
-    protected $player_loc_autoplay;
+    protected $playerLocationAutoplay;
 
     /**
      * @var int|null
@@ -90,7 +90,7 @@ class GoogleVideo
     /**
      * @var DateTimeInterface|null
      */
-    protected $expiration_date;
+    protected $expirationDate;
 
     /**
      * @var int|null
@@ -100,17 +100,17 @@ class GoogleVideo
     /**
      * @var int|null
      */
-    protected $view_count;
+    protected $viewCount;
 
     /**
      * @var DateTimeInterface|null
      */
-    protected $publication_date;
+    protected $publicationDate;
 
     /**
      * @var string|null
      */
-    protected $family_friendly;
+    protected $familyFriendly;
 
     /**
      * @var string|null
@@ -120,27 +120,27 @@ class GoogleVideo
     /**
      * @var array
      */
-    protected $restriction_allow = [];
+    protected $restrictionAllow = [];
 
     /**
      * @var array
      */
-    protected $restriction_deny = [];
+    protected $restrictionDeny = [];
 
     /**
      * @var string|null
      */
-    protected $gallery_loc;
+    protected $galleryLocation;
 
     /**
      * @var string|null
      */
-    protected $gallery_loc_title;
+    protected $galleryLocationTitle;
 
     /**
      * @var string|null
      */
-    protected $requires_subscription;
+    protected $requiresSubscription;
 
     /**
      * @var string|null
@@ -150,7 +150,7 @@ class GoogleVideo
     /**
      * @var string|null
      */
-    protected $uploader_info;
+    protected $uploaderInfo;
 
     /**
      * @var array
@@ -160,7 +160,7 @@ class GoogleVideo
     /**
      * @var string|null
      */
-    protected $platform_relationship;
+    protected $platformRelationship;
 
     /**
      * @var string|null
@@ -182,54 +182,227 @@ class GoogleVideo
     /**
      * create a GoogleImage for your GoogleImageUrl
      *
-     * @param string $thumnail_loc
+     * @param string $thumbnailLocation
      * @param string $title
      * @param string $description
-     * @param array  $parameters - the keys to use are the optional properties of this class, (e.g. 'player_loc' =>
-     *                           'http://acme.com/player.swf')
+     * @param array  $parameters Properties of this class, (e.g. 'player_loc' => 'http://acme.com/player.swf')
      *
      * @throws Exception\GoogleVideoException
      */
-    public function __construct($thumnail_loc, $title, $description, array $parameters = [])
+    public function __construct($thumbnailLocation, $title, $description, array $parameters = [])
     {
         foreach ($parameters as $key => $param) {
-            $method = Utils::getSetMethod($this, $key);
-            $this->$method($param);
+            switch ($key) {
+                case 'content_loc':
+                    @trigger_error(
+                        'GoogleVideo parameter ' . $key . ' is deprecated since 2.3.0, use "content_location" parameter instead',
+                        E_USER_DEPRECATED
+                    );
+                    $this->setContentLocation($param);
+                    break;
+                case 'content_location':
+                    $this->setContentLocation($param);
+                    break;
+                case 'player_loc':
+                    @trigger_error(
+                        'GoogleVideo parameter ' . $key . ' is deprecated since 2.3.0, use "player_location" parameter instead',
+                        E_USER_DEPRECATED
+                    );
+                    $this->setPlayerLocation($param);
+                    break;
+                case 'player_location':
+                    $this->setPlayerLocation($param);
+                    break;
+                case 'player_loc_allow_embed':
+                    @trigger_error(
+                        'GoogleVideo parameter ' . $key . ' is deprecated since 2.3.0, use "player_location_allow_embed" parameter instead',
+                        E_USER_DEPRECATED
+                    );
+                    $this->setPlayerLocationAllowEmbed($param);
+                    break;
+                case 'player_location_allow_embed':
+                    $this->setPlayerLocationAllowEmbed($param);
+                    break;
+                case 'player_loc_autoplay':
+                    @trigger_error(
+                        'GoogleVideo parameter ' . $key . ' is deprecated since 2.3.0, use "player_location_autoplay" parameter instead',
+                        E_USER_DEPRECATED
+                    );
+                    $this->setPlayerLocationAutoplay($param);
+                    break;
+                case 'player_location_autoplay':
+                    $this->setPlayerLocationAutoplay($param);
+                    break;
+                case 'duration':
+                    $this->setDuration($param);
+                    break;
+                case 'expiration_date':
+                    $this->setExpirationDate($param);
+                    break;
+                case 'rating':
+                    $this->setRating($param);
+                    break;
+                case 'view_count':
+                    $this->setViewCount($param);
+                    break;
+                case 'publication_date':
+                    $this->setPublicationDate($param);
+                    break;
+                case 'family_friendly':
+                    $this->setFamilyFriendly($param);
+                    break;
+                case 'category':
+                    $this->setCategory($param);
+                    break;
+                case 'restriction_allow':
+                    $this->setRestrictionAllow($param);
+                    break;
+                case 'restriction_deny':
+                    $this->setRestrictionDeny($param);
+                    break;
+                case 'gallery_loc':
+                    @trigger_error(
+                        'GoogleVideo parameter ' . $key . ' is deprecated since 2.3.0, use "gallery_location" parameter instead',
+                        E_USER_DEPRECATED
+                    );
+                    $this->setGalleryLocation($param);
+                    break;
+                case 'gallery_location':
+                    $this->setGalleryLocation($param);
+                    break;
+                case 'gallery_loc_title':
+                    @trigger_error(
+                        'GoogleVideo parameter ' . $key . ' is deprecated since 2.3.0, use "gallery_location_title" parameter instead',
+                        E_USER_DEPRECATED
+                    );
+                    $this->setGalleryLocationTitle($param);
+                    break;
+                case 'gallery_location_title':
+                    $this->setGalleryLocationTitle($param);
+                    break;
+                case 'requires_subscription':
+                    $this->setRequiresSubscription($param);
+                    break;
+                case 'uploader':
+                    $this->setUploader($param);
+                    break;
+                case 'uploader_info':
+                    $this->setUploaderInfo($param);
+                    break;
+                case 'platforms':
+                    $this->setPlatforms($param);
+                    break;
+                case 'platform_relationship':
+                    $this->setPlatformRelationship($param);
+                    break;
+                case 'live':
+                    $this->setLive($param);
+                    break;
+            }
         }
 
-        $this->setThumbnailLoc($thumnail_loc);
+        $this->setThumbnailLocation($thumbnailLocation);
         $this->setTitle($title);
         $this->setDescription($description);
 
-        if (!$this->content_loc && !$this->player_loc) {
-            throw new Exception\GoogleVideoException('The parameter content_loc or player_loc is required');
+        if (!$this->contentLocation && !$this->playerLocation) {
+            throw new Exception\GoogleVideoException('The parameter content_location or content_location is required');
         }
 
-        if (count($this->platforms) && !$this->platform_relationship) {
+        if (count($this->platforms) && !$this->platformRelationship) {
             throw new Exception\GoogleVideoException(
                 'The parameter platform_relationship is required when platform is set'
             );
         }
     }
 
+    public function __get(string $name)
+    {
+        $map = [
+            'thumbnail_loc' => 'thumbnailLocation',
+            'content_loc' => 'contentLocation',
+            'player_loc' => 'playerLocation',
+            'player_loc_allow_embed' => 'playerLocationAllowEmbed',
+            'player_loc_autoplay' => 'playerLocationAutoplay',
+            'expiration_date' => 'expirationDate',
+            'view_count' => 'viewCount',
+            'publication_date' => 'publicationDate',
+            'family_friendly' => 'familyFriendly',
+            'restriction_allow' => 'restrictionAllow',
+            'restriction_deny' => 'restrictionDeny',
+            'gallery_loc' => 'galleryLocation',
+            'gallery_loc_title' => 'galleryLocationTitle',
+            'requires_subscription' => 'requiresSubscription',
+            'uploader_info' => 'uploaderInformation',
+            'platform_relationship' => 'platformRelationship',
+        ];
+
+        if (array_key_exists($name, $map)) {
+            $newName = $map[$name];
+            @trigger_error(
+                sprintf('Property %s::$%s is deprecated since 2.3.0, use $%s instead.', __CLASS__, $name, $newName),
+                E_USER_DEPRECATED
+            );
+
+            return $this->{$newName};
+        }
+
+        trigger_error(sprintf('Undefined property: %s::$%s', __CLASS__, $name));
+
+        return null;
+    }
+
     /**
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
      * @param string $thumbnail_loc
      *
      * @return GoogleVideo
      */
     public function setThumbnailLoc($thumbnail_loc)
     {
-        $this->thumbnail_loc = $thumbnail_loc;
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0, use %s::setThumbnailLocation instead.', __METHOD__, __CLASS__),
+            E_USER_DEPRECATED
+        );
+        $this->setThumbnailLocation($thumbnail_loc);
 
         return $this;
     }
 
     /**
+     * @param string $location
+     *
+     * @return GoogleVideo
+     */
+    public function setThumbnailLocation($location)
+    {
+        $this->thumbnailLocation = $location;
+
+        return $this;
+    }
+
+    /**
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
      * @return string
      */
     public function getThumbnailLoc()
     {
-        return $this->thumbnail_loc;
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0, use %s::getThumbnailLocation instead.', __METHOD__, __CLASS__),
+            E_USER_DEPRECATED
+        );
+
+        return $this->getThumbnailLocation();
+    }
+
+    /**
+     * @return string
+     */
+    public function getThumbnailLocation()
+    {
+        return $this->thumbnailLocation;
     }
 
     /**
@@ -257,80 +430,200 @@ class GoogleVideo
     }
 
     /**
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
      * @param string $content_loc
      *
      * @return GoogleVideo
      */
     public function setContentLoc($content_loc)
     {
-        $this->content_loc = $content_loc;
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0, use %s::setContentLocation instead.', __METHOD__, __CLASS__),
+            E_USER_DEPRECATED
+        );
+        $this->setContentLocation($content_loc);
 
         return $this;
     }
 
     /**
+     * @param string $location
+     *
+     * @return GoogleVideo
+     */
+    public function setContentLocation($location)
+    {
+        $this->contentLocation = $location;
+
+        return $this;
+    }
+
+    /**
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
      * @param string $player_loc
      *
      * @return GoogleVideo
      */
     public function setPlayerLoc($player_loc)
     {
-        $this->player_loc = $player_loc;
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0, use %s::setPlayerLocation instead.', __METHOD__, __CLASS__),
+            E_USER_DEPRECATED
+        );
+        $this->setPlayerLocation($player_loc);
 
         return $this;
     }
 
     /**
+     * @param string $location
+     *
+     * @return GoogleVideo
+     */
+    public function setPlayerLocation($location)
+    {
+        $this->playerLocation = $location;
+
+        return $this;
+    }
+
+    /**
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
      * @return string|null
      */
     public function getPlayerLoc()
     {
-        return $this->player_loc;
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0, use %s::getPlayerLocation instead.', __METHOD__, __CLASS__),
+            E_USER_DEPRECATED
+        );
+
+        return $this->getPlayerLocation();
     }
 
     /**
+     * @return string|null
+     */
+    public function getPlayerLocation()
+    {
+        return $this->playerLocation;
+    }
+
+    /**
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
      * @param string $player_loc_allow_embed
      *
      * @return GoogleVideo
      */
     public function setPlayerLocAllowEmbed($player_loc_allow_embed)
     {
-        if (!in_array($player_loc_allow_embed, [self::PLAYER_LOC_ALLOW_EMBED_YES, self::PLAYER_LOC_ALLOW_EMBED_NO])) {
-            throw new Exception\GoogleVideoException(
-                sprintf(
-                    'The parameter %s must be a valid player_loc_allow_embed.see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
-                    $player_loc_allow_embed
-                )
-            );
-        }
-        $this->player_loc_allow_embed = $player_loc_allow_embed;
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0, use %s::setPlayerLocationAllowEmbed instead.', __METHOD__, __CLASS__),
+            E_USER_DEPRECATED
+        );
+        $this->setPlayerLocationAllowEmbed($player_loc_allow_embed);
 
         return $this;
     }
 
     /**
+     * @param string $embed
+     *
+     * @return GoogleVideo
+     */
+    public function setPlayerLocationAllowEmbed($embed)
+    {
+        if (!in_array($embed, [self::PLAYER_LOC_ALLOW_EMBED_YES, self::PLAYER_LOC_ALLOW_EMBED_NO])) {
+            throw new Exception\GoogleVideoException(
+                sprintf(
+                    'The parameter %s must be a valid player_location_allow_embed. See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    $embed
+                )
+            );
+        }
+        $this->playerLocationAllowEmbed = $embed;
+
+        return $this;
+    }
+
+    /**
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
      * @return string
      */
     public function getPlayerLocAllowEmbed()
     {
-        return $this->player_loc_allow_embed;
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0, use %s::getPlayerLocationAllowEmbed instead.', __METHOD__, __CLASS__),
+            E_USER_DEPRECATED
+        );
+
+        return $this->getPlayerLocationAllowEmbed();
     }
 
     /**
+     * @return string
+     */
+    public function getPlayerLocationAllowEmbed()
+    {
+        return $this->playerLocationAllowEmbed;
+    }
+
+    /**
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
      * @param string $player_loc_autoplay
      *
      * @return GoogleVideo
      */
     public function setPlayerLocAutoplay($player_loc_autoplay)
     {
-        $this->player_loc_autoplay = $player_loc_autoplay;
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0, use %s::setPlayerLocationAutoplay instead.', __METHOD__, __CLASS__),
+            E_USER_DEPRECATED
+        );
+        $this->setPlayerLocationAutoplay($player_loc_autoplay);
 
         return $this;
     }
 
+    /**
+     * @param string $autoplay
+     *
+     * @return GoogleVideo
+     */
+    public function setPlayerLocationAutoplay($autoplay)
+    {
+        $this->playerLocationAutoplay = $autoplay;
+
+        return $this;
+    }
+
+    /**
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
+     * @return string
+     */
     public function getPlayerLocAutoplay()
     {
-        return $this->player_loc_autoplay;
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0, use %s::getPlayerLocationAutoplay instead.', __METHOD__, __CLASS__),
+            E_USER_DEPRECATED
+        );
+
+        return $this->getPlayerLocationAutoplay();
+    }
+
+    /**
+     * @return string
+     */
+    public function getPlayerLocationAutoplay()
+    {
+        return $this->playerLocationAutoplay;
     }
 
     /**
@@ -344,7 +637,7 @@ class GoogleVideo
         if ($duration < 0 || $duration > 28800) {
             throw new Exception\GoogleVideoException(
                 sprintf(
-                    'The parameter %s must be a valid duration.see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    'The parameter %s must be a valid duration. See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
                     $duration
                 )
             );
@@ -356,13 +649,13 @@ class GoogleVideo
     }
 
     /**
-     * @param DateTimeInterface $expiration_date
+     * @param DateTimeInterface $expirationDate
      *
      * @return GoogleVideo
      */
-    public function setExpirationDate(DateTimeInterface $expiration_date)
+    public function setExpirationDate(DateTimeInterface $expirationDate)
     {
-        $this->expiration_date = $expiration_date;
+        $this->expirationDate = $expirationDate;
 
         return $this;
     }
@@ -377,7 +670,7 @@ class GoogleVideo
         if ($rating < 0 || $rating > 5) {
             throw new Exception\GoogleVideoException(
                 sprintf(
-                    'The parameter %s must be a valid rating.see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    'The parameter %s must be a valid rating. See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
                     $rating
                 )
             );
@@ -389,50 +682,50 @@ class GoogleVideo
     }
 
     /**
-     * @param int $view_count
+     * @param int $viewCount
      *
      * @return GoogleVideo
      */
-    public function setViewCount($view_count)
+    public function setViewCount($viewCount)
     {
-        $this->view_count = $view_count;
+        $this->viewCount = $viewCount;
 
         return $this;
     }
 
     /**
-     * @param DateTimeInterface $publication_date
+     * @param DateTimeInterface $publicationDate
      *
      * @return GoogleVideo
      */
-    public function setPublicationDate(DateTimeInterface $publication_date)
+    public function setPublicationDate(DateTimeInterface $publicationDate)
     {
-        $this->publication_date = $publication_date;
+        $this->publicationDate = $publicationDate;
 
         return $this;
     }
 
     /**
-     * @param null|string $family_friendly
+     * @param null|string $familyFriendly
      *
      * @return GoogleVideo
      */
-    public function setFamilyFriendly($family_friendly = null)
+    public function setFamilyFriendly($familyFriendly = null)
     {
-        if (null == $family_friendly) {
-            $family_friendly = self::FAMILY_FRIENDLY_YES;
+        if (null == $familyFriendly) {
+            $familyFriendly = self::FAMILY_FRIENDLY_YES;
         }
 
-        if (!in_array($family_friendly, [self::FAMILY_FRIENDLY_YES, self::FAMILY_FRIENDLY_NO])) {
+        if (!in_array($familyFriendly, [self::FAMILY_FRIENDLY_YES, self::FAMILY_FRIENDLY_NO])) {
             throw new Exception\GoogleVideoException(
                 sprintf(
-                    'The parameter %s must be a valid family_friendly. see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
-                    $family_friendly
+                    'The parameter %s must be a valid family_friendly. See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    $familyFriendly
                 )
             );
         }
 
-        $this->family_friendly = $family_friendly;
+        $this->familyFriendly = $familyFriendly;
 
         return $this;
     }
@@ -447,7 +740,7 @@ class GoogleVideo
         if (strlen($category) > 256) {
             throw new Exception\GoogleVideoException(
                 sprintf(
-                    'The parameter %s must be a valid category. see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    'The parameter %s must be a valid category. See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
                     $category
                 )
             );
@@ -465,7 +758,7 @@ class GoogleVideo
      */
     public function setRestrictionAllow(array $countries)
     {
-        $this->restriction_allow = $countries;
+        $this->restrictionAllow = $countries;
 
         return $this;
     }
@@ -475,7 +768,7 @@ class GoogleVideo
      */
     public function getRestrictionAllow()
     {
-        return $this->restriction_allow;
+        return $this->restrictionAllow;
     }
 
     /**
@@ -485,7 +778,7 @@ class GoogleVideo
      */
     public function setRestrictionDeny(array $countries)
     {
-        $this->restriction_deny = $countries;
+        $this->restrictionDeny = $countries;
 
         return $this;
     }
@@ -495,50 +788,86 @@ class GoogleVideo
      */
     public function getRestrictionDeny()
     {
-        return $this->restriction_deny;
+        return $this->restrictionDeny;
     }
 
     /**
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
      * @param string $gallery_loc
      *
      * @return GoogleVideo
      */
     public function setGalleryLoc($gallery_loc)
     {
-        $this->gallery_loc = $gallery_loc;
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0, use %s::setGalleryLocation instead.', __METHOD__, __CLASS__),
+            E_USER_DEPRECATED
+        );
+        $this->setGalleryLocation($gallery_loc);
 
         return $this;
     }
 
     /**
+     * @param string $location
+     *
+     * @return GoogleVideo
+     */
+    public function setGalleryLocation($location)
+    {
+        $this->galleryLocation = $location;
+
+        return $this;
+    }
+
+    /**
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
      * @param string $gallery_loc_title
      *
      * @return GoogleVideo
      */
     public function setGalleryLocTitle($gallery_loc_title)
     {
-        $this->gallery_loc_title = $gallery_loc_title;
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0, use %s::setGalleryLocationTitle instead.', __METHOD__, __CLASS__),
+            E_USER_DEPRECATED
+        );
+        $this->setGalleryLocationTitle($gallery_loc_title);
 
         return $this;
     }
 
     /**
-     * @param string $requires_subscription
+     * @param string $title
      *
      * @return GoogleVideo
      */
-    public function setRequiresSubscription($requires_subscription)
+    public function setGalleryLocationTitle($title)
     {
-        if (!in_array($requires_subscription, [self::REQUIRES_SUBSCRIPTION_YES, self::REQUIRES_SUBSCRIPTION_NO])) {
+        $this->galleryLocationTitle = $title;
+
+        return $this;
+    }
+
+    /**
+     * @param string $requiresSubscription
+     *
+     * @return GoogleVideo
+     */
+    public function setRequiresSubscription($requiresSubscription)
+    {
+        if (!in_array($requiresSubscription, [self::REQUIRES_SUBSCRIPTION_YES, self::REQUIRES_SUBSCRIPTION_NO])) {
             throw new Exception\GoogleVideoException(
                 sprintf(
-                    'The parameter %s must be a valid requires_subscription.see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
-                    $requires_subscription
+                    'The parameter %s must be a valid requires_subscription. See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    $requiresSubscription
                 )
             );
         }
 
-        $this->requires_subscription = $requires_subscription;
+        $this->requiresSubscription = $requiresSubscription;
 
         return $this;
     }
@@ -556,13 +885,13 @@ class GoogleVideo
     }
 
     /**
-     * @param string $uploader_info
+     * @param string $uploaderInfo
      *
      * @return GoogleVideo
      */
-    public function setUploaderInfo($uploader_info)
+    public function setUploaderInfo($uploaderInfo)
     {
-        $this->uploader_info = $uploader_info;
+        $this->uploaderInfo = $uploaderInfo;
 
         return $this;
     }
@@ -588,13 +917,13 @@ class GoogleVideo
     }
 
     /**
-     * @param string $platform_relationship
+     * @param string $platformRelationship
      *
      * @return GoogleVideo
      */
-    public function setPlatformRelationship($platform_relationship)
+    public function setPlatformRelationship($platformRelationship)
     {
-        $this->platform_relationship = $platform_relationship;
+        $this->platformRelationship = $platformRelationship;
 
         return $this;
     }
@@ -604,7 +933,7 @@ class GoogleVideo
      */
     public function getPlatformRelationship()
     {
-        return $this->platform_relationship;
+        return $this->platformRelationship;
     }
 
     /**
@@ -636,11 +965,26 @@ class GoogleVideo
     }
 
     /**
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
      * @return null|string
      */
     public function getContentLoc()
     {
-        return $this->content_loc;
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0, use %s::getContentLocation instead.', __METHOD__, __CLASS__),
+            E_USER_DEPRECATED
+        );
+
+        return $this->getContentLocation();
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getContentLocation()
+    {
+        return $this->contentLocation;
     }
 
     /**
@@ -656,7 +1000,7 @@ class GoogleVideo
      */
     public function getExpirationDate()
     {
-        return $this->expiration_date;
+        return $this->expirationDate;
     }
 
     /**
@@ -672,7 +1016,7 @@ class GoogleVideo
      */
     public function getViewCount()
     {
-        return $this->view_count;
+        return $this->viewCount;
     }
 
     /**
@@ -680,7 +1024,7 @@ class GoogleVideo
      */
     public function getPublicationDate()
     {
-        return $this->publication_date;
+        return $this->publicationDate;
     }
 
     /**
@@ -688,7 +1032,7 @@ class GoogleVideo
      */
     public function getFamilyFriendly()
     {
-        return $this->family_friendly;
+        return $this->familyFriendly;
     }
 
     /**
@@ -700,19 +1044,49 @@ class GoogleVideo
     }
 
     /**
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
      * @return null|string
      */
     public function getGalleryLoc()
     {
-        return $this->gallery_loc;
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0, use %s::getGalleryLocation instead.', __METHOD__, __CLASS__),
+            E_USER_DEPRECATED
+        );
+
+        return $this->getGalleryLocation();
     }
 
     /**
      * @return null|string
      */
+    public function getGalleryLocation()
+    {
+        return $this->galleryLocation;
+    }
+
+    /**
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
+     * @return null|string
+     */
     public function getGalleryLocTitle()
     {
-        return $this->gallery_loc_title;
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0, use %s::getGalleryLocationTitle instead.', __METHOD__, __CLASS__),
+            E_USER_DEPRECATED
+        );
+
+        return $this->getGalleryLocationTitle();
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getGalleryLocationTitle()
+    {
+        return $this->galleryLocationTitle;
     }
 
     /**
@@ -720,7 +1094,7 @@ class GoogleVideo
      */
     public function getRequiresSubscription()
     {
-        return $this->requires_subscription;
+        return $this->requiresSubscription;
     }
 
     /**
@@ -736,7 +1110,7 @@ class GoogleVideo
      */
     public function getUploaderInfo()
     {
-        return $this->uploader_info;
+        return $this->uploaderInfo;
     }
 
     /**
@@ -807,7 +1181,9 @@ class GoogleVideo
     }
 
     /**
-     * @inheritdoc
+     * Return the xml representation for the video
+     *
+     * @return string
      */
     public function toXml()
     {
@@ -815,105 +1191,127 @@ class GoogleVideo
 
         //----------------------
         // required fields
-        $videoXml .= '<video:thumbnail_loc>' . Utils::encode($this->getThumbnailLoc()) . '</video:thumbnail_loc>';
+        $videoXml .= '<video:thumbnail_loc>' . Utils::encode($this->getThumbnailLocation()) . '</video:thumbnail_loc>';
+        $videoXml .= '<video:title>' . Utils::cdata($this->getTitle()) . '</video:title>';
+        $videoXml .= '<video:description>' . Utils::cdata($this->getDescription()) . '</video:description>';
 
-        foreach (['title', 'description'] as $paramName) {
-            $videoXml .= '<video:' . $paramName . '>' . Utils::render(
-                    $this->{Utils::getGetMethod($this, $paramName)}()
-                ) . '</video:' . $paramName . '>';
-        }
         //----------------------
         //----------------------
-        // simple optionnal fields
-        if ($this->getCategory()) {
-            $videoXml .= '<video:category>' . Utils::render($this->getCategory()) . '</video:category>';
+        // simple optional fields
+        if ($category = $this->getCategory()) {
+            $videoXml .= '<video:category>' . Utils::cdata($category) . '</video:category>';
         }
-        if ($this->getContentLoc()) {
-            $videoXml .= '<video:content_loc>' . Utils::encode($this->getContentLoc()) . '</video:content_loc>';
+        if ($location = $this->getContentLocation()) {
+            $videoXml .= '<video:content_loc>' . Utils::encode($location) . '</video:content_loc>';
         }
-        foreach ([
-                     'duration',
-                     'rating',
-                     'view_count',
-                     'family_friendly',
-                     'requires_subscription',
-                     'live',
-                 ] as $paramName) {
-            $getMethod = Utils::getGetMethod($this, $paramName);
-            if ($this->$getMethod()) {
-                $videoXml .= '<video:' . $paramName . '>' . $this->$getMethod() . '</video:' . $paramName . '>';
+        if ($duration = $this->getDuration()) {
+            $videoXml .= '<video:duration>' . $duration . '</video:duration>';
+        }
+        if ($rating = $this->getRating()) {
+            $videoXml .= '<video:rating>' . $rating . '</video:rating>';
+        }
+        if ($viewCount = $this->getViewCount()) {
+            $videoXml .= '<video:view_count>' . $viewCount . '</video:view_count>';
+        }
+        if ($familyFriendly = $this->getFamilyFriendly()) {
+            $videoXml .= '<video:family_friendly>' . $familyFriendly . '</video:family_friendly>';
+        }
+        if ($requiresSubscription = $this->getRequiresSubscription()) {
+            $videoXml .= '<video:requires_subscription>' . $requiresSubscription . '</video:requires_subscription>';
+        }
+        if ($live = $this->getLive()) {
+            $videoXml .= '<video:live>' . $live . '</video:live>';
+        }
+
+        //----------------------
+        //----------------------
+        // date based optional fields
+        if ($date = $this->getExpirationDate()) {
+            $videoXml .= '<video:expiration_date>' . $date->format('c') . '</video:expiration_date>';
+        }
+        if ($date = $this->getPublicationDate()) {
+            $videoXml .= '<video:publication_date>' . $date->format('c') . '</video:publication_date>';
+        }
+
+        //----------------------
+        //----------------------
+        // more complex optional fields
+        if ($playerLocation = $this->getPlayerLocation()) {
+            $attributes = [];
+            if ($uploaderInfo = $this->getPlayerLocationAllowEmbed()) {
+                $attributes['allow_embed'] = Utils::encode($uploaderInfo);
             }
-        }
-        //----------------------
-        //----------------------
-        // date based optionnal fields
-        foreach (['expiration_date', 'publication_date'] as $paramName) {
-            $getMethod = Utils::getGetMethod($this, $paramName);
-            if ($this->$getMethod()) {
-                $videoXml .= '<video:' . $paramName . '>' . $this->$getMethod()->format(
-                        'c'
-                    ) . '</video:' . $paramName . '>';
+            if ($autoplay = $this->getPlayerLocationAutoplay()) {
+                $attributes['autoplay'] = Utils::encode($autoplay);
             }
-        }
-        //----------------------
-        //----------------------
-        // moar complexe optionnal fields
-        if ($this->getPlayerLoc()) {
-            $allow_embed = ($this->getPlayerLocAllowEmbed()) ? ' allow_embed="' . $this->getPlayerLocAllowEmbed(
-                ) . '"' : '';
-            $autoplay = ($this->getPlayerLocAutoplay()) ? ' autoplay="' . $this->getPlayerLocAutoplay() . '"' : '';
-            $videoXml .= '<video:player_loc' . $allow_embed . $autoplay . '>' . Utils::encode(
-                    $this->getPlayerLoc()
-                ) . '</video:player_loc>';
+
+            $videoXml .= '<video:player_loc' . $this->attributes($attributes) . '>'
+                . Utils::encode($playerLocation)
+                . '</video:player_loc>';
         }
 
-        if ($this->getRestrictionAllow()) {
-            $videoXml .= '<video:restriction relationship="allow">' . implode(
-                    ' ',
-                    $this->getRestrictionAllow()
-                ) . '</video:restriction>';
+        if ($allow = $this->getRestrictionAllow()) {
+            $videoXml .= '<video:restriction relationship="allow">' . implode(' ', $allow) . '</video:restriction>';
         }
 
-        if ($this->getRestrictionDeny()) {
-            $videoXml .= '<video:restriction relationship="deny">' . implode(
-                    ' ',
-                    $this->getRestrictionDeny()
-                ) . '</video:restriction>';
+        if ($deny = $this->getRestrictionDeny()) {
+            $videoXml .= '<video:restriction relationship="deny">' . implode(' ', $deny) . '</video:restriction>';
         }
 
-        if ($this->getGalleryLoc()) {
-            $title = ($this->getGalleryLocTitle()) ? ' title="' . Utils::encode($this->getGalleryLocTitle()) . '"' : '';
-            $videoXml .= '<video:gallery_loc' . $title . '>' . Utils::encode(
-                    $this->getGalleryLoc()
-                ) . '</video:gallery_loc>';
+        if ($galleryLocation = $this->getGalleryLocation()) {
+            $attributes = [];
+            if ($galleryLocationTitle = $this->getGalleryLocationTitle()) {
+                $attributes['title'] = Utils::encode($galleryLocationTitle);
+            }
+
+            $videoXml .= '<video:gallery_loc' . $this->attributes($attributes) . '>'
+                . Utils::encode($galleryLocation)
+                . '</video:gallery_loc>';
         }
 
         foreach ($this->getTags() as $tag) {
-            $videoXml .= '<video:tag>' . Utils::render($tag) . '</video:tag>';
+            $videoXml .= '<video:tag>' . Utils::cdata($tag) . '</video:tag>';
         }
 
         foreach ($this->getPrices() as $price) {
-            $type = ($price['type']) ? ' type="' . $price['type'] . '"' : '';
-            $resolution = ($price['resolution']) ? ' resolution="' . $price['resolution'] . '"' : '';
-            $videoXml .= '<video:price currency="' . $price['currency'] . '"' . $type . $resolution . '>' . $price['amount'] . '</video:price>';
+            $attributes = array_intersect_key($price, array_flip(['currency', 'type', 'resolution']));
+            $attributes = array_filter($attributes);
+
+            $videoXml .= '<video:price' . $this->attributes($attributes) . '>' . $price['amount'] . '</video:price>';
         }
 
-        if ($this->getUploader()) {
-            $info = ($this->getUploaderInfo()) ? ' info="' . $this->getUploaderInfo() . '"' : '';
-            $videoXml .= '<video:uploader' . $info . '>' . $this->getUploader() . '</video:uploader>';
+        if ($uploader = $this->getUploader()) {
+            $attributes = [];
+            if ($uploaderInfo = $this->getUploaderInfo()) {
+                $attributes['info'] = $uploaderInfo;
+            }
+
+            $videoXml .= '<video:uploader' . $this->attributes($attributes) . '>' . $uploader . '</video:uploader>';
         }
 
-        if (count($this->getPlatforms())) {
-            $relationship = $this->getPlatformRelationship();
-            $videoXml .= '<video:platform relationship="' . $relationship . '">' . implode(
-                    ' ',
-                    $this->getPlatforms()
-                ) . '</video:platform>';
+        if (count($platforms = $this->getPlatforms())) {
+            $videoXml .= '<video:platform relationship="' . $this->getPlatformRelationship() . '">'
+                . implode(' ', $platforms)
+                . '</video:platform>';
         }
         //----------------------
 
         $videoXml .= '</video:video>';
 
         return $videoXml;
+    }
+
+    private function attributes(array $map): string
+    {
+        $attributes = '';
+        if (\count($map) === 0) {
+            return $attributes;
+        }
+
+        foreach ($map as $name => $value) {
+            $attributes .= ' ' . $name . '="' . $value . '"';
+        }
+
+        return ' ' . trim($attributes);
     }
 }

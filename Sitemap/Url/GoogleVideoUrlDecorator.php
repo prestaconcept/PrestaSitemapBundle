@@ -11,6 +11,7 @@
 
 namespace Presta\SitemapBundle\Sitemap\Url;
 
+use DateTimeInterface;
 use Presta\SitemapBundle\Exception;
 
 /**
@@ -257,7 +258,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->bc(__FUNCTION__);
 
-        $this->video->setThumbnailLoc($thumbnail_loc);
+        $this->video->setThumbnailLocation($thumbnail_loc);
 
         return $this;
     }
@@ -271,7 +272,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->bc(__FUNCTION__);
 
-        return $this->video->getThumbnailLoc();
+        return $this->video->getThumbnailLocation();
     }
 
     /**
@@ -317,7 +318,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->bc(__FUNCTION__);
 
-        $this->video->setContentLoc($content_loc);
+        $this->video->setContentLocation($content_loc);
 
         return $this;
     }
@@ -333,7 +334,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->bc(__FUNCTION__);
 
-        $this->video->setPlayerLoc($player_loc);
+        $this->video->setPlayerLocation($player_loc);
 
         return $this;
     }
@@ -347,7 +348,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->bc(__FUNCTION__);
 
-        return $this->video->getPlayerLoc();
+        return $this->video->getPlayerLocation();
     }
 
     /**
@@ -361,7 +362,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->bc(__FUNCTION__);
 
-        $this->video->setPlayerLocAllowEmbed($player_loc_allow_embed);
+        $this->video->setPlayerLocationAllowEmbed($player_loc_allow_embed);
 
         return $this;
     }
@@ -375,7 +376,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->bc(__FUNCTION__);
 
-        return $this->video->getPlayerLocAllowEmbed();
+        return $this->video->getPlayerLocationAllowEmbed();
     }
 
     /**
@@ -389,7 +390,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->bc(__FUNCTION__);
 
-        $this->video->setPlayerLocAutoplay($player_loc_autoplay);
+        $this->video->setPlayerLocationAutoplay($player_loc_autoplay);
 
         return $this;
     }
@@ -401,7 +402,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->bc(__FUNCTION__);
 
-        return $this->video->getPlayerLocAutoplay();
+        return $this->video->getPlayerLocationAutoplay();
     }
 
     /**
@@ -584,7 +585,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->bc(__FUNCTION__);
 
-        $this->video->setGalleryLoc($gallery_loc);
+        $this->video->setGalleryLocation($gallery_loc);
 
         return $this;
     }
@@ -600,7 +601,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->bc(__FUNCTION__);
 
-        $this->video->setGalleryLocTitle($gallery_loc_title);
+        $this->video->setGalleryLocationTitle($gallery_loc_title);
 
         return $this;
     }
@@ -758,7 +759,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->bc(__FUNCTION__);
 
-        return $this->video->getContentLoc();
+        return $this->video->getContentLocation();
     }
 
     /**
@@ -854,7 +855,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->bc(__FUNCTION__);
 
-        return $this->video->getGalleryLoc();
+        return $this->video->getGalleryLocation();
     }
 
     /**
@@ -866,7 +867,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     {
         $this->bc(__FUNCTION__);
 
-        return $this->video->getGalleryLocTitle();
+        return $this->video->getGalleryLocationTitle();
     }
 
     /**

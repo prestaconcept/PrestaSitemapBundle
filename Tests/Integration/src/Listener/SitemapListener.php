@@ -91,7 +91,7 @@ final class SitemapListener implements EventSubscriberInterface
                         sprintf('https://img.youtube.com/vi/%s/0.jpg', $parameters['v']),
                         $post['title'],
                         $post['title'],
-                        ['content_loc' => $post['video']]
+                        ['content_location' => $post['video']]
                     )
                 );
             }
