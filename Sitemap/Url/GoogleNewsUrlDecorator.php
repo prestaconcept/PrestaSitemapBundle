@@ -104,16 +104,10 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     ) {
         parent::__construct($urlDecorated);
 
-        $this->publicationName = $publicationName;
-        if (strlen($publicationLanguage) > 5) {
-            throw new Exception\GoogleNewsUrlException(
-                'Use a 2 oder 3 character long ISO 639 language code. Except for chinese use zh-cn or zh-tw.' .
-                'See https://support.google.com/webmasters/answer/74288?hl=en&ref_topic=10078'
-            );
-        }
-        $this->publicationLanguage = $publicationLanguage;
-        $this->publicationDate = $publicationDate;
-        $this->title = $title;
+        $this->setPublicationName($publicationName);
+        $this->setPublicationLanguage($publicationLanguage);
+        $this->setPublicationDate($publicationDate);
+        $this->setTitle($title);
     }
 
     /**
@@ -151,6 +145,12 @@ class GoogleNewsUrlDecorator extends UrlDecorator
      */
     public function setPublicationLanguage($publicationLanguage)
     {
+        if (strlen($publicationLanguage) > 5) {
+            throw new Exception\GoogleNewsUrlException(
+                'Use a 2 oder 3 character long ISO 639 language code. Except for chinese use zh-cn or zh-tw.' .
+                'See https://support.google.com/webmasters/answer/74288?hl=en&ref_topic=10078'
+            );
+        }
         $this->publicationLanguage = $publicationLanguage;
 
         return $this;
@@ -200,7 +200,10 @@ class GoogleNewsUrlDecorator extends UrlDecorator
      */
     public function setGenres(array $genres)
     {
-        $this->genres = $genres;
+        $this->genres = [];
+        foreach ($genres as $genre) {
+            $this->addGenre($genre);
+        }
 
         return $this;
     }
@@ -332,7 +335,10 @@ class GoogleNewsUrlDecorator extends UrlDecorator
      */
     public function setKeywords(array $keywords)
     {
-        $this->keywords = $keywords;
+        $this->keywords = [];
+        foreach ($keywords as $keyword) {
+            $this->addKeyword($keyword);
+        }
 
         return $this;
     }
@@ -401,7 +407,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
         $newsXml = '<news:news>';
 
         $newsXml .= '<news:publication>';
-        $newsXml .= '<news:name>' . Utils::render($this->getPublicationName()) . '</news:name>';
+        $newsXml .= '<news:name>' . Utils::cdata($this->getPublicationName()) . '</news:name>';
         $newsXml .= '<news:language>' . $this->getPublicationLanguage() . '</news:language>';
         $newsXml .= '</news:publication>';
 
@@ -417,7 +423,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
                 $this->getPublicationDateFormat()
             ) . '</news:publication_date>';
 
-        $newsXml .= '<news:title>' . Utils::render($this->getTitle()) . '</news:title>';
+        $newsXml .= '<news:title>' . Utils::cdata($this->getTitle()) . '</news:title>';
 
         if ($this->getGeoLocations()) {
             $newsXml .= '<news:geo_locations>' . $this->getGeoLocations() . '</news:geo_locations>';
