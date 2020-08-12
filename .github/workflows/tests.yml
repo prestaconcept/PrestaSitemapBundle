@@ -44,7 +44,7 @@ jobs:
 
       - name: "Install dependencies with composer"
         run: |
-          composer require --no-update symfony/console:${{ matrix.symfony-version }} symfony/framework-bundle:${{ matrix.symfony-version }}
+          composer require symfony/console:${{ matrix.symfony-version }} symfony/framework-bundle:${{ matrix.symfony-version }} symfony/http-kernel:${{ matrix.symfony-version }} symfony/routing:${{ matrix.symfony-version }} --no-interaction --no-update
           composer update --no-interaction --no-progress --no-suggest
 
       - name: "Run tests with phpunit/phpunit"
@@ -77,7 +77,7 @@ jobs:
 
       - name: "Install dependencies with composer"
         run: |
-          composer require symfony/console:${{ matrix.symfony-version }} symfony/framework-bundle:${{ matrix.symfony-version }} --no-interaction --no-update
+          composer require symfony/console:${{ matrix.symfony-version }} symfony/framework-bundle:${{ matrix.symfony-version }} symfony/http-kernel:${{ matrix.symfony-version }} symfony/routing:${{ matrix.symfony-version }} --no-interaction --no-update
           composer update --no-interaction --no-progress --no-suggest
 
       - name: "Run tests with phpunit/phpunit"
