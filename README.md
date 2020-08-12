@@ -1,6 +1,7 @@
 # PrestaSitemapBundle
 
-![Tests](https://github.com/prestaconcept/PrestaSitemapBundle/workflows/tests/badge.svg)
+[![Tests](https://github.com/prestaconcept/PrestaSitemapBundle/workflows/Tests/badge.svg)](https://github.com/prestaconcept/PrestaSitemapBundle/actions)
+[![Coverage](https://codecov.io/gh/prestaconcept/PrestaSitemapBundle/branch/master/graph/badge.svg)](https://codecov.io/gh/prestaconcept/PrestaSitemapBundle)
 
 [![Latest Stable Version](https://poser.pugx.org/presta/sitemap-bundle/v/stable.png)](https://packagist.org/packages/presta/sitemap-bundle)
 [![Total Downloads](https://poser.pugx.org/presta/sitemap-bundle/downloads.png)](https://packagist.org/packages/presta/sitemap-bundle)
