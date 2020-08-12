@@ -8,7 +8,7 @@
     <php>
         <server name="KERNEL_DIR" value="Tests/Integration/src"/>
         <server name="KERNEL_CLASS" value="Presta\SitemapBundle\Tests\Integration\Kernel"/>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0&amp;max[direct]=0"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0"/>
         <env name="APP_SECRET" value="s$cretf0rt3st"/>
         <env name="APP_ENV" value="test"/>
         <env name="APP_DEBUG" value="false"/>
@@ -31,4 +31,7 @@
             </exclude>
         </whitelist>
     </filter>
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
+    </listeners>
 </phpunit>
