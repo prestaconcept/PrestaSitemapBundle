@@ -12,6 +12,7 @@
 namespace Presta\SitemapBundle\Tests\Unit\Sitemap\Url;
 
 use PHPUnit\Framework\TestCase;
+use Presta\SitemapBundle\Exception\GoogleImageException;
 use Presta\SitemapBundle\Sitemap;
 
 /**
@@ -35,8 +36,23 @@ class GoogleImageUrlDecoratorTest extends TestCase
 
     public function testIsFull(): void
     {
+        $this->expectException(GoogleImageException::class);
+        $this->expectExceptionMessage('The image limit has been exceeded');
+
         $url = new Sitemap\Url\GoogleImageUrlDecorator(new Sitemap\Url\UrlConcrete('http://acme.com'));
+
         self::assertFalse($url->isFull());
+
+        // fill url with images while not full
+        do {
+            $url->addImage(new Sitemap\Url\GoogleImage('http://acme.com/logo.jpg'));
+        } while (!$url->isFull());
+
+        // url must be full here
+        self::assertTrue($url->isFull());
+
+        // now url is full, adding an image will throw an exception
+        $url->addImage(new Sitemap\Url\GoogleImage('http://acme.com/logo.jpg'));
     }
 
     public function testToXml(): void

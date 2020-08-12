@@ -24,7 +24,7 @@ class GoogleImage
     /**
      * @var string
      */
-    protected $loc;
+    protected $location;
 
     /**
      * @var string|null
@@ -34,7 +34,7 @@ class GoogleImage
     /**
      * @var string|null
      */
-    protected $geo_location;
+    protected $geoLocation;
 
     /**
      * @var string|null
@@ -49,39 +49,94 @@ class GoogleImage
     /**
      * create a GoogleImage for your GoogleImageUrl
      *
-     * @param string      $loc
-     * @param string|null $caption      [optional]
-     * @param string|null $geo_location [optional]
-     * @param string|null $title        [optional]
-     * @param string|null $license      [optional]
+     * @param string      $location
+     * @param string|null $caption     [optional]
+     * @param string|null $geoLocation [optional]
+     * @param string|null $title       [optional]
+     * @param string|null $license     [optional]
      */
-    public function __construct($loc, $caption = null, $geo_location = null, $title = null, $license = null)
+    public function __construct($location, $caption = null, $geoLocation = null, $title = null, $license = null)
     {
-        $this->setLoc($loc);
+        $this->setLocation($location);
         $this->setCaption($caption);
-        $this->setGeoLocation($geo_location);
+        $this->setGeoLocation($geoLocation);
         $this->setTitle($title);
         $this->setLicense($license);
     }
 
+    public function __get(string $name)
+    {
+        $map = [
+            'loc' => 'location',
+            'geo_location' => 'geoLocation',
+        ];
+
+        if (array_key_exists($name, $map)) {
+            $newName = $map[$name];
+            @trigger_error(
+                sprintf('Property %s::$%s is deprecated since 2.3.0, use $%s instead.', __CLASS__, $name, $newName),
+                E_USER_DEPRECATED
+            );
+
+            return $this->{$newName};
+        }
+
+        trigger_error(sprintf('Undefined property: %s::$%s', __CLASS__, $name), E_NOTICE);
+
+        return null;
+    }
+
     /**
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
      * @param string $loc
      *
      * @return GoogleImage
      */
     public function setLoc($loc)
     {
-        $this->loc = $loc;
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0, use %s::setLocation instead.', __METHOD__, __CLASS__),
+            E_USER_DEPRECATED
+        );
+        $this->setLocation($loc);
 
         return $this;
     }
 
     /**
+     * @param string $location
+     *
+     * @return GoogleImage
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    /**
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
      * @return string
      */
     public function getLoc()
     {
-        return $this->loc;
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0, use %s::getLocation instead.', __METHOD__, __CLASS__),
+            E_USER_DEPRECATED
+        );
+
+        return $this->getLocation();
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocation()
+    {
+        return $this->location;
     }
 
     /**
@@ -105,13 +160,13 @@ class GoogleImage
     }
 
     /**
-     * @param null|string $geo_location
+     * @param null|string $geoLocation
      *
      * @return GoogleImage
      */
-    public function setGeoLocation($geo_location)
+    public function setGeoLocation($geoLocation)
     {
-        $this->geo_location = $geo_location;
+        $this->geoLocation = $geoLocation;
 
         return $this;
     }
@@ -121,7 +176,7 @@ class GoogleImage
      */
     public function getGeoLocation()
     {
-        return $this->geo_location;
+        return $this->geoLocation;
     }
 
     /**
@@ -173,22 +228,22 @@ class GoogleImage
     {
         $xml = '<image:image>';
 
-        $xml .= '<image:loc>' . Utils::encode($this->getLoc()) . '</image:loc>';
+        $xml .= '<image:loc>' . Utils::encode($this->getLocation()) . '</image:loc>';
 
         if ($this->getCaption()) {
-            $xml .= '<image:caption>' . Utils::render($this->getCaption()) . '</image:caption>';
+            $xml .= '<image:caption>' . Utils::cdata($this->getCaption()) . '</image:caption>';
         }
 
         if ($this->getGeoLocation()) {
-            $xml .= '<image:geo_location>' . Utils::render($this->getGeoLocation()) . '</image:geo_location>';
+            $xml .= '<image:geo_location>' . Utils::cdata($this->getGeoLocation()) . '</image:geo_location>';
         }
 
         if ($this->getTitle()) {
-            $xml .= '<image:title>' . Utils::render($this->getTitle()) . '</image:title>';
+            $xml .= '<image:title>' . Utils::cdata($this->getTitle()) . '</image:title>';
         }
 
         if ($this->getLicense()) {
-            $xml .= '<image:license>' . Utils::render($this->getLicense()) . '</image:license>';
+            $xml .= '<image:license>' . Utils::cdata($this->getLicense()) . '</image:license>';
         }
 
         $xml .= '</image:image>';
