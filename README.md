@@ -1,6 +1,6 @@
 # PrestaSitemapBundle
 
-[![Build Status](https://secure.travis-ci.org/prestaconcept/PrestaSitemapBundle.png)](http://travis-ci.org/prestaconcept/PrestaSitemapBundle)
+![Tests](https://github.com/prestaconcept/PrestaSitemapBundle/workflows/tests/badge.svg)
 
 [![Latest Stable Version](https://poser.pugx.org/presta/sitemap-bundle/v/stable.png)](https://packagist.org/packages/presta/sitemap-bundle)
 [![Total Downloads](https://poser.pugx.org/presta/sitemap-bundle/downloads.png)](https://packagist.org/packages/presta/sitemap-bundle)
