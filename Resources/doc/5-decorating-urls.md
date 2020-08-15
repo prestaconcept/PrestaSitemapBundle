@@ -23,6 +23,8 @@ Using this pattern you will be able to nest urls and then add some information a
 
 Considering that for each of the following examples after, we are in a sitemap listener method.
 
+> **Note:** URLs of all types (routes, assets, etc...) **must** be absolute.
+
 
 ## Adding images
 
@@ -37,11 +39,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /** @var $router UrlGeneratorInterface */
 /** @var $urls UrlContainerInterface */
 
-$url = new Sitemap\UrlConcrete($router->generate('homepage'));
+$url = new Sitemap\UrlConcrete($router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL));
 $decoratedUrl = new Sitemap\GoogleImageUrlDecorator($url);
-$decoratedUrl->addImage(new Sitemap\GoogleImage('/assets/carousel/php.gif'));
-$decoratedUrl->addImage(new Sitemap\GoogleImage('/assets/carousel/symfony.jpg'));
-$decoratedUrl->addImage(new Sitemap\GoogleImage('/assets/carousel/love.png'));
+$decoratedUrl->addImage(new Sitemap\GoogleImage('https://acme.com/assets/carousel/php.gif'));
+$decoratedUrl->addImage(new Sitemap\GoogleImage('https://acme.com/assets/carousel/symfony.jpg'));
+$decoratedUrl->addImage(new Sitemap\GoogleImage('https://acme.com/assets/carousel/love.png'));
 
 $urls->addUrl($decoratedUrl, 'default');
 ```
@@ -60,7 +62,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /** @var $router UrlGeneratorInterface */
 /** @var $urls UrlContainerInterface */
 
-$url = new Sitemap\UrlConcrete($router->generate('mobile_homepage'));
+$url = new Sitemap\UrlConcrete($router->generate('mobile_homepage', [], UrlGeneratorInterface::ABSOLUTE_URL));
 $decoratedUrl = new Sitemap\GoogleMobileUrlDecorator($url);
 
 $urls->addUrl($decoratedUrl, 'default');
@@ -80,10 +82,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /** @var $router UrlGeneratorInterface */
 /** @var $urls UrlContainerInterface */
 
-$url = new Sitemap\UrlConcrete($router->generate('homepage'));
+$url = new Sitemap\UrlConcrete($router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL));
 $decoratedUrl = new Sitemap\GoogleMultilangUrlDecorator($url);
-$decoratedUrl->addLink($router->generate('homepage_fr'), 'fr');
-$decoratedUrl->addLink($router->generate('homepage_de'), 'de');
+$decoratedUrl->addLink($router->generate('homepage_fr', [], UrlGeneratorInterface::ABSOLUTE_URL), 'fr');
+$decoratedUrl->addLink($router->generate('homepage_de', [], UrlGeneratorInterface::ABSOLUTE_URL), 'de');
 
 $urls->addUrl($decoratedUrl, 'default');
 ```
@@ -102,7 +104,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /** @var $router UrlGeneratorInterface */
 /** @var $urls UrlContainerInterface */
 
-$url = new Sitemap\UrlConcrete($router->generate('homepage'));
+$url = new Sitemap\UrlConcrete($router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL));
 $decoratedUrl = new Sitemap\GoogleNewsUrlDecorator(
     $url,
     'PrestaSitemapBundle News',
@@ -128,7 +130,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /** @var $router UrlGeneratorInterface */
 /** @var $urls UrlContainerInterface */
 
-$url = new Sitemap\UrlConcrete($router->generate('homepage'));
+$url = new Sitemap\UrlConcrete($router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL));
 $video = new Sitemap\GoogleVideo(
     'https://img.youtube.com/vi/j6IKRxH8PTg/0.jpg',
     'How to use PrestaSitemapBundle in Symfony 2.6 [1/2]',
@@ -165,14 +167,14 @@ $url = new Sitemap\GoogleMobileUrlDecorator($url);
 
 // 2nd wrap: images
 $url = new Sitemap\GoogleImageUrlDecorator($url);
-$url->addImage(new Sitemap\GoogleImage('/assets/carousel/php.gif'));
-$url->addImage(new Sitemap\GoogleImage('/assets/carousel/symfony.jpg'));
-$url->addImage(new Sitemap\GoogleImage('/assets/carousel/love.png'));
+$url->addImage(new Sitemap\GoogleImage('https://acme.com/assets/carousel/php.gif'));
+$url->addImage(new Sitemap\GoogleImage('https://acme.com/assets/carousel/symfony.jpg'));
+$url->addImage(new Sitemap\GoogleImage('https://acme.com/assets/carousel/love.png'));
 
 // 3rd wrap: multilang
 $url = new Sitemap\GoogleMultilangUrlDecorator($url);
-$url->addLink($router->generate('homepage_fr'), 'fr');
-$url->addLink($router->generate('homepage_de'), 'de');
+$url->addLink($router->generate('homepage_fr', [], UrlGeneratorInterface::ABSOLUTE_URL), 'fr');
+$url->addLink($router->generate('homepage_de', [], UrlGeneratorInterface::ABSOLUTE_URL), 'de');
 
 // 4th wrap: video
 $video = new Sitemap\GoogleVideo(

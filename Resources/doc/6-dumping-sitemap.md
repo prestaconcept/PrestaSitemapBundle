@@ -79,7 +79,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 if (in_array($event->getSection(), [null, 'mysection'], true)) {
     $event->getUrlContainer()->addUrl(
-        new Sitemap\UrlConcrete($urlGenerator->generate('route_in_my_section')),
+        new Sitemap\UrlConcrete($urlGenerator->generate('route_in_my_section', [], UrlGeneratorInterface::ABSOLUTE_URL)),
         'mysection'
     );
 }
