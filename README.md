@@ -1,10 +1,10 @@
 # PrestaSitemapBundle
 
-[![Tests](https://github.com/prestaconcept/PrestaSitemapBundle/workflows/Tests/badge.svg)](https://github.com/prestaconcept/PrestaSitemapBundle/actions)
-[![Coverage](https://codecov.io/gh/prestaconcept/PrestaSitemapBundle/branch/master/graph/badge.svg)](https://codecov.io/gh/prestaconcept/PrestaSitemapBundle)
-
-[![Latest Stable Version](https://poser.pugx.org/presta/sitemap-bundle/v/stable.png)](https://packagist.org/packages/presta/sitemap-bundle)
-[![Total Downloads](https://poser.pugx.org/presta/sitemap-bundle/downloads.png)](https://packagist.org/packages/presta/sitemap-bundle)
+[![Tests](https://img.shields.io/github/workflow/status/prestaconcept/PrestaSitemapBundle/Tests?style=flat-square&label=tests)](https://github.com/prestaconcept/PrestaSitemapBundle/actions)
+[![Coverage](https://img.shields.io/codecov/c/github/prestaconcept/PrestaSitemapBundle?style=flat-square)](https://codecov.io/gh/prestaconcept/PrestaSitemapBundle)
+[![Latest Stable Version](https://img.shields.io/packagist/v/presta/sitemap-bundle?style=flat-square)](https://packagist.org/packages/presta/sitemap-bundle)
+[![Downloads Monthly](https://img.shields.io/packagist/dm/presta/sitemap-bundle?style=flat-square)](https://packagist.org/packages/presta/sitemap-bundle)
+[![Contributors](https://img.shields.io/github/contributors/prestaconcept/PrestaSitemapBundle?style=flat-square)](https://github.com/prestaconcept/PrestaSitemapBundle/graphs/contributors)
 
 
 PrestaSitemapBundle is a Symfony XML sitemap generator.
