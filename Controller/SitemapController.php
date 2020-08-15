@@ -56,7 +56,7 @@ class SitemapController
             throw new NotFoundHttpException('Not found');
         }
 
-        $response = Response::create($sitemapindex->toXml());
+        $response = new Response($sitemapindex->toXml());
         $response->headers->set('Content-Type', 'text/xml');
         $response->setPublic();
         $response->setClientTtl($this->ttl);
@@ -79,7 +79,7 @@ class SitemapController
             throw new NotFoundHttpException('Not found');
         }
 
-        $response = Response::create($section->toXml());
+        $response = new Response($section->toXml());
         $response->headers->set('Content-Type', 'text/xml');
         $response->setPublic();
         $response->setClientTtl($this->ttl);

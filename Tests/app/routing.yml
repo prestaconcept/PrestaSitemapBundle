@@ -1,7 +1,0 @@
-PrestaSitemapBundle:
-    resource: "@PrestaSitemapBundle/Resources/config/routing.yml"
-    prefix:   /
-
-PrestaDemoBundle_homepage:
-    path:     /
-    defaults: { _controller: Presta\SitemapBundle\Controller\SitemapController::indexAction }

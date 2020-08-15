@@ -29,7 +29,7 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        if (version_compare(Kernel::VERSION, '4.2') >= 0) {
+        if (method_exists(TreeBuilder::class, 'getRootNode')) {
             $treeBuilder = new TreeBuilder('presta_sitemap');
             $rootNode = $treeBuilder->getRootNode();
         } else {
@@ -61,7 +61,9 @@ class Configuration implements ConfigurationInterface
                         'It can be either absolute, or relative (to the place where the command will be triggered). '.
                         'Default to Symfony\'s public dir.'
                     )
-                    ->defaultValue(version_compare(Kernel::VERSION, '4.0') >= 0 ? 'public' : 'web')
+                    ->defaultValue(
+                        '%kernel.project_dir%/'.(version_compare(Kernel::VERSION, '4.0') >= 0 ? 'public' : 'web')
+                    )
                 ->end()
                 ->arrayNode('defaults')
                     ->addDefaultsIfNotSet()

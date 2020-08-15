@@ -1,6 +1,7 @@
 # PrestaSitemapBundle
 
-[![Build Status](https://secure.travis-ci.org/prestaconcept/PrestaSitemapBundle.png)](http://travis-ci.org/prestaconcept/PrestaSitemapBundle)
+[![Tests](https://github.com/prestaconcept/PrestaSitemapBundle/workflows/Tests/badge.svg)](https://github.com/prestaconcept/PrestaSitemapBundle/actions)
+[![Coverage](https://codecov.io/gh/prestaconcept/PrestaSitemapBundle/branch/master/graph/badge.svg)](https://codecov.io/gh/prestaconcept/PrestaSitemapBundle)
 
 [![Latest Stable Version](https://poser.pugx.org/presta/sitemap-bundle/v/stable.png)](https://packagist.org/packages/presta/sitemap-bundle)
 [![Total Downloads](https://poser.pugx.org/presta/sitemap-bundle/downloads.png)](https://packagist.org/packages/presta/sitemap-bundle)
@@ -43,6 +44,7 @@ You will find the detailed documentation in the following links:
 * [Dynamic routes usage](Resources/doc/4-dynamic-routes-usage.md)
 * [Decorating URLs](Resources/doc/5-decorating-urls.md)
 * [Dumping sitemap](Resources/doc/6-dumping-sitemap.md)
+* [Messenger integration](Resources/doc/7-messenger-integration.md)
 
 
 ## Contributing

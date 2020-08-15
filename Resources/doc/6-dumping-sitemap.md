@@ -121,4 +121,4 @@ See more about compression in [sitemaps protocol](https://www.sitemaps.org/proto
 
 ---
 
-« [Decorating URLs](5-decorating-urls.md) • [README](../../README.md) »
++ « [Decorating URLs](5-decorating-urls.md) • [Messenger integration](7-messenger-integration.md) »

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="presta_sitemap.messenger.message_handler" class="Presta\SitemapBundle\Messenger\DumpSitemapMessageHandler">
+            <argument type="service" id="router" />
+            <argument type="service" id="presta_sitemap.dumper" />
+            <argument>%presta_sitemap.dump_directory%</argument>
+            <tag name="messenger.message_handler" />
+        </service>
+    </services>
+
+</container>

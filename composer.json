@@ -16,19 +16,16 @@
     "require": {
         "php": ">=7.1.0",
         "ext-simplexml": "*",
-        "symfony/framework-bundle": "^3.4|~4.0",
-        "symfony/console": "^3.4|~4.0"
+        "symfony/console": "^3.4|~4.0|~5.0",
+        "symfony/framework-bundle": "^3.4|~4.0|~5.0"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "^3.4|~4.0",
-        "phpunit/phpunit": "7.*",
-        "symfony/security-bundle": "^3.4|~4.0",
-        "symfony/translation": "^3.4|~4.0",
-        "symfony/form": "^3.4|~4.0",
-        "symfony/validator": "^3.4|~4.0",
-        "symfony/browser-kit": "^3.4|~4.0",
-        "symfony/yaml": "^3.4|~4.0",
-        "doctrine/annotations": "~1.0"
+        "ext-simplexml": "*",
+        "doctrine/annotations": "^1.0",
+        "phpunit/phpunit": "^7.5",
+        "symfony/browser-kit": "^4.4",
+        "symfony/phpunit-bridge": "^4.4",
+        "symfony/yaml": "^4.4"
     },
     "suggest": {
         "doctrine/doctrine-cache-bundle" : "Allows to store sitemaps in cache"
@@ -36,12 +33,17 @@
     "autoload": {
         "psr-4": {
             "Presta\\SitemapBundle\\": ""
-        }
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
     },
     "autoload-dev": {
-        "files": [
-            "Tests/app/AppKernel.php"
-        ]
+        "psr-4": {
+            "Presta\\SitemapBundle\\Tests\\Unit\\": "Tests/Unit",
+            "Presta\\SitemapBundle\\Tests\\Integration\\Tests\\": "Tests/Integration/tests",
+            "Presta\\SitemapBundle\\Tests\\Integration\\": "Tests/Integration/src"
+        }
     },
     "extra": {
         "branch-alias": {
