@@ -352,6 +352,42 @@ class GoogleVideo
         return null;
     }
 
+    public function __set(string $name, $value)
+    {
+        $map = [
+            'thumbnail_loc' => 'thumbnailLocation',
+            'content_loc' => 'contentLocation',
+            'player_loc' => 'playerLocation',
+            'player_loc_allow_embed' => 'playerLocationAllowEmbed',
+            'player_loc_autoplay' => 'playerLocationAutoplay',
+            'expiration_date' => 'expirationDate',
+            'view_count' => 'viewCount',
+            'publication_date' => 'publicationDate',
+            'family_friendly' => 'familyFriendly',
+            'restriction_allow' => 'restrictionAllow',
+            'restriction_deny' => 'restrictionDeny',
+            'gallery_loc' => 'galleryLocation',
+            'gallery_loc_title' => 'galleryLocationTitle',
+            'requires_subscription' => 'requiresSubscription',
+            'uploader_info' => 'uploaderInformation',
+            'platform_relationship' => 'platformRelationship',
+        ];
+
+        if (array_key_exists($name, $map)) {
+            $newName = $map[$name];
+            @trigger_error(
+                sprintf('Property %s::$%s is deprecated since 2.3.0, use $%s instead.', __CLASS__, $name, $newName),
+                E_USER_DEPRECATED
+            );
+
+            $this->{$newName} = $value;
+
+            return;
+        }
+
+        trigger_error(sprintf('Undefined property: %s::$%s', __CLASS__, $name), E_NOTICE);
+    }
+
     /**
      * @deprecated since 2.3.0, to be removed in 3.0.0
      *

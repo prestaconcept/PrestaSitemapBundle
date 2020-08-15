@@ -252,9 +252,19 @@ final class GoogleVideoTest extends TestCase
                 return $this->thumbnail_loc;
             }
 
+            public function setThumbnailLocLegacy($value)
+            {
+                $this->thumbnail_loc = $value;
+            }
+
             public function getContentLocLegacy()
             {
                 return $this->content_loc;
+            }
+
+            public function setContentLocLegacy($value)
+            {
+                $this->content_loc = $value;
             }
 
             public function getPlayerLocLegacy()
@@ -262,9 +272,19 @@ final class GoogleVideoTest extends TestCase
                 return $this->player_loc;
             }
 
+            public function setPlayerLocLegacy($value)
+            {
+                $this->player_loc = $value;
+            }
+
             public function getPlayerLocAllowEmbedLegacy()
             {
                 return $this->player_loc_allow_embed;
+            }
+
+            public function setPlayerLocAllowEmbedLegacy($value)
+            {
+                $this->player_loc_allow_embed = $value;
             }
 
             public function getPlayerLocAutoplayLegacy()
@@ -272,14 +292,29 @@ final class GoogleVideoTest extends TestCase
                 return $this->player_loc_autoplay;
             }
 
+            public function setPlayerLocAutoplayLegacy($value)
+            {
+                $this->player_loc_autoplay = $value;
+            }
+
             public function getGalleryLocLegacy()
             {
                 return $this->gallery_loc;
             }
 
+            public function setGalleryLocLegacy($value)
+            {
+                $this->gallery_loc = $value;
+            }
+
             public function getGalleryLocTitleLegacy()
             {
                 return $this->gallery_loc_title;
+            }
+
+            public function setGalleryLocTitleLegacy($value)
+            {
+                $this->gallery_loc_title = $value;
             }
         };
 
@@ -287,35 +322,63 @@ final class GoogleVideoTest extends TestCase
         self::assertSame('http://acme.com/video/thumbnail.jpg', $video->getThumbnailLoc());
         self::assertSame('http://acme.com/video/thumbnail.jpg', $video->getThumbnailLocLegacy());
         self::assertSame('http://acme.com/video/thumbnail.jpg', $video->getThumbnailLocation());
+        $video->setThumbnailLocLegacy('http://legacy.acme.com/video/thumbnail.jpg');
+        self::assertSame('http://legacy.acme.com/video/thumbnail.jpg', $video->getThumbnailLoc());
+        self::assertSame('http://legacy.acme.com/video/thumbnail.jpg', $video->getThumbnailLocLegacy());
+        self::assertSame('http://legacy.acme.com/video/thumbnail.jpg', $video->getThumbnailLocation());
 
         $video->setContentLoc('http://acme.com/video/content.flv');
         self::assertSame('http://acme.com/video/content.flv', $video->getContentLoc());
         self::assertSame('http://acme.com/video/content.flv', $video->getContentLocLegacy());
         self::assertSame('http://acme.com/video/content.flv', $video->getContentLocation());
+        $video->setContentLocLegacy('http://legacy.acme.com/video/content.flv');
+        self::assertSame('http://legacy.acme.com/video/content.flv', $video->getContentLoc());
+        self::assertSame('http://legacy.acme.com/video/content.flv', $video->getContentLocLegacy());
+        self::assertSame('http://legacy.acme.com/video/content.flv', $video->getContentLocation());
 
         $video->setPlayerLoc('http://acme.com/video/player.swf?a=b&c=d');
         self::assertSame('http://acme.com/video/player.swf?a=b&c=d', $video->getPlayerLoc());
         self::assertSame('http://acme.com/video/player.swf?a=b&c=d', $video->getPlayerLocLegacy());
         self::assertSame('http://acme.com/video/player.swf?a=b&c=d', $video->getPlayerLocation());
+        $video->setPlayerLocLegacy('http://legacy.acme.com/video/player.swf?a=b&c=d');
+        self::assertSame('http://legacy.acme.com/video/player.swf?a=b&c=d', $video->getPlayerLoc());
+        self::assertSame('http://legacy.acme.com/video/player.swf?a=b&c=d', $video->getPlayerLocLegacy());
+        self::assertSame('http://legacy.acme.com/video/player.swf?a=b&c=d', $video->getPlayerLocation());
 
         $video->setPlayerLocAllowEmbed(GoogleVideo::PLAYER_LOC_ALLOW_EMBED_NO);
         self::assertSame(GoogleVideo::PLAYER_LOC_ALLOW_EMBED_NO, $video->getPlayerLocAllowEmbed());
         self::assertSame(GoogleVideo::PLAYER_LOC_ALLOW_EMBED_NO, $video->getPlayerLocAllowEmbedLegacy());
         self::assertSame(GoogleVideo::PLAYER_LOC_ALLOW_EMBED_NO, $video->getPlayerLocationAllowEmbed());
+        $video->setPlayerLocAllowEmbedLegacy(GoogleVideo::PLAYER_LOC_ALLOW_EMBED_YES);
+        self::assertSame(GoogleVideo::PLAYER_LOC_ALLOW_EMBED_YES, $video->getPlayerLocAllowEmbed());
+        self::assertSame(GoogleVideo::PLAYER_LOC_ALLOW_EMBED_YES, $video->getPlayerLocAllowEmbedLegacy());
+        self::assertSame(GoogleVideo::PLAYER_LOC_ALLOW_EMBED_YES, $video->getPlayerLocationAllowEmbed());
 
         $video->setPlayerLocAutoplay('ap=1');
         self::assertSame('ap=1', $video->getPlayerLocAutoplay());
         self::assertSame('ap=1', $video->getPlayerLocAutoplayLegacy());
         self::assertSame('ap=1', $video->getPlayerLocationAutoplay());
+        $video->setPlayerLocAutoplayLegacy('legacy=1');
+        self::assertSame('legacy=1', $video->getPlayerLocAutoplay());
+        self::assertSame('legacy=1', $video->getPlayerLocAutoplayLegacy());
+        self::assertSame('legacy=1', $video->getPlayerLocationAutoplay());
 
         $video->setGalleryLoc('http://acme.com/video/gallery/?p=1&sort=desc');
         self::assertSame('http://acme.com/video/gallery/?p=1&sort=desc', $video->getGalleryLoc());
         self::assertSame('http://acme.com/video/gallery/?p=1&sort=desc', $video->getGalleryLocLegacy());
         self::assertSame('http://acme.com/video/gallery/?p=1&sort=desc', $video->getGalleryLocation());
+        $video->setGalleryLocLegacy('http://legacy.acme.com/video/gallery/?p=1&sort=desc');
+        self::assertSame('http://legacy.acme.com/video/gallery/?p=1&sort=desc', $video->getGalleryLoc());
+        self::assertSame('http://legacy.acme.com/video/gallery/?p=1&sort=desc', $video->getGalleryLocLegacy());
+        self::assertSame('http://legacy.acme.com/video/gallery/?p=1&sort=desc', $video->getGalleryLocation());
 
         $video->setGalleryLocTitle('Gallery for testing purposes');
         self::assertSame('Gallery for testing purposes', $video->getGalleryLocTitle());
         self::assertSame('Gallery for testing purposes', $video->getGalleryLocTitleLegacy());
         self::assertSame('Gallery for testing purposes', $video->getGalleryLocationTitle());
+        $video->setGalleryLocTitleLegacy('Legacy Test Gallery');
+        self::assertSame('Legacy Test Gallery', $video->getGalleryLocTitle());
+        self::assertSame('Legacy Test Gallery', $video->getGalleryLocTitleLegacy());
+        self::assertSame('Legacy Test Gallery', $video->getGalleryLocationTitle());
     }
 }

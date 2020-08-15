@@ -72,9 +72,19 @@ class GoogleImageTest extends TestCase
                 return $this->loc;
             }
 
+            public function setLocLegacy($value)
+            {
+                $this->loc = $value;
+            }
+
             public function getGeoLocationLegacy()
             {
                 return $this->geo_location;
+            }
+
+            public function setGeoLocationLegacy($value)
+            {
+                $this->geo_location = $value;
             }
         };
 
@@ -82,9 +92,16 @@ class GoogleImageTest extends TestCase
         self::assertSame('http://acme.com/logo.jpg', $image->getLoc());
         self::assertSame('http://acme.com/logo.jpg', $image->getLocLegacy());
         self::assertSame('http://acme.com/logo.jpg', $image->getLocation());
+        $image->setLocLegacy('http://legacy.acme.com/logo.jpg');
+        self::assertSame('http://legacy.acme.com/logo.jpg', $image->getLoc());
+        self::assertSame('http://legacy.acme.com/logo.jpg', $image->getLocLegacy());
+        self::assertSame('http://legacy.acme.com/logo.jpg', $image->getLocation());
 
         $image->setGeoLocation('Lyon, France');
         self::assertSame('Lyon, France', $image->getGeoLocation());
         self::assertSame('Lyon, France', $image->getGeoLocationLegacy());
+        $image->setGeoLocationLegacy('Lugdunum, Gaule');
+        self::assertSame('Lugdunum, Gaule', $image->getGeoLocation());
+        self::assertSame('Lugdunum, Gaule', $image->getGeoLocationLegacy());
     }
 }
