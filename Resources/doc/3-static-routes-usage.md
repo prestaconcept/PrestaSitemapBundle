@@ -22,7 +22,7 @@ The supported sitemap parameters are:
 
 namespace App\Controller;
 
-use Symfony\Component\HttpKernel\Tests\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Route;
 
 class DefaultController extends Controller
