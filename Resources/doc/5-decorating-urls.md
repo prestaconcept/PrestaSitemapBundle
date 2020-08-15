@@ -23,6 +23,8 @@ Using this pattern you will be able to nest urls and then add some information a
 
 Considering that for each of the following examples after, we are in a sitemap listener method.
 
+> **Note:** URLs of all types (routes, assets, etc...) **must** be absolute.
+
 
 ## Adding images
 
@@ -39,9 +41,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 $url = new Sitemap\UrlConcrete($router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL));
 $decoratedUrl = new Sitemap\GoogleImageUrlDecorator($url);
-$decoratedUrl->addImage(new Sitemap\GoogleImage('/assets/carousel/php.gif'));
-$decoratedUrl->addImage(new Sitemap\GoogleImage('/assets/carousel/symfony.jpg'));
-$decoratedUrl->addImage(new Sitemap\GoogleImage('/assets/carousel/love.png'));
+$decoratedUrl->addImage(new Sitemap\GoogleImage('https://acme.com/assets/carousel/php.gif'));
+$decoratedUrl->addImage(new Sitemap\GoogleImage('https://acme.com/assets/carousel/symfony.jpg'));
+$decoratedUrl->addImage(new Sitemap\GoogleImage('https://acme.com/assets/carousel/love.png'));
 
 $urls->addUrl($decoratedUrl, 'default');
 ```
@@ -165,9 +167,9 @@ $url = new Sitemap\GoogleMobileUrlDecorator($url);
 
 // 2nd wrap: images
 $url = new Sitemap\GoogleImageUrlDecorator($url);
-$url->addImage(new Sitemap\GoogleImage('/assets/carousel/php.gif'));
-$url->addImage(new Sitemap\GoogleImage('/assets/carousel/symfony.jpg'));
-$url->addImage(new Sitemap\GoogleImage('/assets/carousel/love.png'));
+$url->addImage(new Sitemap\GoogleImage('https://acme.com/assets/carousel/php.gif'));
+$url->addImage(new Sitemap\GoogleImage('https://acme.com/assets/carousel/symfony.jpg'));
+$url->addImage(new Sitemap\GoogleImage('https://acme.com/assets/carousel/love.png'));
 
 // 3rd wrap: multilang
 $url = new Sitemap\GoogleMultilangUrlDecorator($url);
