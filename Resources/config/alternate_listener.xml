@@ -3,15 +3,10 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="presta_sitemap.eventlistener.route_annotation.class">Presta\SitemapBundle\EventListener\RouteAnnotationEventListener</parameter>
-    </parameters>
-
     <services>
-        <service id="presta_sitemap.eventlistener.route_annotation" class="%presta_sitemap.eventlistener.route_annotation.class%">
+        <service id="presta_sitemap.event_listener.static_routes_alternate" class="Presta\SitemapBundle\EventListener\StaticRoutesAlternateEventListener">
             <argument type="service" id="router"/>
-            <argument type="service" id="event_dispatcher"/>
-            <argument>%presta_sitemap.default_section%</argument>
+            <argument>%presta_sitemap.alternate%</argument>
             <tag name="kernel.event_subscriber"/>
         </service>
     </services>

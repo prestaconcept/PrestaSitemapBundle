@@ -11,32 +11,22 @@
 
 namespace Presta\SitemapBundle\EventListener;
 
+use Presta\SitemapBundle\Event\SitemapAddUrlEvent;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Routing\RouteOptionParser;
 use Presta\SitemapBundle\Service\UrlContainerInterface;
-use Presta\SitemapBundle\Sitemap\Url\GoogleMultilangUrlDecorator;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 
 /**
- * this listener allows you to use annotations to include routes in the Sitemap, just like
- * https://github.com/dreipunktnull/DpnXmlSitemapBundle
- *
- * supported parameters are:
- *
- *  lastmod: a text string that can be parsed by \DateTime
- *  changefreq: a text string that matches a constant defined in UrlConcrete
- *  priority: a number between 0 and 1
- *
- * if you don't want to specify these parameters, you can simply use
- * Route("/", name="homepage", options={"sitemap" = true })
- *
- * @author Tony Piper (tpiper@tpiper.com)
+ * This listener iterate over configured routes, and register allowed URLs to sitemap.
  */
 class RouteAnnotationEventListener implements EventSubscriberInterface
 {
@@ -46,25 +36,23 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     protected $router;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
+
+    /**
      * @var string
      */
     private $defaultSection;
 
-    /**
-     * @var array
-     */
-    private $alternateSection;
-
-    /**
-     * @param RouterInterface $router
-     * @param string          $defaultSection
-     * @param array           $alternateSection
-     */
-    public function __construct(RouterInterface $router, ?string $defaultSection, ?array $alternateSection = null)
-    {
+    public function __construct(
+        RouterInterface $router,
+        EventDispatcherInterface $eventDispatcher,
+        string $defaultSection
+    ) {
         $this->router = $router;
+        $this->dispatcher = $eventDispatcher;
         $this->defaultSection = $defaultSection;
-        $this->alternateSection = $alternateSection;
     }
 
     /**
@@ -106,36 +94,21 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
                 continue;
             }
 
-            if ($this->alternateSection) {
-                if ($this->alternateSection['default_locale']) {
-                    if (strpos($name, $this->alternateSection['default_locale']) === false) {
-                        continue;
-                    }
-
-                    switch ($this->alternateSection['i18n']) {
-                        case 'symfony':
-                            // Replace route_name.en or route_name.it into route_name
-                            $name = preg_replace("/\.[a-z]+/", '', $name);
-                            break;
-                        case 'jms':
-                            // Replace en__RG__route_name or it__RG__route_name into route_name
-                            $name = preg_replace("/[a-z]+__RG__/", '', $name);
-                            break;
-                    }
-                }
-
-                $options = array_merge($options, $this->alternateSection);
-
-                $container->addUrl(
-                    $this->getMultilangUrl($name, $options),
-                    $section
-                );
+            $event = new SitemapAddUrlEvent($name, $options);
+            if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
+                $this->dispatcher->dispatch($event, SitemapAddUrlEvent::NAME);
             } else {
-                $container->addUrl(
-                    $this->getUrlConcrete($name, $options),
-                    $section
-                );
+                $this->dispatcher->dispatch(SitemapAddUrlEvent::NAME, $event);
             }
+
+            if (!$event->shouldBeRegistered()) {
+                continue;
+            }
+
+            $container->addUrl(
+                $event->getUrl() ?? $this->getUrlConcrete($name, $options),
+                $routeSection
+            );
         }
     }
 
@@ -198,36 +171,6 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
                 $e
             );
         }
-    }
-
-    /**
-     * @param string $name    Route name
-     * @param array  $options Node options
-     *
-     * @throws \InvalidArgumentException
-     * @return UrlConcrete
-     */
-    protected function getMultilangUrl($name, $options)
-    {
-        $params = [];
-
-        if ($options['default_locale']) {
-            $params['_locale'] = $options['default_locale'];
-        }
-
-        $url = $this->getUrlConcrete($name, $options, $params);
-
-        if ($options['locales'] && is_array($options['locales'])) {
-            $url = new GoogleMultilangUrlDecorator($url);
-
-            foreach ($options['locales'] as $locale) {
-                $params['_locale'] = $locale;
-
-                $url->addLink($this->getRouteUri($name, $params), $locale);
-            }
-        }
-
-        return $url;
     }
 
     /**

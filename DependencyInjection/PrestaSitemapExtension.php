@@ -40,12 +40,13 @@ class PrestaSitemapExtension extends Extension
         $container->setParameter($this->getAlias() . '.defaults', $config['defaults']);
         $container->setParameter($this->getAlias() . '.default_section', (string)$config['default_section']);
 
-        if ($this->isConfigEnabled($container, $config['alternate'])) {
-            $container->setParameter($this->getAlias() . '.alternate', $config['alternate']);
-        }
-
         if (true === $config['route_annotation_listener']) {
             $loader->load('route_annotation_listener.xml');
+
+            if ($this->isConfigEnabled($container, $config['alternate'])) {
+                $container->setParameter($this->getAlias() . '.alternate', $config['alternate']);
+                $loader->load('alternate_listener.xml');
+            }
         }
 
         if (interface_exists(MessageHandlerInterface::class)) {
