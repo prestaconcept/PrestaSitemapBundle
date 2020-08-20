@@ -13,23 +13,6 @@ presta_sitemap:
         lastmod: now
 ```
 
-optionally you can add a section `alternate` to generate alternate (hreflang) urls
-
-```yaml
-presta_sitemap:
-    alternate:
-        default_locale: 'en'
-        locales: ['en', 'it']
-        i18n: jms
-```
-
-where:
-
-* `default_locale` is project default locale
-* `locales` is the array of all i18n routes
-* `i18n` is the name of project bundle to create i18n routes. Possible values are [symfony](https://symfony.com/doc/current/routing.html#localized-routes-i18n) or [jms](http://jmsyst.com/bundles/JMSI18nRoutingBundle)
-
-
 Or choose the default sections for static routes:
 
 ```yaml
@@ -37,6 +20,30 @@ Or choose the default sections for static routes:
 presta_sitemap:
     default_section: default
 ```
+
+
+## Translated routes
+
+If you do have some translated routes, you can configure the `alternate` section to generate alternate (hreflang) urls.
+
+> **note** : this feature won't work if you disabled the static routes listener (see [below](#disabling-annotation-listener)).
+
+```yaml
+presta_sitemap:
+    alternate:
+        enabled: true
+        default_locale: 'en'
+        locales: ['en', 'fr']
+        i18n: symfony
+```
+
+The `i18n` config value should be set accordingly to the technology you are using for your translated routes.
+At the moment, this bundle supports :
+- [`symfony`](https://symfony.com/doc/current/routing.html#localized-routes-i18n)
+- [`jms`](http://jmsyst.com/bundles/JMSI18nRoutingBundle)
+
+> **note** : this feature will [decorate](5-decorating-urls.md#adding-alternales) your static routes using a multilang sitemap URL.
+
 
 ## Time to live
 
