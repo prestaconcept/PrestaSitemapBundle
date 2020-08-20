@@ -149,6 +149,7 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
      * @param array  $options Node options
      *
      * @return UrlConcrete
+     * @throws \InvalidArgumentException
      */
     protected function getUrlConcrete($name, $options)
     {
