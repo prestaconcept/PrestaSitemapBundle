@@ -147,15 +147,14 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     /**
      * @param string $name    Route name
      * @param array  $options Node options
-     * @param array  $params  Optional route params
      *
      * @return UrlConcrete
      */
-    protected function getUrlConcrete($name, $options, $params = [])
+    protected function getUrlConcrete($name, $options)
     {
         try {
             return new UrlConcrete(
-                $this->getRouteUri($name, $params),
+                $this->getRouteUri($name),
                 $options['lastmod'],
                 $options['changefreq'],
                 $options['priority']
