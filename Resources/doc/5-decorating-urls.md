@@ -48,6 +48,21 @@ $decoratedUrl->addImage(new Sitemap\GoogleImage('https://acme.com/assets/carouse
 $urls->addUrl($decoratedUrl, 'default');
 ```
 
+```xml
+<url>
+    <loc>https://acme.com/</loc>
+    <image:image>
+        <image:loc>https://acme.com/assets/carousel/php.gif</image:loc>
+    </image:image>
+    <image:image>
+        <image:loc>https://acme.com/assets/carousel/symfony.jpg</image:loc>
+    </image:image>
+    <image:image>
+        <image:loc>https://acme.com/assets/carousel/love.png</image:loc>
+    </image:image>
+</url>
+```
+
 
 ## Configuring an URL as a mobile resource
 
@@ -66,6 +81,13 @@ $url = new Sitemap\UrlConcrete($router->generate('mobile_homepage', [], UrlGener
 $decoratedUrl = new Sitemap\GoogleMobileUrlDecorator($url);
 
 $urls->addUrl($decoratedUrl, 'default');
+```
+
+```xml
+<url>
+    <loc>https://m.acme.com/</loc>
+    <mobile:mobile/>
+</url>
 ```
 
 
@@ -90,6 +112,14 @@ $decoratedUrl->addLink($router->generate('homepage_de', [], UrlGeneratorInterfac
 $urls->addUrl($decoratedUrl, 'default');
 ```
 
+```xml
+<url>
+    <loc>https://acme.com/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://acme.fr/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://acme.de/"/>
+</url>
+```
+
 
 ## Adding news
 
@@ -107,13 +137,27 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 $url = new Sitemap\UrlConcrete($router->generate('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL));
 $decoratedUrl = new Sitemap\GoogleNewsUrlDecorator(
     $url,
-    'PrestaSitemapBundle News',
+    'Symfony Sitemap',
     'fr',
-    new \DateTime('2018-02-13'),
-    'The docs were updated'
+    new \DateTime('2020-01-01T10:00:00+00:00'),
+    'Setup sitemap with Symfony'
 );
 
 $urls->addUrl($decoratedUrl, 'default');
+```
+
+```xml
+<url>
+    <loc>https://acme.com/</loc>
+    <news:news>
+        <news:publication>
+            <news:name><![CDATA[Symfony Sitemap]]></news:name>
+            <news:language>fr</news:language>
+        </news:publication>
+        <news:publication_date>2020-01-01T10:00:00+00:00</news:publication_date>
+        <news:title><![CDATA[Setup sitemap with Symfony]]></news:title>
+    </news:news>
+</url>
 ```
 
 
@@ -144,6 +188,21 @@ $decoratedUrl = new Sitemap\GoogleVideoUrlDecorator($url);
 $decoratedUrl->addVideo($video);
 
 $urls->addUrl($decoratedUrl, 'default');
+```
+
+```xml
+<url>
+    <loc>https://acme.com/</loc>
+    <video:video>
+        <video:thumbnail_loc>https://img.youtube.com/vi/j6IKRxH8PTg/0.jpg</video:thumbnail_loc>
+        <video:title><![CDATA[How to use PrestaSitemapBundle in Symfony 2.6 [1/2]]]></video:title>
+        <video:description><![CDATA[In this video you will learn how to use PrestaSitemapBundle in your Symfony 2.6 projects]]></video:description>
+        <video:content_loc>https://www.youtube.com/watch?v=j6IKRxH8PTg</video:content_loc>
+        <video:tag>php</video:tag>
+        <video:tag>symfony</video:tag>
+        <video:tag>sitemap</video:tag>
+    </video:video>
+</url>
 ```
 
 
