@@ -14,7 +14,7 @@ if (Kernel::VERSION_ID >= 50100) {
         protected function configureContainer(ContainerConfigurator $container): void
         {
             $confDir = $this->getProjectDir() . '/config';
-            
+
             $container->import($confDir . '/{packages}/*' . self::CONFIG_EXTS);
             $container->import($confDir . '/{packages}/' . $this->environment . '/*' . self::CONFIG_EXTS);
             $container->import($confDir . '/{services}' . self::CONFIG_EXTS);
@@ -24,6 +24,8 @@ if (Kernel::VERSION_ID >= 50100) {
             if (interface_exists(MessageBusInterface::class)) {
                 $container->import($confDir . '/messenger.yaml');
             }
+
+            $container->import($confDir . '/{packages}/5.1/*' . self::CONFIG_EXTS);
         }
     }
 } else {
