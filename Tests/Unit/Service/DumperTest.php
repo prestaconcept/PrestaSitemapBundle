@@ -28,33 +28,6 @@ class DumperTest extends TestCase
      */
     private $dumper;
 
-    private static function createDir(): void
-    {
-        if (!\is_dir(self::DUMP_DIR) && !@\mkdir(self::DUMP_DIR)) {
-            throw new \LogicException(\sprintf('Cannot create %s dir', self::DUMP_DIR));
-        }
-    }
-
-    private static function removeDir(): void
-    {
-        if (!\is_dir(self::DUMP_DIR)) {
-            return;
-        }
-
-        foreach (\scandir(self::DUMP_DIR) as $file) {
-            if ('.' === $file || '..' === $file) {
-                continue;
-            }
-            if (!@\unlink(self::DUMP_DIR . '/' . $file)) {
-                throw new \LogicException(\sprintf('Cannot remove %s file from %s dir', $file, self::DUMP_DIR));
-            }
-        }
-
-        if (!@\rmdir(self::DUMP_DIR)) {
-            throw new \LogicException(\sprintf('Cannot remove %s dir', self::DUMP_DIR));
-        }
-    }
-
     public function setUp(): void
     {
         self::removeDir();
@@ -80,10 +53,10 @@ class DumperTest extends TestCase
         $hasIndex = $hasDefaultSection || $hasBlogSection;
 
         if ($hasDefaultSection) {
-            $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, $this->defaultListener());
+            $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, self::defaultListener());
         }
         if ($hasBlogSection) {
-            $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, $this->blogListener());
+            $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, self::blogListener());
         }
 
         self::assertEmpty(\glob(self::DUMP_DIR . '/*'), 'Sitemap is empty before test');
@@ -109,8 +82,8 @@ class DumperTest extends TestCase
      */
     public function testIncremental(bool $gzip): void
     {
-        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, $this->defaultListener());
-        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, $this->blogListener());
+        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, self::defaultListener());
+        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, self::blogListener());
 
         self::assertEmpty(\glob(self::DUMP_DIR . '/*'), 'Sitemap is empty before test');
 
@@ -131,7 +104,7 @@ class DumperTest extends TestCase
 
     public function testDirCreated(): void
     {
-        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, $this->defaultListener());
+        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, self::defaultListener());
 
         self::removeDir();
 
@@ -146,7 +119,7 @@ class DumperTest extends TestCase
     public function testExistingInvalidSitemap(string $index): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, $this->defaultListener());
+        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, self::defaultListener());
 
         \file_put_contents(self::DUMP_DIR . '/sitemap.xml', $index);
         $this->dumper->dump(self::DUMP_DIR, 'https://acme.org', 'default');
@@ -184,7 +157,21 @@ XML
         ];
     }
 
-    private function assertGeneratedSitemap(
+    private static function createDir(): void
+    {
+        (new Filesystem())->mkdir(self::DUMP_DIR);
+    }
+
+    private static function removeDir(): void
+    {
+        if (!\is_dir(self::DUMP_DIR)) {
+            return;
+        }
+
+        (new Filesystem())->remove(self::DUMP_DIR);
+    }
+
+    private static function assertGeneratedSitemap(
         bool $gzip,
         bool $hasIndex,
         bool $hasDefaultSection,
@@ -231,7 +218,7 @@ XML
         }
     }
 
-    private function defaultListener(): \Closure
+    private static function defaultListener(): \Closure
     {
         return function (SitemapPopulateEvent $event): void {
             $urls = $event->getUrlContainer();
@@ -246,7 +233,7 @@ XML
         };
     }
 
-    private function blogListener(): \Closure
+    private static function blogListener(): \Closure
     {
         return function (SitemapPopulateEvent $event): void {
             $urls = $event->getUrlContainer();
