@@ -11,129 +11,131 @@
 
 namespace Presta\SitemapBundle\Tests\Unit\EventListener;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\EventListener\RouteAnnotationEventListener;
+use Presta\SitemapBundle\Sitemap\Url\Url;
+use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
+use Presta\SitemapBundle\Sitemap\Url\UrlDecorator;
+use Presta\SitemapBundle\Tests\Unit\InMemoryUrlContainer;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\Routing\Loader\ClosureLoader;
 use Symfony\Component\Routing\Route;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\Router;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 
-/**
-* Manage sitemaps listing
-*
-* @author David Epely <depely@prestaconcept.net>
-*/
 class RouteAnnotationEventListenerTest extends TestCase
 {
     /**
-     * test no "sitemap" annotation
+     * @dataProvider routes
      */
-    public function testNoAnnotation(): void
+    public function testPopulateSitemap(?string $section, array $routes, array $urls): void
     {
-        self::assertEquals(null, $this->getListener()->getOptions('route1', $this->getRoute(null)), 'sitemap = null returns null');
-    }
+        $router = new Router(
+            new ClosureLoader(),
+            static function () use ($routes): RouteCollection {
+                $collection = new RouteCollection();
+                foreach ($routes as [$name, $path, $option]) {
+                    $collection->add($name, new Route($path, [], [], ['sitemap' => $option]));
+                }
 
-    /**
-     * test "sitemap"="anything" annotation
-     */
-    public function testInvalidSitemapArbitrary(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        self::assertEquals(-1, $this->getListener()->getOptions('route1', $this->getRoute('anything')), 'sitemap = "anything" throws an exception');
-    }
-
-    /**
-     * test "sitemap"=false annotation
-     */
-    public function testSitemapFalse(): void
-    {
-        self::assertNull($this->getListener()->getOptions('route1', $this->getRoute(false)), 'sitemap = false returns null');
-    }
-
-    /**
-     * test "sitemap"=true
-     */
-    public function testDefaultAnnotation(): void
-    {
-        $result = $this->getListener()->getOptions('route1', $this->getRoute(true));
-        self::assertArrayHasKey('priority', $result);
-        self::assertArrayHasKey('changefreq', $result);
-        self::assertArrayHasKey('lastmod', $result);
-        self::assertNull($result['priority']);
-        self::assertNull($result['changefreq']);
-        self::assertNull($result['lastmod']);
-    }
-
-    /**
-     * test "sitemap = {"priority" = "0.5"}
-     */
-    public function testValidPriority(): void
-    {
-        $result = $this->getListener()->getOptions('route1', $this->getRoute(['priority' => 0.5]));
-        self::assertEquals(0.5, $result['priority']);
-    }
-
-    /**
-     * test "sitemap = {"changefreq = weekly"}
-     */
-    public function testValidChangefreq(): void
-    {
-        $result = $this->getListener()->getOptions('route1', $this->getRoute(['changefreq' => 'weekly']));
-        self::assertEquals('weekly', $result['changefreq']);
-    }
-
-    /**
-     * test "sitemap = {"lastmod" = "2012-01-01 00:00:00"}
-     */
-    public function testValidLastmod(): void
-    {
-        $result = $this->getListener()->getOptions('route1', $this->getRoute(['lastmod' => '2012-01-01 00:00:00']));
-        self::assertEquals(new \DateTime('2012-01-01 00:00:00'), $result['lastmod']);
-    }
-
-    /**
-     * test "sitemap = {"lastmod" = "unknown"}
-     */
-    public function testInvalidLastmod(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        $this->getListener()->getOptions('route1', $this->getRoute(['lastmod' => 'unknown']));
-    }
-
-    /**
-     * @param null $option
-     *
-     * @return Route|MockObject
-     */
-    private function getRoute($option = null)
-    {
-        $route = $this->getMockBuilder(Route::class)
-            ->setMethods(['getOption'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $route->expects(self::once())
-            ->method('getOption')
-            ->willReturn($option);
-
-        return $route;
-    }
-
-    private function getRouter(): RouterInterface
-    {
-        /** @var RouterInterface|MockObject $router */
-        $router = $this->getMockBuilder(RouterInterface::class)
-            ->getMock();
-
-        return $router;
-    }
-
-    private function getListener(): RouteAnnotationEventListener
-    {
-        return new RouteAnnotationEventListener(
-            $this->getRouter(),
-            'default'
+                return $collection;
+            },
+            ['resource_type' => 'closure']
         );
+
+        $urlContainer = new InMemoryUrlContainer();
+
+        $dispatcher = new EventDispatcher();
+        $dispatcher->addSubscriber(new RouteAnnotationEventListener($router, 'default'));
+        $event = new SitemapPopulateEvent($urlContainer, $section);
+        if ($dispatcher instanceof ContractsEventDispatcherInterface) {
+            $dispatcher->dispatch($event, SitemapPopulateEvent::ON_SITEMAP_POPULATE);
+        } else {
+            $dispatcher->dispatch(SitemapPopulateEvent::ON_SITEMAP_POPULATE, $event);
+        }
+
+        // ensure that all expected section were created but not more than expected
+        self::assertEquals(\array_keys($urls), $urlContainer->getSections());
+
+        foreach ($urls as $section => $sectionUrls) {
+            $urlset = $urlContainer->getUrlset($section);
+
+            // ensure that urlset is filled with expected count of urls
+            self::assertCount(\count($sectionUrls), $urlset);
+
+            foreach ($sectionUrls as [$loc, $changefreq, $lastmod, $priority]) {
+                $url = $this->findUrl($urlset, $loc);
+                self::assertNotNull($url);
+
+                self::assertSame($loc, $url->getLoc());
+                self::assertSame($changefreq, $url->getChangefreq());
+                self::assertEquals($lastmod, $url->getLastmod());
+                self::assertSame($priority, $url->getPriority());
+            }
+        }
+    }
+
+    public function routes(): \Generator
+    {
+        // *Route vars : [name, path, sitemap option]
+        // *Sitemap vars : [loc, changefreq, lastmod, priority]
+
+        $homepageRoute = ['home', '/', true];
+        $homepageSitemap = ['http://localhost/', null, null, null];
+
+        $contactRoute = ['contact', '/contact', ['lastmod' => '2020-01-01 10:00:00', 'priority' => 1]];
+        $contactSitemap = ['http://localhost/contact', null, new \DateTimeImmutable('2020-01-01 10:00:00'), 1.0];
+
+        $blogRoute = ['blog', '/blog', ['section' => 'blog', 'changefreq' => 'always']];
+        $blogSitemap = ['http://localhost/blog', 'always', null, null];
+
+        yield [
+            null,
+            [$homepageRoute, $contactRoute, $blogRoute],
+            ['default' => [$homepageSitemap, $contactSitemap], 'blog' => [$blogSitemap]]
+        ];
+        yield [
+            'default',
+            [$homepageRoute, $contactRoute, $blogRoute],
+            ['default' => [$homepageSitemap, $contactSitemap]]
+        ];
+        yield [
+            'blog',
+            [$homepageRoute, $contactRoute, $blogRoute],
+            ['blog' => [$blogSitemap]]
+        ];
+    }
+
+    private function findUrl(array $urlset, string $loc): ?UrlConcrete
+    {
+        foreach ($urlset as $url) {
+            $urlConcrete = $this->getUrlConcrete($url);
+            if ($urlConcrete === null) {
+                continue;
+            }
+
+            if ($urlConcrete->getLoc() !== $loc) {
+                continue;
+            }
+
+            return $urlConcrete;
+        }
+
+        return null;
+    }
+
+    private function getUrlConcrete(Url $url): ?UrlConcrete
+    {
+        if ($url instanceof UrlConcrete) {
+            return $url;
+        }
+
+        if ($url instanceof UrlDecorator) {
+            return $this->getUrlConcrete($url->getUrlDecorated());
+        }
+
+        return null;
     }
 }

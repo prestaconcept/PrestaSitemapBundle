@@ -91,9 +91,13 @@ class SitemapController
      * Time to live of the response in seconds
      *
      * @return int
+     * @deprecated since v2.3.0
+     * @codeCoverageIgnore
      */
     protected function getTtl()
     {
+        @trigger_error(__METHOD__ . ' method is deprecated since v2.3.0', E_USER_DEPRECATED);
+
         return $this->ttl;
     }
 }
