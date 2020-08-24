@@ -73,7 +73,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
     {
         $options = array_merge(['gzip' => false], $options);
 
-        $this->baseUrl = $host;
+        $this->baseUrl = rtrim($host, '/') . '/';
         // we should prepare temp folder each time, because dump may be called several times (with different sections)
         // and activate command below removes temp folder
         $this->prepareTempFolder();
@@ -222,14 +222,14 @@ class Dumper extends AbstractGenerator implements DumperInterface
     protected function deleteExistingSitemaps($targetDir)
     {
         foreach ($this->urlsets as $urlset) {
-            $basename = basename($urlset->getLoc());
-            if (preg_match('/(.*)_[\d]+\.xml(?:\.gz)?$/', $basename)) {
+            if (preg_match('/.*_\d+\.xml(\.gz)?$/', $urlset->getLoc())) {
                 continue; // skip numbered files
             }
 
             // pattern is base name of sitemap file (with .xml cut) optionally followed by _X for numbered files
-            $basename = preg_replace('/\.xml(?:\.gz)?$/', '', $basename); // cut .xml|.xml.gz
-            $pattern = '/' . preg_quote($basename, '/') . '(_\d+)?\.xml(?:\.gz)?$/';
+            $basename = basename($urlset->getLoc());
+            $basename = preg_replace('/\.xml(\.gz)?$/', '', $basename); // cut .xml|.xml.gz
+            $pattern = '/' . preg_quote($basename, '/') . '(_\d+)?\.xml(\.gz)?$/';
 
             foreach (Finder::create()->in($targetDir)->depth(0)->name($pattern)->files() as $file) {
                 // old sitemap files are removed only if not existing in new file set
