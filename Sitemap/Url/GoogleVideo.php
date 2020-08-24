@@ -316,7 +316,7 @@ class GoogleVideo
         }
     }
 
-    public function __get(string $name)
+    public function __get($name)
     {
         $map = [
             'thumbnail_loc' => 'thumbnailLocation',
@@ -352,7 +352,7 @@ class GoogleVideo
         return null;
     }
 
-    public function __set(string $name, $value)
+    public function __set($name, $value)
     {
         $map = [
             'thumbnail_loc' => 'thumbnailLocation',

@@ -64,7 +64,7 @@ class GoogleImage
         $this->setLicense($license);
     }
 
-    public function __get(string $name)
+    public function __get($name)
     {
         $map = [
             'loc' => 'location',
@@ -86,7 +86,7 @@ class GoogleImage
         return null;
     }
 
-    public function __set(string $name, $value)
+    public function __set($name, $value)
     {
         $map = [
             'loc' => 'location',
