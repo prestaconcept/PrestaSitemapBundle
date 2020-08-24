@@ -13,10 +13,6 @@ namespace Presta\SitemapBundle\Sitemap;
 
 use Presta\SitemapBundle\Exception\Exception;
 
-if (!defined('ENT_SUBSTITUTE')) {
-    define('ENT_SUBSTITUTE', 8);
-}
-
 /**
  * Description of Utils
  *
@@ -25,6 +21,8 @@ if (!defined('ENT_SUBSTITUTE')) {
 class Utils
 {
     /**
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
      * Verify method affiliated to given param
      *
      * @param object $object
@@ -34,6 +32,11 @@ class Utils
      */
     public static function getSetMethod($object, $name)
     {
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0.', __METHOD__),
+            E_USER_DEPRECATED
+        );
+
         $methodName = 'set' . self::camelize($name);
 
         if (!method_exists($object, $methodName)) {
@@ -44,6 +47,8 @@ class Utils
     }
 
     /**
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
      * Verify method affiliated to given param
      *
      * @param object $object
@@ -54,6 +59,11 @@ class Utils
      */
     public static function getGetMethod($object, $name)
     {
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0.', __METHOD__),
+            E_USER_DEPRECATED
+        );
+
         $methodName = 'get' . self::camelize($name);
 
         if (!method_exists($object, $methodName)) {
@@ -64,7 +74,9 @@ class Utils
     }
 
     /**
-     * Render a string as CDATA section
+     * @deprecated since 2.3.0, to be removed in 3.0.0
+     *
+     * Legacy alias of Utils::cdata
      *
      * @param string $string
      *
@@ -72,11 +84,28 @@ class Utils
      */
     public static function render($string)
     {
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0, use %s::cdata instead.', __METHOD__, __CLASS__),
+            E_USER_DEPRECATED
+        );
+
+        return self::cdata($string);
+    }
+
+    /**
+     * Wrap string with CDATA markup
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    public static function cdata($string)
+    {
         return '<![CDATA[' . $string . ']]>';
     }
 
     /**
-     * Encode special chars
+     * Encode string with html special chars
      *
      * @param string $string
      *
@@ -96,6 +125,11 @@ class Utils
      */
     public static function camelize($string)
     {
+        @trigger_error(
+            sprintf('Method %s is deprecated since 2.3.0.', __METHOD__),
+            E_USER_DEPRECATED
+        );
+
         return str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
     }
 }
