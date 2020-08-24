@@ -3,6 +3,7 @@
 namespace Presta\SitemapBundle\Tests\Integration\Tests;
 
 use PHPUnit\Framework\Assert;
+use Presta\SitemapBundle\Tests\Integration\Kernel;
 use SimpleXMLElement;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -24,13 +25,23 @@ abstract class SitemapTestCase extends WebTestCase
         $static = simplexml_load_string($xml);
         $static->registerXPathNamespace('sm', 'http://www.sitemaps.org/schemas/sitemap/0.9');
 
-        self::assertSectionContainsCountUrls($static, 'static', 3);
+        if (Kernel::VERSION_ID >= 50100) {
+            self::assertSectionContainsCountUrls($static, 'static', 4);
+        } else {
+            self::assertSectionContainsCountUrls($static, 'static', 3);
+        }
+
         $annotations = self::assertSectionContainsPath($static, 'static', '/');
         self::assertUrlConcrete($annotations, 'static', 0.5, 'daily');
         $xml = self::assertSectionContainsPath($static, 'static', '/company');
         self::assertUrlConcrete($xml, 'static', 0.7, 'weekly');
         $yaml = self::assertSectionContainsPath($static, 'static', '/contact');
         self::assertUrlConcrete($yaml, 'static', 0.5, 'daily');
+
+        if (Kernel::VERSION_ID >= 50100) {
+            $translated = self::assertSectionContainsPath($static, 'static', '/about');
+            self::assertUrlConcrete($translated, 'static', 0.5, 'daily');
+        }
     }
 
     protected static function assertBlogSection(string $xml): void

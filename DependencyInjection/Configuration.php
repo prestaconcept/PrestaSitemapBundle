@@ -13,6 +13,7 @@ namespace Presta\SitemapBundle\DependencyInjection;
 
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Presta\SitemapBundle\Sitemap\XmlConstraint;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\HttpKernel\Kernel;
@@ -80,6 +81,43 @@ class Configuration implements ConfigurationInterface
             ->end()
         ;
 
+        $this->addAlternateSection($rootNode);
+
         return $treeBuilder;
+    }
+
+    private function addAlternateSection(ArrayNodeDefinition $rootNode)
+    {
+        $rootNode
+            ->children()
+                ->arrayNode('alternate')
+                    ->info(
+                        'Automatically generate alternate (hreflang) urls with static routes.' .
+                       ' Requires route_annotation_listener config to be enabled.'
+                    )
+                    ->canBeEnabled()
+                    ->children()
+                        ->scalarNode('default_locale')
+                            ->defaultValue('en')
+                            ->info('The default locale of your routes.')
+                        ->end()
+                        ->arrayNode('locales')
+                            ->defaultValue(['en'])
+                            ->beforeNormalization()
+                            ->ifString()
+                                ->then(function ($v) { return preg_split('/\s*,\s*/', $v); })
+                            ->end()
+                            ->prototype('scalar')->end()
+                            ->info('List of supported locales of your routes.')
+                        ->end()
+                        ->enumNode('i18n')
+                            ->defaultValue('symfony')
+                            ->values(['symfony', 'jms'])
+                            ->info('Strategy used to create your i18n routes.')
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
     }
 }

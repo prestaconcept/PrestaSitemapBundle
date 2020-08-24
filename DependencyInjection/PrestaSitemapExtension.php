@@ -42,6 +42,11 @@ class PrestaSitemapExtension extends Extension
 
         if (true === $config['route_annotation_listener']) {
             $loader->load('route_annotation_listener.xml');
+
+            if ($this->isConfigEnabled($container, $config['alternate'])) {
+                $container->setParameter($this->getAlias() . '.alternate', $config['alternate']);
+                $loader->load('alternate_listener.xml');
+            }
         }
 
         if (interface_exists(MessageHandlerInterface::class)) {

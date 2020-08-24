@@ -11,31 +11,22 @@
 
 namespace Presta\SitemapBundle\EventListener;
 
+use Presta\SitemapBundle\Event\SitemapAddUrlEvent;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Routing\RouteOptionParser;
 use Presta\SitemapBundle\Service\UrlContainerInterface;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 
 /**
- * this listener allows you to use annotations to include routes in the Sitemap, just like
- * https://github.com/dreipunktnull/DpnXmlSitemapBundle
- *
- * supported parameters are:
- *
- *  lastmod: a text string that can be parsed by \DateTime
- *  changefreq: a text string that matches a constant defined in UrlConcrete
- *  priority: a number between 0 and 1
- *
- * if you don't want to specify these parameters, you can simply use
- * Route("/", name="homepage", options={"sitemap" = true })
- *
- * @author Tony Piper (tpiper@tpiper.com)
+ * This listener iterate over configured routes, and register allowed URLs to sitemap.
  */
 class RouteAnnotationEventListener implements EventSubscriberInterface
 {
@@ -45,17 +36,22 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     protected $router;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
+
+    /**
      * @var string
      */
     private $defaultSection;
 
-    /**
-     * @param RouterInterface $router
-     * @param string          $defaultSection
-     */
-    public function __construct(RouterInterface $router, $defaultSection)
-    {
+    public function __construct(
+        RouterInterface $router,
+        EventDispatcherInterface $eventDispatcher,
+        string $defaultSection
+    ) {
         $this->router = $router;
+        $this->dispatcher = $eventDispatcher;
         $this->defaultSection = $defaultSection;
     }
 
@@ -78,7 +74,8 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     }
 
     /**
-     * @param SitemapPopulateEvent $event
+     * @param UrlContainerInterface $container
+     * @param string|null           $section
      *
      * @throws \InvalidArgumentException
      */
@@ -97,8 +94,19 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
                 continue;
             }
 
+            $event = new SitemapAddUrlEvent($name, $options);
+            if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
+                $this->dispatcher->dispatch($event, SitemapAddUrlEvent::NAME);
+            } else {
+                $this->dispatcher->dispatch(SitemapAddUrlEvent::NAME, $event);
+            }
+
+            if (!$event->shouldBeRegistered()) {
+                continue;
+            }
+
             $container->addUrl(
-                $this->getUrlConcrete($name, $options),
+                $event->getUrl() ?? $this->getUrlConcrete($name, $options),
                 $routeSection
             );
         }

@@ -16,6 +16,8 @@ if (Kernel::VERSION_ID >= 50100) {
             $routes->import($confDir . '/{routes}/' . $this->environment . '/*' . self::CONFIG_EXTS);
             $routes->import($confDir . '/{routes}/*' . self::CONFIG_EXTS);
             $routes->import($confDir . '/{routes}' . self::CONFIG_EXTS);
+
+            $routes->import($confDir . '/{routes}/5.1/*' . self::CONFIG_EXTS);
         }
     }
 } else {

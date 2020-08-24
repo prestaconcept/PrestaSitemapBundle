@@ -24,4 +24,9 @@ final class StaticController
     {
         return new Response(__FUNCTION__);
     }
+
+    public function about(): Response
+    {
+        return new Response(__FUNCTION__);
+    }
 }

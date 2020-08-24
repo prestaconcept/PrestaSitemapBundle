@@ -21,6 +21,30 @@ presta_sitemap:
     default_section: default
 ```
 
+
+## Translated routes
+
+If you do have some translated routes, you can configure the `alternate` section to generate alternate (hreflang) urls.
+
+> **note** : this feature won't work if you disabled the static routes listener (see [below](#disabling-annotation-listener)).
+
+```yaml
+presta_sitemap:
+    alternate:
+        enabled: true
+        default_locale: 'en'
+        locales: ['en', 'fr']
+        i18n: symfony
+```
+
+The `i18n` config value should be set accordingly to the technology you are using for your translated routes.
+At the moment, this bundle supports :
+- [`symfony`](https://symfony.com/doc/current/routing.html#localized-routes-i18n)
+- [`jms`](http://jmsyst.com/bundles/JMSI18nRoutingBundle)
+
+> **note** : this feature will [decorate](5-decorating-urls.md#adding-alternales) your static routes using a multilang sitemap URL.
+
+
 ## Time to live
 
 You may want to change the default `3600` seconds max-age set when rendering the

@@ -10,6 +10,7 @@
     <services>
         <service id="presta_sitemap.eventlistener.route_annotation" class="%presta_sitemap.eventlistener.route_annotation.class%">
             <argument type="service" id="router"/>
+            <argument type="service" id="event_dispatcher"/>
             <argument>%presta_sitemap.default_section%</argument>
             <tag name="kernel.event_subscriber"/>
         </service>
