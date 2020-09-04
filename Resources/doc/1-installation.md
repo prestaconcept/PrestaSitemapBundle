@@ -41,7 +41,7 @@ class AppKernel
 Import routing.
 
 ```yaml
-#config/routes/presta_sitemap.yml
+# config/routes/presta_sitemap.yaml
 presta_sitemap:
     resource: "@PrestaSitemapBundle/Resources/config/routing.yml"
 ```
