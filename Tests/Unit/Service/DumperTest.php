@@ -2,12 +2,14 @@
 
 namespace Presta\SitemapBundle\Tests\Unit\Service;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Service\Dumper;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Filesystem\Filesystem;
+use Throwable;
 
 class DumperTest extends TestCase
 {
@@ -36,10 +38,13 @@ class DumperTest extends TestCase
         $this->eventDispatcher = new EventDispatcher();
         $this->filesystem = new Filesystem();
         $this->dumper = new Dumper($this->eventDispatcher, $this->filesystem, 'sitemap', 5);
+
+        (new Filesystem())->remove(\glob(sys_get_temp_dir() . '/PrestaSitemaps-*'));
     }
 
     protected function tearDown(): void
     {
+        self::assertTempFilesWereRemoved();
         self::removeDir();
     }
 
@@ -122,6 +127,17 @@ class DumperTest extends TestCase
         $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, self::defaultListener());
 
         \file_put_contents(self::DUMP_DIR . '/sitemap.xml', $index);
+        $this->dumper->dump(self::DUMP_DIR, 'https://acme.org', 'default');
+    }
+
+    public function testErrorInListener(): void
+    {
+        $this->expectException(\Exception::class);
+        $this->eventDispatcher->addListener(
+            SitemapPopulateEvent::ON_SITEMAP_POPULATE,
+            self::errorListener(new Exception('Throw on Unit Test'))
+        );
+
         $this->dumper->dump(self::DUMP_DIR, 'https://acme.org', 'default');
     }
 
@@ -218,6 +234,11 @@ XML
         }
     }
 
+    private static function assertTempFilesWereRemoved(): void
+    {
+        self::assertEmpty(\glob(sys_get_temp_dir() . '/PrestaSitemaps-*'));
+    }
+
     private static function defaultListener(): \Closure
     {
         return function (SitemapPopulateEvent $event): void {
@@ -230,6 +251,13 @@ XML
                 $urls->addUrl(new UrlConcrete('https://acme.org/team'), 'default');
                 $urls->addUrl(new UrlConcrete('https://acme.org/jobs'), 'default');
             }
+        };
+    }
+
+    private static function errorListener(Throwable $exception): \Closure
+    {
+        return function () use ($exception): void {
+            throw $exception;
         };
     }
 
