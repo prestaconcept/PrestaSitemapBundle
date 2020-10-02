@@ -78,44 +78,50 @@ class Dumper extends AbstractGenerator implements DumperInterface
         // and activate command below removes temp folder
         $this->prepareTempFolder();
 
-        $this->populate($section);
+        $filenames = [];
 
-        // if no urlset wasn't created during populating
-        // it means no URLs were added to the sitemap
-        if (!count($this->urlsets)) {
-            $this->cleanup();
+        try {
+            $this->populate($section);
 
-            return false;
-        }
+            // if no urlset wasn't created during populating
+            // it means no URLs were added to the sitemap
+            if (!count($this->urlsets)) {
+                $this->cleanup();
 
-        foreach ($this->urlsets as $urlset) {
-            if ($urlset instanceof DumpingUrlset) {
-                $urlset->save($this->tmpFolder, $options['gzip']);
+                return false;
             }
-            $filenames[] = basename($urlset->getLoc());
-        }
 
-        if (null !== $section) {
-            // Load current SitemapIndex file and add all sitemaps except those,
-            // matching section currently being regenerated to root
-            $index = $this->loadCurrentSitemapIndex($targetDir . '/' . $this->sitemapFilePrefix . '.xml');
-            foreach ($index as $key => $urlset) {
-                // cut possible _X, to compare base section name
-                $baseKey = preg_replace('/(.*?)(_\d+)?/', '\1', $key);
-                if ($baseKey !== $section) {
-                    // we add them to root only, if we add them to $this->urlset
-                    // deleteExistingSitemaps() will delete matching files, which we don't want
-                    $this->getRoot()->addSitemap($urlset);
+            foreach ($this->urlsets as $urlset) {
+                if ($urlset instanceof DumpingUrlset) {
+                    $urlset->save($this->tmpFolder, $options['gzip']);
+                }
+                $filenames[] = basename($urlset->getLoc());
+            }
+
+            if (null !== $section) {
+                // Load current SitemapIndex file and add all sitemaps except those,
+                // matching section currently being regenerated to root
+                $index = $this->loadCurrentSitemapIndex($targetDir . '/' . $this->sitemapFilePrefix . '.xml');
+                foreach ($index as $key => $urlset) {
+                    // cut possible _X, to compare base section name
+                    $baseKey = preg_replace('/(.*?)(_\d+)?/', '\1', $key);
+                    if ($baseKey !== $section) {
+                        // we add them to root only, if we add them to $this->urlset
+                        // deleteExistingSitemaps() will delete matching files, which we don't want
+                        $this->getRoot()->addSitemap($urlset);
+                    }
                 }
             }
+
+            file_put_contents($this->tmpFolder . '/' . $this->sitemapFilePrefix . '.xml', $this->getRoot()->toXml());
+            $filenames[] = $this->sitemapFilePrefix . '.xml';
+
+            // if we came to this point - we can activate new files
+            // if we fail on exception eariler - old files will stay making Google happy
+            $this->activate($targetDir);
+        } finally {
+            $this->cleanup();
         }
-
-        file_put_contents($this->tmpFolder . '/' . $this->sitemapFilePrefix . '.xml', $this->getRoot()->toXml());
-        $filenames[] = $this->sitemapFilePrefix . '.xml';
-
-        // if we came to this point - we can activate new files
-        // if we fail on exception eariler - old files will stay making Google happy
-        $this->activate($targetDir);
 
         return $filenames;
     }
@@ -202,16 +208,15 @@ class Dumper extends AbstractGenerator implements DumperInterface
         }
 
         if (!is_writable($targetDir)) {
-            $this->cleanup();
             throw new \RuntimeException(
                 sprintf('Can\'t move sitemaps to "%s" - directory is not writeable', $targetDir)
             );
         }
+
         $this->deleteExistingSitemaps($targetDir);
 
         // no need to delete the root file as it always exists, it will be overwritten
         $this->filesystem->mirror($this->tmpFolder, $targetDir, null, ['override' => true]);
-        $this->cleanup();
     }
 
     /**
