@@ -20,6 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -40,6 +41,7 @@ class DumpSitemapsCommandTest extends WebTestCase
 
     protected function setUp()
     {
+        (new Filesystem())->remove(\glob(sys_get_temp_dir() . '/PrestaSitemaps-*'));
         $this->fixturesDir = realpath(__DIR__ . '/../fixtures');
         $this->webDir = realpath(__DIR__ . '/../web');
 
@@ -74,6 +76,7 @@ class DumpSitemapsCommandTest extends WebTestCase
 
     protected function tearDown()
     {
+        self::assertEmpty(\glob(sys_get_temp_dir() . '/PrestaSitemaps-*'));
         parent::tearDown();
         foreach (glob($this->webDir . '/*{.xml,.xml.gz}', GLOB_BRACE) as $file) {
             unlink($file);
@@ -90,6 +93,20 @@ class DumpSitemapsCommandTest extends WebTestCase
 
         $expectedSitemaps = array('http://sitemap.php54.local/sitemap.video.xml.gz');
         $this->assertSitemapIndexEquals($this->webDir . '/sitemap.xml', $expectedSitemaps);
+    }
+
+    public function testSitemapDumpWithError()
+    {
+        $this->container->get('event_dispatcher')
+            ->addListener(
+                SitemapPopulateEvent::ON_SITEMAP_POPULATE,
+                function () {
+                    throw new \Exception();
+                }
+            );
+
+        $this->expectException('Exception');
+        $this->executeDumpWithOptions(array('target' => $this->webDir));
     }
 
     public function testSitemapDumpUpdateExistingIndex()
