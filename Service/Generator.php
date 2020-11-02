@@ -59,6 +59,14 @@ class Generator extends AbstractGenerator implements GeneratorInterface
         $this->router = $router;
         $this->cache = $cache;
         $this->cacheTtl = $cacheTtl;
+
+        if ($cache !== null) {
+            @trigger_error(
+                'Providing ' . __METHOD__ . ' $cache parameter is deprecated.' .
+                ' Cache support has been deprecated since v2.3.2 and will be removed in v3.0.0.',
+                E_USER_DEPRECATED
+            );
+        }
     }
 
     /**
@@ -66,6 +74,12 @@ class Generator extends AbstractGenerator implements GeneratorInterface
      */
     public function generate()
     {
+        @trigger_error(
+            __METHOD__ . ' is deprecated since v2.3.2 and will be removed in v3.0.0.' .
+            ' Use ' . __CLASS__ . '::fetch instead.',
+            E_USER_DEPRECATED
+        );
+
         $this->populate();
 
         //---------------------
@@ -91,7 +105,7 @@ class Generator extends AbstractGenerator implements GeneratorInterface
         }
 
         if ('root' === $name) {
-            $this->generate();
+            $this->populate();
 
             return $this->getRoot();
         }

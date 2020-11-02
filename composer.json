@@ -20,15 +20,11 @@
         "symfony/framework-bundle": "^3.4|~4.0|~5.0"
     },
     "require-dev": {
-        "ext-simplexml": "*",
         "doctrine/annotations": "^1.0",
         "phpunit/phpunit": "^7.5",
         "symfony/browser-kit": "^4.4",
         "symfony/phpunit-bridge": "^4.4",
         "symfony/yaml": "^4.4"
-    },
-    "suggest": {
-        "doctrine/doctrine-cache-bundle" : "Allows to store sitemaps in cache"
     },
     "autoload": {
         "psr-4": {

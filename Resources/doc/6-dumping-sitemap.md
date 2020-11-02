@@ -3,8 +3,7 @@
 Back to the [installation](1-installation.md) instructions, you may have noticed that this bundle is declaring routes:
 `/sitemap.xml` and `/sitemap.{section}.xml`.
 
-That means that, whenever the sitemap is requested, it is built on demand
-(or build from cache if you [configured](2-configuration.md) an adapter for the bundle).
+That means that, whenever the sitemap is requested, it is built on demand.
 
 For small sites, it is fast enough to be a good option.
 But as your site grows (and so your sitemap), this option starts being a very bad one.

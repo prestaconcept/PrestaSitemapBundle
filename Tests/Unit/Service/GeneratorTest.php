@@ -51,6 +51,9 @@ class GeneratorTest extends WebTestCase
         });
     }
 
+    /**
+     * @group legacy
+     */
     public function testGenerate(): void
     {
         $this->generator()->generate();

@@ -21,16 +21,18 @@ use Presta\SitemapBundle\Sitemap\XmlConstraint;
 interface GeneratorInterface extends UrlContainerInterface
 {
     /**
-     * Generate all datas and store in cache if it is possible
+     * Generate all sitemaps.
+     *
+     * @deprecated since v2.3.2 use @link GeneratorInterface::fetch instead
      */
     public function generate();
 
     /**
-     * Get eventual cached data or generate whole sitemap
+     * Generate sitemap section.
      *
-     * @param string $name
+     * @param string $name The section name (or "root" for all sections)
      *
-     * @return XmlConstraint|null
+     * @return XmlConstraint|null The generated XML (or null if section not found)
      */
     public function fetch($name);
 }
