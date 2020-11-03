@@ -61,7 +61,6 @@ You may also have a look to [Prestaconcept's website sitemap](https://www.presta
 * Comply with Urlset specifications : 50k items / 10MB per file
 * Decorates your sitemap with images, video, mobile and multilang urls
 * No database required
-* Optional caching (using `DoctrineCacheBundle`)
 
 
 ## Documentation

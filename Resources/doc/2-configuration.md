@@ -56,8 +56,6 @@ presta_sitemap:
     timetolive: 3600
 ```
 
-Also this value is used by the cache if you have installed and configured doctrine_cache.
-
 
 ## Configuring your application base url
 
@@ -103,7 +101,10 @@ presta_sitemap:
 ```
 
 
-## Caching the sitemap
+## Caching the sitemap (deprecated)
+
+> **warning** Cache support has been deprecated since v2.3.2 and will be removed in v3.0.0.
+> Please [dump](6-dumping-sitemap.md) your sitemap instead.
 
 Sitemap can be stored in a cache.
 
