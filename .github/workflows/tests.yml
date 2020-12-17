@@ -29,10 +29,10 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v2.0.0
+        uses: actions/checkout@v2
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@2.4.2
+        uses: shivammathur/setup-php@v2
         with:
           coverage: none
           php-version: ${{ matrix.php-version }}
@@ -62,10 +62,10 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v2.0.0
+        uses: actions/checkout@v2
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@2.4.2
+        uses: shivammathur/setup-php@v2
         with:
           coverage: xdebug
           php-version: ${{ matrix.php-version }}
