@@ -66,10 +66,6 @@ final class StaticRoutesAlternateEventListener implements EventSubscriberInterfa
             )
         );
         foreach ($this->options['locales'] as $alternate) {
-            if ($alternate === $locale) {
-                continue; // avoid re-adding default route
-            }
-
             $url->addLink($this->generateTranslatedRouteUrl($translatedName, $alternate), $alternate);
         }
 

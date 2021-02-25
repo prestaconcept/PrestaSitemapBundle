@@ -47,7 +47,7 @@ class StaticRoutesAlternateEventListenerTest extends TestCase
     public function translated(): \Generator
     {
         $options = ['lastmod' => null, 'changefreq' => null, 'priority' => null];
-        $xml = '<url><loc>https://acme.org/about</loc><xhtml:link rel="alternate" hreflang="fr" href="https://acme.org/a-propos" /></url>';
+        $xml = '<url><loc>https://acme.org/about</loc><xhtml:link rel="alternate" hreflang="en" href="https://acme.org/about" /><xhtml:link rel="alternate" hreflang="fr" href="https://acme.org/a-propos" /></url>';
         yield [
             self::SYMFONY_OPTIONS,
             'about.en',
