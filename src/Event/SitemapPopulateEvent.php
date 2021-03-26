@@ -24,7 +24,7 @@ class SitemapPopulateEvent extends Event
     /**
      * @Event("Presta\SitemapBundle\Event\SitemapPopulateEvent")
      */
-    const ON_SITEMAP_POPULATE = 'presta_sitemap.populate';
+    public const ON_SITEMAP_POPULATE = 'presta_sitemap.populate';
 
     /**
      * @var UrlContainerInterface

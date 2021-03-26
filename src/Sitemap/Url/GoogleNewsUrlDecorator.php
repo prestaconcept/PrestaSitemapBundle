@@ -25,11 +25,11 @@ use Presta\SitemapBundle\Sitemap\Utils;
  */
 class GoogleNewsUrlDecorator extends UrlDecorator
 {
-    const ACCESS_SUBSCRIPTION = 'Subscription';
-    const ACCESS_REGISTRATION = 'Registration';
+    public const ACCESS_SUBSCRIPTION = 'Subscription';
+    public const ACCESS_REGISTRATION = 'Registration';
 
-    const DATE_FORMAT_DATE = 'Y-m-d';
-    const DATE_FORMAT_DATE_TIME = DateTime::W3C;
+    public const DATE_FORMAT_DATE = 'Y-m-d';
+    public const DATE_FORMAT_DATE_TIME = DateTime::W3C;
 
     /**
      * @var array
@@ -175,7 +175,8 @@ class GoogleNewsUrlDecorator extends UrlDecorator
         if ($access && !in_array($access, [self::ACCESS_REGISTRATION, self::ACCESS_SUBSCRIPTION])) {
             throw new Exception\GoogleNewsUrlException(
                 sprintf(
-                    'The parameter %s must be a valid access. See https://support.google.com/webmasters/answer/74288?hl=en&ref_topic=10078',
+                    'The parameter %s must be a valid access.' .
+                    ' See https://support.google.com/webmasters/answer/74288?hl=en&ref_topic=10078',
                     $access
                 )
             );
@@ -260,7 +261,8 @@ class GoogleNewsUrlDecorator extends UrlDecorator
         if ($publicationDateFormat && !in_array($publicationDateFormat, $formats)) {
             throw new Exception\GoogleNewsUrlException(
                 sprintf(
-                    'The parameter %s must be a valid date format. See https://support.google.com/webmasters/answer/74288?hl=en',
+                    'The parameter %s must be a valid date format.' .
+                    ' See https://support.google.com/webmasters/answer/74288?hl=en',
                     $publicationDateFormat
                 )
             );
@@ -310,7 +312,8 @@ class GoogleNewsUrlDecorator extends UrlDecorator
         if (count($locationParts) < 2) {
             throw new Exception\GoogleNewsUrlException(
                 sprintf(
-                    'The parameter %s must be a valid geo_location. See https://support.google.com/news/publisher/answer/1662970?hl=en',
+                    'The parameter %s must be a valid geo_location.' .
+                    ' See https://support.google.com/news/publisher/answer/1662970?hl=en',
                     $geoLocations
                 )
             );
@@ -373,7 +376,8 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     {
         if ($stockTickers && count($stockTickers) > 5) {
             throw new Exception\GoogleNewsUrlException(
-                'The stock tickers are limited to 5. See https://support.google.com/webmasters/answer/74288?hl=en&ref_topic=10078'
+                'The stock tickers are limited to 5.' .
+                ' See https://support.google.com/webmasters/answer/74288?hl=en&ref_topic=10078'
             );
         }
         $this->stockTickers = $stockTickers;
@@ -391,7 +395,8 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     {
         if ($this->stockTickers && count($this->stockTickers) == 5) {
             throw new Exception\GoogleNewsUrlException(
-                'The stock tickers are limited to 5. See https://support.google.com/webmasters/answer/74288?hl=en&ref_topic=10078'
+                'The stock tickers are limited to 5.' .
+                ' See https://support.google.com/webmasters/answer/74288?hl=en&ref_topic=10078'
             );
         }
         $this->stockTickers[] = $stockTicker;
@@ -419,9 +424,9 @@ class GoogleNewsUrlDecorator extends UrlDecorator
             $newsXml .= '<news:genres>' . implode(', ', $this->getGenres()) . '</news:genres>';
         }
 
-        $newsXml .= '<news:publication_date>' . $this->getPublicationDate()->format(
-                $this->getPublicationDateFormat()
-            ) . '</news:publication_date>';
+        $newsXml .= '<news:publication_date>';
+        $newsXml .= $this->getPublicationDate()->format($this->getPublicationDateFormat());
+        $newsXml .= '</news:publication_date>';
 
         $newsXml .= '<news:title>' . Utils::cdata($this->getTitle()) . '</news:title>';
 

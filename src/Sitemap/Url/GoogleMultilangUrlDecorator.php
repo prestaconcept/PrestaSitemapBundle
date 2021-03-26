@@ -22,7 +22,7 @@ use Presta\SitemapBundle\Sitemap\Utils;
  */
 class GoogleMultilangUrlDecorator extends UrlDecorator
 {
-    const REL_ALTERNATE = 'alternate';
+    public const REL_ALTERNATE = 'alternate';
 
     /**
      * @var array

@@ -20,8 +20,8 @@ namespace Presta\SitemapBundle\Sitemap;
  */
 abstract class XmlConstraint implements \Countable
 {
-    const LIMIT_ITEMS = 49999;
-    const LIMIT_BYTES = 50000000; // 52,428,800 bytes - 2,428,800
+    public const LIMIT_ITEMS = 49999;
+    public const LIMIT_BYTES = 50000000; // 52,428,800 bytes - 2,428,800
 
     /**
      * @var bool

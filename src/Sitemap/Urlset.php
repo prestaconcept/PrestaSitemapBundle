@@ -21,7 +21,7 @@ use Presta\SitemapBundle\Sitemap\Url\Url;
  */
 class Urlset extends XmlConstraint
 {
-    const TAG = 'sitemap';
+    public const TAG = 'sitemap';
 
     /**
      * @var string

@@ -38,8 +38,12 @@ class DumpSitemapMessage
      */
     private $options;
 
-    public function __construct(string $section = null, string $baseUrl = null, string $targetDir = null, array $options = [])
-    {
+    public function __construct(
+        string $section = null,
+        string $baseUrl = null,
+        string $targetDir = null,
+        array $options = []
+    ) {
         $this->section = $section;
         $this->baseUrl = $baseUrl;
         $this->targetDir = $targetDir;

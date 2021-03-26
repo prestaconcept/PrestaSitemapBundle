@@ -22,7 +22,7 @@ use Presta\SitemapBundle\Exception;
  */
 class GoogleVideoUrlDecorator extends UrlDecorator
 {
-    const LIMIT_ITEMS = 1000;
+    public const LIMIT_ITEMS = 1000;
 
     /**
      * @var array

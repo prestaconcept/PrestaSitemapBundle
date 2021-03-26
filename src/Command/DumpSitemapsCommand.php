@@ -70,7 +70,8 @@ class DumpSitemapsCommand extends Command
                 'base-url',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Base url to use for absolute urls. Good example - http://acme.com/, bad example - acme.com. Defaults to router.request_context.host parameter'
+                'Base url to use for absolute urls. Good example - http://acme.com/, bad example - acme.com.' .
+                ' Defaults to router.request_context.host parameter'
             )
             ->addOption(
                 'gzip',
@@ -89,7 +90,7 @@ class DumpSitemapsCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $targetDir = rtrim($input->getArgument('target'), '/');
 
@@ -129,12 +130,15 @@ class DumpSitemapsCommand extends Command
             );
         }
         $options = [
-            'gzip' => (Boolean)$input->getOption('gzip'),
+            'gzip' => (bool)$input->getOption('gzip'),
         ];
         $filenames = $this->dumper->dump($targetDir, $baseUrl, $input->getOption('section'), $options);
 
         if ($filenames === false) {
-            $output->writeln("<error>No URLs were added to sitemap by EventListeners</error> - this may happen when provided section is invalid");
+            $output->writeln(
+                "<error>No URLs were added to sitemap by EventListeners</error>" .
+                " - this may happen when provided section is invalid"
+            );
 
             return 1;
         }
@@ -164,9 +168,9 @@ class DumpSitemapsCommand extends Command
         $port = '';
 
         if ('http' === $scheme && 80 != $context->getHttpPort()) {
-            $port = ':'.$context->getHttpPort();
+            $port = ':' . $context->getHttpPort();
         } elseif ('https' === $scheme && 443 != $context->getHttpsPort()) {
-            $port = ':'.$context->getHttpsPort();
+            $port = ':' . $context->getHttpsPort();
         }
 
         return rtrim($scheme . '://' . $host . $port, '/') . '/';

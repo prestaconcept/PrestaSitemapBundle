@@ -16,14 +16,13 @@ use Presta\SitemapBundle\Sitemap\XmlConstraint;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * This is the class that validates and merges configuration from your app/config files
  */
 class Configuration implements ConfigurationInterface
 {
-    const DEFAULT_FILENAME = 'sitemap';
+    public const DEFAULT_FILENAME = 'sitemap';
 
     /**
      * @inheritDoc
@@ -42,7 +41,10 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('sitemap_file_prefix')
                     ->defaultValue(self::DEFAULT_FILENAME)
-                    ->info('Sets sitemap filename prefix defaults to "sitemap" -> sitemap.xml (for index); sitemap.<section>.xml(.gz) (for sitemaps)')
+                    ->info(
+                        'Sets sitemap filename prefix defaults to "sitemap" -> sitemap.xml (for index);' .
+                        ' sitemap.<section>.xml(.gz) (for sitemaps)'
+                    )
                 ->end()
                 ->integerNode('items_by_set')
                     // Add one to the limit items value because it's an
@@ -53,13 +55,11 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('route_annotation_listener')->defaultTrue()->end()
                 ->scalarNode('dump_directory')
                     ->info(
-                        'The directory to which the sitemap will be dumped. '.
-                        'It can be either absolute, or relative (to the place where the command will be triggered). '.
-                        'Default to Symfony\'s public dir.'
+                        'The directory to which the sitemap will be dumped.' .
+                        ' It can be either absolute, or relative (to the place where the command will be triggered).' .
+                        ' Default to Symfony\'s public dir.'
                     )
-                    ->defaultValue(
-                        '%kernel.project_dir%/'.(version_compare(Kernel::VERSION, '4.0') >= 0 ? 'public' : 'web')
-                    )
+                    ->defaultValue('%kernel.project_dir%/public')
                 ->end()
                 ->arrayNode('defaults')
                     ->addDefaultsIfNotSet()
@@ -88,7 +88,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('alternate')
                     ->info(
                         'Automatically generate alternate (hreflang) urls with static routes.' .
-                       ' Requires route_annotation_listener config to be enabled.'
+                        ' Requires route_annotation_listener config to be enabled.'
                     )
                     ->canBeEnabled()
                     ->children()
@@ -100,7 +100,11 @@ class Configuration implements ConfigurationInterface
                             ->defaultValue(['en'])
                             ->beforeNormalization()
                             ->ifString()
-                                ->then(function ($v) { return preg_split('/\s*,\s*/', $v); })
+                                ->then(
+                                    function ($v) {
+                                        return preg_split('/\s*,\s*/', $v);
+                                    }
+                                )
                             ->end()
                             ->prototype('scalar')->end()
                             ->info('List of supported locales of your routes.')

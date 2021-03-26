@@ -75,7 +75,8 @@ class Sitemapindex extends XmlConstraint
     {
         $struct = '<?xml version="1.0" encoding="UTF-8"?>';
         $struct .= '<sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"';
-        $struct .= ' xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd"';
+        $struct .= ' xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9' .
+                   ' http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd"';
         $struct .= ' xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">SITEMAPS</sitemapindex>';
 
         return $struct;

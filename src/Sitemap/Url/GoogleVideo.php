@@ -22,26 +22,26 @@ use Presta\SitemapBundle\Sitemap\Utils;
  */
 class GoogleVideo
 {
-    const PLAYER_LOC_ALLOW_EMBED_YES = 'yes';
-    const PLAYER_LOC_ALLOW_EMBED_NO = 'no';
-    const FAMILY_FRIENDLY_YES = 'yes';
-    const FAMILY_FRIENDLY_NO = 'no';
-    const RELATIONSHIP_ALLOW = 'allow';
-    const RELATIONSHIP_DENY = 'deny';
-    const PRICE_TYPE_RENT = 'rent';
-    const PRICE_TYPE_OWN = 'own';
-    const PRICE_RESOLUTION_HD = 'HD';
-    const PRICE_RESOLUTION_SD = 'SD';
-    const REQUIRES_SUBSCRIPTION_YES = 'yes';
-    const REQUIRES_SUBSCRIPTION_NO = 'no';
-    const PLATFORM_WEB = 'web';
-    const PLATFORM_MOBILE = 'mobile';
-    const PLATFORM_TV = 'tv';
-    const PLATFORM_RELATIONSHIP_ALLOW = 'allow';
-    const PLATFORM_RELATIONSHIP_DENY = 'deny';
-    const LIVE_YES = 'yes';
-    const LIVE_NO = 'no';
-    const TAG_ITEMS_LIMIT = 32;
+    public const PLAYER_LOC_ALLOW_EMBED_YES = 'yes';
+    public const PLAYER_LOC_ALLOW_EMBED_NO = 'no';
+    public const FAMILY_FRIENDLY_YES = 'yes';
+    public const FAMILY_FRIENDLY_NO = 'no';
+    public const RELATIONSHIP_ALLOW = 'allow';
+    public const RELATIONSHIP_DENY = 'deny';
+    public const PRICE_TYPE_RENT = 'rent';
+    public const PRICE_TYPE_OWN = 'own';
+    public const PRICE_RESOLUTION_HD = 'HD';
+    public const PRICE_RESOLUTION_SD = 'SD';
+    public const REQUIRES_SUBSCRIPTION_YES = 'yes';
+    public const REQUIRES_SUBSCRIPTION_NO = 'no';
+    public const PLATFORM_WEB = 'web';
+    public const PLATFORM_MOBILE = 'mobile';
+    public const PLATFORM_TV = 'tv';
+    public const PLATFORM_RELATIONSHIP_ALLOW = 'allow';
+    public const PLATFORM_RELATIONSHIP_DENY = 'deny';
+    public const LIVE_YES = 'yes';
+    public const LIVE_NO = 'no';
+    public const TAG_ITEMS_LIMIT = 32;
 
     /**
      * @var string
@@ -360,7 +360,8 @@ class GoogleVideo
         if (!in_array($embed, [self::PLAYER_LOC_ALLOW_EMBED_YES, self::PLAYER_LOC_ALLOW_EMBED_NO])) {
             throw new Exception\GoogleVideoException(
                 sprintf(
-                    'The parameter %s must be a valid player_location_allow_embed. See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    'The parameter %s must be a valid player_location_allow_embed.' .
+                    ' See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
                     $embed
                 )
             );
@@ -409,7 +410,8 @@ class GoogleVideo
         if ($duration < 0 || $duration > 28800) {
             throw new Exception\GoogleVideoException(
                 sprintf(
-                    'The parameter %s must be a valid duration. See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    'The parameter %s must be a valid duration.' .
+                    ' See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
                     $duration
                 )
             );
@@ -442,7 +444,8 @@ class GoogleVideo
         if ($rating < 0 || $rating > 5) {
             throw new Exception\GoogleVideoException(
                 sprintf(
-                    'The parameter %s must be a valid rating. See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    'The parameter %s must be a valid rating.' .
+                    ' See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
                     $rating
                 )
             );
@@ -491,7 +494,8 @@ class GoogleVideo
         if (!in_array($familyFriendly, [self::FAMILY_FRIENDLY_YES, self::FAMILY_FRIENDLY_NO])) {
             throw new Exception\GoogleVideoException(
                 sprintf(
-                    'The parameter %s must be a valid family_friendly. See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    'The parameter %s must be a valid family_friendly.' .
+                    ' See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
                     $familyFriendly
                 )
             );
@@ -512,7 +516,8 @@ class GoogleVideo
         if (strlen($category) > 256) {
             throw new Exception\GoogleVideoException(
                 sprintf(
-                    'The parameter %s must be a valid category. See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    'The parameter %s must be a valid category.' .
+                    ' See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
                     $category
                 )
             );
@@ -597,7 +602,8 @@ class GoogleVideo
         if (!in_array($requiresSubscription, [self::REQUIRES_SUBSCRIPTION_YES, self::REQUIRES_SUBSCRIPTION_NO])) {
             throw new Exception\GoogleVideoException(
                 sprintf(
-                    'The parameter %s must be a valid requires_subscription. See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    'The parameter %s must be a valid requires_subscription.' .
+                    ' See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
                     $requiresSubscription
                 )
             );

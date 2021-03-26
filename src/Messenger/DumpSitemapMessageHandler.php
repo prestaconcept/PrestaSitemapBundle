@@ -84,9 +84,9 @@ class DumpSitemapMessageHandler implements MessageHandlerInterface
         $port = '';
 
         if ('http' === $scheme && 80 != $context->getHttpPort()) {
-            $port = ':'.$context->getHttpPort();
+            $port = ':' . $context->getHttpPort();
         } elseif ('https' === $scheme && 443 != $context->getHttpsPort()) {
-            $port = ':'.$context->getHttpsPort();
+            $port = ':' . $context->getHttpsPort();
         }
 
         return rtrim($scheme . '://' . $host . $port, '/') . '/';

@@ -22,13 +22,13 @@ use Presta\SitemapBundle\Sitemap\Utils;
  */
 class UrlConcrete implements Url
 {
-    const CHANGEFREQ_ALWAYS = 'always';
-    const CHANGEFREQ_HOURLY = 'hourly';
-    const CHANGEFREQ_DAILY = 'daily';
-    const CHANGEFREQ_WEEKLY = 'weekly';
-    const CHANGEFREQ_MONTHLY = 'monthly';
-    const CHANGEFREQ_YEARLY = 'yearly';
-    const CHANGEFREQ_NEVER = 'never';
+    public const CHANGEFREQ_ALWAYS = 'always';
+    public const CHANGEFREQ_HOURLY = 'hourly';
+    public const CHANGEFREQ_DAILY = 'daily';
+    public const CHANGEFREQ_WEEKLY = 'weekly';
+    public const CHANGEFREQ_MONTHLY = 'monthly';
+    public const CHANGEFREQ_YEARLY = 'yearly';
+    public const CHANGEFREQ_NEVER = 'never';
 
     /**
      * @var string
@@ -128,7 +128,8 @@ class UrlConcrete implements Url
         if (!in_array($changefreq, $frequencies)) {
             throw new \RuntimeException(
                 sprintf(
-                    'The value "%s" is not supported by the option changefreq. See http://www.sitemaps.org/protocol.html#xmlTagDefinitions',
+                    'The value "%s" is not supported by the option changefreq.' .
+                    ' See http://www.sitemaps.org/protocol.html#xmlTagDefinitions',
                     $changefreq
                 )
             );
@@ -171,7 +172,9 @@ class UrlConcrete implements Url
         } else {
             throw new \RuntimeException(
                 sprintf(
-                    'The value "%s" is not supported by the option priority, it must be a numeric between 0.0 and 1.0. See http://www.sitemaps.org/protocol.html#xmlTagDefinitions',
+                    'The value "%s" is not supported by the option priority,' .
+                    ' it must be a numeric between 0.0 and 1.0.' .
+                    ' See http://www.sitemaps.org/protocol.html#xmlTagDefinitions',
                     $priority
                 )
             );
