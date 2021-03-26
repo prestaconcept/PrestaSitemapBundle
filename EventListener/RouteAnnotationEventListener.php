@@ -22,7 +22,6 @@ use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 
 /**
  * This listener iterate over configured routes, and register allowed URLs to sitemap.
@@ -94,11 +93,7 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
             }
 
             $event = new SitemapAddUrlEvent($name, $options);
-            if ($this->dispatcher instanceof ContractsEventDispatcherInterface) {
-                $this->dispatcher->dispatch($event, SitemapAddUrlEvent::NAME);
-            } else {
-                $this->dispatcher->dispatch(SitemapAddUrlEvent::NAME, $event);
-            }
+            $this->dispatcher->dispatch($event, SitemapAddUrlEvent::NAME);
 
             if (!$event->shouldBeRegistered()) {
                 continue;

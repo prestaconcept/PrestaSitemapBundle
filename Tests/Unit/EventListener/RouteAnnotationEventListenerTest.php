@@ -24,7 +24,6 @@ use Symfony\Component\Routing\Loader\ClosureLoader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Router;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 
 class RouteAnnotationEventListenerTest extends TestCase
 {
@@ -149,11 +148,7 @@ class RouteAnnotationEventListenerTest extends TestCase
         );
 
         $dispatcher->addSubscriber(new RouteAnnotationEventListener($router, $dispatcher, 'default'));
-        if ($dispatcher instanceof ContractsEventDispatcherInterface) {
-            $dispatcher->dispatch($event, SitemapPopulateEvent::ON_SITEMAP_POPULATE);
-        } else {
-            $dispatcher->dispatch(SitemapPopulateEvent::ON_SITEMAP_POPULATE, $event);
-        }
+        $dispatcher->dispatch($event, SitemapPopulateEvent::ON_SITEMAP_POPULATE);
     }
 
     private function findUrl(array $urlset, string $loc): ?UrlConcrete

@@ -8,7 +8,6 @@ use Presta\SitemapBundle\EventListener\StaticRoutesAlternateEventListener;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 
 class StaticRoutesAlternateEventListenerTest extends TestCase
 {
@@ -102,11 +101,7 @@ class StaticRoutesAlternateEventListenerTest extends TestCase
         $dispatcher->addSubscriber(new StaticRoutesAlternateEventListener($this->router->reveal(), $listenerOptions));
 
         $event = new SitemapAddUrlEvent($route, $options);
-        if ($dispatcher instanceof ContractsEventDispatcherInterface) {
-            $dispatcher->dispatch($event, SitemapAddUrlEvent::NAME);
-        } else {
-            $dispatcher->dispatch(SitemapAddUrlEvent::NAME, $event);
-        }
+        $dispatcher->dispatch($event, SitemapAddUrlEvent::NAME);
 
         return $event;
     }
