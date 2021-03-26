@@ -193,42 +193,14 @@ class GoogleVideo
     {
         foreach ($parameters as $key => $param) {
             switch ($key) {
-                case 'content_loc':
-                    @trigger_error(
-                        'GoogleVideo parameter ' . $key . ' is deprecated since 2.3.0, use "content_location" parameter instead',
-                        E_USER_DEPRECATED
-                    );
-                    $this->setContentLocation($param);
-                    break;
                 case 'content_location':
                     $this->setContentLocation($param);
-                    break;
-                case 'player_loc':
-                    @trigger_error(
-                        'GoogleVideo parameter ' . $key . ' is deprecated since 2.3.0, use "player_location" parameter instead',
-                        E_USER_DEPRECATED
-                    );
-                    $this->setPlayerLocation($param);
                     break;
                 case 'player_location':
                     $this->setPlayerLocation($param);
                     break;
-                case 'player_loc_allow_embed':
-                    @trigger_error(
-                        'GoogleVideo parameter ' . $key . ' is deprecated since 2.3.0, use "player_location_allow_embed" parameter instead',
-                        E_USER_DEPRECATED
-                    );
-                    $this->setPlayerLocationAllowEmbed($param);
-                    break;
                 case 'player_location_allow_embed':
                     $this->setPlayerLocationAllowEmbed($param);
-                    break;
-                case 'player_loc_autoplay':
-                    @trigger_error(
-                        'GoogleVideo parameter ' . $key . ' is deprecated since 2.3.0, use "player_location_autoplay" parameter instead',
-                        E_USER_DEPRECATED
-                    );
-                    $this->setPlayerLocationAutoplay($param);
                     break;
                 case 'player_location_autoplay':
                     $this->setPlayerLocationAutoplay($param);
@@ -260,22 +232,8 @@ class GoogleVideo
                 case 'restriction_deny':
                     $this->setRestrictionDeny($param);
                     break;
-                case 'gallery_loc':
-                    @trigger_error(
-                        'GoogleVideo parameter ' . $key . ' is deprecated since 2.3.0, use "gallery_location" parameter instead',
-                        E_USER_DEPRECATED
-                    );
-                    $this->setGalleryLocation($param);
-                    break;
                 case 'gallery_location':
                     $this->setGalleryLocation($param);
-                    break;
-                case 'gallery_loc_title':
-                    @trigger_error(
-                        'GoogleVideo parameter ' . $key . ' is deprecated since 2.3.0, use "gallery_location_title" parameter instead',
-                        E_USER_DEPRECATED
-                    );
-                    $this->setGalleryLocationTitle($param);
                     break;
                 case 'gallery_location_title':
                     $this->setGalleryLocationTitle($param);
@@ -316,96 +274,6 @@ class GoogleVideo
         }
     }
 
-    public function __get($name)
-    {
-        $map = [
-            'thumbnail_loc' => 'thumbnailLocation',
-            'content_loc' => 'contentLocation',
-            'player_loc' => 'playerLocation',
-            'player_loc_allow_embed' => 'playerLocationAllowEmbed',
-            'player_loc_autoplay' => 'playerLocationAutoplay',
-            'expiration_date' => 'expirationDate',
-            'view_count' => 'viewCount',
-            'publication_date' => 'publicationDate',
-            'family_friendly' => 'familyFriendly',
-            'restriction_allow' => 'restrictionAllow',
-            'restriction_deny' => 'restrictionDeny',
-            'gallery_loc' => 'galleryLocation',
-            'gallery_loc_title' => 'galleryLocationTitle',
-            'requires_subscription' => 'requiresSubscription',
-            'uploader_info' => 'uploaderInformation',
-            'platform_relationship' => 'platformRelationship',
-        ];
-
-        if (array_key_exists($name, $map)) {
-            $newName = $map[$name];
-            @trigger_error(
-                sprintf('Property %s::$%s is deprecated since 2.3.0, use $%s instead.', __CLASS__, $name, $newName),
-                E_USER_DEPRECATED
-            );
-
-            return $this->{$newName};
-        }
-
-        trigger_error(sprintf('Undefined property: %s::$%s', __CLASS__, $name));
-
-        return null;
-    }
-
-    public function __set($name, $value)
-    {
-        $map = [
-            'thumbnail_loc' => 'thumbnailLocation',
-            'content_loc' => 'contentLocation',
-            'player_loc' => 'playerLocation',
-            'player_loc_allow_embed' => 'playerLocationAllowEmbed',
-            'player_loc_autoplay' => 'playerLocationAutoplay',
-            'expiration_date' => 'expirationDate',
-            'view_count' => 'viewCount',
-            'publication_date' => 'publicationDate',
-            'family_friendly' => 'familyFriendly',
-            'restriction_allow' => 'restrictionAllow',
-            'restriction_deny' => 'restrictionDeny',
-            'gallery_loc' => 'galleryLocation',
-            'gallery_loc_title' => 'galleryLocationTitle',
-            'requires_subscription' => 'requiresSubscription',
-            'uploader_info' => 'uploaderInformation',
-            'platform_relationship' => 'platformRelationship',
-        ];
-
-        if (array_key_exists($name, $map)) {
-            $newName = $map[$name];
-            @trigger_error(
-                sprintf('Property %s::$%s is deprecated since 2.3.0, use $%s instead.', __CLASS__, $name, $newName),
-                E_USER_DEPRECATED
-            );
-
-            $this->{$newName} = $value;
-
-            return;
-        }
-
-        trigger_error(sprintf('Undefined property: %s::$%s', __CLASS__, $name), E_NOTICE);
-    }
-
-    /**
-     * @deprecated since 2.3.0, to be removed in 3.0.0
-     *
-     * @param string $thumbnail_loc
-     *
-     * @return GoogleVideo
-     */
-    public function setThumbnailLoc($thumbnail_loc)
-    {
-        @trigger_error(
-            sprintf('Method %s is deprecated since 2.3.0, use %s::setThumbnailLocation instead.', __METHOD__, __CLASS__),
-            E_USER_DEPRECATED
-        );
-        $this->setThumbnailLocation($thumbnail_loc);
-
-        return $this;
-    }
-
     /**
      * @param string $location
      *
@@ -416,21 +284,6 @@ class GoogleVideo
         $this->thumbnailLocation = $location;
 
         return $this;
-    }
-
-    /**
-     * @deprecated since 2.3.0, to be removed in 3.0.0
-     *
-     * @return string
-     */
-    public function getThumbnailLoc()
-    {
-        @trigger_error(
-            sprintf('Method %s is deprecated since 2.3.0, use %s::getThumbnailLocation instead.', __METHOD__, __CLASS__),
-            E_USER_DEPRECATED
-        );
-
-        return $this->getThumbnailLocation();
     }
 
     /**
@@ -466,24 +319,6 @@ class GoogleVideo
     }
 
     /**
-     * @deprecated since 2.3.0, to be removed in 3.0.0
-     *
-     * @param string $content_loc
-     *
-     * @return GoogleVideo
-     */
-    public function setContentLoc($content_loc)
-    {
-        @trigger_error(
-            sprintf('Method %s is deprecated since 2.3.0, use %s::setContentLocation instead.', __METHOD__, __CLASS__),
-            E_USER_DEPRECATED
-        );
-        $this->setContentLocation($content_loc);
-
-        return $this;
-    }
-
-    /**
      * @param string $location
      *
      * @return GoogleVideo
@@ -491,24 +326,6 @@ class GoogleVideo
     public function setContentLocation($location)
     {
         $this->contentLocation = $location;
-
-        return $this;
-    }
-
-    /**
-     * @deprecated since 2.3.0, to be removed in 3.0.0
-     *
-     * @param string $player_loc
-     *
-     * @return GoogleVideo
-     */
-    public function setPlayerLoc($player_loc)
-    {
-        @trigger_error(
-            sprintf('Method %s is deprecated since 2.3.0, use %s::setPlayerLocation instead.', __METHOD__, __CLASS__),
-            E_USER_DEPRECATED
-        );
-        $this->setPlayerLocation($player_loc);
 
         return $this;
     }
@@ -526,44 +343,11 @@ class GoogleVideo
     }
 
     /**
-     * @deprecated since 2.3.0, to be removed in 3.0.0
-     *
-     * @return string|null
-     */
-    public function getPlayerLoc()
-    {
-        @trigger_error(
-            sprintf('Method %s is deprecated since 2.3.0, use %s::getPlayerLocation instead.', __METHOD__, __CLASS__),
-            E_USER_DEPRECATED
-        );
-
-        return $this->getPlayerLocation();
-    }
-
-    /**
      * @return string|null
      */
     public function getPlayerLocation()
     {
         return $this->playerLocation;
-    }
-
-    /**
-     * @deprecated since 2.3.0, to be removed in 3.0.0
-     *
-     * @param string $player_loc_allow_embed
-     *
-     * @return GoogleVideo
-     */
-    public function setPlayerLocAllowEmbed($player_loc_allow_embed)
-    {
-        @trigger_error(
-            sprintf('Method %s is deprecated since 2.3.0, use %s::setPlayerLocationAllowEmbed instead.', __METHOD__, __CLASS__),
-            E_USER_DEPRECATED
-        );
-        $this->setPlayerLocationAllowEmbed($player_loc_allow_embed);
-
-        return $this;
     }
 
     /**
@@ -587,44 +371,11 @@ class GoogleVideo
     }
 
     /**
-     * @deprecated since 2.3.0, to be removed in 3.0.0
-     *
-     * @return string
-     */
-    public function getPlayerLocAllowEmbed()
-    {
-        @trigger_error(
-            sprintf('Method %s is deprecated since 2.3.0, use %s::getPlayerLocationAllowEmbed instead.', __METHOD__, __CLASS__),
-            E_USER_DEPRECATED
-        );
-
-        return $this->getPlayerLocationAllowEmbed();
-    }
-
-    /**
      * @return string
      */
     public function getPlayerLocationAllowEmbed()
     {
         return $this->playerLocationAllowEmbed;
-    }
-
-    /**
-     * @deprecated since 2.3.0, to be removed in 3.0.0
-     *
-     * @param string $player_loc_autoplay
-     *
-     * @return GoogleVideo
-     */
-    public function setPlayerLocAutoplay($player_loc_autoplay)
-    {
-        @trigger_error(
-            sprintf('Method %s is deprecated since 2.3.0, use %s::setPlayerLocationAutoplay instead.', __METHOD__, __CLASS__),
-            E_USER_DEPRECATED
-        );
-        $this->setPlayerLocationAutoplay($player_loc_autoplay);
-
-        return $this;
     }
 
     /**
@@ -637,21 +388,6 @@ class GoogleVideo
         $this->playerLocationAutoplay = $autoplay;
 
         return $this;
-    }
-
-    /**
-     * @deprecated since 2.3.0, to be removed in 3.0.0
-     *
-     * @return string
-     */
-    public function getPlayerLocAutoplay()
-    {
-        @trigger_error(
-            sprintf('Method %s is deprecated since 2.3.0, use %s::getPlayerLocationAutoplay instead.', __METHOD__, __CLASS__),
-            E_USER_DEPRECATED
-        );
-
-        return $this->getPlayerLocationAutoplay();
     }
 
     /**
@@ -828,24 +564,6 @@ class GoogleVideo
     }
 
     /**
-     * @deprecated since 2.3.0, to be removed in 3.0.0
-     *
-     * @param string $gallery_loc
-     *
-     * @return GoogleVideo
-     */
-    public function setGalleryLoc($gallery_loc)
-    {
-        @trigger_error(
-            sprintf('Method %s is deprecated since 2.3.0, use %s::setGalleryLocation instead.', __METHOD__, __CLASS__),
-            E_USER_DEPRECATED
-        );
-        $this->setGalleryLocation($gallery_loc);
-
-        return $this;
-    }
-
-    /**
      * @param string $location
      *
      * @return GoogleVideo
@@ -853,24 +571,6 @@ class GoogleVideo
     public function setGalleryLocation($location)
     {
         $this->galleryLocation = $location;
-
-        return $this;
-    }
-
-    /**
-     * @deprecated since 2.3.0, to be removed in 3.0.0
-     *
-     * @param string $gallery_loc_title
-     *
-     * @return GoogleVideo
-     */
-    public function setGalleryLocTitle($gallery_loc_title)
-    {
-        @trigger_error(
-            sprintf('Method %s is deprecated since 2.3.0, use %s::setGalleryLocationTitle instead.', __METHOD__, __CLASS__),
-            E_USER_DEPRECATED
-        );
-        $this->setGalleryLocationTitle($gallery_loc_title);
 
         return $this;
     }
@@ -1001,21 +701,6 @@ class GoogleVideo
     }
 
     /**
-     * @deprecated since 2.3.0, to be removed in 3.0.0
-     *
-     * @return null|string
-     */
-    public function getContentLoc()
-    {
-        @trigger_error(
-            sprintf('Method %s is deprecated since 2.3.0, use %s::getContentLocation instead.', __METHOD__, __CLASS__),
-            E_USER_DEPRECATED
-        );
-
-        return $this->getContentLocation();
-    }
-
-    /**
      * @return null|string
      */
     public function getContentLocation()
@@ -1080,41 +765,11 @@ class GoogleVideo
     }
 
     /**
-     * @deprecated since 2.3.0, to be removed in 3.0.0
-     *
-     * @return null|string
-     */
-    public function getGalleryLoc()
-    {
-        @trigger_error(
-            sprintf('Method %s is deprecated since 2.3.0, use %s::getGalleryLocation instead.', __METHOD__, __CLASS__),
-            E_USER_DEPRECATED
-        );
-
-        return $this->getGalleryLocation();
-    }
-
-    /**
      * @return null|string
      */
     public function getGalleryLocation()
     {
         return $this->galleryLocation;
-    }
-
-    /**
-     * @deprecated since 2.3.0, to be removed in 3.0.0
-     *
-     * @return null|string
-     */
-    public function getGalleryLocTitle()
-    {
-        @trigger_error(
-            sprintf('Method %s is deprecated since 2.3.0, use %s::getGalleryLocationTitle instead.', __METHOD__, __CLASS__),
-            E_USER_DEPRECATED
-        );
-
-        return $this->getGalleryLocationTitle();
     }
 
     /**

@@ -12,7 +12,6 @@
 namespace Presta\SitemapBundle\Tests\Unit\Sitemap;
 
 use PHPUnit\Framework\TestCase;
-use Presta\SitemapBundle\Exception\Exception;
 use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
@@ -22,37 +21,6 @@ use Presta\SitemapBundle\Sitemap\Utils;
  */
 class UtilsTest extends TestCase
 {
-    /**
-     * @group legacy
-     */
-    public function testGetSetMethodException(): void
-    {
-        $this->expectException(Exception::class);
-
-        $object = new \stdClass();
-        Utils::getSetMethod($object, 'unknown');
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testGetGetMethodException(): void
-    {
-        $this->expectException(Exception::class);
-
-        $object = new \stdClass();
-        Utils::getGetMethod($object, 'unknown');
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testRender(): void
-    {
-        $actual = Utils::render('data w/ cdata section');
-        self::assertEquals('<![CDATA[data w/ cdata section]]>', $actual);
-    }
-
     public function testCdata(): void
     {
         $actual = Utils::cdata('data w/ cdata section');

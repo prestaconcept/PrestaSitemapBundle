@@ -51,15 +51,6 @@ class GeneratorTest extends WebTestCase
         });
     }
 
-    /**
-     * @group legacy
-     */
-    public function testGenerate(): void
-    {
-        $this->generator()->generate();
-        self::assertTrue(true, 'No exception was thrown');
-    }
-
     public function testFetch(): void
     {
         $generator = $this->generator();
@@ -159,6 +150,6 @@ class GeneratorTest extends WebTestCase
 
     private function generator(): Generator
     {
-        return new Generator($this->eventDispatcher, $this->router, null, null, self::ITEMS_BY_SET);
+        return new Generator($this->eventDispatcher, $this->router, self::ITEMS_BY_SET);
     }
 }

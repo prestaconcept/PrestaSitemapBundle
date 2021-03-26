@@ -20,7 +20,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
@@ -118,30 +117,6 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     protected function getRouteCollection()
     {
         return $this->router->getRouteCollection();
-    }
-
-    /**
-     * @deprecated since 2.3.0, use @link RouteOptionParser::parse instead
-     *
-     * @param string $name
-     * @param Route  $route
-     *
-     * @return array|null
-     * @throws \InvalidArgumentException
-     */
-    public function getOptions($name, Route $route)
-    {
-        @trigger_error(
-            sprintf(
-                '%s is deprecated since 2.3.0 and will be removed in 3.0.0, use %s::%s instead',
-                __METHOD__,
-                RouteOptionParser::class,
-                'parse'
-            ),
-            E_USER_DEPRECATED
-        );
-
-        return RouteOptionParser::parse($name, $route);
     }
 
     /**

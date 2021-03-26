@@ -101,31 +101,6 @@ presta_sitemap:
 ```
 
 
-## Caching the sitemap (deprecated)
-
-> **warning** Cache support has been deprecated since v2.3.2 and will be removed in v3.0.0.
-> Please [dump](6-dumping-sitemap.md) your sitemap instead.
-
-Sitemap can be stored in a cache.
-
-`PrestaSitemapBundle` uses `DoctrineCacheBundle` to cache things.
-You need to install the bundle and specify what kind of cache system to use with this bundle.
-
- * Follow the instruction to install [DoctrineCacheBundle](http://packagist.org/packages/doctrine/doctrine-cache-bundle).
- * Configure a provider for this bundle.
-
-For example:
-
-```yaml
-# config/packages/doctrine_cache.yaml
-doctrine_cache:
-    providers:
-        presta_sitemap:
-            type: array
-            namespace: presta_sitemap
-```
-
-
 ## Changing default services
 
 Both sitemap generator and sitemap dumper services can be changed within the configuration.
