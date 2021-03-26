@@ -12,111 +12,56 @@
 namespace Presta\SitemapBundle\Event;
 
 use Presta\SitemapBundle\Service\UrlContainerInterface;
-use Symfony\Component\EventDispatcher\Event as BaseEvent;
-use Symfony\Contracts\EventDispatcher\Event as ContractsBaseEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-if (is_subclass_of('Symfony\Component\EventDispatcher\EventDispatcher', 'Symfony\Contracts\EventDispatcher\EventDispatcherInterface')) {
+/**
+ * Manage populate event
+ *
+ * @author depely
+ */
+class SitemapPopulateEvent extends Event
+{
     /**
-     * Manage populate event
-     *
-     * @author depely
+     * @Event("Presta\SitemapBundle\Event\SitemapPopulateEvent")
      */
-    class SitemapPopulateEvent extends ContractsBaseEvent
+    const ON_SITEMAP_POPULATE = 'presta_sitemap.populate';
+
+    /**
+     * @var UrlContainerInterface
+     */
+    protected $urlContainer;
+
+    /**
+     * Allows creating EventListeners for particular sitemap sections, used when dumping
+     * @var string
+     */
+    protected $section;
+
+    /**
+     * @param UrlContainerInterface $urlContainer
+     * @param string|null           $section
+     */
+    public function __construct(UrlContainerInterface $urlContainer, $section = null)
     {
-        /**
-         * @Event("Presta\SitemapBundle\Event\SitemapPopulateEvent")
-         */
-        const ON_SITEMAP_POPULATE = 'presta_sitemap.populate';
-
-        /**
-         * @var UrlContainerInterface
-         */
-        protected $urlContainer;
-
-        /**
-         * Allows creating EventListeners for particular sitemap sections, used when dumping
-         * @var string
-         */
-        protected $section;
-
-        /**
-         * @param UrlContainerInterface $urlContainer
-         * @param string|null           $section
-         */
-        public function __construct(UrlContainerInterface $urlContainer, $section = null)
-        {
-            $this->urlContainer = $urlContainer;
-            $this->section = $section;
-        }
-
-        /**
-         * @return UrlContainerInterface
-         */
-        public function getUrlContainer()
-        {
-            return $this->urlContainer;
-        }
-
-        /**
-         * Section to be processed, null means any
-         *
-         * @return null|string
-         */
-        public function getSection()
-        {
-            return $this->section;
-        }
+        $this->urlContainer = $urlContainer;
+        $this->section = $section;
     }
-} else {
+
     /**
-     * Manage populate event
-     *
-     * @author depely
+     * @return UrlContainerInterface
      */
-    class SitemapPopulateEvent extends BaseEvent
+    public function getUrlContainer()
     {
-        /**
-         * @Event("Presta\SitemapBundle\Event\SitemapPopulateEvent")
-         */
-        const ON_SITEMAP_POPULATE = 'presta_sitemap.populate';
+        return $this->urlContainer;
+    }
 
-        /**
-         * @var UrlContainerInterface
-         */
-        protected $urlContainer;
-
-        /**
-         * Allows creating EventListeners for particular sitemap sections, used when dumping
-         * @var string
-         */
-        protected $section;
-
-        /**
-         * @param UrlContainerInterface $urlContainer
-         * @param string|null           $section
-         */
-        public function __construct(UrlContainerInterface $urlContainer, $section = null)
-        {
-            $this->urlContainer = $urlContainer;
-            $this->section = $section;
-        }
-
-        /**
-         * @return UrlContainerInterface
-         */
-        public function getUrlContainer()
-        {
-            return $this->urlContainer;
-        }
-
-        /**
-         * Section to be processed, null means any
-         *
-         * @return null|string
-         */
-        public function getSection()
-        {
-            return $this->section;
-        }
+    /**
+     * Section to be processed, null means any
+     *
+     * @return null|string
+     */
+    public function getSection()
+    {
+        return $this->section;
     }
 }
