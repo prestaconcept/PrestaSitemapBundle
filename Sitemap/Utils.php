@@ -11,8 +11,6 @@
 
 namespace Presta\SitemapBundle\Sitemap;
 
-use Presta\SitemapBundle\Exception\Exception;
-
 /**
  * Description of Utils
  *
@@ -20,78 +18,6 @@ use Presta\SitemapBundle\Exception\Exception;
  */
 class Utils
 {
-    /**
-     * @deprecated since 2.3.0, to be removed in 3.0.0
-     *
-     * Verify method affiliated to given param
-     *
-     * @param object $object
-     * @param string $name
-     *
-     * @return string
-     */
-    public static function getSetMethod($object, $name)
-    {
-        @trigger_error(
-            sprintf('Method %s is deprecated since 2.3.0.', __METHOD__),
-            E_USER_DEPRECATED
-        );
-
-        $methodName = 'set' . self::camelize($name);
-
-        if (!method_exists($object, $methodName)) {
-            throw new Exception(sprintf('The set method for parameter %s is missing', $name));
-        }
-
-        return $methodName;
-    }
-
-    /**
-     * @deprecated since 2.3.0, to be removed in 3.0.0
-     *
-     * Verify method affiliated to given param
-     *
-     * @param object $object
-     * @param string $name
-     *
-     * @return string
-     * @throws Exception
-     */
-    public static function getGetMethod($object, $name)
-    {
-        @trigger_error(
-            sprintf('Method %s is deprecated since 2.3.0.', __METHOD__),
-            E_USER_DEPRECATED
-        );
-
-        $methodName = 'get' . self::camelize($name);
-
-        if (!method_exists($object, $methodName)) {
-            throw new Exception(sprintf('The get method for parameter %s is missing', $name));
-        }
-
-        return $methodName;
-    }
-
-    /**
-     * @deprecated since 2.3.0, to be removed in 3.0.0
-     *
-     * Legacy alias of Utils::cdata
-     *
-     * @param string $string
-     *
-     * @return string
-     */
-    public static function render($string)
-    {
-        @trigger_error(
-            sprintf('Method %s is deprecated since 2.3.0, use %s::cdata instead.', __METHOD__, __CLASS__),
-            E_USER_DEPRECATED
-        );
-
-        return self::cdata($string);
-    }
-
     /**
      * Wrap string with CDATA markup
      *
@@ -114,22 +40,5 @@ class Utils
     public static function encode($string)
     {
         return htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-    }
-
-    /**
-     * Uppercase first letter after a space or underscore
-     *
-     * @param string $string
-     *
-     * @return string
-     */
-    public static function camelize($string)
-    {
-        @trigger_error(
-            sprintf('Method %s is deprecated since 2.3.0.', __METHOD__),
-            E_USER_DEPRECATED
-        );
-
-        return str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
     }
 }

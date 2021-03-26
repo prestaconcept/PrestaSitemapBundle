@@ -16,6 +16,6 @@ namespace Presta\SitemapBundle\Exception;
  *
  * @author David Epely <depely@prestaconcept.net>
  */
-class GoogleVideoTagException extends GoogleVideoUrlTagException
+class GoogleVideoTagException extends Exception
 {
 }
