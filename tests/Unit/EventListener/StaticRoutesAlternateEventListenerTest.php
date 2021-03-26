@@ -5,9 +5,13 @@ namespace Presta\SitemapBundle\Tests\Unit\EventListener;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Event\SitemapAddUrlEvent;
 use Presta\SitemapBundle\EventListener\StaticRoutesAlternateEventListener;
-use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 
 class StaticRoutesAlternateEventListenerTest extends TestCase
 {
@@ -15,19 +19,24 @@ class StaticRoutesAlternateEventListenerTest extends TestCase
     private const JMS_OPTIONS = ['i18n' => 'jms', 'default_locale' => 'en', 'locales' => ['en', 'fr']];
 
     /**
-     * @var UrlGeneratorInterface|ObjectProphecy
+     * @var UrlGeneratorInterface
      */
     private $router;
 
     protected function setUp(): void
     {
-        $this->router = $this->prophesize(UrlGeneratorInterface::class);
-        $this->router->generate('home', [], UrlGeneratorInterface::ABSOLUTE_URL)
-            ->willReturn('https://acme.org/');
-        $this->router->generate('about', ['_locale' => 'en'], UrlGeneratorInterface::ABSOLUTE_URL)
-            ->willReturn('https://acme.org/about');
-        $this->router->generate('about', ['_locale' => 'fr'], UrlGeneratorInterface::ABSOLUTE_URL)
-            ->willReturn('https://acme.org/a-propos');
+        $routes = new RouteCollection();
+        $routes->add('home', new Route('/'));
+        $routes->add(
+            'about.en',
+            new Route('/about', ['_locale' => 'en', '_canonical_route' => 'about'], ['_locale' => 'en'])
+        );
+        $routes->add(
+            'about.fr',
+            new Route('/a-propos', ['_locale' => 'fr', '_canonical_route' => 'about'], ['_locale' => 'fr'])
+        );
+        $this->router = new UrlGenerator($routes, new RequestContext());
+        $this->router->getContext()->fromRequest(Request::create('https://acme.org'));
     }
 
     /**
@@ -98,7 +107,7 @@ class StaticRoutesAlternateEventListenerTest extends TestCase
     private function dispatch(array $listenerOptions, string $route, array $options = []): SitemapAddUrlEvent
     {
         $dispatcher = new EventDispatcher();
-        $dispatcher->addSubscriber(new StaticRoutesAlternateEventListener($this->router->reveal(), $listenerOptions));
+        $dispatcher->addSubscriber(new StaticRoutesAlternateEventListener($this->router, $listenerOptions));
 
         $event = new SitemapAddUrlEvent($route, $options);
         $dispatcher->dispatch($event, SitemapAddUrlEvent::NAME);

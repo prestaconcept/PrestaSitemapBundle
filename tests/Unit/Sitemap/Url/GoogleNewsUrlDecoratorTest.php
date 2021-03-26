@@ -20,8 +20,10 @@ use Presta\SitemapBundle\Sitemap\Url\GoogleNewsUrlDecorator;
 use Presta\SitemapBundle\Sitemap\Url\Url;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * Tests the GoogleNewsUrlDecorator
@@ -291,16 +293,12 @@ class GoogleNewsUrlDecoratorTest extends TestCase
     private function generateXml(Url $url): string
     {
         /** @var EventDispatcherInterface|MockObject $eventDispatcher */
-        $eventDispatcher = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
-        /** @var RouterInterface|MockObject $router */
-        $router = $this->getMockBuilder(RouterInterface::class)->getMock();
-        $router->method('generate')
-            ->with(
-                'PrestaSitemapBundle_section',
-                ['name' => 'default', '_format' => 'xml'],
-                UrlGeneratorInterface::ABSOLUTE_URL
-            )
-            ->willReturn('http://localhost/sitemap.default.xml');
+        $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+
+        $routes = new RouteCollection();
+        $routes->add('PrestaSitemapBundle_section', new Route('/sitemap.{name}.xml.{_format}'));
+        $router = new UrlGenerator($routes, new RequestContext());
+
         $generator = new Generator($eventDispatcher, $router);
         $generator->addUrl($url, 'default');
 

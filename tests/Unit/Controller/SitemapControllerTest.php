@@ -11,12 +11,12 @@
 
 namespace Presta\SitemapBundle\Tests\Unit\Controller;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Controller\SitemapController;
 use Presta\SitemapBundle\Service\GeneratorInterface;
 use Presta\SitemapBundle\Sitemap\Sitemapindex;
 use Presta\SitemapBundle\Sitemap\Urlset;
-use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -25,26 +25,24 @@ class SitemapControllerTest extends TestCase
     private const TTL = 3600;
 
     /**
-     * @var GeneratorInterface|ObjectProphecy
+     * @var GeneratorInterface|MockObject
      */
     private $generator;
 
     public function setUp(): void
     {
-        $this->generator = $this->prophesize(GeneratorInterface::class);
+        $this->generator = $this->createMock(GeneratorInterface::class);
     }
 
     public function testIndexSuccessful(): void
     {
-        /** @var Sitemapindex|ObjectProphecy $index */
-        $index = $this->prophesize(Sitemapindex::class);
-        $index->toXml()
-            ->shouldBeCalledTimes(1)
+        /** @var Sitemapindex|MockObject $index */
+        $index = $this->createMock(Sitemapindex::class);
+        $index->method('toXml')
             ->willReturn('<index/>');
 
-        $this->generator->fetch('root')
-            ->shouldBeCalledTimes(1)
-            ->willReturn($index->reveal());
+        $this->generator->method('fetch')
+            ->willReturn($index);
 
         $response = $this->controller()->indexAction();
         self::assertSitemapResponse($response, '<index/>');
@@ -54,8 +52,8 @@ class SitemapControllerTest extends TestCase
     {
         $this->expectException(NotFoundHttpException::class);
 
-        $this->generator->fetch('root')
-            ->shouldBeCalledTimes(1)
+        $this->generator->method('fetch')
+            ->with('root')
             ->willReturn(null);
 
         $this->controller()->indexAction();
@@ -63,15 +61,14 @@ class SitemapControllerTest extends TestCase
 
     public function testSectionSuccessful(): void
     {
-        /** @var Urlset|ObjectProphecy $urlset */
-        $urlset = $this->prophesize(Urlset::class);
-        $urlset->toXml()
-            ->shouldBeCalledTimes(1)
+        /** @var Urlset|MockObject $urlset */
+        $urlset = $this->createMock(Urlset::class);
+        $urlset->method('toXml')
             ->willReturn('<urlset/>');
 
-        $this->generator->fetch('default')
-            ->shouldBeCalledTimes(1)
-            ->willReturn($urlset->reveal());
+        $this->generator->method('fetch')
+            ->with('default')
+            ->willReturn($urlset);
 
         $response = $this->controller()->sectionAction('default');
         self::assertSitemapResponse($response, '<urlset/>');
@@ -81,8 +78,8 @@ class SitemapControllerTest extends TestCase
     {
         $this->expectException(NotFoundHttpException::class);
 
-        $this->generator->fetch('void')
-            ->shouldBeCalledTimes(1)
+        $this->generator->method('fetch')
+            ->with('void')
             ->willReturn(null);
 
         $this->controller()->sectionAction('void');
@@ -110,6 +107,6 @@ class SitemapControllerTest extends TestCase
 
     private function controller(): SitemapController
     {
-        return new SitemapController($this->generator->reveal(), self::TTL);
+        return new SitemapController($this->generator, self::TTL);
     }
 }

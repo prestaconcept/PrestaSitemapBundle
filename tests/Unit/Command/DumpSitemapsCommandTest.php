@@ -11,11 +11,10 @@
 
 namespace Presta\SitemapBundle\Tests\Unit\Command;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Command\DumpSitemapsCommand;
 use Presta\SitemapBundle\Service\DumperInterface;
-use Prophecy\Argument;
-use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Loader\ClosureLoader;
@@ -33,7 +32,7 @@ class DumpSitemapsCommandTest extends TestCase
     private $router;
 
     /**
-     * @var DumperInterface|ObjectProphecy
+     * @var DumperInterface|MockObject
      */
     private $dumper;
 
@@ -41,7 +40,7 @@ class DumpSitemapsCommandTest extends TestCase
     {
         $this->router = new Router(new ClosureLoader(), null);
         $this->router->getContext()->fromRequest(Request::create(self::BASE_URL));
-        $this->dumper = $this->prophesize(DumperInterface::class);
+        $this->dumper = $this->createMock(DumperInterface::class);
     }
 
     /**
@@ -55,8 +54,8 @@ class DumpSitemapsCommandTest extends TestCase
             $files = ["sitemap.{$section}.xml"];
         }
 
-        $this->dumper->dump(self::TARGET_DIR, self::BASE_URL, $section, ['gzip' => $gzip])
-            ->shouldBeCalledTimes(1)
+        $this->dumper->method('dump')
+            ->with(self::TARGET_DIR, self::BASE_URL, $section, ['gzip' => $gzip])
             ->willReturn($files);
 
         [$status, $display] = $this->executeCommand($section, $gzip);
@@ -72,8 +71,8 @@ class DumpSitemapsCommandTest extends TestCase
      */
     public function testDumpSitemapFailed(?string $section, bool $gzip): void
     {
-        $this->dumper->dump(self::TARGET_DIR, self::BASE_URL, $section, ['gzip' => $gzip])
-            ->shouldBeCalledTimes(1)
+        $this->dumper->method('dump')
+            ->with(self::TARGET_DIR, self::BASE_URL, $section, ['gzip' => $gzip])
             ->willReturn(false);
 
         [$status,] = $this->executeCommand($section, $gzip);
@@ -87,8 +86,8 @@ class DumpSitemapsCommandTest extends TestCase
     public function testRouterHost(string $inUrl, string $expectedUrl): void
     {
         $this->router->getContext()->fromRequest(Request::create($inUrl));
-        $this->dumper->dump(self::TARGET_DIR, $expectedUrl, null, ['gzip' => false])
-            ->shouldBeCalledTimes(1)
+        $this->dumper->method('dump')
+            ->with(self::TARGET_DIR, $expectedUrl, null, ['gzip' => false])
             ->willReturn([]);
 
         [$status,] = $this->executeCommand(null, false);
@@ -104,16 +103,15 @@ class DumpSitemapsCommandTest extends TestCase
         );
 
         $this->router->getContext()->setHost('');
-        $this->dumper->dump(Argument::any())
-            ->shouldNotBeCalled();
+        $this->dumper->expects($this->never())->method('dump');
 
         $this->executeCommand(null, false);
     }
 
     public function testBaseUrlOption(): void
     {
-        $this->dumper->dump(self::TARGET_DIR, 'http://example.dev/', null, ['gzip' => false])
-            ->shouldBeCalledTimes(1)
+        $this->dumper->method('dump')
+            ->with(self::TARGET_DIR, 'http://example.dev/', null, ['gzip' => false])
             ->willReturn([]);
 
         [$status,] = $this->executeCommand(null, false, 'http://example.dev');
@@ -128,8 +126,7 @@ class DumpSitemapsCommandTest extends TestCase
             'Invalid base url. Use fully qualified base url, e.g. http://acme.com/'
         );
 
-        $this->dumper->dump(Argument::any())
-            ->shouldNotBeCalled();
+        $this->dumper->expects($this->never())->method('dump');
 
         $this->executeCommand(null, false, 'not an url');
     }
@@ -162,7 +159,7 @@ class DumpSitemapsCommandTest extends TestCase
             $options['--base-url'] = $baseUrl;
         }
 
-        $command = new DumpSitemapsCommand($this->router, $this->dumper->reveal(), 'public');
+        $command = new DumpSitemapsCommand($this->router, $this->dumper, 'public');
         $commandTester = new CommandTester($command);
         $commandTester->execute($options);
 
