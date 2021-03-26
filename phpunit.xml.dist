@@ -15,20 +15,15 @@
     </php>
     <testsuites>
         <testsuite name="Unit">
-            <directory suffix="Test.php">./Tests/Unit</directory>
+            <directory suffix="Test.php">./tests/Unit</directory>
         </testsuite>
         <testsuite name="Integration">
-            <directory suffix="Test.php">./Tests/Integration/tests</directory>
+            <directory suffix="Test.php">./tests/Integration/tests</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>./Resources</directory>
-                <directory>./Tests</directory>
-                <directory>./vendor</directory>
-            </exclude>
+            <directory>./src/</directory>
         </whitelist>
     </filter>
     <listeners>

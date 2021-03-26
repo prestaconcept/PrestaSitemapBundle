@@ -44,4 +44,4 @@ class DefaultController extends AbstractController
 
 ---
 
-« [Dumping sitemap](6-dumping-sitemap.md) • [README](../../README.md) »
+« [Dumping sitemap](6-dumping-sitemap.md) • [README](../README.md) »

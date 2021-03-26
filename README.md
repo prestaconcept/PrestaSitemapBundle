@@ -67,13 +67,13 @@ You may also have a look to [Prestaconcept's website sitemap](https://www.presta
 
 You will find the detailed documentation in the following links:
 
-* [Installation](Resources/doc/1-installation.md)
-* [Configuration](Resources/doc/2-configuration.md)
-* [Static routes usage](Resources/doc/3-static-routes-usage.md)
-* [Dynamic routes usage](Resources/doc/4-dynamic-routes-usage.md)
-* [Decorating URLs](Resources/doc/5-decorating-urls.md)
-* [Dumping sitemap](Resources/doc/6-dumping-sitemap.md)
-* [Messenger integration](Resources/doc/7-messenger-integration.md)
+* [Installation](doc/1-installation.md)
+* [Configuration](doc/2-configuration.md)
+* [Static routes usage](doc/3-static-routes-usage.md)
+* [Dynamic routes usage](doc/4-dynamic-routes-usage.md)
+* [Decorating URLs](doc/5-decorating-urls.md)
+* [Dumping sitemap](doc/6-dumping-sitemap.md)
+* [Messenger integration](doc/7-messenger-integration.md)
 
 
 ## Versions
