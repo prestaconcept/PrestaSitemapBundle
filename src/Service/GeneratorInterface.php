@@ -27,5 +27,5 @@ interface GeneratorInterface extends UrlContainerInterface
      *
      * @return XmlConstraint|null The generated XML (or null if section not found)
      */
-    public function fetch($name);
+    public function fetch(string $name): ?XmlConstraint;
 }

@@ -21,16 +21,23 @@ final class StaticRoutesAlternateEventListener implements EventSubscriberInterfa
     private $router;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     private $options;
 
+    /**
+     * @param UrlGeneratorInterface $router
+     * @param array<string, mixed>  $options
+     */
     public function __construct(UrlGeneratorInterface $router, array $options)
     {
         $this->router = $router;
         $this->options = $options;
     }
 
+    /**
+     * @inheritdoc
+     */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -72,6 +79,11 @@ final class StaticRoutesAlternateEventListener implements EventSubscriberInterfa
         $event->setUrl($url);
     }
 
+    /**
+     * @param string $name
+     *
+     * @return array{0: string, 1: string}|null
+     */
     private function getTranslatedRouteInfo(string $name): ?array
     {
         $pattern = self::TRANSLATED_ROUTE_NAME_STRATEGIES[$this->options['i18n']] ?? '';

@@ -27,7 +27,7 @@ class Configuration implements ConfigurationInterface
     /**
      * @inheritDoc
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('presta_sitemap');
         $rootNode = $treeBuilder->getRootNode();
@@ -81,7 +81,7 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
-    private function addAlternateSection(ArrayNodeDefinition $rootNode)
+    private function addAlternateSection(ArrayNodeDefinition $rootNode): void
     {
         $rootNode
             ->children()

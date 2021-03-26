@@ -23,12 +23,12 @@ interface Url
      *
      * @return string
      */
-    public function toXml();
+    public function toXml(): string;
 
     /**
-     * List of used namespaces
+     * List of used namespaces.
      *
-     * @return array - [{ns} => {location}]
+     * @return array<string, string>
      */
-    public function getCustomNamespaces();
+    public function getCustomNamespaces(): array;
 }

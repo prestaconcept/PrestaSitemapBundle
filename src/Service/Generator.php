@@ -11,8 +11,8 @@
 
 namespace Presta\SitemapBundle\Service;
 
-use Doctrine\Common\Cache\Cache;
 use Presta\SitemapBundle\Sitemap\Urlset;
+use Presta\SitemapBundle\Sitemap\XmlConstraint;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -38,7 +38,7 @@ class Generator extends AbstractGenerator implements GeneratorInterface
     public function __construct(
         EventDispatcherInterface $dispatcher,
         UrlGeneratorInterface $router,
-        $itemsBySet = null
+        int $itemsBySet = null
     ) {
         parent::__construct($dispatcher, $itemsBySet);
 
@@ -48,7 +48,7 @@ class Generator extends AbstractGenerator implements GeneratorInterface
     /**
      * @inheritdoc
      */
-    public function fetch($name)
+    public function fetch(string $name): ?XmlConstraint
     {
         if ('root' === $name) {
             $this->populate();
@@ -68,7 +68,7 @@ class Generator extends AbstractGenerator implements GeneratorInterface
     /**
      * @inheritdoc
      */
-    protected function newUrlset($name, \DateTimeInterface $lastmod = null)
+    protected function newUrlset(string $name, \DateTimeInterface $lastmod = null): Urlset
     {
         return new Urlset(
             $this->router->generate(

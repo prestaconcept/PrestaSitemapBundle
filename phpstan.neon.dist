@@ -1,0 +1,23 @@
+parameters:
+  level: max
+  paths:
+    - src/
+
+  ignoreErrors:
+    # config definition is not well parsed
+    - '#Symfony\\Component\\Config\\Definition#'
+
+    # issues from vendor using array that has no iterable specification
+    -
+        message: "#^Method Presta\\\\SitemapBundle\\\\DependencyInjection\\\\PrestaSitemapExtension\\:\\:load\\(\\) has parameter \\$configs with no value type specified in iterable type array\\.$#"
+        count: 1
+        path: src/DependencyInjection/PrestaSitemapExtension.php
+    -
+        message: "#^Method Presta\\\\SitemapBundle\\\\EventListener\\\\RouteAnnotationEventListener\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
+        count: 1
+        path: src/EventListener/RouteAnnotationEventListener.php
+    -
+        message: "#^Method Presta\\\\SitemapBundle\\\\EventListener\\\\StaticRoutesAlternateEventListener\\:\\:getSubscribedEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
+        count: 1
+        path: src/EventListener/StaticRoutesAlternateEventListener.php
+

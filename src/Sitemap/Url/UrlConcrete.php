@@ -56,10 +56,14 @@ class UrlConcrete implements Url
      * @param string                 $loc        Absolute url
      * @param DateTimeInterface|null $lastmod    Last modification date
      * @param string|null            $changefreq Change frequency
-     * @param float|null             $priority   Priority
+     * @param float|string|int|null  $priority   Priority
      */
-    public function __construct($loc, DateTimeInterface $lastmod = null, $changefreq = null, $priority = null)
-    {
+    public function __construct(
+        string $loc,
+        DateTimeInterface $lastmod = null,
+        string $changefreq = null,
+        $priority = null
+    ) {
         $this->setLoc($loc);
         $this->setLastmod($lastmod);
         $this->setChangefreq($changefreq);
@@ -71,7 +75,7 @@ class UrlConcrete implements Url
      *
      * @return UrlConcrete
      */
-    public function setLoc($loc)
+    public function setLoc(string $loc): self
     {
         $this->loc = $loc;
 
@@ -81,7 +85,7 @@ class UrlConcrete implements Url
     /**
      * @return string
      */
-    public function getLoc()
+    public function getLoc(): string
     {
         return $this->loc;
     }
@@ -91,7 +95,7 @@ class UrlConcrete implements Url
      *
      * @return UrlConcrete
      */
-    public function setLastmod(DateTimeInterface $lastmod = null)
+    public function setLastmod(?DateTimeInterface $lastmod): self
     {
         $this->lastmod = $lastmod;
 
@@ -101,7 +105,7 @@ class UrlConcrete implements Url
     /**
      * @return DateTimeInterface|null
      */
-    public function getLastmod()
+    public function getLastmod(): ?DateTimeInterface
     {
         return $this->lastmod;
     }
@@ -113,7 +117,7 @@ class UrlConcrete implements Url
      *
      * @return UrlConcrete
      */
-    public function setChangefreq($changefreq = null)
+    public function setChangefreq(string $changefreq = null): self
     {
         $frequencies = [
             self::CHANGEFREQ_ALWAYS,
@@ -145,7 +149,7 @@ class UrlConcrete implements Url
      *
      * @return string|null
      */
-    public function getChangefreq()
+    public function getChangefreq(): ?string
     {
         return $this->changefreq;
     }
@@ -157,7 +161,7 @@ class UrlConcrete implements Url
      *
      * @return UrlConcrete
      */
-    public function setPriority($priority = null)
+    public function setPriority($priority = null): self
     {
         if ($priority === null) {
             return $this;
@@ -186,7 +190,7 @@ class UrlConcrete implements Url
     /**
      * @return float|null
      */
-    public function getPriority()
+    public function getPriority(): ?float
     {
         return $this->priority;
     }
@@ -194,20 +198,23 @@ class UrlConcrete implements Url
     /**
      * @inheritdoc
      */
-    public function toXml()
+    public function toXml(): string
     {
         $xml = '<url><loc>' . Utils::encode($this->getLoc()) . '</loc>';
 
-        if ($this->getLastmod()) {
-            $xml .= '<lastmod>' . $this->getLastmod()->format('c') . '</lastmod>';
+        $lastmod = $this->getLastmod();
+        if ($lastmod) {
+            $xml .= '<lastmod>' . $lastmod->format('c') . '</lastmod>';
         }
 
-        if ($this->getChangefreq()) {
-            $xml .= '<changefreq>' . $this->getChangefreq() . '</changefreq>';
+        $changefreq = $this->getChangefreq();
+        if ($changefreq) {
+            $xml .= '<changefreq>' . $changefreq . '</changefreq>';
         }
 
-        if ($this->getPriority()) {
-            $xml .= '<priority>' . number_format($this->getPriority(), 1) . '</priority>';
+        $priority = $this->getPriority();
+        if ($priority) {
+            $xml .= '<priority>' . number_format($priority, 1) . '</priority>';
         }
 
         $xml .= '</url>';
@@ -218,7 +225,7 @@ class UrlConcrete implements Url
     /**
      * @inheritdoc
      */
-    public function getCustomNamespaces()
+    public function getCustomNamespaces(): array
     {
         return []; // basic url has no namespace. see decorated urls
     }

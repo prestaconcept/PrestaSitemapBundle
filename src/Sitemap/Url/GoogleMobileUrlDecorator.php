@@ -21,14 +21,14 @@ namespace Presta\SitemapBundle\Sitemap\Url;
 class GoogleMobileUrlDecorator extends UrlDecorator
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $customNamespaces = ['mobile' => 'http://www.google.com/schemas/sitemap-mobile/1.0'];
 
     /**
      * @inheritdoc
      */
-    public function toXml()
+    public function toXml(): string
     {
         return str_replace('</url>', '<mobile:mobile/></url>', $this->urlDecorated->toXml());
     }

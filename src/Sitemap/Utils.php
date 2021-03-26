@@ -21,11 +21,11 @@ class Utils
     /**
      * Wrap string with CDATA markup
      *
-     * @param string $string
+     * @param string|null $string
      *
      * @return string
      */
-    public static function cdata($string)
+    public static function cdata(?string $string): string
     {
         return '<![CDATA[' . $string . ']]>';
     }
@@ -37,7 +37,7 @@ class Utils
      *
      * @return string
      */
-    public static function encode($string)
+    public static function encode(string $string): string
     {
         return htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }

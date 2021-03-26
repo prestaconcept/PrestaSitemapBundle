@@ -20,6 +20,7 @@ use Presta\SitemapBundle\Sitemap\Url\GoogleNewsUrlDecorator;
 use Presta\SitemapBundle\Sitemap\Url\Url;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -289,14 +290,20 @@ class GoogleNewsUrlDecoratorTest extends TestCase
      */
     private function generateXml(Url $url): string
     {
-        $section = 'default';
         /** @var EventDispatcherInterface|MockObject $eventDispatcher */
         $eventDispatcher = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
         /** @var RouterInterface|MockObject $router */
         $router = $this->getMockBuilder(RouterInterface::class)->getMock();
+        $router->method('generate')
+            ->with(
+                'PrestaSitemapBundle_section',
+                ['name' => 'default', '_format' => 'xml'],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            )
+            ->willReturn('http://localhost/sitemap.default.xml');
         $generator = new Generator($eventDispatcher, $router);
         $generator->addUrl($url, 'default');
 
-        return $generator->fetch($section)->toXml();
+        return $generator->fetch('default')->toXml();
     }
 }

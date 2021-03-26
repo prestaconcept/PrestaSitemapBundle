@@ -45,7 +45,7 @@ class DumpSitemapMessageHandler implements MessageHandlerInterface
         $this->defaultTarget = $defaultTarget;
     }
 
-    public function __invoke(DumpSitemapMessage $message)
+    public function __invoke(DumpSitemapMessage $message): void
     {
         $targetDir = rtrim($message->getTargetDir() ?? $this->defaultTarget, '/');
 

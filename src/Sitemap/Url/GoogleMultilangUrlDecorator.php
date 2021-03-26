@@ -25,7 +25,7 @@ class GoogleMultilangUrlDecorator extends UrlDecorator
     public const REL_ALTERNATE = 'alternate';
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $customNamespaces = ['xhtml' => 'http://www.w3.org/1999/xhtml'];
 
@@ -45,7 +45,7 @@ class GoogleMultilangUrlDecorator extends UrlDecorator
      *
      * @return GoogleMultilangUrlDecorator
      */
-    public function addLink($href, $hreflang, $rel = null)
+    public function addLink(string $href, string $hreflang, string $rel = null): self
     {
         $this->linkXml .= $this->generateLinkXml($href, $hreflang, $rel);
 
@@ -59,23 +59,21 @@ class GoogleMultilangUrlDecorator extends UrlDecorator
      *
      * @return string
      */
-    protected function generateLinkXml($href, $hreflang, $rel = null)
+    protected function generateLinkXml(string $href, string $hreflang, string $rel = null): string
     {
         if (null == $rel) {
             $rel = self::REL_ALTERNATE;
         }
 
-        $xml = '<xhtml:link rel="' . $rel
+        return '<xhtml:link rel="' . $rel
             . '" hreflang="' . $hreflang
             . '" href="' . Utils::encode($href) . '" />';
-
-        return $xml;
     }
 
     /**
      * @inheritdoc
      */
-    public function toXml()
+    public function toXml(): string
     {
         $baseXml = $this->urlDecorated->toXml();
 

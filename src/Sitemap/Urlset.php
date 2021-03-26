@@ -39,24 +39,24 @@ class Urlset extends XmlConstraint
     protected $urlsXml = '';
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $customNamespaces = [];
 
     /**
-     * @param string         $loc
+     * @param string                 $loc
      * @param DateTimeInterface|null $lastmod
      */
-    public function __construct($loc, DateTimeInterface $lastmod = null)
+    public function __construct(string $loc, DateTimeInterface $lastmod = null)
     {
         $this->loc = $loc;
-        $this->lastmod = $lastmod ? $lastmod : new \DateTimeImmutable();
+        $this->lastmod = $lastmod ?? new \DateTimeImmutable();
     }
 
     /**
      * @return string
      */
-    public function getLoc()
+    public function getLoc(): string
     {
         return $this->loc;
     }
@@ -64,7 +64,7 @@ class Urlset extends XmlConstraint
     /**
      * @return DateTimeInterface
      */
-    public function getLastmod()
+    public function getLastmod(): DateTimeInterface
     {
         return $this->lastmod;
     }
@@ -76,7 +76,7 @@ class Urlset extends XmlConstraint
      *
      * @throws \RuntimeException
      */
-    public function addUrl(Url $url)
+    public function addUrl(Url $url): void
     {
         if ($this->isFull()) {
             throw new \RuntimeException('The urlset limit has been exceeded');
@@ -111,7 +111,7 @@ class Urlset extends XmlConstraint
      *
      * @param string $urlXml
      */
-    protected function appendXML($urlXml)
+    protected function appendXML(string $urlXml): void
     {
         $this->urlsXml .= $urlXml;
     }
@@ -121,7 +121,7 @@ class Urlset extends XmlConstraint
      *
      * @return string
      */
-    protected function getStructureXml()
+    protected function getStructureXml(): string
     {
         $struct = '<?xml version="1.0" encoding="UTF-8"?>';
         $struct .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" NAMESPACES>URLS</urlset>';
@@ -139,7 +139,7 @@ class Urlset extends XmlConstraint
     /**
      * @inheritdoc
      */
-    public function toXml()
+    public function toXml(): string
     {
         return str_replace('URLS', $this->urlsXml, $this->getStructureXml());
     }

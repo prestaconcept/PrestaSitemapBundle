@@ -32,7 +32,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     public const DATE_FORMAT_DATE_TIME = DateTime::W3C;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $customNamespaces = ['news' => 'http://www.google.com/schemas/sitemap-news/0.9'];
 
@@ -52,7 +52,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     private $access;
 
     /**
-     * @var array
+     * @var array<int, string>
      */
     private $genres = [];
 
@@ -77,12 +77,12 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     private $geoLocations;
 
     /**
-     * @var array
+     * @var array<int, string>
      */
     private $keywords = [];
 
     /**
-     * @var array
+     * @var array<int, string>
      */
     private $stockTickers = [];
 
@@ -97,10 +97,10 @@ class GoogleNewsUrlDecorator extends UrlDecorator
      */
     public function __construct(
         Url $urlDecorated,
-        $publicationName,
-        $publicationLanguage,
+        string $publicationName,
+        string $publicationLanguage,
         DateTimeInterface $publicationDate,
-        $title
+        string $title
     ) {
         parent::__construct($urlDecorated);
 
@@ -113,7 +113,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @return string
      */
-    public function getPublicationName()
+    public function getPublicationName(): string
     {
         return $this->publicationName;
     }
@@ -123,7 +123,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
      *
      * @return GoogleNewsUrlDecorator
      */
-    public function setPublicationName($publicationName)
+    public function setPublicationName(string $publicationName): self
     {
         $this->publicationName = $publicationName;
 
@@ -133,7 +133,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @return string
      */
-    public function getPublicationLanguage()
+    public function getPublicationLanguage(): string
     {
         return $this->publicationLanguage;
     }
@@ -143,7 +143,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
      *
      * @return GoogleNewsUrlDecorator
      */
-    public function setPublicationLanguage($publicationLanguage)
+    public function setPublicationLanguage(string $publicationLanguage): self
     {
         if (strlen($publicationLanguage) > 5) {
             throw new Exception\GoogleNewsUrlException(
@@ -159,18 +159,18 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @return string|null
      */
-    public function getAccess()
+    public function getAccess(): ?string
     {
         return $this->access;
     }
 
     /**
-     * @param string $access
+     * @param string|null $access
      *
      * @return GoogleNewsUrlDecorator
      * @throws Exception\GoogleNewsUrlException
      */
-    public function setAccess($access)
+    public function setAccess(?string $access): self
     {
         if ($access && !in_array($access, [self::ACCESS_REGISTRATION, self::ACCESS_SUBSCRIPTION])) {
             throw new Exception\GoogleNewsUrlException(
@@ -187,19 +187,19 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     }
 
     /**
-     * @return array
+     * @return array<int, string>
      */
-    public function getGenres()
+    public function getGenres(): array
     {
         return $this->genres;
     }
 
     /**
-     * @param array $genres
+     * @param array<int, string> $genres
      *
      * @return GoogleNewsUrlDecorator
      */
-    public function setGenres(array $genres)
+    public function setGenres(array $genres): self
     {
         $this->genres = [];
         foreach ($genres as $genre) {
@@ -214,7 +214,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
      *
      * @return GoogleNewsUrlDecorator
      */
-    public function addGenre($genre)
+    public function addGenre(string $genre): self
     {
         $this->genres[] = $genre;
 
@@ -224,7 +224,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @return DateTimeInterface
      */
-    public function getPublicationDate()
+    public function getPublicationDate(): DateTimeInterface
     {
         return $this->publicationDate;
     }
@@ -234,7 +234,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
      *
      * @return GoogleNewsUrlDecorator
      */
-    public function setPublicationDate(DateTimeInterface $publicationDate)
+    public function setPublicationDate(DateTimeInterface $publicationDate): self
     {
         $this->publicationDate = $publicationDate;
 
@@ -244,7 +244,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @return string
      */
-    public function getPublicationDateFormat()
+    public function getPublicationDateFormat(): string
     {
         return $this->publicationDateFormat;
     }
@@ -255,7 +255,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
      * @return GoogleNewsUrlDecorator
      * @throws Exception\GoogleNewsUrlException
      */
-    public function setPublicationDateFormat($publicationDateFormat)
+    public function setPublicationDateFormat(string $publicationDateFormat): self
     {
         $formats = [self::DATE_FORMAT_DATE, self::DATE_FORMAT_DATE_TIME];
         if ($publicationDateFormat && !in_array($publicationDateFormat, $formats)) {
@@ -275,7 +275,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -285,7 +285,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
      *
      * @return GoogleNewsUrlDecorator
      */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -295,7 +295,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @return string|null
      */
-    public function getGeoLocations()
+    public function getGeoLocations(): ?string
     {
         return $this->geoLocations;
     }
@@ -306,7 +306,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
      * @return GoogleNewsUrlDecorator
      * @throws Exception\GoogleNewsUrlException
      */
-    public function setGeoLocations($geoLocations)
+    public function setGeoLocations(string $geoLocations): self
     {
         $locationParts = explode(', ', $geoLocations);
         if (count($locationParts) < 2) {
@@ -324,19 +324,19 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     }
 
     /**
-     * @return array
+     * @return array<int, string>
      */
-    public function getKeywords()
+    public function getKeywords(): array
     {
         return $this->keywords;
     }
 
     /**
-     * @param array $keywords
+     * @param array<int, string> $keywords
      *
      * @return GoogleNewsUrlDecorator
      */
-    public function setKeywords(array $keywords)
+    public function setKeywords(array $keywords): self
     {
         $this->keywords = [];
         foreach ($keywords as $keyword) {
@@ -351,7 +351,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
      *
      * @return GoogleNewsUrlDecorator
      */
-    public function addKeyword($keyword)
+    public function addKeyword(string $keyword): self
     {
         $this->keywords[] = $keyword;
 
@@ -359,20 +359,20 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     }
 
     /**
-     * @return array
+     * @return array<int, string>
      */
-    public function getStockTickers()
+    public function getStockTickers(): array
     {
         return $this->stockTickers;
     }
 
     /**
-     * @param array $stockTickers
+     * @param array<int, string> $stockTickers
      *
      * @return GoogleNewsUrlDecorator
      * @throws Exception\GoogleNewsUrlException If the stock ticker limit is reached
      */
-    public function setStockTickers(array $stockTickers)
+    public function setStockTickers(array $stockTickers): self
     {
         if ($stockTickers && count($stockTickers) > 5) {
             throw new Exception\GoogleNewsUrlException(
@@ -391,7 +391,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
      * @return GoogleNewsUrlDecorator
      * @throws Exception\GoogleNewsUrlException If the stock ticker limit is reached
      */
-    public function addStockTicker($stockTicker)
+    public function addStockTicker(string $stockTicker): self
     {
         if ($this->stockTickers && count($this->stockTickers) == 5) {
             throw new Exception\GoogleNewsUrlException(
@@ -407,7 +407,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @inheritdoc
      */
-    public function toXml()
+    public function toXml(): string
     {
         $newsXml = '<news:news>';
 

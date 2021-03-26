@@ -34,10 +34,16 @@ class DumpSitemapMessage
     private $targetDir;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     private $options;
 
+    /**
+     * @param string|null          $section
+     * @param string|null          $baseUrl
+     * @param string|null          $targetDir
+     * @param array<string, mixed> $options
+     */
     public function __construct(
         string $section = null,
         string $baseUrl = null,
@@ -65,6 +71,9 @@ class DumpSitemapMessage
         return $this->targetDir;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getOptions(): array
     {
         return $this->options;

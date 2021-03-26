@@ -40,10 +40,14 @@ class SitemapAddUrlEvent extends Event
     private $route;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     private $options;
 
+    /**
+     * @param string               $route
+     * @param array<string, mixed> $options
+     */
     public function __construct(string $route, array $options)
     {
         $this->route = $route;
@@ -109,7 +113,7 @@ class SitemapAddUrlEvent extends Event
     /**
      * The sitemap route options.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getOptions(): array
     {

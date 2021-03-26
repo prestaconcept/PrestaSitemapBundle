@@ -46,7 +46,7 @@ abstract class XmlConstraint implements \Countable
     /**
      * @return bool
      */
-    public function isFull()
+    public function isFull(): bool
     {
         return $this->limitItemsReached || $this->limitBytesReached;
     }
@@ -54,7 +54,7 @@ abstract class XmlConstraint implements \Countable
     /**
      * @inheritdoc
      */
-    public function count()
+    public function count(): int
     {
         return $this->countItems;
     }
@@ -62,5 +62,5 @@ abstract class XmlConstraint implements \Countable
     /**
      * Render full and valid xml
      */
-    abstract public function toXml();
+    abstract public function toXml(): string;
 }
