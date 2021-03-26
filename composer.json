@@ -29,17 +29,14 @@
     },
     "autoload": {
         "psr-4": {
-            "Presta\\SitemapBundle\\": ""
-        },
-        "exclude-from-classmap": [
-            "/Tests/"
-        ]
+            "Presta\\SitemapBundle\\": "src/"
+        }
     },
     "autoload-dev": {
         "psr-4": {
-            "Presta\\SitemapBundle\\Tests\\Unit\\": "Tests/Unit",
-            "Presta\\SitemapBundle\\Tests\\Integration\\Tests\\": "Tests/Integration/tests",
-            "Presta\\SitemapBundle\\Tests\\Integration\\": "Tests/Integration/src"
+            "Presta\\SitemapBundle\\Tests\\Unit\\": "tests/Unit",
+            "Presta\\SitemapBundle\\Tests\\Integration\\Tests\\": "tests/Integration/tests",
+            "Presta\\SitemapBundle\\Tests\\Integration\\": "tests/Integration/src"
         }
     },
     "extra": {

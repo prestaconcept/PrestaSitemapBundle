@@ -22,4 +22,11 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class PrestaSitemapBundle extends Bundle
 {
+    /**
+     * @inheritDoc
+     */
+    public function getPath()
+    {
+        return \dirname(__DIR__);
+    }
 }
