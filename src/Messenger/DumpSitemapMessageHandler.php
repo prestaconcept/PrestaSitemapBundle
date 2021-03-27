@@ -18,8 +18,6 @@ use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Message handler to handle DumpSitemapMessage asynchronously or synchronously in background
- *
- * @author Tomas Norkūnas <norkunas.tom@gmail.com>
  */
 class DumpSitemapMessageHandler implements MessageHandlerInterface
 {

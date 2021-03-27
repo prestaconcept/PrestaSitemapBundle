@@ -17,9 +17,6 @@ use Presta\SitemapBundle\Sitemap\Url\GoogleVideo;
 use Presta\SitemapBundle\Sitemap\Url\GoogleVideoUrlDecorator;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
-/**
- * @author David Epely <depely@prestaconcept.net>
- */
 class GoogleVideoUrlDecoratorTest extends TestCase
 {
     /**

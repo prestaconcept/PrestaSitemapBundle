@@ -17,8 +17,6 @@ use Presta\SitemapBundle\Exception;
  * Decorate url with images
  *
  * @see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=178636&topic=20986&ctx=topic
- *
- * @author David Epely
  */
 class GoogleImageUrlDecorator extends UrlDecorator
 {

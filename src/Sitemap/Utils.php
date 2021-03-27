@@ -13,8 +13,6 @@ namespace Presta\SitemapBundle\Sitemap;
 
 /**
  * Description of Utils
- *
- * @author David Epely <depely@prestaconcept.net>
  */
 class Utils
 {

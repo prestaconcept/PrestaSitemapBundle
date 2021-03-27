@@ -14,9 +14,6 @@ namespace Presta\SitemapBundle\Tests\Unit\Sitemap\Url;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
-/**
- * @author David Epely <depely@prestaconcept.net>
- */
 class UrlConcreteTest extends TestCase
 {
     /**

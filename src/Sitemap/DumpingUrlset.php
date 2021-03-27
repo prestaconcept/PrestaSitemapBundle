@@ -13,9 +13,6 @@ namespace Presta\SitemapBundle\Sitemap;
 
 /**
  * Urlset which writes added URLs into (temporary) files directly, w/o consuming memory
- *
- * @author Konstantin Tjuterev <kostik.lv@gmail.com>
- * @author Konstantin Myakshin <koc-dp@yandex.ru>
  */
 class DumpingUrlset extends Urlset
 {

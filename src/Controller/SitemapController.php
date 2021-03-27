@@ -17,8 +17,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Provides action to render sitemap files
- *
- * @author David Epely <depely@prestaconcept.net>
  */
 class SitemapController
 {

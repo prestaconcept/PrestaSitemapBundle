@@ -13,8 +13,6 @@ namespace Presta\SitemapBundle\Sitemap;
 
 /**
  * Representation of sitemap (urlset) list
- *
- * @author David Epely
  */
 class Sitemapindex extends XmlConstraint
 {

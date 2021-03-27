@@ -21,8 +21,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Abstract sitemap generator class
- *
- * @author Konstantin Myakshin <koc-dp@yandex.ru>
  */
 abstract class AbstractGenerator implements UrlContainerInterface
 {

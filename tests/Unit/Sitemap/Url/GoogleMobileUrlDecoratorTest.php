@@ -14,9 +14,6 @@ namespace Presta\SitemapBundle\Tests\Unit\Sitemap\Url;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap;
 
-/**
- * @author David Epely <depely@prestaconcept.net>
- */
 class GoogleMobileUrlDecoratorTest extends TestCase
 {
     public function testToXml(): void

@@ -14,11 +14,6 @@ namespace Presta\SitemapBundle\Tests\Unit\Sitemap;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap\Utils;
 
-/**
- * Description of Utils
- *
- * @author David Epely <depely@prestaconcept.net>
- */
 class UtilsTest extends TestCase
 {
     public function testCdata(): void

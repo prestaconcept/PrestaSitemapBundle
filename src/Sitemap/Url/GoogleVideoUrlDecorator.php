@@ -17,8 +17,6 @@ use Presta\SitemapBundle\Exception;
  * Help to generate video url
  *
  * @see guidelines at http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472
- *
- * @author David Epely <depely@prestaconcept.net>
  */
 class GoogleVideoUrlDecorator extends UrlDecorator
 {

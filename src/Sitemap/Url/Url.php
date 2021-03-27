@@ -13,8 +13,6 @@ namespace Presta\SitemapBundle\Sitemap\Url;
 
 /**
  * Representation of an Url in urlset
- *
- * @author depely
  */
 interface Url
 {

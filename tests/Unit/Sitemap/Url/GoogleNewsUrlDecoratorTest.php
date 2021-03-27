@@ -25,11 +25,6 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-/**
- * Tests the GoogleNewsUrlDecorator
- *
- * @author Christoph Foehrdes
- */
 class GoogleNewsUrlDecoratorTest extends TestCase
 {
     /**

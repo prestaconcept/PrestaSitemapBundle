@@ -14,9 +14,6 @@ namespace Presta\SitemapBundle\Tests\Unit\Sitemap;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap;
 
-/**
- * @author David Epely <depely@prestaconcept.net>
- */
 class UrlsetTest extends TestCase
 {
     protected $urlset;

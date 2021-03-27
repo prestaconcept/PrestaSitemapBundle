@@ -15,8 +15,6 @@ use Presta\SitemapBundle\Sitemap\XmlConstraint;
 
 /**
  * Interface for class that intend to generate a sitemap.
- *
- * @author Yann Eugoné <yeugone@prestaconcept.net>
  */
 interface GeneratorInterface extends UrlContainerInterface
 {

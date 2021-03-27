@@ -16,8 +16,6 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Manage populate event
- *
- * @author depely
  */
 class SitemapPopulateEvent extends Event
 {

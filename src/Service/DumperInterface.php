@@ -13,8 +13,6 @@ namespace Presta\SitemapBundle\Service;
 
 /**
  * Interface for class that intend to dump a sitemap.
- *
- * @author Yann Eugoné <yeugone@prestaconcept.net>
  */
 interface DumperInterface extends UrlContainerInterface
 {

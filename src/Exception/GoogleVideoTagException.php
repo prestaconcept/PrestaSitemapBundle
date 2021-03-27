@@ -13,8 +13,6 @@ namespace Presta\SitemapBundle\Exception;
 
 /**
  * Exception used when limit is reached on adding tag to video
- *
- * @author David Epely <depely@prestaconcept.net>
  */
 class GoogleVideoTagException extends Exception
 {

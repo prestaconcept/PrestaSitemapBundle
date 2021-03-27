@@ -16,8 +16,6 @@ use Presta\SitemapBundle\Sitemap\Url\Url;
 
 /**
  * Representation of url list
- *
- * @author depely
  */
 class Urlset extends XmlConstraint
 {

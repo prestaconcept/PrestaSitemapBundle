@@ -13,8 +13,6 @@ namespace Presta\SitemapBundle\Exception;
 
 /**
  * Exception used when some limits are reached in a news url.
- *
- * @author Christoph Foehrdes
  */
 class GoogleNewsUrlException extends Exception
 {

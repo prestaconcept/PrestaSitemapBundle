@@ -13,8 +13,6 @@ namespace Presta\SitemapBundle\Exception;
 
 /**
  * Base Exception for Sitemap
- *
- * @author David Epely <depely@prestaconcept.net>
  */
 class Exception extends \RuntimeException
 {

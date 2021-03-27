@@ -16,9 +16,6 @@ use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
  * Class used for managing url entities
- *
- * @author Christophe Dolivet
- * @author David Epely
  */
 class UrlConcrete implements Url
 {

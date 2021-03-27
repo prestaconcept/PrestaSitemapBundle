@@ -15,8 +15,6 @@ use Presta\SitemapBundle\Sitemap\Url\Url;
 
 /**
  * Interface for class that intend contain urls.
- *
- * @author Yann Eugoné <yeugone@prestaconcept.net>
  */
 interface UrlContainerInterface
 {

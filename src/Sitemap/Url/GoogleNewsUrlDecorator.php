@@ -20,8 +20,6 @@ use Presta\SitemapBundle\Sitemap\Utils;
  * Helps to generate google news urls
  *
  * @see guidelines at https://support.google.com/webmasters/answer/74288
- *
- * @author Christoph Foehrdes
  */
 class GoogleNewsUrlDecorator extends UrlDecorator
 {

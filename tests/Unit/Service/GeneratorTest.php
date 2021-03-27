@@ -23,9 +23,6 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
 
-/**
- * @author David Epely <depely@prestaconcept.net>
- */
 class GeneratorTest extends WebTestCase
 {
     private const ITEMS_BY_SET = 1;

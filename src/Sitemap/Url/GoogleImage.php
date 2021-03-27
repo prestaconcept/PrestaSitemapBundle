@@ -15,9 +15,6 @@ use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
  * Class used for managing image's url entities
- *
- * @author David Epely <depely@prestaconcept.net>
- * @author Alain Flaus <aflaus@prestaconcept.net>
  */
 class GoogleImage
 {

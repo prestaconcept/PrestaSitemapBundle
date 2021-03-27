@@ -22,8 +22,6 @@ use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Command to dump the sitemaps to provided directory
- *
- * @author Konstantin Tjuterev <kostik.lv@gmail.com>
  */
 class DumpSitemapsCommand extends Command
 {

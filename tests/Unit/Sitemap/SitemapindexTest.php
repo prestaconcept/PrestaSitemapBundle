@@ -14,11 +14,6 @@ namespace Presta\SitemapBundle\Tests\Unit\Sitemap;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap;
 
-/**
- * Manage sitemaps listing
- *
- * @author David Epely <depely@prestaconcept.net>
- */
 class SitemapindexTest extends TestCase
 {
     public function testAddSitemap(): void

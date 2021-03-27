@@ -15,8 +15,6 @@ namespace Presta\SitemapBundle\Sitemap\Url;
  * Decorate url for mobile website
  *
  * @see http://support.google.com/webmasters/bin/answer.py?hl=en&hlrm=fr&answer=34648
- *
- * @author David Epely <depely@prestaconcept.net>
  */
 class GoogleMobileUrlDecorator extends UrlDecorator
 {

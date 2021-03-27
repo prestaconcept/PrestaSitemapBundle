@@ -18,10 +18,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Sitemap Manager service
- *
- * @author David Epely <depely@prestaconcept.net>
- * @author Christophe Dolivet
- * @author Konstantin Myakshin <koc-dp@yandex.ru>
  */
 class Generator extends AbstractGenerator implements GeneratorInterface
 {

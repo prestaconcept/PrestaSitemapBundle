@@ -15,9 +15,6 @@ use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Exception\GoogleImageException;
 use Presta\SitemapBundle\Sitemap;
 
-/**
- * @author David Epely <depely@prestaconcept.net>
- */
 class GoogleImageUrlDecoratorTest extends TestCase
 {
     public function testAddImage(): void

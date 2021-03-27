@@ -13,8 +13,6 @@ namespace Presta\SitemapBundle\Messenger;
 
 /**
  * Message to dump the sitemaps asynchronously or synchronously in background
- *
- * @author Tomas Norkūnas <norkunas.tom@gmail.com>
  */
 class DumpSitemapMessage
 {

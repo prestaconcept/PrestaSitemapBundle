@@ -20,9 +20,6 @@ use Symfony\Component\Finder\Finder;
 
 /**
  * Service for dumping sitemaps into static files
- *
- * @author Konstantin Tjuterev <kostik.lv@gmail.com>
- * @author Konstantin Myakshin <koc-dp@yandex.ru>
  */
 class Dumper extends AbstractGenerator implements DumperInterface
 {

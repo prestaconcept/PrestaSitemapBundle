@@ -15,8 +15,6 @@ namespace Presta\SitemapBundle\Sitemap;
  * Xml requirements for sitemap protocol
  *
  * @see http://www.sitemaps.org/protocol.html
- *
- * @author depely
  */
 abstract class XmlConstraint implements \Countable
 {

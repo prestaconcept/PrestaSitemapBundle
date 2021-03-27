@@ -17,8 +17,6 @@ use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
  * Class used for managing video's url entities
- *
- * @author David Epely <depely@prestaconcept.net>
  */
 class GoogleVideo
 {
