@@ -15,7 +15,9 @@ use DateTimeInterface;
 use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
- * Class used for managing url entities
+ * First class citizen of sitemaps.
+ *
+ * https://developers.google.com/search/docs/guides/create-URLs
  */
 class UrlConcrete implements Url
 {

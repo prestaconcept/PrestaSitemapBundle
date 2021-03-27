@@ -17,7 +17,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Sitemap Manager service
+ * Sitemap generator.
  */
 class Generator extends AbstractGenerator implements GeneratorInterface
 {

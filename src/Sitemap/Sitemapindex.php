@@ -12,7 +12,10 @@
 namespace Presta\SitemapBundle\Sitemap;
 
 /**
- * Representation of sitemap (urlset) list
+ * Index of sitemap url sets.
+ *
+ * https://www.sitemaps.org/protocol.html#index
+ * https://developers.google.com/search/docs/advanced/sitemaps/large-sitemaps
  */
 class Sitemapindex extends XmlConstraint
 {

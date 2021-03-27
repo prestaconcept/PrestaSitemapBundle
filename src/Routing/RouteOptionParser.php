@@ -13,6 +13,9 @@ namespace Presta\SitemapBundle\Routing;
 
 use Symfony\Component\Routing\Route;
 
+/**
+ * Util class to parse sitemap option value from Route objects.
+ */
 final class RouteOptionParser
 {
     /**

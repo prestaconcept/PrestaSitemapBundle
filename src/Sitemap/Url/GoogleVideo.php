@@ -16,7 +16,9 @@ use Presta\SitemapBundle\Exception;
 use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
- * Class used for managing video's url entities
+ * Sitemap video object attached to a sitemap Url.
+ *
+ * https://developers.google.com/search/docs/advanced/sitemaps/video-sitemaps
  */
 class GoogleVideo
 {

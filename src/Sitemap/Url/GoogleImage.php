@@ -14,7 +14,9 @@ namespace Presta\SitemapBundle\Sitemap\Url;
 use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
- * Class used for managing image's url entities
+ * Sitemap image object attached to a sitemap Url.
+ *
+ * https://developers.google.com/search/docs/advanced/sitemaps/image-sitemaps
  */
 class GoogleImage
 {

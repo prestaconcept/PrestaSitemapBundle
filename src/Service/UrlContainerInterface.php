@@ -19,9 +19,7 @@ use Presta\SitemapBundle\Sitemap\Url\Url;
 interface UrlContainerInterface
 {
     /**
-     * Add an Url to an Urlset
-     *
-     * section is helpfull for partial cache invalidation
+     * Add an Url to an Urlset (identified by section name).
      *
      * @param Url    $url
      * @param string $section

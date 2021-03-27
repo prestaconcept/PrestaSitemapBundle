@@ -19,7 +19,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
 /**
- * Service for dumping sitemaps into static files
+ * Generator that dump sitemaps to files.
  */
 class Dumper extends AbstractGenerator implements DumperInterface
 {

@@ -19,16 +19,14 @@ use ReflectionClass;
 final class ClassCommentDocBlockTest extends StandardsTestCase
 {
     /**
-     * Sources classes/interfaces/traits can have doc blocks.
+     * Sources classes/interfaces/traits must have doc blocks.
      * - `@author` annotation is forbidden : use `git log --reverse` instead
      */
     public function testSources(): void
     {
         foreach (self::getSourceFiles() as ['class' => $class]) {
             $doc = (new ReflectionClass($class))->getDocComment();
-            if ($doc === false) {
-                continue;
-            }
+            self::assertNotFalse($doc, "Class \"{$class}\" must have comment docblock");
             self::assertStringNotContainsString(
                 '@author',
                 $doc,

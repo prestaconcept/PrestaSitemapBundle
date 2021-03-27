@@ -15,7 +15,10 @@ use Presta\SitemapBundle\Service\UrlContainerInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**
- * Manage populate event
+ * Event called whenever a sitemap build is asked.
+ *
+ * Subscribe to this event if :
+ *  - you want to register non-static routes
  */
 class SitemapPopulateEvent extends Event
 {

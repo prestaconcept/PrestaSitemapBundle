@@ -14,9 +14,9 @@ namespace Presta\SitemapBundle\Sitemap\Url;
 use Presta\SitemapBundle\Exception;
 
 /**
- * Help to generate video url
+ * Url decorator to add videos to a sitemap Url.
  *
- * @see guidelines at http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472
+ * https://developers.google.com/search/docs/advanced/sitemaps/video-sitemaps
  */
 class GoogleVideoUrlDecorator extends UrlDecorator
 {

@@ -17,9 +17,9 @@ use Presta\SitemapBundle\Exception;
 use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
- * Helps to generate google news urls
+ * Url decorator to add news information to a sitemap Url.
  *
- * @see guidelines at https://support.google.com/webmasters/answer/74288
+ * https://developers.google.com/search/docs/advanced/sitemaps/news-sitemap
  */
 class GoogleNewsUrlDecorator extends UrlDecorator
 {

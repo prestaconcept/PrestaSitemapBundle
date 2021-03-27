@@ -12,7 +12,7 @@
 namespace Presta\SitemapBundle\Sitemap;
 
 /**
- * Description of Utils
+ * XML utils for sitemap format.
  */
 class Utils
 {

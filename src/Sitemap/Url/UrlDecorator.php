@@ -12,7 +12,7 @@
 namespace Presta\SitemapBundle\Sitemap\Url;
 
 /**
- * decorated url model
+ * Base class for all Url decorators.
  */
 abstract class UrlDecorator implements Url
 {

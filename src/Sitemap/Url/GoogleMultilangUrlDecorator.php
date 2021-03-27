@@ -14,9 +14,9 @@ namespace Presta\SitemapBundle\Sitemap\Url;
 use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
- * Decorate w/ google alternate language url guidelines
+ * Url decorator to add alternates to a sitemap Url.
  *
- * @see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=2620865
+ * https://developers.google.com/search/docs/advanced/crawling/localized-versions
  */
 class GoogleMultilangUrlDecorator extends UrlDecorator
 {

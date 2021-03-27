@@ -20,7 +20,7 @@ use Presta\SitemapBundle\Sitemap\Urlset;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Abstract sitemap generator class
+ * Base class for all sitemap generators.
  */
 abstract class AbstractGenerator implements UrlContainerInterface
 {

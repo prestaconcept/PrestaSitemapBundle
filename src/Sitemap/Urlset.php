@@ -15,7 +15,10 @@ use DateTimeInterface;
 use Presta\SitemapBundle\Sitemap\Url\Url;
 
 /**
- * Representation of url list
+ * Url set containing urls.
+ *
+ * https://www.sitemaps.org/protocol.html
+ * https://developers.google.com/search/docs/advanced/sitemaps/large-sitemaps
  */
 class Urlset extends XmlConstraint
 {

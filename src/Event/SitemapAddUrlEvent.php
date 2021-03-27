@@ -15,7 +15,11 @@ use Presta\SitemapBundle\Sitemap\Url\Url;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**
- * Event to allow generation of static routes sitemap urls.
+ * Event called whenever an static url is about to be added to sitemap.
+ *
+ * Subscribe to this event if :
+ *  - you want to decorate Url
+ *  - you want to prevent Url from being added
  */
 class SitemapAddUrlEvent extends Event
 {

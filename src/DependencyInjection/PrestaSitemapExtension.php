@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
- * This is the class that loads and manages your bundle configuration
+ * Load Bundle configuration, configure container parameters & services.
  */
 class PrestaSitemapExtension extends Extension
 {

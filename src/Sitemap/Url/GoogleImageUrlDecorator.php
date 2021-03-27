@@ -14,9 +14,9 @@ namespace Presta\SitemapBundle\Sitemap\Url;
 use Presta\SitemapBundle\Exception;
 
 /**
- * Decorate url with images
+ * Url decorator to add images to a sitemap Url.
  *
- * @see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=178636&topic=20986&ctx=topic
+ * https://developers.google.com/search/docs/advanced/sitemaps/image-sitemaps
  */
 class GoogleImageUrlDecorator extends UrlDecorator
 {
