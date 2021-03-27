@@ -38,7 +38,8 @@
         "psr-4": {
             "Presta\\SitemapBundle\\Tests\\Unit\\": "tests/Unit",
             "Presta\\SitemapBundle\\Tests\\Integration\\Tests\\": "tests/Integration/tests",
-            "Presta\\SitemapBundle\\Tests\\Integration\\": "tests/Integration/src"
+            "Presta\\SitemapBundle\\Tests\\Integration\\": "tests/Integration/src",
+            "Presta\\SitemapBundle\\Tests\\Standards\\": "tests/Standards"
         }
     },
     "extra": {
