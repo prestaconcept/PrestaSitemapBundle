@@ -22,10 +22,10 @@ use Presta\SitemapBundle\Exception;
  */
 class GoogleVideoUrlDecorator extends UrlDecorator
 {
-    const LIMIT_ITEMS = 1000;
+    public const LIMIT_ITEMS = 1000;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $customNamespaces = ['video' => 'http://www.google.com/schemas/sitemap-video/1.1'];
 
@@ -49,7 +49,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
      *
      * @return GoogleVideoUrlDecorator
      */
-    public function addVideo(GoogleVideo $video)
+    public function addVideo(GoogleVideo $video): self
     {
         if ($this->isFull()) {
             throw new Exception\GoogleVideoException('The video limit has been exceeded');
@@ -69,7 +69,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @inheritdoc
      */
-    public function toXml()
+    public function toXml(): string
     {
         $baseXml = $this->urlDecorated->toXml();
 
@@ -79,7 +79,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @return bool
      */
-    public function isFull()
+    public function isFull(): bool
     {
         return $this->limitItemsReached;
     }

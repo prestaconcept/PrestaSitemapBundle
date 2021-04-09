@@ -34,10 +34,7 @@ class SitemapController
      */
     private $ttl;
 
-    /**
-     * @param int $ttl
-     */
-    public function __construct(GeneratorInterface $generator, $ttl)
+    public function __construct(GeneratorInterface $generator, int $ttl)
     {
         $this->generator = $generator;
         $this->ttl = $ttl;
@@ -48,7 +45,7 @@ class SitemapController
      *
      * @return Response
      */
-    public function indexAction()
+    public function indexAction(): Response
     {
         $sitemapindex = $this->generator->fetch('root');
 
@@ -71,7 +68,7 @@ class SitemapController
      *
      * @return Response
      */
-    public function sectionAction($name)
+    public function sectionAction(string $name): Response
     {
         $section = $this->generator->fetch($name);
 

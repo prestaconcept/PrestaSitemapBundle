@@ -45,7 +45,7 @@ class DumpSitemapMessageHandler implements MessageHandlerInterface
         $this->defaultTarget = $defaultTarget;
     }
 
-    public function __invoke(DumpSitemapMessage $message)
+    public function __invoke(DumpSitemapMessage $message): void
     {
         $targetDir = rtrim($message->getTargetDir() ?? $this->defaultTarget, '/');
 
@@ -84,9 +84,9 @@ class DumpSitemapMessageHandler implements MessageHandlerInterface
         $port = '';
 
         if ('http' === $scheme && 80 != $context->getHttpPort()) {
-            $port = ':'.$context->getHttpPort();
+            $port = ':' . $context->getHttpPort();
         } elseif ('https' === $scheme && 443 != $context->getHttpsPort()) {
-            $port = ':'.$context->getHttpsPort();
+            $port = ':' . $context->getHttpsPort();
         }
 
         return rtrim($scheme . '://' . $host . $port, '/') . '/';

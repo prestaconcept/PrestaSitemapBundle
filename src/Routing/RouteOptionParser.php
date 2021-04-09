@@ -6,6 +6,12 @@ use Symfony\Component\Routing\Route;
 
 final class RouteOptionParser
 {
+    /**
+     * @param string $name
+     * @param Route  $route
+     *
+     * @return array<string, mixed>|null
+     */
     public static function parse(string $name, Route $route): ?array
     {
         $option = $route->getOption('sitemap');
@@ -61,7 +67,7 @@ final class RouteOptionParser
 
         if (\is_string($options['lastmod'])) {
             try {
-                $options['lastmod'] = new \DateTimeImmutable($options['lastmod']);
+                $lastmod = new \DateTimeImmutable($options['lastmod']);
             } catch (\Exception $e) {
                 throw new \InvalidArgumentException(
                     \sprintf(
@@ -73,6 +79,8 @@ final class RouteOptionParser
                     $e
                 );
             }
+
+            $options['lastmod'] = $lastmod;
         }
 
         return $options;

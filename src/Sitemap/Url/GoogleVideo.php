@@ -22,26 +22,26 @@ use Presta\SitemapBundle\Sitemap\Utils;
  */
 class GoogleVideo
 {
-    const PLAYER_LOC_ALLOW_EMBED_YES = 'yes';
-    const PLAYER_LOC_ALLOW_EMBED_NO = 'no';
-    const FAMILY_FRIENDLY_YES = 'yes';
-    const FAMILY_FRIENDLY_NO = 'no';
-    const RELATIONSHIP_ALLOW = 'allow';
-    const RELATIONSHIP_DENY = 'deny';
-    const PRICE_TYPE_RENT = 'rent';
-    const PRICE_TYPE_OWN = 'own';
-    const PRICE_RESOLUTION_HD = 'HD';
-    const PRICE_RESOLUTION_SD = 'SD';
-    const REQUIRES_SUBSCRIPTION_YES = 'yes';
-    const REQUIRES_SUBSCRIPTION_NO = 'no';
-    const PLATFORM_WEB = 'web';
-    const PLATFORM_MOBILE = 'mobile';
-    const PLATFORM_TV = 'tv';
-    const PLATFORM_RELATIONSHIP_ALLOW = 'allow';
-    const PLATFORM_RELATIONSHIP_DENY = 'deny';
-    const LIVE_YES = 'yes';
-    const LIVE_NO = 'no';
-    const TAG_ITEMS_LIMIT = 32;
+    public const PLAYER_LOC_ALLOW_EMBED_YES = 'yes';
+    public const PLAYER_LOC_ALLOW_EMBED_NO = 'no';
+    public const FAMILY_FRIENDLY_YES = 'yes';
+    public const FAMILY_FRIENDLY_NO = 'no';
+    public const RELATIONSHIP_ALLOW = 'allow';
+    public const RELATIONSHIP_DENY = 'deny';
+    public const PRICE_TYPE_RENT = 'rent';
+    public const PRICE_TYPE_OWN = 'own';
+    public const PRICE_RESOLUTION_HD = 'HD';
+    public const PRICE_RESOLUTION_SD = 'SD';
+    public const REQUIRES_SUBSCRIPTION_YES = 'yes';
+    public const REQUIRES_SUBSCRIPTION_NO = 'no';
+    public const PLATFORM_WEB = 'web';
+    public const PLATFORM_MOBILE = 'mobile';
+    public const PLATFORM_TV = 'tv';
+    public const PLATFORM_RELATIONSHIP_ALLOW = 'allow';
+    public const PLATFORM_RELATIONSHIP_DENY = 'deny';
+    public const LIVE_YES = 'yes';
+    public const LIVE_NO = 'no';
+    public const TAG_ITEMS_LIMIT = 32;
 
     /**
      * @var string
@@ -72,13 +72,13 @@ class GoogleVideo
 
     /**
      * allow google to embed video in search results
-     * @var string
+     * @var string|null
      */
     protected $playerLocationAllowEmbed;
 
     /**
      * user defined string for flashvar parameters in embed tag (e.g. autoplay="ap=1")
-     * @var string
+     * @var string|null
      */
     protected $playerLocationAutoplay;
 
@@ -93,7 +93,7 @@ class GoogleVideo
     protected $expirationDate;
 
     /**
-     * @var int|null
+     * @var int|float|null
      */
     protected $rating;
 
@@ -118,12 +118,12 @@ class GoogleVideo
     protected $category;
 
     /**
-     * @var array
+     * @var array<int, string>
      */
     protected $restrictionAllow = [];
 
     /**
-     * @var array
+     * @var array<int, string>
      */
     protected $restrictionDeny = [];
 
@@ -153,7 +153,7 @@ class GoogleVideo
     protected $uploaderInfo;
 
     /**
-     * @var array
+     * @var array<int, string>
      */
     protected $platforms = [];
 
@@ -169,27 +169,28 @@ class GoogleVideo
 
     /**
      * multiple prices can be added, see self::addPrice()
-     * @var array
+     * @var array<int, array<string, mixed>>
      */
     protected $prices = [];
 
     /**
      * multiple tags can be added, see self::addTag()
-     * @var array
+     * @var array<int, string>
      */
     protected $tags = [];
 
     /**
      * create a GoogleImage for your GoogleImageUrl
      *
-     * @param string $thumbnailLocation
-     * @param string $title
-     * @param string $description
-     * @param array  $parameters Properties of this class, (e.g. 'player_loc' => 'http://acme.com/player.swf')
+     * @param string               $thumbnailLocation
+     * @param string               $title
+     * @param string               $description
+     * @param array<string, mixed> $parameters Properties of this class
+     *                                         (e.g. 'player_loc' => 'http://acme.com/player.swf')
      *
      * @throws Exception\GoogleVideoException
      */
-    public function __construct($thumbnailLocation, $title, $description, array $parameters = [])
+    public function __construct(string $thumbnailLocation, string $title, string $description, array $parameters = [])
     {
         foreach ($parameters as $key => $param) {
             switch ($key) {
@@ -279,7 +280,7 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function setThumbnailLocation($location)
+    public function setThumbnailLocation(string $location): self
     {
         $this->thumbnailLocation = $location;
 
@@ -289,7 +290,7 @@ class GoogleVideo
     /**
      * @return string
      */
-    public function getThumbnailLocation()
+    public function getThumbnailLocation(): string
     {
         return $this->thumbnailLocation;
     }
@@ -299,7 +300,7 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -311,7 +312,7 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -323,7 +324,7 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function setContentLocation($location)
+    public function setContentLocation(string $location): self
     {
         $this->contentLocation = $location;
 
@@ -335,7 +336,7 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function setPlayerLocation($location)
+    public function setPlayerLocation(string $location): self
     {
         $this->playerLocation = $location;
 
@@ -345,22 +346,23 @@ class GoogleVideo
     /**
      * @return string|null
      */
-    public function getPlayerLocation()
+    public function getPlayerLocation(): ?string
     {
         return $this->playerLocation;
     }
 
     /**
-     * @param string $embed
+     * @param string|null $embed
      *
      * @return GoogleVideo
      */
-    public function setPlayerLocationAllowEmbed($embed)
+    public function setPlayerLocationAllowEmbed(?string $embed): self
     {
-        if (!in_array($embed, [self::PLAYER_LOC_ALLOW_EMBED_YES, self::PLAYER_LOC_ALLOW_EMBED_NO])) {
+        if ($embed && !in_array($embed, [self::PLAYER_LOC_ALLOW_EMBED_YES, self::PLAYER_LOC_ALLOW_EMBED_NO])) {
             throw new Exception\GoogleVideoException(
                 sprintf(
-                    'The parameter %s must be a valid player_location_allow_embed. See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    'The parameter %s must be a valid player_location_allow_embed.' .
+                    ' See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
                     $embed
                 )
             );
@@ -371,19 +373,19 @@ class GoogleVideo
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPlayerLocationAllowEmbed()
+    public function getPlayerLocationAllowEmbed(): ?string
     {
         return $this->playerLocationAllowEmbed;
     }
 
     /**
-     * @param string $autoplay
+     * @param string|null $autoplay
      *
      * @return GoogleVideo
      */
-    public function setPlayerLocationAutoplay($autoplay)
+    public function setPlayerLocationAutoplay(?string $autoplay): self
     {
         $this->playerLocationAutoplay = $autoplay;
 
@@ -391,9 +393,9 @@ class GoogleVideo
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getPlayerLocationAutoplay()
+    public function getPlayerLocationAutoplay(): ?string
     {
         return $this->playerLocationAutoplay;
     }
@@ -404,12 +406,13 @@ class GoogleVideo
      * @return GoogleVideo
      * @throws Exception\GoogleVideoException
      */
-    public function setDuration($duration)
+    public function setDuration(int $duration): self
     {
         if ($duration < 0 || $duration > 28800) {
             throw new Exception\GoogleVideoException(
                 sprintf(
-                    'The parameter %s must be a valid duration. See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    'The parameter %s must be a valid duration.' .
+                    ' See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
                     $duration
                 )
             );
@@ -425,7 +428,7 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function setExpirationDate(DateTimeInterface $expirationDate)
+    public function setExpirationDate(DateTimeInterface $expirationDate): self
     {
         $this->expirationDate = $expirationDate;
 
@@ -433,16 +436,17 @@ class GoogleVideo
     }
 
     /**
-     * @param float $rating
+     * @param float|int $rating
      *
      * @return GoogleVideo
      */
-    public function setRating($rating)
+    public function setRating($rating): self
     {
         if ($rating < 0 || $rating > 5) {
             throw new Exception\GoogleVideoException(
                 sprintf(
-                    'The parameter %s must be a valid rating. See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    'The parameter %s must be a valid rating.' .
+                    ' See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
                     $rating
                 )
             );
@@ -458,7 +462,7 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function setViewCount($viewCount)
+    public function setViewCount(int $viewCount): self
     {
         $this->viewCount = $viewCount;
 
@@ -470,7 +474,7 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function setPublicationDate(DateTimeInterface $publicationDate)
+    public function setPublicationDate(DateTimeInterface $publicationDate): self
     {
         $this->publicationDate = $publicationDate;
 
@@ -482,7 +486,7 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function setFamilyFriendly($familyFriendly = null)
+    public function setFamilyFriendly(string $familyFriendly = null): self
     {
         if (null == $familyFriendly) {
             $familyFriendly = self::FAMILY_FRIENDLY_YES;
@@ -491,7 +495,8 @@ class GoogleVideo
         if (!in_array($familyFriendly, [self::FAMILY_FRIENDLY_YES, self::FAMILY_FRIENDLY_NO])) {
             throw new Exception\GoogleVideoException(
                 sprintf(
-                    'The parameter %s must be a valid family_friendly. See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    'The parameter %s must be a valid family_friendly.' .
+                    ' See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
                     $familyFriendly
                 )
             );
@@ -507,12 +512,13 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function setCategory($category)
+    public function setCategory(string $category): self
     {
         if (strlen($category) > 256) {
             throw new Exception\GoogleVideoException(
                 sprintf(
-                    'The parameter %s must be a valid category. See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    'The parameter %s must be a valid category.' .
+                    ' See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
                     $category
                 )
             );
@@ -524,11 +530,11 @@ class GoogleVideo
     }
 
     /**
-     * @param array $countries
+     * @param array<int, string> $countries
      *
      * @return GoogleVideo
      */
-    public function setRestrictionAllow(array $countries)
+    public function setRestrictionAllow(array $countries): self
     {
         $this->restrictionAllow = $countries;
 
@@ -536,7 +542,7 @@ class GoogleVideo
     }
 
     /**
-     * @return array
+     * @return array<int, string>
      */
     public function getRestrictionAllow()
     {
@@ -544,11 +550,11 @@ class GoogleVideo
     }
 
     /**
-     * @param array $countries
+     * @param array<int, string> $countries
      *
      * @return GoogleVideo
      */
-    public function setRestrictionDeny(array $countries)
+    public function setRestrictionDeny(array $countries): self
     {
         $this->restrictionDeny = $countries;
 
@@ -556,9 +562,9 @@ class GoogleVideo
     }
 
     /**
-     * @return array
+     * @return array<int, string>
      */
-    public function getRestrictionDeny()
+    public function getRestrictionDeny(): array
     {
         return $this->restrictionDeny;
     }
@@ -568,7 +574,7 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function setGalleryLocation($location)
+    public function setGalleryLocation(string $location): self
     {
         $this->galleryLocation = $location;
 
@@ -580,7 +586,7 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function setGalleryLocationTitle($title)
+    public function setGalleryLocationTitle(string $title): self
     {
         $this->galleryLocationTitle = $title;
 
@@ -592,12 +598,13 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function setRequiresSubscription($requiresSubscription)
+    public function setRequiresSubscription(string $requiresSubscription): self
     {
         if (!in_array($requiresSubscription, [self::REQUIRES_SUBSCRIPTION_YES, self::REQUIRES_SUBSCRIPTION_NO])) {
             throw new Exception\GoogleVideoException(
                 sprintf(
-                    'The parameter %s must be a valid requires_subscription. See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    'The parameter %s must be a valid requires_subscription.' .
+                    ' See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
                     $requiresSubscription
                 )
             );
@@ -613,7 +620,7 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function setUploader($uploader)
+    public function setUploader(string $uploader): self
     {
         $this->uploader = $uploader;
 
@@ -625,7 +632,7 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function setUploaderInfo($uploaderInfo)
+    public function setUploaderInfo(string $uploaderInfo): self
     {
         $this->uploaderInfo = $uploaderInfo;
 
@@ -633,11 +640,11 @@ class GoogleVideo
     }
 
     /**
-     * @param array $platforms
+     * @param array<int, string> $platforms
      *
      * @return GoogleVideo
      */
-    public function setPlatforms(array $platforms)
+    public function setPlatforms(array $platforms): self
     {
         $this->platforms = $platforms;
 
@@ -645,9 +652,9 @@ class GoogleVideo
     }
 
     /**
-     * @return array
+     * @return array<int, string>
      */
-    public function getPlatforms()
+    public function getPlatforms(): array
     {
         return $this->platforms;
     }
@@ -657,7 +664,7 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function setPlatformRelationship($platformRelationship)
+    public function setPlatformRelationship(string $platformRelationship): self
     {
         $this->platformRelationship = $platformRelationship;
 
@@ -667,7 +674,7 @@ class GoogleVideo
     /**
      * @return null|string
      */
-    public function getPlatformRelationship()
+    public function getPlatformRelationship(): ?string
     {
         return $this->platformRelationship;
     }
@@ -677,8 +684,18 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function setLive($live)
+    public function setLive(string $live): self
     {
+        if (!in_array($live, [self::LIVE_YES, self::LIVE_NO])) {
+            throw new Exception\GoogleVideoException(
+                sprintf(
+                    'The parameter %s must be a valid live.' .
+                    ' See http://support.google.com/webmasters/bin/answer.py?hl=en&answer=80472#4',
+                    $live
+                )
+            );
+        }
+
         $this->live = $live;
 
         return $this;
@@ -687,7 +704,7 @@ class GoogleVideo
     /**
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -695,7 +712,7 @@ class GoogleVideo
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -703,7 +720,7 @@ class GoogleVideo
     /**
      * @return null|string
      */
-    public function getContentLocation()
+    public function getContentLocation(): ?string
     {
         return $this->contentLocation;
     }
@@ -711,7 +728,7 @@ class GoogleVideo
     /**
      * @return int|null
      */
-    public function getDuration()
+    public function getDuration(): ?int
     {
         return $this->duration;
     }
@@ -719,13 +736,13 @@ class GoogleVideo
     /**
      * @return DateTimeInterface|null
      */
-    public function getExpirationDate()
+    public function getExpirationDate(): ?DateTimeInterface
     {
         return $this->expirationDate;
     }
 
     /**
-     * @return int|null
+     * @return int|float|null
      */
     public function getRating()
     {
@@ -735,7 +752,7 @@ class GoogleVideo
     /**
      * @return int|null
      */
-    public function getViewCount()
+    public function getViewCount(): ?int
     {
         return $this->viewCount;
     }
@@ -743,7 +760,7 @@ class GoogleVideo
     /**
      * @return DateTimeInterface|null
      */
-    public function getPublicationDate()
+    public function getPublicationDate(): ?DateTimeInterface
     {
         return $this->publicationDate;
     }
@@ -751,7 +768,7 @@ class GoogleVideo
     /**
      * @return null|string
      */
-    public function getFamilyFriendly()
+    public function getFamilyFriendly(): ?string
     {
         return $this->familyFriendly;
     }
@@ -759,7 +776,7 @@ class GoogleVideo
     /**
      * @return null|string
      */
-    public function getCategory()
+    public function getCategory(): ?string
     {
         return $this->category;
     }
@@ -767,7 +784,7 @@ class GoogleVideo
     /**
      * @return null|string
      */
-    public function getGalleryLocation()
+    public function getGalleryLocation(): ?string
     {
         return $this->galleryLocation;
     }
@@ -775,7 +792,7 @@ class GoogleVideo
     /**
      * @return null|string
      */
-    public function getGalleryLocationTitle()
+    public function getGalleryLocationTitle(): ?string
     {
         return $this->galleryLocationTitle;
     }
@@ -783,7 +800,7 @@ class GoogleVideo
     /**
      * @return null|string
      */
-    public function getRequiresSubscription()
+    public function getRequiresSubscription(): ?string
     {
         return $this->requiresSubscription;
     }
@@ -791,7 +808,7 @@ class GoogleVideo
     /**
      * @return null|string
      */
-    public function getUploader()
+    public function getUploader(): ?string
     {
         return $this->uploader;
     }
@@ -799,7 +816,7 @@ class GoogleVideo
     /**
      * @return null|string
      */
-    public function getUploaderInfo()
+    public function getUploaderInfo(): ?string
     {
         return $this->uploaderInfo;
     }
@@ -807,7 +824,7 @@ class GoogleVideo
     /**
      * @return string|null
      */
-    public function getLive()
+    public function getLive(): ?string
     {
         return $this->live;
     }
@@ -815,14 +832,14 @@ class GoogleVideo
     /**
      * add price element
      *
-     * @param float       $amount
+     * @param int|float   $amount
      * @param string      $currency   - ISO 4217 format.
      * @param string|null $type       - rent or own
      * @param string|null $resolution - hd or sd
      *
      * @return GoogleVideo
      */
-    public function addPrice($amount, $currency, $type = null, $resolution = null)
+    public function addPrice($amount, string $currency, string $type = null, string $resolution = null): self
     {
         $this->prices[] = [
             'amount' => $amount,
@@ -837,9 +854,9 @@ class GoogleVideo
     /**
      * list of defined prices with price, currency, type and resolution
      *
-     * @return array
+     * @return array<int, array<string, mixed>>
      */
-    public function getPrices()
+    public function getPrices(): array
     {
         return $this->prices;
     }
@@ -850,7 +867,7 @@ class GoogleVideo
      * @return GoogleVideo
      * @throws Exception\GoogleVideoTagException
      */
-    public function addTag($tag)
+    public function addTag(string $tag): self
     {
         if (count($this->tags) >= self::TAG_ITEMS_LIMIT) {
             throw new Exception\GoogleVideoTagException(
@@ -864,9 +881,9 @@ class GoogleVideo
     }
 
     /**
-     * @return array
+     * @return array<int, string>
      */
-    public function getTags()
+    public function getTags(): array
     {
         return $this->tags;
     }
@@ -876,7 +893,7 @@ class GoogleVideo
      *
      * @return string
      */
-    public function toXml()
+    public function toXml(): string
     {
         $videoXml = '<video:video>';
 
@@ -932,7 +949,7 @@ class GoogleVideo
             if ($uploaderInfo = $this->getPlayerLocationAllowEmbed()) {
                 $attributes['allow_embed'] = Utils::encode($uploaderInfo);
             }
-            if ($autoplay = $this->getPlayerLocationAutoplay()) {
+            if (null !== $autoplay = $this->getPlayerLocationAutoplay()) {
                 $attributes['autoplay'] = Utils::encode($autoplay);
             }
 
@@ -992,6 +1009,11 @@ class GoogleVideo
         return $videoXml;
     }
 
+    /**
+     * @param array<string, string> $map
+     *
+     * @return string
+     */
     private function attributes(array $map): string
     {
         $attributes = '';

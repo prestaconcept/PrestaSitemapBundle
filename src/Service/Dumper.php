@@ -57,8 +57,8 @@ class Dumper extends AbstractGenerator implements DumperInterface
     public function __construct(
         EventDispatcherInterface $dispatcher,
         Filesystem $filesystem,
-        $sitemapFilePrefix = Configuration::DEFAULT_FILENAME,
-        $itemsBySet = null
+        string $sitemapFilePrefix = Configuration::DEFAULT_FILENAME,
+        int $itemsBySet = null
     ) {
         parent::__construct($dispatcher, $itemsBySet);
 
@@ -69,7 +69,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
     /**
      * @inheritdoc
      */
-    public function dump($targetDir, $host, $section = null, array $options = [])
+    public function dump(string $targetDir, string $host, string $section = null, array $options = [])
     {
         $options = array_merge(['gzip' => false], $options);
 
@@ -131,7 +131,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
      *
      * @return void
      */
-    protected function prepareTempFolder()
+    protected function prepareTempFolder(): void
     {
         $this->tmpFolder = sys_get_temp_dir() . '/PrestaSitemaps-' . uniqid();
         $this->filesystem->mkdir($this->tmpFolder);
@@ -142,7 +142,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
      *
      * @return void
      */
-    protected function cleanup()
+    protected function cleanup(): void
     {
         $this->filesystem->remove($this->tmpFolder);
         $this->root = null;
@@ -157,7 +157,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
      * @return Urlset[]
      * @throws \InvalidArgumentException
      */
-    protected function loadCurrentSitemapIndex($filename)
+    protected function loadCurrentSitemapIndex(string $filename): array
     {
         if (!file_exists($filename)) {
             return [];
@@ -165,6 +165,12 @@ class Dumper extends AbstractGenerator implements DumperInterface
 
         $urlsets = [];
         $index = simplexml_load_file($filename);
+        if ($index === false) {
+            throw new \InvalidArgumentException(
+                "Sitemaps in $filename doesn't contain valid XML."
+            );
+        }
+
         foreach ($index->children() as $child) {
             /** @var $child \SimpleXMLElement */
             if ($child->getName() === 'sitemap') {
@@ -201,7 +207,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
      *
      * @throws \RuntimeException
      */
-    protected function activate($targetDir)
+    protected function activate(string $targetDir): void
     {
         if (!is_dir($targetDir)) {
             mkdir($targetDir, 0777, true);
@@ -224,7 +230,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
      *
      * @param string $targetDir
      */
-    protected function deleteExistingSitemaps($targetDir)
+    protected function deleteExistingSitemaps(string $targetDir): void
     {
         foreach ($this->urlsets as $urlset) {
             if (preg_match('/.*_\d+\.xml(\.gz)?$/', $urlset->getLoc())) {
@@ -233,6 +239,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
 
             // pattern is base name of sitemap file (with .xml cut) optionally followed by _X for numbered files
             $basename = basename($urlset->getLoc());
+            /** @var string $basename */
             $basename = preg_replace('/\.xml(\.gz)?$/', '', $basename); // cut .xml|.xml.gz
             $pattern = '/' . preg_quote($basename, '/') . '(_\d+)?\.xml(\.gz)?$/';
 
@@ -248,12 +255,13 @@ class Dumper extends AbstractGenerator implements DumperInterface
     /**
      * Create new DumpingUrlset with gz option
      *
-     * @param string $name The urlset name
-     * @param \DateTimeInterface|null $lastmod The urlset last modification date
-     * @param bool $gzExtension Whether the urlset is gzipped
+     * @param string                  $name        The urlset name
+     * @param \DateTimeInterface|null $lastmod     The urlset last modification date
+     * @param bool                    $gzExtension Whether the urlset is gzipped
+     *
      * @return DumpingUrlset|Urlset
      */
-    protected function newUrlset($name, \DateTimeInterface $lastmod = null, bool $gzExtension = false)
+    protected function newUrlset(string $name, \DateTimeInterface $lastmod = null, bool $gzExtension = false): Urlset
     {
         $url = $this->baseUrl . $this->sitemapFilePrefix . '.' . $name . '.xml';
         if ($gzExtension) {

@@ -32,16 +32,22 @@ class DumpingUrlset extends Urlset
      * @param string $targetDir Directory where file should be saved
      * @param bool   $gzip
      */
-    public function save($targetDir, $gzip = false)
+    public function save(string $targetDir, bool $gzip = false): void
     {
         $this->initializeFileHandler();
         $filename = realpath($targetDir) . '/' . basename($this->getLoc());
         $sitemapFile = fopen($filename, 'w+');
+        if ($sitemapFile === false) {
+            throw new \RuntimeException(
+                \sprintf('Cannot open sitemap file %s for writing.', $filename)
+            );
+        }
+
         $structureXml = $this->getStructureXml();
 
         // since header may contain namespaces which may get added when adding URLs
         // we can't prepare the header beforehand, so here we just take it and add to the beginning of the file
-        $header = substr($structureXml, 0, strpos($structureXml, 'URLS</urlset>'));
+        $header = (string)substr($structureXml, 0, (int)strpos($structureXml, 'URLS</urlset>'));
         fwrite($sitemapFile, $header);
 
         // append body file to sitemap file (after the header)
@@ -49,7 +55,7 @@ class DumpingUrlset extends Urlset
         fseek($this->bodyFile, 0);
 
         while (!feof($this->bodyFile)) {
-            fwrite($sitemapFile, fread($this->bodyFile, 65536));
+            fwrite($sitemapFile, (string)fread($this->bodyFile, 65536));
         }
         fwrite($sitemapFile, '</urlset>');
 
@@ -63,8 +69,14 @@ class DumpingUrlset extends Urlset
             $filenameGz = $filename . '.gz';
             fseek($sitemapFile, 0);
             $sitemapFileGz = gzopen($filenameGz, 'wb9');
+            if ($sitemapFileGz === false) {
+                throw new \RuntimeException(
+                    \sprintf('Cannot open sitemap gz file %s for writing.', $filenameGz)
+                );
+            }
+
             while (!feof($sitemapFile)) {
-                gzwrite($sitemapFileGz, fread($sitemapFile, 65536));
+                gzwrite($sitemapFileGz, (string)fread($sitemapFile, 65536));
             }
             gzclose($sitemapFileGz);
         }
@@ -80,7 +92,7 @@ class DumpingUrlset extends Urlset
      *
      * @param string $urlXml
      */
-    protected function appendXML($urlXml)
+    protected function appendXML(string $urlXml): void
     {
         $this->initializeFileHandler();
         fwrite($this->bodyFile, $urlXml);
@@ -89,15 +101,22 @@ class DumpingUrlset extends Urlset
     /**
      * @throws \RuntimeException
      */
-    private function initializeFileHandler()
+    private function initializeFileHandler(): void
     {
         if (null !== $this->bodyFile) {
             return;
         }
 
         $tmpFile = tempnam(sys_get_temp_dir(), 'sitemap');
-        if (false === $this->bodyFile = @fopen($tmpFile, 'w+')) {
+        if ($tmpFile === false) {
+            throw new \RuntimeException('Cannot create temporary file');
+        }
+
+        $file = @fopen($tmpFile, 'w+');
+        if ($file === false) {
             throw new \RuntimeException("Cannot create temporary file $tmpFile");
         }
+
+        $this->bodyFile = $file;
     }
 }

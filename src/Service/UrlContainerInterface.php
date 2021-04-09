@@ -30,5 +30,5 @@ interface UrlContainerInterface
      *
      * @throws \RuntimeException
      */
-    public function addUrl(Url $url, $section);
+    public function addUrl(Url $url, string $section): void;
 }

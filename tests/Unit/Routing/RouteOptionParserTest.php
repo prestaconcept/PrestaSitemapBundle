@@ -3,7 +3,6 @@
 namespace Presta\SitemapBundle\Tests\Unit\Routing;
 
 use DateTimeImmutable;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Routing\RouteOptionParser;
 use Symfony\Component\Routing\Route;
@@ -77,19 +76,10 @@ class RouteOptionParserTest extends TestCase
     /**
      * @param mixed $option
      *
-     * @return Route|MockObject
+     * @return Route
      */
-    private function getRoute($option): MockObject
+    private function getRoute($option): Route
     {
-        $route = $this->getMockBuilder(Route::class)
-            ->setMethods(['getOption'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $route->expects($this->once())
-            ->method('getOption')
-            ->will($this->returnValue($option));
-
-        return $route;
+        return new Route('/', [], [], ['sitemap' => $option]);
     }
 }

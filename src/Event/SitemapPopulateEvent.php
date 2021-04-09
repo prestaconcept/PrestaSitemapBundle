@@ -24,7 +24,7 @@ class SitemapPopulateEvent extends Event
     /**
      * @Event("Presta\SitemapBundle\Event\SitemapPopulateEvent")
      */
-    const ON_SITEMAP_POPULATE = 'presta_sitemap.populate';
+    public const ON_SITEMAP_POPULATE = 'presta_sitemap.populate';
 
     /**
      * @var UrlContainerInterface
@@ -33,7 +33,7 @@ class SitemapPopulateEvent extends Event
 
     /**
      * Allows creating EventListeners for particular sitemap sections, used when dumping
-     * @var string
+     * @var string|null
      */
     protected $section;
 
@@ -41,7 +41,7 @@ class SitemapPopulateEvent extends Event
      * @param UrlContainerInterface $urlContainer
      * @param string|null           $section
      */
-    public function __construct(UrlContainerInterface $urlContainer, $section = null)
+    public function __construct(UrlContainerInterface $urlContainer, string $section = null)
     {
         $this->urlContainer = $urlContainer;
         $this->section = $section;
@@ -50,7 +50,7 @@ class SitemapPopulateEvent extends Event
     /**
      * @return UrlContainerInterface
      */
-    public function getUrlContainer()
+    public function getUrlContainer(): UrlContainerInterface
     {
         return $this->urlContainer;
     }
@@ -60,7 +60,7 @@ class SitemapPopulateEvent extends Event
      *
      * @return null|string
      */
-    public function getSection()
+    public function getSection(): ?string
     {
         return $this->section;
     }

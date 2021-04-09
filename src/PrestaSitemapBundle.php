@@ -25,7 +25,7 @@ class PrestaSitemapBundle extends Bundle
     /**
      * @inheritDoc
      */
-    public function getPath()
+    public function getPath(): string
     {
         return \dirname(__DIR__);
     }

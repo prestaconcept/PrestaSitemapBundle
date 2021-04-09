@@ -20,7 +20,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -56,7 +55,7 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     /**
      * @inheritdoc
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             SitemapPopulateEvent::ON_SITEMAP_POPULATE => ['registerRouteAnnotation', 0],
@@ -66,7 +65,7 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     /**
      * @param SitemapPopulateEvent $event
      */
-    public function registerRouteAnnotation(SitemapPopulateEvent $event)
+    public function registerRouteAnnotation(SitemapPopulateEvent $event): void
     {
         $this->addUrlsFromRoutes($event->getUrlContainer(), $event->getSection());
     }
@@ -77,9 +76,9 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
      *
      * @throws \InvalidArgumentException
      */
-    private function addUrlsFromRoutes(UrlContainerInterface $container, ?string $section)
+    private function addUrlsFromRoutes(UrlContainerInterface $container, ?string $section): void
     {
-        $collection = $this->getRouteCollection();
+        $collection = $this->router->getRouteCollection();
 
         foreach ($collection->all() as $name => $route) {
             $options = RouteOptionParser::parse($name, $route);
@@ -107,21 +106,13 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     }
 
     /**
-     * @return RouteCollection
-     */
-    protected function getRouteCollection()
-    {
-        return $this->router->getRouteCollection();
-    }
-
-    /**
-     * @param string $name    Route name
-     * @param array  $options Node options
+     * @param string               $name    Route name
+     * @param array<string, mixed> $options Node options
      *
      * @return UrlConcrete
      * @throws \InvalidArgumentException
      */
-    protected function getUrlConcrete($name, $options)
+    protected function getUrlConcrete(string $name, array $options): UrlConcrete
     {
         try {
             return new UrlConcrete(
@@ -144,13 +135,13 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     }
 
     /**
-     * @param string $name   Route name
-     * @param array  $params Route additional parameters
+     * @param string               $name   Route name
+     * @param array<string, mixed> $params Route additional parameters
      *
      * @return string
      * @throws \InvalidArgumentException
      */
-    protected function getRouteUri($name, $params = [])
+    protected function getRouteUri(string $name, array $params = []): string
     {
         // If the route needs additional parameters, we can't add it
         try {

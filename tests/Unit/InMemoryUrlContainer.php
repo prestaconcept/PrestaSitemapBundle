@@ -16,7 +16,7 @@ final class InMemoryUrlContainer implements UrlContainerInterface
      */
     private $urls = [];
 
-    public function addUrl(Url $url, $section)
+    public function addUrl(Url $url, string $section): void
     {
         $this->urls[$section][] = $url;
     }

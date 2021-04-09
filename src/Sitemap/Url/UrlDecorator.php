@@ -24,7 +24,7 @@ abstract class UrlDecorator implements Url
     protected $urlDecorated;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $customNamespaces = [];
 
@@ -39,7 +39,7 @@ abstract class UrlDecorator implements Url
     /**
      * @inheritdoc
      */
-    public function getCustomNamespaces()
+    public function getCustomNamespaces(): array
     {
         return array_merge($this->urlDecorated->getCustomNamespaces(), $this->customNamespaces);
     }
@@ -47,7 +47,7 @@ abstract class UrlDecorator implements Url
     /**
      * @return Url
      */
-    public function getUrlDecorated()
+    public function getUrlDecorated(): Url
     {
         return $this->urlDecorated;
     }

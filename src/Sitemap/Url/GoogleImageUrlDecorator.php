@@ -22,7 +22,7 @@ use Presta\SitemapBundle\Exception;
  */
 class GoogleImageUrlDecorator extends UrlDecorator
 {
-    const LIMIT_ITEMS = 1000;
+    public const LIMIT_ITEMS = 1000;
 
     /**
      * @var string
@@ -30,7 +30,7 @@ class GoogleImageUrlDecorator extends UrlDecorator
     protected $imageXml = '';
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $customNamespaces = ['image' => 'http://www.google.com/schemas/sitemap-image/1.1'];
 
@@ -49,7 +49,7 @@ class GoogleImageUrlDecorator extends UrlDecorator
      *
      * @return GoogleImageUrlDecorator
      */
-    public function addImage(GoogleImage $image)
+    public function addImage(GoogleImage $image): self
     {
         if ($this->isFull()) {
             throw new Exception\GoogleImageException('The image limit has been exceeded');
@@ -69,7 +69,7 @@ class GoogleImageUrlDecorator extends UrlDecorator
     /**
      * @inheritdoc
      */
-    public function toXml()
+    public function toXml(): string
     {
         $baseXml = $this->urlDecorated->toXml();
 
@@ -79,7 +79,7 @@ class GoogleImageUrlDecorator extends UrlDecorator
     /**
      * @return bool
      */
-    public function isFull()
+    public function isFull(): bool
     {
         return $this->limitItemsReached;
     }

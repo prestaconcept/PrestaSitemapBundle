@@ -26,7 +26,7 @@ class Sitemapindex extends XmlConstraint
     /**
      * @param Urlset $urlset
      */
-    public function addSitemap(Urlset $urlset)
+    public function addSitemap(Urlset $urlset): void
     {
         if ($this->isFull()) {
             throw new \RuntimeException('The sitemapindex limit has been exceeded');
@@ -59,7 +59,7 @@ class Sitemapindex extends XmlConstraint
      *
      * @return string
      */
-    protected function getSitemapXml(Urlset $urlset)
+    protected function getSitemapXml(Urlset $urlset): string
     {
         return '<sitemap><loc>' . $urlset->getLoc()
             . '</loc><lastmod>' . $urlset->getLastmod()->format('c')
@@ -71,11 +71,12 @@ class Sitemapindex extends XmlConstraint
      *
      * @return string
      */
-    protected function getStructureXml()
+    protected function getStructureXml(): string
     {
         $struct = '<?xml version="1.0" encoding="UTF-8"?>';
         $struct .= '<sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"';
-        $struct .= ' xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd"';
+        $struct .= ' xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9' .
+                   ' http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd"';
         $struct .= ' xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">SITEMAPS</sitemapindex>';
 
         return $struct;
@@ -84,7 +85,7 @@ class Sitemapindex extends XmlConstraint
     /**
      * @inheritdoc
      */
-    public function toXml()
+    public function toXml(): string
     {
         return str_replace('SITEMAPS', $this->sitemapsXml, $this->getStructureXml());
     }

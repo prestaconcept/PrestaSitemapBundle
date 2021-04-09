@@ -32,7 +32,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
     protected $dispatcher;
 
     /**
-     * @var Sitemapindex
+     * @var Sitemapindex|null
      */
     protected $root;
 
@@ -48,7 +48,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
     protected $itemsBySet;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     private $defaults;
 
@@ -56,7 +56,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
      * @param EventDispatcherInterface $dispatcher
      * @param int|null                 $itemsBySet
      */
-    public function __construct(EventDispatcherInterface $dispatcher, $itemsBySet = null)
+    public function __construct(EventDispatcherInterface $dispatcher, int $itemsBySet = null)
     {
         $this->dispatcher = $dispatcher;
         // We add one to LIMIT_ITEMS because it was used as an index, not a quantity
@@ -70,9 +70,9 @@ abstract class AbstractGenerator implements UrlContainerInterface
     }
 
     /**
-     * @param array $defaults
+     * @param array<string, mixed> $defaults
      */
-    public function setDefaults(array $defaults)
+    public function setDefaults(array $defaults): void
     {
         $this->defaults = $defaults;
     }
@@ -80,7 +80,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
     /**
      * @inheritdoc
      */
-    public function addUrl(Url $url, $section)
+    public function addUrl(Url $url, string $section): void
     {
         $urlset = $this->getUrlset($section);
 
@@ -119,7 +119,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
      *
      * @return Urlset
      */
-    public function getUrlset($name)
+    public function getUrlset(string $name): Urlset
     {
         if (!isset($this->urlsets[$name])) {
             $this->urlsets[$name] = $this->newUrlset($name);
@@ -136,14 +136,14 @@ abstract class AbstractGenerator implements UrlContainerInterface
      *
      * @return Urlset
      */
-    abstract protected function newUrlset($name, \DateTimeInterface $lastmod = null);
+    abstract protected function newUrlset(string $name, \DateTimeInterface $lastmod = null): Urlset;
 
     /**
      * Dispatches SitemapPopulate Event - the listeners should use it to add their URLs to the sitemap
      *
      * @param string|null $section
      */
-    protected function populate($section = null)
+    protected function populate(string $section = null): void
     {
         $event = new SitemapPopulateEvent($this, $section);
 
@@ -153,7 +153,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
     /**
      * @return Sitemapindex
      */
-    protected function getRoot()
+    protected function getRoot(): Sitemapindex
     {
         if (null === $this->root) {
             $this->root = new Sitemapindex();
@@ -171,7 +171,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
      *
      * @return Url|null
      */
-    private function getUrlConcrete(Url $url)
+    private function getUrlConcrete(Url $url): ?Url
     {
         if ($url instanceof UrlConcrete) {
             return $url;
