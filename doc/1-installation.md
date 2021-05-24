@@ -43,7 +43,7 @@ Import routing.
 ```yaml
 # config/routes/presta_sitemap.yaml
 presta_sitemap:
-    resource: "@PrestaSitemapBundle/config/routing.yml"
+    resource: "@PrestaSitemapBundle/Resources/config/routing.yml"
 ```
 
 > **Note** you may not be required to import routing if you would only rely on dumped sitemaps.
