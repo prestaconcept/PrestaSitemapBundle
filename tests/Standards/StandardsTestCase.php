@@ -21,13 +21,7 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 abstract class StandardsTestCase extends TestCase
 {
-    private const PSR4 = [
-        "Presta\\SitemapBundle\\" => "src/",
-        "Presta\\SitemapBundle\\Tests\\Unit\\" => "tests/Unit",
-        "Presta\\SitemapBundle\\Tests\\Integration\\Tests\\" => "tests/Integration/tests",
-        "Presta\\SitemapBundle\\Tests\\Integration\\" => "tests/Integration/src",
-        "Presta\\SitemapBundle\\Tests\\Standards\\" => "tests/Standards",
-    ];
+    private const COMPOSER = __DIR__ . '/../../composer.json';
 
     private static $sources = null;
     private static $tests = null;
@@ -87,7 +81,9 @@ abstract class StandardsTestCase extends TestCase
     private static function class(SplFileInfo $file, string $dir): string
     {
         $classPath = \substr($file->getRelativePathname(), 0, -4);
-        foreach (self::PSR4 as $namespacePrefix => $directoryPrefix) {
+        $json = \json_decode(\file_get_contents(self::COMPOSER), true);
+        $psr4 = \array_merge($json['autoload']['psr-4'], $json['autoload-dev']['psr-4']);
+        foreach ($psr4 as $namespacePrefix => $directoryPrefix) {
             if (\strpos($dir . '/' . $file->getRelativePathname(), $directoryPrefix) !== 0) {
                 continue;
             }
