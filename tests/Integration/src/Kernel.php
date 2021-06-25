@@ -21,8 +21,6 @@ class Kernel extends BaseKernel
     use MicroKernelTrait;
     use RouteConfiguratorTrait;
 
-    const CONFIG_EXTS = '.{php,xml,yaml,yml}';
-
     public function getCacheDir(): string
     {
         return $this->getProjectDir() . '/var/cache/' . $this->environment;
@@ -38,12 +36,13 @@ class Kernel extends BaseKernel
         return \dirname(__DIR__);
     }
 
-    public function registerBundles(): array
+    public function registerBundles(): iterable
     {
-        return [
-            new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new \Presta\SitemapBundle\PrestaSitemapBundle(),
-        ];
+        yield new \Symfony\Bundle\FrameworkBundle\FrameworkBundle();
+        yield new \Presta\SitemapBundle\PrestaSitemapBundle();
+        if (\PHP_VERSION_ID < 80000) {
+            yield new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle();
+        }
     }
 
     public function boot()

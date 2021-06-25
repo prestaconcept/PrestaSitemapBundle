@@ -22,7 +22,8 @@
     "require-dev": {
         "doctrine/annotations": "^1.0",
         "phpstan/phpstan": "^0.12.82",
-        "phpunit/phpunit": "^7.5",
+        "phpunit/phpunit": "^7.5|^8.0",
+        "sensio/framework-extra-bundle": "^5.5|^6.1",
         "squizlabs/php_codesniffer": "^3.5",
         "symfony/messenger": "^4.4|^5.0",
         "symfony/browser-kit": "^4.4|^5.0",

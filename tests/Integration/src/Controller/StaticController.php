@@ -19,6 +19,7 @@ final class StaticController
     /**
      * @Route("", name="home", options={"sitemap"={"section"="static"}})
      */
+    #[Route(path: '', name: 'home', options: ['sitemap' => ['section' => 'static']])]
     public function home(): Response
     {
         return new Response(__FUNCTION__);

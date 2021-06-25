@@ -19,6 +19,7 @@ final class BlogController
     /**
      * @Route("/blog", name="blog_read", options={"sitemap"={"section"="blog"}})
      */
+    #[Route(path: '/blog', name: 'blog_read', options: ['sitemap' => ['section' => 'blog']])]
     public function read(): Response
     {
         return new Response(__FUNCTION__);
@@ -27,6 +28,7 @@ final class BlogController
     /**
      * @Route("/blog/{slug}", name="blog_post")
      */
+    #[Route(path: '/blog/{slug}', name: 'blog_post')]
     public function post(string $slug): Response
     {
         return new Response(__FUNCTION__ . ':' . $slug);
