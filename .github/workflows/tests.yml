@@ -53,8 +53,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - php-version: 7.4
-            symfony-version: 5.2.*
+          - php-version: 8.0
+            symfony-version: 5.3.*
 
     steps:
       - name: "Checkout"
@@ -92,8 +92,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - php-version: 7.4
-            symfony-version: 5.2.*
+          - php-version: 8.0
+            symfony-version: 5.3.*
 
     steps:
       - name: "Checkout"
@@ -125,8 +125,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - php-version: 7.4
-            symfony-version: 5.2.*
+          - php-version: 8.0
+            symfony-version: 5.3.*
 
     steps:
       - name: "Checkout"
