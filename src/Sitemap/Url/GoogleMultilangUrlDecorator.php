@@ -14,7 +14,7 @@ namespace Presta\SitemapBundle\Sitemap\Url;
 use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
- * Url decorator to add alternates to a sitemap Url.
+ * Url decorator to add alternatives to a sitemap Url.
  *
  * https://developers.google.com/search/docs/advanced/crawling/localized-versions
  */

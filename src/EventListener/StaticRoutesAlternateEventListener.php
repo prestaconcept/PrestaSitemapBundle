@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Listen to "presta_sitemap.add_url" event.
- * Decorate translatable Url with multi-lang alternates.
+ * Decorate translatable Url with multi-lang alternatives.
  * Support both Symfony translated routes & JMSI18nRoutingBundle.
  */
 final class StaticRoutesAlternateEventListener implements EventSubscriberInterface
