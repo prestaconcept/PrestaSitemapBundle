@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * This file is part of the PrestaSitemapBundle package.
  *
- * (c) PrestaConcept <www.prestaconcept.net>
+ * (c) PrestaConcept <https://prestaconcept.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,11 +14,9 @@ namespace Presta\SitemapBundle\Sitemap\Url;
 use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
- * Decorate w/ google alternate language url guidelines
+ * Url decorator to add alternatives to a sitemap Url.
  *
- * @see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=2620865
- *
- * @author David Epely <depely@prestaconcept.net>
+ * https://developers.google.com/search/docs/advanced/crawling/localized-versions
  */
 class GoogleMultilangUrlDecorator extends UrlDecorator
 {

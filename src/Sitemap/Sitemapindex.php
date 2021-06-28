@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * This file is part of the PrestaSitemapBundle package.
  *
- * (c) PrestaConcept <www.prestaconcept.net>
+ * (c) PrestaConcept <https://prestaconcept.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,10 @@
 namespace Presta\SitemapBundle\Sitemap;
 
 /**
- * Representation of sitemap (urlset) list
+ * Index of sitemap url sets.
  *
- * @author David Epely
+ * https://www.sitemaps.org/protocol.html#index
+ * https://developers.google.com/search/docs/advanced/sitemaps/large-sitemaps
  */
 class Sitemapindex extends XmlConstraint
 {

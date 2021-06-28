@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * This file is part of the PrestaSitemapBundle package.
  *
- * (c) PrestaConcept <www.prestaconcept.net>
+ * (c) PrestaConcept <https://prestaconcept.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -25,11 +25,6 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-/**
- * Tests the GoogleNewsUrlDecorator
- *
- * @author Christoph Foehrdes
- */
 class GoogleNewsUrlDecoratorTest extends TestCase
 {
     /**

@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * This file is part of the PrestaSitemapBundle package.
  *
- * (c) PrestaConcept <www.prestaconcept.net>
+ * (c) PrestaConcept <https://prestaconcept.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,9 +16,9 @@ use Presta\SitemapBundle\Exception;
 use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
- * Class used for managing video's url entities
+ * Sitemap video object attached to a sitemap Url.
  *
- * @author David Epely <depely@prestaconcept.net>
+ * https://developers.google.com/search/docs/advanced/sitemaps/video-sitemaps
  */
 class GoogleVideo
 {

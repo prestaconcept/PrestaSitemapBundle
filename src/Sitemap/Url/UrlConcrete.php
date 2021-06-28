@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * This file is part of the PrestaSitemapBundle package.
  *
- * (c) PrestaConcept <www.prestaconcept.net>
+ * (c) PrestaConcept <https://prestaconcept.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,10 +15,9 @@ use DateTimeInterface;
 use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
- * Class used for managing url entities
+ * First class citizen of sitemaps.
  *
- * @author Christophe Dolivet
- * @author David Epely
+ * https://developers.google.com/search/docs/guides/create-URLs
  */
 class UrlConcrete implements Url
 {

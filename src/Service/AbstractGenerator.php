@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * This file is part of the PrestaSitemapBundle package.
  *
- * (c) PrestaConcept <www.prestaconcept.net>
+ * (c) PrestaConcept <https://prestaconcept.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,9 +20,7 @@ use Presta\SitemapBundle\Sitemap\Urlset;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Abstract sitemap generator class
- *
- * @author Konstantin Myakshin <koc-dp@yandex.ru>
+ * Base class for all sitemap generators.
  */
 abstract class AbstractGenerator implements UrlContainerInterface
 {

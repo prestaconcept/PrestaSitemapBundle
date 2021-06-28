@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * This file is part of the PrestaSitemapBundle package.
  *
- * (c) PrestaConcept <www.prestaconcept.net>
+ * (c) PrestaConcept <https://prestaconcept.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,9 +13,6 @@ namespace Presta\SitemapBundle\Sitemap;
 
 /**
  * Urlset which writes added URLs into (temporary) files directly, w/o consuming memory
- *
- * @author Konstantin Tjuterev <kostik.lv@gmail.com>
- * @author Konstantin Myakshin <koc-dp@yandex.ru>
  */
 class DumpingUrlset extends Urlset
 {

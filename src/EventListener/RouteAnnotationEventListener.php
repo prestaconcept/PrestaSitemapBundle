@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * This file is part of the PrestaSitemapBundle package.
  *
- * (c) PrestaConcept <www.prestaconcept.net>
+ * (c) PrestaConcept <https://prestaconcept.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -23,7 +23,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
- * This listener iterate over configured routes, and register allowed URLs to sitemap.
+ * Listen to "presta_sitemap.populate" event.
+ * Populate sitemap with configured static routes.
  */
 class RouteAnnotationEventListener implements EventSubscriberInterface
 {

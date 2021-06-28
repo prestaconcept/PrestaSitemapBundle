@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * This file is part of the PrestaSitemapBundle package.
  *
- * (c) PrestaConcept <www.prestaconcept.net>
+ * (c) PrestaConcept <https://prestaconcept.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,11 +17,9 @@ use Presta\SitemapBundle\Exception;
 use Presta\SitemapBundle\Sitemap\Utils;
 
 /**
- * Helps to generate google news urls
+ * Url decorator to add news information to a sitemap Url.
  *
- * @see guidelines at https://support.google.com/webmasters/answer/74288
- *
- * @author Christoph Foehrdes
+ * https://developers.google.com/search/docs/advanced/sitemaps/news-sitemap
  */
 class GoogleNewsUrlDecorator extends UrlDecorator
 {

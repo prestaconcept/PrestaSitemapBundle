@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * This file is part of the PrestaSitemapBundle package.
  *
- * (c) PrestaConcept <www.prestaconcept.net>
+ * (c) PrestaConcept <https://prestaconcept.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,7 @@
 namespace Presta\SitemapBundle\Sitemap;
 
 /**
- * Description of Utils
- *
- * @author David Epely <depely@prestaconcept.net>
+ * XML utils for sitemap format.
  */
 class Utils
 {

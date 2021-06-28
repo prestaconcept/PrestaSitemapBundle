@@ -1,5 +1,9 @@
-/.github          export-ignore
-/Tests            export-ignore
-/.gitignore       export-ignore
-/Makefile         export-ignore
-/phpunit.xml.dist export-ignore
+/.github           export-ignore
+/doc/              export-ignore
+/tests/            export-ignore
+/.gitattributes    export-ignore
+/.gitignore        export-ignore
+/phpcs.xml.dist    export-ignore
+/phpstan.neon.dist export-ignore
+/phpunit.xml.dist  export-ignore
+/README.md         export-ignore

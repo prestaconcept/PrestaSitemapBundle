@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the PrestaSitemapBundle package.
+ *
+ * (c) PrestaConcept <https://prestaconcept.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Presta\SitemapBundle\EventListener;
 
 use Presta\SitemapBundle\Event\SitemapAddUrlEvent;
@@ -8,6 +17,11 @@ use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+/**
+ * Listen to "presta_sitemap.add_url" event.
+ * Decorate translatable Url with multi-lang alternatives.
+ * Support both Symfony translated routes & JMSI18nRoutingBundle.
+ */
 final class StaticRoutesAlternateEventListener implements EventSubscriberInterface
 {
     private const TRANSLATED_ROUTE_NAME_STRATEGIES = [

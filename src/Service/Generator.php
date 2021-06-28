@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * This file is part of the PrestaSitemapBundle package.
  *
- * (c) PrestaConcept <www.prestaconcept.net>
+ * (c) PrestaConcept <https://prestaconcept.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,11 +17,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Sitemap Manager service
- *
- * @author David Epely <depely@prestaconcept.net>
- * @author Christophe Dolivet
- * @author Konstantin Myakshin <koc-dp@yandex.ru>
+ * Sitemap generator.
  */
 class Generator extends AbstractGenerator implements GeneratorInterface
 {

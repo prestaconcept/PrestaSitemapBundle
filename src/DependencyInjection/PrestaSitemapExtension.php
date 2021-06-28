@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * This file is part of the PrestaSitemapBundle package.
  *
- * (c) PrestaConcept <www.prestaconcept.net>
+ * (c) PrestaConcept <https://prestaconcept.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 /**
- * This is the class that loads and manages your bundle configuration
+ * Load Bundle configuration, configure container parameters & services.
  */
 class PrestaSitemapExtension extends Extension
 {

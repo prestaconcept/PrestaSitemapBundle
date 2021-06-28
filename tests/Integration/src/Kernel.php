@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the PrestaSitemapBundle package.
+ *
+ * (c) PrestaConcept <https://prestaconcept.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Presta\SitemapBundle\Tests\Integration;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -11,8 +20,6 @@ class Kernel extends BaseKernel
     use ContainerConfiguratorTrait;
     use MicroKernelTrait;
     use RouteConfiguratorTrait;
-
-    const CONFIG_EXTS = '.{php,xml,yaml,yml}';
 
     public function getCacheDir(): string
     {
@@ -29,12 +36,13 @@ class Kernel extends BaseKernel
         return \dirname(__DIR__);
     }
 
-    public function registerBundles(): array
+    public function registerBundles(): iterable
     {
-        return [
-            new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new \Presta\SitemapBundle\PrestaSitemapBundle(),
-        ];
+        yield new \Symfony\Bundle\FrameworkBundle\FrameworkBundle();
+        yield new \Presta\SitemapBundle\PrestaSitemapBundle();
+        if (\PHP_VERSION_ID < 80000) {
+            yield new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle();
+        }
     }
 
     public function boot()

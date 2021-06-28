@@ -1,9 +1,9 @@
 <?php
 
-/**
+/*
  * This file is part of the PrestaSitemapBundle package.
  *
- * (c) PrestaConcept <www.prestaconcept.net>
+ * (c) PrestaConcept <https://prestaconcept.net>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,9 +15,10 @@ use Presta\SitemapBundle\Service\UrlContainerInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**
- * Manage populate event
+ * Event called whenever a sitemap build is requested.
  *
- * @author depely
+ * Subscribe to this event if :
+ *  - you want to register non-static routes
  */
 class SitemapPopulateEvent extends Event
 {
