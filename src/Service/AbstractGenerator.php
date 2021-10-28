@@ -67,7 +67,10 @@ abstract class AbstractGenerator implements UrlContainerInterface
         UrlGeneratorInterface $urlGenerator = null
     ) {
         if (!$urlGenerator) {
-            @trigger_error('Not injecting the $urlGenerator is deprecated and will be required in 4.0.', \E_USER_DEPRECATED);
+            @trigger_error(
+                'Not injecting the $urlGenerator is deprecated and will be required in 4.0.',
+                \E_USER_DEPRECATED
+            );
         }
 
         $this->dispatcher = $dispatcher;
