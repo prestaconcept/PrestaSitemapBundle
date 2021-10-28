@@ -29,22 +29,15 @@ use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 class SitemapSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
-
-    /**
      * @var BlogPostRepository
      */
     private $blogPostRepository;
 
     /**
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param BlogPostRepository    $blogPostRepository
+     * @param BlogPostRepository $blogPostRepository
      */
-    public function __construct(UrlGeneratorInterface $urlGenerator, BlogPostRepository $blogPostRepository)
+    public function __construct(BlogPostRepository $blogPostRepository)
     {
-        $this->urlGenerator = $urlGenerator;
         $this->blogPostRepository = $blogPostRepository;
     }
 
@@ -68,15 +61,16 @@ class SitemapSubscriber implements EventSubscriberInterface
 
     /**
      * @param UrlContainerInterface $urls
+     * @param UrlGeneratorInterface $router
      */
-    public function registerBlogPostsUrls(UrlContainerInterface $urls): void
+    public function registerBlogPostsUrls(UrlContainerInterface $urls, UrlGeneratorInterface $router): void
     {
         $posts = $this->blogPostRepository->findAll();
 
         foreach ($posts as $post) {
             $urls->addUrl(
                 new UrlConcrete(
-                    $this->urlGenerator->generate(
+                    $router->generate(
                         'blog_post',
                         ['slug' => $post->getSlug()],
                         UrlGeneratorInterface::ABSOLUTE_URL
@@ -104,7 +98,6 @@ Otherwhise you will have to register it by hand.
 ```xml
 <services>
     <service id="app.sitemap.blog_post_subscriber" class="App\EventListener\SitemapSubscriber">
-        <argument type="service" id="router"/>
         <argument type="service" id="<your repository service id>"/>
         <tag name="kernel.event_subscriber" priority="100"/>
     </service>
@@ -117,8 +110,7 @@ Otherwhise you will have to register it by hand.
 services:
     app.sitemap.blog_post_subscriber:
         class: App\EventListener\SitemapSubscriber
-        arguments: 
-            - "@router"
+        arguments:
             - "@<your repository service id>"
         tags:
             - { name: "kernel.event_subscriber", priority: 100 }
