@@ -147,6 +147,20 @@ class DumperTest extends TestCase
         $this->dumper->dump(self::DUMP_DIR, 'https://acme.org', 'default');
     }
 
+    public function testRouterInjectedIntoEvent(): void
+    {
+        $eventRouter = null;
+        $listener = function(SitemapPopulateEvent $event) use (&$eventRouter) {
+            $eventRouter = $event->getUrlGenerator();
+        };
+
+        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, $listener);
+
+        $this->dumper->dump(self::DUMP_DIR, 'https://acme.org', 'default');
+
+        $this->assertSame($this->router, $eventRouter);
+    }
+
     public function testErrorInListener(): void
     {
         $this->expectException(\Exception::class);
