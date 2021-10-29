@@ -92,7 +92,7 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
                 continue;
             }
 
-            $event = new SitemapAddUrlEvent($name, $options);
+            $event = new SitemapAddUrlEvent($name, $options, $this->router);
             $this->dispatcher->dispatch($event, SitemapAddUrlEvent::NAME);
 
             if (!$event->shouldBeRegistered()) {

@@ -18,6 +18,8 @@ use Presta\SitemapBundle\Service\Dumper;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Routing\Loader\ClosureLoader;
+use Symfony\Component\Routing\Router;
 use Throwable;
 
 class DumperTest extends TestCase
@@ -39,6 +41,11 @@ class DumperTest extends TestCase
      */
     private $dumper;
 
+    /**
+     * @var Router
+     */
+    private $router;
+
     public function setUp(): void
     {
         self::removeDir();
@@ -46,7 +53,8 @@ class DumperTest extends TestCase
 
         $this->eventDispatcher = new EventDispatcher();
         $this->filesystem = new Filesystem();
-        $this->dumper = new Dumper($this->eventDispatcher, $this->filesystem, 'sitemap', 5);
+        $this->router = new Router(new ClosureLoader(), null);
+        $this->dumper = new Dumper($this->eventDispatcher, $this->filesystem, 'sitemap', 5, $this->router);
 
         (new Filesystem())->remove(\glob(sys_get_temp_dir() . '/PrestaSitemaps-*'));
     }
@@ -137,6 +145,20 @@ class DumperTest extends TestCase
 
         \file_put_contents(self::DUMP_DIR . '/sitemap.xml', $index);
         $this->dumper->dump(self::DUMP_DIR, 'https://acme.org', 'default');
+    }
+
+    public function testRouterInjectedIntoEvent(): void
+    {
+        $eventRouter = null;
+        $listener = function(SitemapPopulateEvent $event) use (&$eventRouter) {
+            $eventRouter = $event->getUrlGenerator();
+        };
+
+        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, $listener);
+
+        $this->dumper->dump(self::DUMP_DIR, 'https://acme.org', 'default');
+
+        $this->assertSame($this->router, $eventRouter);
     }
 
     public function testErrorInListener(): void

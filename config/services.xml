@@ -25,6 +25,7 @@
             <argument id="filesystem" type="service" />
             <argument>%presta_sitemap.sitemap_file_prefix%</argument>
             <argument>%presta_sitemap.items_by_set%</argument>
+            <argument id="router" type="service" />
             <call method="setDefaults">
                 <argument>%presta_sitemap.defaults%</argument>
             </call>

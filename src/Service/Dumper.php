@@ -17,6 +17,7 @@ use Presta\SitemapBundle\Sitemap\Urlset;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Generator that dump sitemaps to files.
@@ -46,18 +47,20 @@ class Dumper extends AbstractGenerator implements DumperInterface
     protected $sitemapFilePrefix;
 
     /**
-     * @param EventDispatcherInterface $dispatcher Symfony's EventDispatcher
-     * @param Filesystem               $filesystem Symfony's Filesystem
-     * @param string                   $sitemapFilePrefix
-     * @param int|null                 $itemsBySet
+     * @param EventDispatcherInterface   $dispatcher Symfony's EventDispatcher
+     * @param Filesystem                 $filesystem Symfony's Filesystem
+     * @param string                     $sitemapFilePrefix
+     * @param int|null                   $itemsBySet
+     * @param UrlGeneratorInterface|null $urlGenerator
      */
     public function __construct(
         EventDispatcherInterface $dispatcher,
         Filesystem $filesystem,
         string $sitemapFilePrefix = Configuration::DEFAULT_FILENAME,
-        int $itemsBySet = null
+        int $itemsBySet = null,
+        UrlGeneratorInterface $urlGenerator = null
     ) {
-        parent::__construct($dispatcher, $itemsBySet);
+        parent::__construct($dispatcher, $itemsBySet, $urlGenerator);
 
         $this->filesystem = $filesystem;
         $this->sitemapFilePrefix = $sitemapFilePrefix;

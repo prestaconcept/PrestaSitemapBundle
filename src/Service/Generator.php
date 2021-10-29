@@ -36,7 +36,7 @@ class Generator extends AbstractGenerator implements GeneratorInterface
         UrlGeneratorInterface $router,
         int $itemsBySet = null
     ) {
-        parent::__construct($dispatcher, $itemsBySet);
+        parent::__construct($dispatcher, $itemsBySet, $router);
 
         $this->router = $router;
     }

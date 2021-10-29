@@ -66,6 +66,20 @@ class GeneratorTest extends WebTestCase
         self::assertTrue($triggered, 'Event listener was triggered');
     }
 
+    public function testRouterInjectedIntoEvent(): void
+    {
+        $eventRouter = null;
+        $listener = function(SitemapPopulateEvent $event) use (&$eventRouter) {
+            $eventRouter = $event->getUrlGenerator();
+        };
+
+        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, $listener);
+
+        $this->generator()->fetch('foo');
+
+        $this->assertSame($this->router, $eventRouter);
+    }
+
     public function testAddUrl(): void
     {
         $url = $this->acmeHome();

@@ -50,14 +50,6 @@ final class SitemapListener implements EventSubscriberInterface
             'video' => 'https://www.youtube.com/watch?v=JugaMuswrmk',
         ],
     ];
-
-    private $routing;
-
-    public function __construct(UrlGeneratorInterface $routing)
-    {
-        $this->routing = $routing;
-    }
-
     public static function getSubscribedEvents(): array
     {
         return [
@@ -68,19 +60,19 @@ final class SitemapListener implements EventSubscriberInterface
     public function populate(SitemapPopulateEvent $event): void
     {
         if (in_array($event->getSection(), ['blog', null], true)) {
-            $this->blog($event->getUrlContainer());
+            $this->blog($event->getUrlContainer(), $event->getUrlGenerator());
         }
 
         if (in_array($event->getSection(), ['archives', null], true)) {
-            $this->archives($event->getUrlContainer());
+            $this->archives($event->getUrlContainer(), $event->getUrlGenerator());
         }
     }
 
-    private function blog(UrlContainerInterface $sitemap): void
+    private function blog(UrlContainerInterface $sitemap, UrlGeneratorInterface $router): void
     {
         foreach (self::BLOG as $post) {
             $url = new UrlConcrete(
-                $this->url('blog_post', ['slug' => $post['slug']])
+                $this->url($router, 'blog_post', ['slug' => $post['slug']])
             );
 
             if (count($post['images']) > 0) {
@@ -109,16 +101,16 @@ final class SitemapListener implements EventSubscriberInterface
         }
     }
 
-    private function archives(UrlContainerInterface $sitemap): void
+    private function archives(UrlContainerInterface $sitemap, UrlGeneratorInterface $router): void
     {
-        $url = $this->url('archive');
+        $url = $this->url($router, 'archive');
         for ($i = 1; $i <= 20; $i++) {
             $sitemap->addUrl(new UrlConcrete($url . '?i=' . $i), 'archives');
         }
     }
 
-    private function url(string $route, array $parameters = []): string
+    private function url(UrlGeneratorInterface $router, string $route, array $parameters = []): string
     {
-        return $this->routing->generate($route, $parameters, RouterInterface::ABSOLUTE_URL);
+        return $router->generate($route, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
     }
 }
