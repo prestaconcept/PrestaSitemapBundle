@@ -3,6 +3,7 @@ parameters:
   paths:
     - src/
 
+  reportUnmatchedIgnoredErrors: false
   ignoreErrors:
     # config definition is not well parsed
     - '#Symfony\\Component\\Config\\Definition#'
