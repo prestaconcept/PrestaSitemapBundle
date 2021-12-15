@@ -4,7 +4,3 @@ framework:
             async: 'in-memory://'
         routing:
             'Presta\SitemapBundle\Messenger\DumpSitemapMessage': async
-
-services:
-    Presta\SitemapBundle\Tests\Integration\Controller\MessengerController:
-        tags: ['controller.service_arguments']

@@ -62,18 +62,18 @@ class MessengerTest extends SitemapTestCase
         self::assertFileNotExists($archives0, 'Sitemap "archive_0" section file does not exists before dump');
 
         /** @var MessageBusInterface $messageBus */
-        $messageBus = self::$container->get('messenger.default_bus');
+        $messageBus = self::getContainer()->get('messenger.default_bus');
         /** @var InMemoryTransport $transport */
-        $transport = self::$container->get('messenger.transport.async');
+        $transport = self::getContainer()->get('messenger.transport.async');
         /** @var EventDispatcherInterface $eventDispatcher */
-        $eventDispatcher = self::$container->get(EventDispatcherInterface::class);
+        $eventDispatcher = self::getContainer()->get(EventDispatcherInterface::class);
         $eventDispatcher->addSubscriber(new StopWorkerOnMessageLimitListener(1));
         /** @var LoggerInterface $logger */
-        $logger = self::$container->get(LoggerInterface::class);
+        $logger = self::getContainer()->get(LoggerInterface::class);
         $worker = new Worker([$transport], $messageBus, $eventDispatcher, $logger);
 
         /** @var KernelBrowser $web */
-        $web = $kernel->getContainer()->get('test.client');
+        $web = self::getContainer()->get('test.client');
         $web->request(self::GET, '/dispatch-message?gzip='.$gzip);
 
         $worker->run();

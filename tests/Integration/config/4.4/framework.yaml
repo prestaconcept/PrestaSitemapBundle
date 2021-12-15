@@ -6,3 +6,6 @@ framework:
         storage_id: session.storage.mock_file
     php_errors:
         log: true
+    router:
+        utf8: true
+    cache: null

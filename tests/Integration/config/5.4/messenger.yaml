@@ -1,0 +1,6 @@
+framework:
+    messenger:
+        transports:
+            async: 'in-memory://'
+        routing:
+            'Presta\SitemapBundle\Messenger\DumpSitemapMessage': async
