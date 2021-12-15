@@ -10,5 +10,4 @@ services:
 
   Presta\SitemapBundle\Tests\Integration\Controller\:
     resource: '../src/Controller/*'
-    exclude: '../src/Controller/MessengerController.php'
     tags: ['controller.service_arguments']

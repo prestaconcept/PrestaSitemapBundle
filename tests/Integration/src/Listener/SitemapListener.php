@@ -50,6 +50,7 @@ final class SitemapListener implements EventSubscriberInterface
             'video' => 'https://www.youtube.com/watch?v=JugaMuswrmk',
         ],
     ];
+
     public static function getSubscribedEvents(): array
     {
         return [
