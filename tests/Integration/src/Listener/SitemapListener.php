@@ -20,7 +20,6 @@ use Presta\SitemapBundle\Sitemap\Url\GoogleVideoUrlDecorator;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
 
 final class SitemapListener implements EventSubscriberInterface
 {
@@ -54,7 +53,7 @@ final class SitemapListener implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            SitemapPopulateEvent::ON_SITEMAP_POPULATE => 'populate',
+            SitemapPopulateEvent::class => 'populate',
         ];
     }
 

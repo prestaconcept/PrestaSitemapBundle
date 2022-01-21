@@ -27,6 +27,7 @@ class SitemapAddUrlEvent extends Event
 {
     /**
      * @Event("Presta\SitemapBundle\Event\SitemapAddUrlEvent")
+     * @deprecated since presta/sitemap-bundle 3.3, use `SitemapAddUrlEvent::class` instead.
      */
     public const NAME = 'presta_sitemap.add_url';
 

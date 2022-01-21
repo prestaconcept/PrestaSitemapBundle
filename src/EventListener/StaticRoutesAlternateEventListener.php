@@ -55,7 +55,7 @@ final class StaticRoutesAlternateEventListener implements EventSubscriberInterfa
     public static function getSubscribedEvents(): array
     {
         return [
-            SitemapAddUrlEvent::NAME => 'addAlternate',
+            SitemapAddUrlEvent::class => 'addAlternate',
         ];
     }
 
