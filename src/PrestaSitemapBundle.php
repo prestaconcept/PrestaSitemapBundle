@@ -11,6 +11,11 @@
 
 namespace Presta\SitemapBundle;
 
+use Presta\SitemapBundle\DependencyInjection\Compiler\EventAliasMappingPass;
+use Presta\SitemapBundle\Event\SitemapAddUrlEvent;
+use Presta\SitemapBundle\Event\SitemapPopulateEvent;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\EventDispatcher\DependencyInjection\AddEventAliasesPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
@@ -20,6 +25,21 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class PrestaSitemapBundle extends Bundle
 {
+    /**
+     * @inheritdoc
+     *
+     * @return void
+     */
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new AddEventAliasesPass([
+            SitemapAddUrlEvent::class => SitemapAddUrlEvent::NAME,
+            SitemapPopulateEvent::class => SitemapPopulateEvent::ON_SITEMAP_POPULATE,
+        ]));
+    }
+
     /**
      * @inheritDoc
      */

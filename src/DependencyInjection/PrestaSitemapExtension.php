@@ -11,6 +11,8 @@
 
 namespace Presta\SitemapBundle\DependencyInjection;
 
+use Presta\SitemapBundle\Event\SitemapAddUrlEvent;
+use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;

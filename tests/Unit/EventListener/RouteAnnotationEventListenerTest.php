@@ -148,7 +148,7 @@ class RouteAnnotationEventListenerTest extends TestCase
         );
 
         $dispatcher->addSubscriber(new RouteAnnotationEventListener($router, $dispatcher, 'default'));
-        $dispatcher->dispatch($event, SitemapPopulateEvent::ON_SITEMAP_POPULATE);
+        $dispatcher->dispatch($event, SitemapPopulateEvent::class);
     }
 
     private function findUrl(array $urlset, string $loc): ?UrlConcrete
