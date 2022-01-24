@@ -14,6 +14,44 @@ The supported sitemap parameters are:
 > **Note** you can change defaults in the bundle configuration.
 > Jump to [dedicated documentation](2-configuration.md) for more information.
 
+## Attribute
+
+```php
+<?php
+
+namespace App\Controller;
+
+use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Route;
+
+class DefaultController extends Controller
+{
+    #[Route('/', name: 'homepage', options: ['sitemap' => true])]
+    public function indexAction()
+    {
+        //...
+    }
+
+    #[Route('/faq', name: 'faq', options: ['sitemap' => ['priority' => 0.7]])]
+    public function faqAction()
+    {
+        //...
+    }
+
+    #[Route('/about', name: 'about', options: ['sitemap' => ['priority' => 0.7, 'changefreq' => UrlConcrete::CHANGEFREQ_WEEKLY]])]
+    public function aboutAction()
+    {
+        //...
+    }
+
+    #[Route('/contact', name: 'contact', options: ['sitemap' => ['priority' => 0.7, 'changefreq' => UrlConcrete::CHANGEFREQ_WEEKLY, 'section' => 'misc']])]
+    public function contactAction()
+    {
+        //...
+    }
+}
+```
 
 ## Annotation
 
