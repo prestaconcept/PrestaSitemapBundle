@@ -22,10 +22,8 @@ jobs:
             symfony-version: 5.4.*
           - php-version: 8.1
             symfony-version: 5.4.*
-          - php-version: 8.0
-            symfony-version: 6.0.*
           - php-version: 8.1
-            symfony-version: 6.0.*
+            symfony-version: 6.1.*
 
     steps:
       - name: "Checkout"
@@ -45,7 +43,7 @@ jobs:
             symfony/http-kernel:${{ matrix.symfony-version }} \
             symfony/routing:${{ matrix.symfony-version }} \
             symfony/messenger:${{ matrix.symfony-version }}
-          composer update --no-interaction --no-progress --no-suggest
+          composer update --no-interaction --no-progress
 
       - name: "Run tests with phpunit/phpunit"
         run: vendor/bin/phpunit
@@ -58,7 +56,7 @@ jobs:
       matrix:
         include:
           - php-version: 8.1
-            symfony-version: 6.0.*
+            symfony-version: 6.1.*
 
     steps:
       - name: "Checkout"
@@ -78,7 +76,7 @@ jobs:
             symfony/http-kernel:${{ matrix.symfony-version }} \
             symfony/routing:${{ matrix.symfony-version }} \
             symfony/messenger:${{ matrix.symfony-version }}
-          composer update --no-interaction --no-progress --no-suggest
+          composer update --no-interaction --no-progress
 
       - name: "Run tests with phpunit/phpunit"
         env:
@@ -97,7 +95,7 @@ jobs:
       matrix:
         include:
           - php-version: 8.1
-            symfony-version: 6.0.*
+            symfony-version: 6.1.*
 
     steps:
       - name: "Checkout"
@@ -117,12 +115,12 @@ jobs:
             symfony/http-kernel:${{ matrix.symfony-version }} \
             symfony/routing:${{ matrix.symfony-version }} \
             symfony/messenger:${{ matrix.symfony-version }}
-          composer update --no-interaction --no-progress --no-suggest
+          composer update --no-interaction --no-progress
 
       - name: "Run static analysis with phpstan/phpstan"
         run: vendor/bin/phpstan analyze
 
-  checkstyke:
+  checkstyle:
     name: "Checkstyle"
     runs-on: ubuntu-latest
 
@@ -130,7 +128,7 @@ jobs:
       matrix:
         include:
           - php-version: 8.1
-            symfony-version: 6.0.*
+            symfony-version: 6.1.*
 
     steps:
       - name: "Checkout"
@@ -150,7 +148,7 @@ jobs:
             symfony/http-kernel:${{ matrix.symfony-version }} \
             symfony/routing:${{ matrix.symfony-version }} \
             symfony/messenger:${{ matrix.symfony-version }}
-          composer update --no-interaction --no-progress --no-suggest
+          composer update --no-interaction --no-progress
 
       - name: "Run checkstyle with squizlabs/php_codesniffer"
         run: vendor/bin/phpcs
