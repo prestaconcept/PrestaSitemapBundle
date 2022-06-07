@@ -418,7 +418,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
             $newsXml .= '<news:access>' . $this->getAccess() . '</news:access>';
         }
 
-        if ($this->getGenres() && count($this->getGenres()) > 0) {
+        if (count($this->getGenres()) > 0) {
             $newsXml .= '<news:genres>' . implode(', ', $this->getGenres()) . '</news:genres>';
         }
 
@@ -432,11 +432,11 @@ class GoogleNewsUrlDecorator extends UrlDecorator
             $newsXml .= '<news:geo_locations>' . $this->getGeoLocations() . '</news:geo_locations>';
         }
 
-        if ($this->getKeywords() && count($this->getKeywords()) > 0) {
+        if (count($this->getKeywords()) > 0) {
             $newsXml .= '<news:keywords>' . implode(', ', $this->getKeywords()) . '</news:keywords>';
         }
 
-        if ($this->getStockTickers() && count($this->getStockTickers()) > 0) {
+        if (count($this->getStockTickers()) > 0) {
             $newsXml .= '<news:stock_tickers>' . implode(', ', $this->getStockTickers()) . '</news:stock_tickers>';
         }
 

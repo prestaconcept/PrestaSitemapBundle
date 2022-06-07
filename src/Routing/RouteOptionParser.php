@@ -15,6 +15,13 @@ use Symfony\Component\Routing\Route;
 
 /**
  * Util class to parse sitemap option value from Route objects.
+ *
+ * @phpstan-type RouteOptions array{
+ *     section: string|null,
+ *     lastmod: \DateTimeInterface|null,
+ *     changefreq: string|null,
+ *     priority: float|string|int|null
+ * }
  */
 final class RouteOptionParser
 {
@@ -22,7 +29,7 @@ final class RouteOptionParser
      * @param string $name
      * @param Route  $route
      *
-     * @return array<string, mixed>|null
+     * @return RouteOptions|null
      */
     public static function parse(string $name, Route $route): ?array
     {
@@ -55,7 +62,7 @@ final class RouteOptionParser
                     \sprintf(
                         'The route %s sitemap option must be of type "boolean" or "array", got "%s"',
                         $name,
-                        $option
+                        \gettype($option)
                     )
                 );
             }
@@ -94,6 +101,8 @@ final class RouteOptionParser
 
             $options['lastmod'] = $lastmod;
         }
+
+        /** @var RouteOptions $options */
 
         return $options;
     }

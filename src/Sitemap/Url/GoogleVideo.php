@@ -185,8 +185,29 @@ class GoogleVideo
      * @param string               $thumbnailLocation
      * @param string               $title
      * @param string               $description
-     * @param array<string, mixed> $parameters Properties of this class
-     *                                         (e.g. 'player_loc' => 'http://acme.com/player.swf')
+     * @param array{
+     *     content_location?: string,
+     *     player_location?: string,
+     *     player_location_allow_embed?: string,
+     *     player_location_autoplay?: string,
+     *     duration?: int,
+     *     expiration_date?: DateTimeInterface,
+     *     rating?: float|int,
+     *     view_count?: int,
+     *     publication_date?: DateTimeInterface,
+     *     family_friendly?: string,
+     *     category?: string,
+     *     restriction_allow?: array<int, string>,
+     *     restriction_deny?: array<int, string>,
+     *     gallery_location?: string,
+     *     gallery_location_title?: string,
+     *     requires_subscription?: string,
+     *     uploader?: string,
+     *     uploader_info?: string,
+     *     platforms?: array<int, string>,
+     *     platform_relationship?: string,
+     *     live?: string,
+     * } $parameters
      *
      * @throws Exception\GoogleVideoException
      */
@@ -195,66 +216,87 @@ class GoogleVideo
         foreach ($parameters as $key => $param) {
             switch ($key) {
                 case 'content_location':
+                    /** @var string $param */
                     $this->setContentLocation($param);
                     break;
                 case 'player_location':
+                    /** @var string $param */
                     $this->setPlayerLocation($param);
                     break;
                 case 'player_location_allow_embed':
+                    /** @var string $param */
                     $this->setPlayerLocationAllowEmbed($param);
                     break;
                 case 'player_location_autoplay':
+                    /** @var string $param */
                     $this->setPlayerLocationAutoplay($param);
                     break;
                 case 'duration':
+                    /** @var int $param */
                     $this->setDuration($param);
                     break;
                 case 'expiration_date':
+                    /** @var DateTimeInterface $param */
                     $this->setExpirationDate($param);
                     break;
                 case 'rating':
+                    /** @var float|int $param */
                     $this->setRating($param);
                     break;
                 case 'view_count':
+                    /** @var int $param */
                     $this->setViewCount($param);
                     break;
                 case 'publication_date':
+                    /** @var DateTimeInterface $param */
                     $this->setPublicationDate($param);
                     break;
                 case 'family_friendly':
+                    /** @var string $param */
                     $this->setFamilyFriendly($param);
                     break;
                 case 'category':
+                    /** @var string $param */
                     $this->setCategory($param);
                     break;
                 case 'restriction_allow':
+                    /** @var array<int, string> $param */
                     $this->setRestrictionAllow($param);
                     break;
                 case 'restriction_deny':
+                    /** @var array<int, string> $param */
                     $this->setRestrictionDeny($param);
                     break;
                 case 'gallery_location':
+                    /** @var string $param */
                     $this->setGalleryLocation($param);
                     break;
                 case 'gallery_location_title':
+                    /** @var string $param */
                     $this->setGalleryLocationTitle($param);
                     break;
                 case 'requires_subscription':
+                    /** @var string $param */
                     $this->setRequiresSubscription($param);
                     break;
                 case 'uploader':
+                    /** @var string $param */
                     $this->setUploader($param);
                     break;
                 case 'uploader_info':
+                    /** @var string $param */
                     $this->setUploaderInfo($param);
                     break;
                 case 'platforms':
+                    /** @var array<int, string> $param */
                     $this->setPlatforms($param);
                     break;
                 case 'platform_relationship':
+                    /** @var string $param */
                     $this->setPlatformRelationship($param);
                     break;
                 case 'live':
+                    /** @var string $param */
                     $this->setLive($param);
                     break;
             }
@@ -982,6 +1024,7 @@ class GoogleVideo
         }
 
         foreach ($this->getPrices() as $price) {
+            /** @var array<string, string> $attributes */
             $attributes = array_intersect_key($price, array_flip(['currency', 'type', 'resolution']));
             $attributes = array_filter($attributes);
 
