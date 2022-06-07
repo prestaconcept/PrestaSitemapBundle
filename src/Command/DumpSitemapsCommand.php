@@ -25,8 +25,6 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class DumpSitemapsCommand extends Command
 {
-    protected static $defaultName = 'presta:sitemaps:dump';
-
     /**
      * @var RouterInterface
      */
@@ -48,7 +46,12 @@ class DumpSitemapsCommand extends Command
         $this->dumper = $dumper;
         $this->defaultTarget = $defaultTarget;
 
-        parent::__construct(null);
+        parent::__construct();
+    }
+
+    public static function getDefaultName(): ?string
+    {
+        return 'presta:sitemaps:dump';
     }
 
     /**
