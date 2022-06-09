@@ -25,6 +25,8 @@ use Symfony\Component\Routing\RouterInterface;
 /**
  * Listen to "presta_sitemap.populate" event.
  * Populate sitemap with configured static routes.
+ *
+ * @phpstan-import-type RouteOptions from RouteOptionParser
  */
 class RouteAnnotationEventListener implements EventSubscriberInterface
 {
@@ -107,8 +109,8 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
     }
 
     /**
-     * @param string               $name    Route name
-     * @param array<string, mixed> $options Node options
+     * @param string       $name    Route name
+     * @param RouteOptions $options Node options
      *
      * @return UrlConcrete
      * @throws \InvalidArgumentException

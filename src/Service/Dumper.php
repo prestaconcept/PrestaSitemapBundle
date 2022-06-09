@@ -71,6 +71,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
      */
     public function dump(string $targetDir, string $host, string $section = null, array $options = [])
     {
+        /** @var array{gzip: bool} $options */
         $options = array_merge(['gzip' => false], $options);
 
         $this->baseUrl = rtrim($host, '/') . '/';

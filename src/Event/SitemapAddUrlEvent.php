@@ -12,6 +12,7 @@
 namespace Presta\SitemapBundle\Event;
 
 use LogicException;
+use Presta\SitemapBundle\Routing\RouteOptionParser;
 use Presta\SitemapBundle\Sitemap\Url\Url;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\EventDispatcher\Event;
@@ -22,6 +23,8 @@ use Symfony\Contracts\EventDispatcher\Event;
  * Subscribe to this event if :
  *  - you want to decorate Url
  *  - you want to prevent Url from being added
+ *
+ * @phpstan-import-type RouteOptions from RouteOptionParser
  */
 class SitemapAddUrlEvent extends Event
 {
@@ -47,7 +50,7 @@ class SitemapAddUrlEvent extends Event
     private $route;
 
     /**
-     * @var array<string, mixed>
+     * @var RouteOptions
      */
     private $options;
 
@@ -58,7 +61,7 @@ class SitemapAddUrlEvent extends Event
 
     /**
      * @param string                     $route
-     * @param array<string, mixed>       $options
+     * @param RouteOptions               $options
      * @param UrlGeneratorInterface|null $urlGenerator
      */
     public function __construct(string $route, array $options, UrlGeneratorInterface $urlGenerator = null)
@@ -127,7 +130,7 @@ class SitemapAddUrlEvent extends Event
     /**
      * The sitemap route options.
      *
-     * @return array<string, mixed>
+     * @return RouteOptions
      */
     public function getOptions(): array
     {

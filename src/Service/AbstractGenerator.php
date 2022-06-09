@@ -22,6 +22,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Base class for all sitemap generators.
+ *
+ * @phpstan-type Defaults array{
+ *     lastmod: string|null,
+ *     changefreq: string|null,
+ *     priority: float|string|int|null
+ * }
  */
 abstract class AbstractGenerator implements UrlContainerInterface
 {
@@ -52,7 +58,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
     protected $urlGenerator;
 
     /**
-     * @var array<string, mixed>
+     * @var Defaults
      */
     private $defaults;
 
@@ -86,7 +92,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
     }
 
     /**
-     * @param array<string, mixed> $defaults
+     * @param Defaults $defaults
      */
     public function setDefaults(array $defaults): void
     {
