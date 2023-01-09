@@ -8,7 +8,7 @@
             <argument type="service" id="router" />
             <argument type="service" id="presta_sitemap.dumper" />
             <argument>%presta_sitemap.dump_directory%</argument>
-            <tag name="messenger.message_handler" />
+            <tag name="messenger.message_handler" handles="Presta\SitemapBundle\Messenger\DumpSitemapMessage" />
         </service>
     </services>
 
