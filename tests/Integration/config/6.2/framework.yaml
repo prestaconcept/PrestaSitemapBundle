@@ -1,0 +1,14 @@
+framework:
+    test: true
+    secret: '%env(APP_SECRET)%'
+    http_method_override: false
+    session:
+        handler_id: null
+        cookie_secure: auto
+        cookie_samesite: lax
+        storage_factory_id: session.storage.factory.mock_file
+    php_errors:
+        log: true
+    router:
+        utf8: true
+    cache: null
