@@ -18,6 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * Load Bundle configuration, configure container parameters & services.
@@ -51,7 +52,7 @@ class PrestaSitemapExtension extends Extension
             }
         }
 
-        if (interface_exists(MessageHandlerInterface::class)) {
+        if (interface_exists(MessageBusInterface::class)) {
             $loader->load('messenger.xml');
         }
 
