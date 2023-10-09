@@ -14,7 +14,6 @@ namespace Presta\SitemapBundle\EventListener;
 use Presta\SitemapBundle\Event\SitemapAddUrlEvent;
 use Presta\SitemapBundle\Sitemap\Url\GoogleMultilangUrlDecorator;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -28,7 +27,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *     locales: array<string>
  * }
  */
-final class StaticRoutesAlternateEventListener implements EventSubscriberInterface
+final class StaticRoutesAlternateEventListener
 {
     private const TRANSLATED_ROUTE_NAME_STRATEGIES = [
         'symfony' => '/^(?P<name>.+)\.(?P<locale>%locales%)$/',
@@ -53,16 +52,6 @@ final class StaticRoutesAlternateEventListener implements EventSubscriberInterfa
     {
         $this->router = $router;
         $this->options = $options;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            SitemapAddUrlEvent::class => 'addAlternate',
-        ];
     }
 
     public function addAlternate(SitemapAddUrlEvent $event): void

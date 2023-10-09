@@ -147,7 +147,8 @@ class RouteAnnotationEventListenerTest extends TestCase
             ['resource_type' => 'closure']
         );
 
-        $dispatcher->addSubscriber(new RouteAnnotationEventListener($router, $dispatcher, 'default'));
+        $listener = new RouteAnnotationEventListener($router, $dispatcher, 'default');
+        $dispatcher->addListener(SitemapPopulateEvent::class, [$listener, 'registerRouteAnnotation']);
         $dispatcher->dispatch($event, SitemapPopulateEvent::class);
     }
 

@@ -7,7 +7,7 @@
         <service id="presta_sitemap.event_listener.static_routes_alternate" class="Presta\SitemapBundle\EventListener\StaticRoutesAlternateEventListener">
             <argument type="service" id="router"/>
             <argument>%presta_sitemap.alternate%</argument>
-            <tag name="kernel.event_subscriber"/>
+            <tag name="kernel.event_listener" event="Presta\SitemapBundle\Event\SitemapAddUrlEvent" method="addAlternate"/>
         </service>
     </services>
 

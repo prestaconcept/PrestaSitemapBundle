@@ -17,7 +17,6 @@ use Presta\SitemapBundle\Routing\RouteOptionParser;
 use Presta\SitemapBundle\Service\UrlContainerInterface;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -28,7 +27,7 @@ use Symfony\Component\Routing\RouterInterface;
  *
  * @phpstan-import-type RouteOptions from RouteOptionParser
  */
-class RouteAnnotationEventListener implements EventSubscriberInterface
+class RouteAnnotationEventListener
 {
     /**
      * @var RouterInterface
@@ -53,16 +52,6 @@ class RouteAnnotationEventListener implements EventSubscriberInterface
         $this->router = $router;
         $this->dispatcher = $eventDispatcher;
         $this->defaultSection = $defaultSection;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            SitemapPopulateEvent::class => ['registerRouteAnnotation', 0],
-        ];
     }
 
     /**
