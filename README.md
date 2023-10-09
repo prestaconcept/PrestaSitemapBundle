@@ -1,6 +1,6 @@
 # PrestaSitemapBundle
 
-[![Tests](https://img.shields.io/github/workflow/status/prestaconcept/PrestaSitemapBundle/Tests?style=flat-square&label=tests)](https://github.com/prestaconcept/PrestaSitemapBundle/actions)
+[![Tests](https://img.shields.io/github/actions/workflow/status/prestaconcept/PrestaSitemapBundle/tests.yml?branch=3.x&style=flat-square&label=tests)](https://github.com/prestaconcept/PrestaSitemapBundle/actions?query=branch%3A3.x++)
 [![Coverage](https://img.shields.io/codecov/c/github/prestaconcept/PrestaSitemapBundle?style=flat-square)](https://codecov.io/gh/prestaconcept/PrestaSitemapBundle)
 [![Latest Stable Version](https://img.shields.io/packagist/v/presta/sitemap-bundle?style=flat-square)](https://packagist.org/packages/presta/sitemap-bundle)
 [![Downloads Monthly](https://img.shields.io/packagist/dm/presta/sitemap-bundle?style=flat-square)](https://packagist.org/packages/presta/sitemap-bundle)
