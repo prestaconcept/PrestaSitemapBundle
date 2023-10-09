@@ -32,10 +32,7 @@ class RouteAnnotationEventListenerTest extends TestCase
      */
     public function testPopulateSitemap(?string $section, array $routes, array $urls): void
     {
-        $urlContainer = new InMemoryUrlContainer();
-        $event = new SitemapPopulateEvent($urlContainer, $section);
-        $dispatcher = new EventDispatcher();
-        $this->dispatch($dispatcher, $event, $routes);
+        $urlContainer = $this->dispatch($section, $routes);
 
         // ensure that all expected section were created but not more than expected
         self::assertEquals(\array_keys($urls), $urlContainer->getSections());
@@ -63,36 +60,18 @@ class RouteAnnotationEventListenerTest extends TestCase
      */
     public function testEventListenerCanPreventUrlFromBeingAddedToSitemap(?string $section, array $routes): void
     {
-        $dispatcher = new EventDispatcher();
-        $dispatcher->addListener(
-            SitemapAddUrlEvent::class,
-            function (SitemapAddUrlEvent $event): void {
-                $event->preventRegistration();
-            }
-        );
-
-        $urlContainer = new InMemoryUrlContainer();
-        $event = new SitemapPopulateEvent($urlContainer, $section);
-
-        $this->dispatch($dispatcher, $event, $routes);
+        $urlContainer = $this->dispatch($section, $routes, function (SitemapAddUrlEvent $event): void {
+            $event->preventRegistration();
+        });
 
         self::assertEmpty($urlContainer->getSections());
     }
 
     public function testEventListenerCanSetUrl(): void
     {
-        $dispatcher = new EventDispatcher();
-        $dispatcher->addListener(
-            SitemapAddUrlEvent::class,
-            function (SitemapAddUrlEvent $event): void {
-                $event->setUrl(new UrlConcrete('http://localhost/redirect'));
-            }
-        );
-
-        $urlContainer = new InMemoryUrlContainer();
-        $event = new SitemapPopulateEvent($urlContainer, null);
-
-        $this->dispatch($dispatcher, $event, [['home', '/', true]]);
+        $urlContainer = $this->dispatch(null, [['home', '/', true]], function (SitemapAddUrlEvent $event): void {
+            $event->setUrl(new UrlConcrete('http://localhost/redirect'));
+        });
 
         $urlset = $urlContainer->getUrlset('default');
         self::assertCount(1, $urlset);
@@ -132,8 +111,13 @@ class RouteAnnotationEventListenerTest extends TestCase
         ];
     }
 
-    private function dispatch(EventDispatcher $dispatcher, SitemapPopulateEvent $event, array $routes): void
+    private function dispatch(?string $section, array $routes, ?\Closure $listener = null): InMemoryUrlContainer
     {
+        $dispatcher = new EventDispatcher();
+        if ($listener !== null) {
+            $dispatcher->addListener(SitemapAddUrlEvent::class, $listener);
+        }
+
         $router = new Router(
             new ClosureLoader(),
             static function () use ($routes): RouteCollection {
@@ -147,9 +131,13 @@ class RouteAnnotationEventListenerTest extends TestCase
             ['resource_type' => 'closure']
         );
 
+        $urlContainer = new InMemoryUrlContainer();
         $listener = new RouteAnnotationEventListener($router, $dispatcher, 'default');
         $dispatcher->addListener(SitemapPopulateEvent::class, [$listener, 'registerRouteAnnotation']);
+        $event = new SitemapPopulateEvent($urlContainer, $section, $router);
         $dispatcher->dispatch($event);
+
+        return $urlContainer;
     }
 
     private function findUrl(array $urlset, string $loc): ?UrlConcrete

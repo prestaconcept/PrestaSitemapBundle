@@ -11,7 +11,6 @@
 
 namespace Presta\SitemapBundle\Event;
 
-use LogicException;
 use Presta\SitemapBundle\Routing\RouteOptionParser;
 use Presta\SitemapBundle\Sitemap\Url\Url;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -49,16 +48,16 @@ class SitemapAddUrlEvent extends Event
     private $options;
 
     /**
-     * @var UrlGeneratorInterface|null
+     * @var UrlGeneratorInterface
      */
     protected $urlGenerator;
 
     /**
-     * @param string                     $route
-     * @param RouteOptions               $options
-     * @param UrlGeneratorInterface|null $urlGenerator
+     * @param string                $route
+     * @param RouteOptions          $options
+     * @param UrlGeneratorInterface $urlGenerator
      */
-    public function __construct(string $route, array $options, UrlGeneratorInterface $urlGenerator = null)
+    public function __construct(string $route, array $options, UrlGeneratorInterface $urlGenerator)
     {
         $this->route = $route;
         $this->options = $options;
@@ -133,10 +132,6 @@ class SitemapAddUrlEvent extends Event
 
     public function getUrlGenerator(): UrlGeneratorInterface
     {
-        if (!$this->urlGenerator) {
-            throw new LogicException('UrlGenerator was not set.');
-        }
-
         return $this->urlGenerator;
     }
 }
