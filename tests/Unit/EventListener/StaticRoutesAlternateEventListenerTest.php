@@ -118,7 +118,7 @@ class StaticRoutesAlternateEventListenerTest extends TestCase
         $dispatcher = new EventDispatcher();
         $dispatcher->addSubscriber(new StaticRoutesAlternateEventListener($this->router, $listenerOptions));
 
-        $event = new SitemapAddUrlEvent($route, $options);
+        $event = new SitemapAddUrlEvent($route, $options, $this->router);
         $dispatcher->dispatch($event, SitemapAddUrlEvent::class);
 
         return $event;

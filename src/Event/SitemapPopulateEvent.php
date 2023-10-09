@@ -59,6 +59,12 @@ class SitemapPopulateEvent extends Event
         $this->urlContainer = $urlContainer;
         $this->section = $section;
         $this->urlGenerator = $urlGenerator;
+        if ($urlGenerator === null) {
+            @trigger_error(
+                'Not injecting the $urlGenerator in ' . __CLASS__ . ' is deprecated and will be required in 4.0.',
+                \E_USER_DEPRECATED
+            );
+        }
     }
 
     /**
