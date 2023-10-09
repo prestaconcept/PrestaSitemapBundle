@@ -46,8 +46,8 @@ class SitemapPopulateEvent extends Event
      */
     public function __construct(
         UrlContainerInterface $urlContainer,
-        string $section = null,
-        UrlGeneratorInterface $urlGenerator
+        UrlGeneratorInterface $urlGenerator,
+        string $section = null
     ) {
         $this->urlContainer = $urlContainer;
         $this->section = $section;
