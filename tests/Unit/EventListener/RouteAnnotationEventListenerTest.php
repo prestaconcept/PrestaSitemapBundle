@@ -133,7 +133,7 @@ class RouteAnnotationEventListenerTest extends TestCase
 
         $urlContainer = new InMemoryUrlContainer();
         $dispatcher->addSubscriber(new RouteAnnotationEventListener($router, $dispatcher, 'default'));
-        $event = new SitemapPopulateEvent($urlContainer, $section, $router);
+        $event = new SitemapPopulateEvent($urlContainer, $router, $section);
         $dispatcher->dispatch($event, SitemapPopulateEvent::class);
 
         return $urlContainer;

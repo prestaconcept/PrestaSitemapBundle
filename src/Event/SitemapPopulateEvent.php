@@ -53,9 +53,41 @@ class SitemapPopulateEvent extends Event
      */
     public function __construct(
         UrlContainerInterface $urlContainer,
-        string $section = null,
-        UrlGeneratorInterface $urlGenerator = null
+        $urlGenerator = null,
+        $section = null
     ) {
+        if (
+            (\is_null($urlGenerator) || \is_string($urlGenerator))
+            && (\is_null($section) || $section instanceof UrlGeneratorInterface)
+        ) {
+            $tmpUrlGenerator = $section;
+            $section = $urlGenerator;
+            $urlGenerator = $tmpUrlGenerator;
+            @\trigger_error(
+                \sprintf(
+                    '%s will change in 4.0, the argument #2 will be %s $urlGenerator.',
+                    __METHOD__,
+                    UrlGeneratorInterface::class
+                ),
+                \E_USER_DEPRECATED
+            );
+        }
+        if (!\is_null($urlGenerator) && !$urlGenerator instanceof UrlGeneratorInterface) {
+            throw new \TypeError(\sprintf(
+                '%s(): Argument #2 ($urlGenerator) must be of type %s, %s given.',
+                __METHOD__,
+                UrlGeneratorInterface::class,
+                \is_object($urlGenerator) ? \get_class($urlGenerator) : \gettype($urlGenerator)
+            ));
+        }
+        if (!\is_null($section) && !\is_string($section)) {
+            throw new \TypeError(\sprintf(
+                '%s(): Argument #3 ($itemsBySet) must be of type ?string, %s given.',
+                __METHOD__,
+                \is_object($section) ? \get_class($section) : \gettype($section)
+            ));
+        }
+
         $this->urlContainer = $urlContainer;
         $this->section = $section;
         $this->urlGenerator = $urlGenerator;

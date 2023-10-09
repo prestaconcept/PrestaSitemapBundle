@@ -199,7 +199,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
      */
     protected function populate(string $section = null): void
     {
-        $event = new SitemapPopulateEvent($this, $section, $this->urlGenerator);
+        $event = new SitemapPopulateEvent($this, $this->urlGenerator, $section);
 
         $this->dispatcher->dispatch($event, SitemapPopulateEvent::ON_SITEMAP_POPULATE);
     }
