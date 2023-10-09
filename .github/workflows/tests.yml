@@ -27,7 +27,7 @@ jobs:
           - php-version: 8.1
             symfony-version: 5.4.*
           - php-version: 8.1
-            symfony-version: 6.2.*
+            symfony-version: 6.3.*
 
     steps:
       - name: "Checkout"
@@ -60,7 +60,7 @@ jobs:
       matrix:
         include:
           - php-version: 8.1
-            symfony-version: 6.2.*
+            symfony-version: 6.3.*
 
     steps:
       - name: "Checkout"
@@ -99,7 +99,7 @@ jobs:
       matrix:
         include:
           - php-version: 8.1
-            symfony-version: 6.2.*
+            symfony-version: 6.3.*
 
     steps:
       - name: "Checkout"
@@ -132,7 +132,7 @@ jobs:
       matrix:
         include:
           - php-version: 8.1
-            symfony-version: 6.2.*
+            symfony-version: 6.3.*
 
     steps:
       - name: "Checkout"
