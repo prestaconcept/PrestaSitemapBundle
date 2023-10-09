@@ -25,12 +25,6 @@ use Symfony\Contracts\EventDispatcher\Event;
 class SitemapPopulateEvent extends Event
 {
     /**
-     * @Event("Presta\SitemapBundle\Event\SitemapPopulateEvent")
-     * @deprecated since presta/sitemap-bundle 3.3, use `SitemapPopulateEvent::class` instead.
-     */
-    public const ON_SITEMAP_POPULATE = 'presta_sitemap.populate';
-
-    /**
      * @var UrlContainerInterface
      */
     protected $urlContainer;

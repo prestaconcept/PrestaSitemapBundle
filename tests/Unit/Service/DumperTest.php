@@ -75,10 +75,10 @@ class DumperTest extends TestCase
         $hasIndex = $hasDefaultSection || $hasBlogSection;
 
         if ($hasDefaultSection) {
-            $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, self::defaultListener());
+            $this->eventDispatcher->addListener(SitemapPopulateEvent::class, self::defaultListener());
         }
         if ($hasBlogSection) {
-            $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, self::blogListener());
+            $this->eventDispatcher->addListener(SitemapPopulateEvent::class, self::blogListener());
         }
 
         self::assertEmpty(\glob(self::DUMP_DIR . '/*'), 'Sitemap is empty before test');
@@ -104,8 +104,8 @@ class DumperTest extends TestCase
      */
     public function testIncremental(bool $gzip): void
     {
-        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, self::defaultListener());
-        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, self::blogListener());
+        $this->eventDispatcher->addListener(SitemapPopulateEvent::class, self::defaultListener());
+        $this->eventDispatcher->addListener(SitemapPopulateEvent::class, self::blogListener());
 
         self::assertEmpty(\glob(self::DUMP_DIR . '/*'), 'Sitemap is empty before test');
 
@@ -126,7 +126,7 @@ class DumperTest extends TestCase
 
     public function testDirCreated(): void
     {
-        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, self::defaultListener());
+        $this->eventDispatcher->addListener(SitemapPopulateEvent::class, self::defaultListener());
 
         self::removeDir();
 
@@ -141,7 +141,7 @@ class DumperTest extends TestCase
     public function testExistingInvalidSitemap(string $index): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, self::defaultListener());
+        $this->eventDispatcher->addListener(SitemapPopulateEvent::class, self::defaultListener());
 
         \file_put_contents(self::DUMP_DIR . '/sitemap.xml', $index);
         $this->dumper->dump(self::DUMP_DIR, 'https://acme.org', 'default');
@@ -154,7 +154,7 @@ class DumperTest extends TestCase
             $eventRouter = $event->getUrlGenerator();
         };
 
-        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, $listener);
+        $this->eventDispatcher->addListener(SitemapPopulateEvent::class, $listener);
 
         $this->dumper->dump(self::DUMP_DIR, 'https://acme.org', 'default');
 
@@ -165,7 +165,7 @@ class DumperTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->eventDispatcher->addListener(
-            SitemapPopulateEvent::ON_SITEMAP_POPULATE,
+            SitemapPopulateEvent::class,
             self::errorListener(new Exception('Throw on Unit Test'))
         );
 

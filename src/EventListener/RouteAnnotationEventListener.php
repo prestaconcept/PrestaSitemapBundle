@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
- * Listen to "presta_sitemap.populate" event.
+ * Listen to {@see SitemapPopulateEvent} event.
  * Populate sitemap with configured static routes.
  *
  * @phpstan-import-type RouteOptions from RouteOptionParser
@@ -84,7 +84,7 @@ class RouteAnnotationEventListener
             }
 
             $event = new SitemapAddUrlEvent($name, $options, $this->router);
-            $this->dispatcher->dispatch($event, SitemapAddUrlEvent::NAME);
+            $this->dispatcher->dispatch($event);
 
             if (!$event->shouldBeRegistered()) {
                 continue;

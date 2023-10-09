@@ -65,7 +65,7 @@ class RouteAnnotationEventListenerTest extends TestCase
     {
         $dispatcher = new EventDispatcher();
         $dispatcher->addListener(
-            SitemapAddUrlEvent::NAME,
+            SitemapAddUrlEvent::class,
             function (SitemapAddUrlEvent $event): void {
                 $event->preventRegistration();
             }
@@ -83,7 +83,7 @@ class RouteAnnotationEventListenerTest extends TestCase
     {
         $dispatcher = new EventDispatcher();
         $dispatcher->addListener(
-            SitemapAddUrlEvent::NAME,
+            SitemapAddUrlEvent::class,
             function (SitemapAddUrlEvent $event): void {
                 $event->setUrl(new UrlConcrete('http://localhost/redirect'));
             }
@@ -149,7 +149,7 @@ class RouteAnnotationEventListenerTest extends TestCase
 
         $listener = new RouteAnnotationEventListener($router, $dispatcher, 'default');
         $dispatcher->addListener(SitemapPopulateEvent::class, [$listener, 'registerRouteAnnotation']);
-        $dispatcher->dispatch($event, SitemapPopulateEvent::class);
+        $dispatcher->dispatch($event);
     }
 
     private function findUrl(array $urlset, string $loc): ?UrlConcrete
