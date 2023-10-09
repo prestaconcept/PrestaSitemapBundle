@@ -69,6 +69,12 @@ class SitemapAddUrlEvent extends Event
         $this->route = $route;
         $this->options = $options;
         $this->urlGenerator = $urlGenerator;
+        if ($urlGenerator === null) {
+            @trigger_error(
+                'Not injecting the $urlGenerator in ' . __CLASS__ . ' is deprecated and will be required in 4.0.',
+                \E_USER_DEPRECATED
+            );
+        }
     }
 
     /**
