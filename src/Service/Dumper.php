@@ -60,7 +60,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
         string $sitemapFilePrefix = Configuration::DEFAULT_FILENAME,
         int $itemsBySet = null
     ) {
-        parent::__construct($dispatcher, $itemsBySet, $urlGenerator);
+        parent::__construct($dispatcher, $urlGenerator, $itemsBySet);
 
         $this->filesystem = $filesystem;
         $this->sitemapFilePrefix = $sitemapFilePrefix;

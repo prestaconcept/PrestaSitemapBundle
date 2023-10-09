@@ -64,8 +64,8 @@ abstract class AbstractGenerator implements UrlContainerInterface
 
     public function __construct(
         EventDispatcherInterface $dispatcher,
-        int $itemsBySet = null,
-        UrlGeneratorInterface $urlGenerator
+        UrlGeneratorInterface $urlGenerator,
+        int $itemsBySet = null
     ) {
         $this->dispatcher = $dispatcher;
         // We add one to LIMIT_ITEMS because it was used as an index, not a quantity
