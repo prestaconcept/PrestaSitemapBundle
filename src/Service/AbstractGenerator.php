@@ -53,7 +53,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
     protected $itemsBySet;
 
     /**
-     * @var UrlGeneratorInterface|null
+     * @var UrlGeneratorInterface
      */
     protected $urlGenerator;
 
@@ -62,23 +62,11 @@ abstract class AbstractGenerator implements UrlContainerInterface
      */
     private $defaults;
 
-    /**
-     * @param EventDispatcherInterface   $dispatcher
-     * @param int|null                   $itemsBySet
-     * @param UrlGeneratorInterface|null $urlGenerator
-     */
     public function __construct(
         EventDispatcherInterface $dispatcher,
-        int $itemsBySet = null,
-        UrlGeneratorInterface $urlGenerator = null
+        UrlGeneratorInterface $urlGenerator,
+        int $itemsBySet = null
     ) {
-        if (!$urlGenerator) {
-            @trigger_error(
-                'Not injecting the $urlGenerator is deprecated and will be required in 4.0.',
-                \E_USER_DEPRECATED
-            );
-        }
-
         $this->dispatcher = $dispatcher;
         // We add one to LIMIT_ITEMS because it was used as an index, not a quantity
         $this->itemsBySet = ($itemsBySet === null) ? Sitemapindex::LIMIT_ITEMS + 1 : $itemsBySet;
@@ -167,9 +155,9 @@ abstract class AbstractGenerator implements UrlContainerInterface
      */
     protected function populate(string $section = null): void
     {
-        $event = new SitemapPopulateEvent($this, $section, $this->urlGenerator);
+        $event = new SitemapPopulateEvent($this, $this->urlGenerator, $section);
 
-        $this->dispatcher->dispatch($event, SitemapPopulateEvent::ON_SITEMAP_POPULATE);
+        $this->dispatcher->dispatch($event);
     }
 
     /**

@@ -17,7 +17,7 @@ use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Listen to "presta_sitemap.add_url" event.
+ * Listen to {@see SitemapAddUrlEvent} event.
  * Decorate translatable Url with multi-lang alternatives.
  * Support both Symfony translated routes & JMSI18nRoutingBundle.
  *

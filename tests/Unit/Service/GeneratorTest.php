@@ -60,7 +60,7 @@ class GeneratorTest extends WebTestCase
             self::assertEquals($event->getSection(), 'foo');
             $triggered = true;
         };
-        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, $listener);
+        $this->eventDispatcher->addListener(SitemapPopulateEvent::class, $listener);
 
         $generator->fetch('foo');
         self::assertTrue($triggered, 'Event listener was triggered');
@@ -73,7 +73,7 @@ class GeneratorTest extends WebTestCase
             $eventRouter = $event->getUrlGenerator();
         };
 
-        $this->eventDispatcher->addListener(SitemapPopulateEvent::ON_SITEMAP_POPULATE, $listener);
+        $this->eventDispatcher->addListener(SitemapPopulateEvent::class, $listener);
 
         $this->generator()->fetch('foo');
 

@@ -49,18 +49,18 @@ class Dumper extends AbstractGenerator implements DumperInterface
     /**
      * @param EventDispatcherInterface   $dispatcher Symfony's EventDispatcher
      * @param Filesystem                 $filesystem Symfony's Filesystem
+     * @param UrlGeneratorInterface      $urlGenerator
      * @param string                     $sitemapFilePrefix
      * @param int|null                   $itemsBySet
-     * @param UrlGeneratorInterface|null $urlGenerator
      */
     public function __construct(
         EventDispatcherInterface $dispatcher,
         Filesystem $filesystem,
+        UrlGeneratorInterface $urlGenerator,
         string $sitemapFilePrefix = Configuration::DEFAULT_FILENAME,
-        int $itemsBySet = null,
-        UrlGeneratorInterface $urlGenerator = null
+        int $itemsBySet = null
     ) {
-        parent::__construct($dispatcher, $itemsBySet, $urlGenerator);
+        parent::__construct($dispatcher, $urlGenerator, $itemsBySet);
 
         $this->filesystem = $filesystem;
         $this->sitemapFilePrefix = $sitemapFilePrefix;
