@@ -64,15 +64,47 @@ abstract class AbstractGenerator implements UrlContainerInterface
 
     /**
      * @param EventDispatcherInterface   $dispatcher
-     * @param int|null                   $itemsBySet
      * @param UrlGeneratorInterface|null $urlGenerator
+     * @param int|null                   $itemsBySet
      */
     public function __construct(
         EventDispatcherInterface $dispatcher,
-        int $itemsBySet = null,
-        UrlGeneratorInterface $urlGenerator = null
+        $urlGenerator = null,
+        $itemsBySet = null
     ) {
-        if (!$urlGenerator) {
+        if (
+            (\is_null($urlGenerator) || \is_int($urlGenerator))
+            && (\is_null($itemsBySet) || $itemsBySet instanceof UrlGeneratorInterface)
+        ) {
+            $tmpUrlGenerator = $itemsBySet;
+            $itemsBySet = $urlGenerator;
+            $urlGenerator = $tmpUrlGenerator;
+            @\trigger_error(
+                \sprintf(
+                    '%s will change in 4.0, the argument #2 will be %s $urlGenerator.',
+                    __METHOD__,
+                    UrlGeneratorInterface::class
+                ),
+                \E_USER_DEPRECATED
+            );
+        }
+        if (!\is_null($urlGenerator) && !$urlGenerator instanceof UrlGeneratorInterface) {
+            throw new \TypeError(\sprintf(
+                '%s(): Argument #2 ($urlGenerator) must be of type %s, %s given.',
+                __METHOD__,
+                UrlGeneratorInterface::class,
+                \is_object($urlGenerator) ? \get_class($urlGenerator) : \gettype($urlGenerator)
+            ));
+        }
+        if (!\is_null($itemsBySet) && !\is_int($itemsBySet)) {
+            throw new \TypeError(\sprintf(
+                '%s(): Argument #3 ($itemsBySet) must be of type ?int, %s given.',
+                __METHOD__,
+                \is_object($itemsBySet) ? \get_class($itemsBySet) : \gettype($itemsBySet)
+            ));
+        }
+
+        if ($urlGenerator === null) {
             @trigger_error(
                 'Not injecting the $urlGenerator is deprecated and will be required in 4.0.',
                 \E_USER_DEPRECATED
@@ -167,7 +199,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
      */
     protected function populate(string $section = null): void
     {
-        $event = new SitemapPopulateEvent($this, $section, $this->urlGenerator);
+        $event = new SitemapPopulateEvent($this, $this->urlGenerator, $section);
 
         $this->dispatcher->dispatch($event, SitemapPopulateEvent::ON_SITEMAP_POPULATE);
     }

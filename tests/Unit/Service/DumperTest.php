@@ -54,7 +54,7 @@ class DumperTest extends TestCase
         $this->eventDispatcher = new EventDispatcher();
         $this->filesystem = new Filesystem();
         $this->router = new Router(new ClosureLoader(), null);
-        $this->dumper = new Dumper($this->eventDispatcher, $this->filesystem, 'sitemap', 5, $this->router);
+        $this->dumper = new Dumper($this->eventDispatcher, $this->filesystem, $this->router, 'sitemap', 5);
 
         (new Filesystem())->remove(\glob(sys_get_temp_dir() . '/PrestaSitemaps-*'));
     }

@@ -49,18 +49,59 @@ class Dumper extends AbstractGenerator implements DumperInterface
     /**
      * @param EventDispatcherInterface   $dispatcher Symfony's EventDispatcher
      * @param Filesystem                 $filesystem Symfony's Filesystem
+     * @param UrlGeneratorInterface|null $urlGenerator
      * @param string                     $sitemapFilePrefix
      * @param int|null                   $itemsBySet
-     * @param UrlGeneratorInterface|null $urlGenerator
      */
     public function __construct(
         EventDispatcherInterface $dispatcher,
         Filesystem $filesystem,
-        string $sitemapFilePrefix = Configuration::DEFAULT_FILENAME,
-        int $itemsBySet = null,
-        UrlGeneratorInterface $urlGenerator = null
+        $urlGenerator = null,
+        $sitemapFilePrefix = Configuration::DEFAULT_FILENAME,
+        $itemsBySet = null
     ) {
-        parent::__construct($dispatcher, $itemsBySet, $urlGenerator);
+        if (
+            \is_string($urlGenerator)
+            && (\is_null($sitemapFilePrefix) || \is_int($sitemapFilePrefix))
+            && (\is_null($itemsBySet) || $itemsBySet instanceof UrlGeneratorInterface)
+        ) {
+            $tmpUrlGenerator = $itemsBySet;
+            $itemsBySet = $sitemapFilePrefix;
+            $sitemapFilePrefix = $urlGenerator;
+            $urlGenerator = $tmpUrlGenerator;
+            @\trigger_error(
+                \sprintf(
+                    '%s will change in 4.0, the argument #3 will be %s $urlGenerator.',
+                    __METHOD__,
+                    UrlGeneratorInterface::class
+                ),
+                \E_USER_DEPRECATED
+            );
+        }
+        if (!\is_null($urlGenerator) && !$urlGenerator instanceof UrlGeneratorInterface) {
+            throw new \TypeError(\sprintf(
+                '%s(): Argument #3 ($urlGenerator) must be of type %s, %s given.',
+                __METHOD__,
+                UrlGeneratorInterface::class,
+                \is_object($urlGenerator) ? \get_class($urlGenerator) : \gettype($urlGenerator)
+            ));
+        }
+        if (!\is_string($sitemapFilePrefix)) {
+            throw new \TypeError(\sprintf(
+                '%s(): Argument #4 ($sitemapFilePrefix) must be of type string, %s given.',
+                __METHOD__,
+                \is_object($sitemapFilePrefix) ? \get_class($sitemapFilePrefix) : \gettype($sitemapFilePrefix)
+            ));
+        }
+        if (!\is_null($itemsBySet) && !\is_int($itemsBySet)) {
+            throw new \TypeError(\sprintf(
+                '%s(): Argument #5 ($itemsBySet) must be of type ?int, %s given.',
+                __METHOD__,
+                \is_object($itemsBySet) ? \get_class($itemsBySet) : \gettype($itemsBySet)
+            ));
+        }
+
+        parent::__construct($dispatcher, $urlGenerator, $itemsBySet);
 
         $this->filesystem = $filesystem;
         $this->sitemapFilePrefix = $sitemapFilePrefix;
