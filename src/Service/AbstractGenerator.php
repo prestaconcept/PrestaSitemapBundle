@@ -81,7 +81,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
             $urlGenerator = $tmpUrlGenerator;
             @\trigger_error(
                 \sprintf(
-                    '%s will changed in 4.0, the argument #2 will be %s $urlGenerator.',
+                    '%s will change in 4.0, the argument #2 will be %s $urlGenerator.',
                     __METHOD__,
                     UrlGeneratorInterface::class
                 ),

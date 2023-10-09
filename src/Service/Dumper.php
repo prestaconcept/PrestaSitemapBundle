@@ -71,7 +71,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
             $urlGenerator = $tmpUrlGenerator;
             @\trigger_error(
                 \sprintf(
-                    '%s will changed in 4.0, the argument #3 will be %s $urlGenerator.',
+                    '%s will change in 4.0, the argument #3 will be %s $urlGenerator.',
                     __METHOD__,
                     UrlGeneratorInterface::class
                 ),

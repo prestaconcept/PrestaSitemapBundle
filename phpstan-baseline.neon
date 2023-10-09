@@ -1,0 +1,56 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to function is_int\\(\\) with Symfony\\\\Component\\\\Routing\\\\Generator\\\\UrlGeneratorInterface will always evaluate to false\\.$#"
+			count: 1
+			path: src/Service/AbstractGenerator.php
+
+		-
+			message: "#^Else branch is unreachable because ternary operator condition is always true\\.$#"
+			count: 2
+			path: src/Service/AbstractGenerator.php
+
+		-
+			message: "#^Instanceof between int and Symfony\\\\Component\\\\Routing\\\\Generator\\\\UrlGeneratorInterface will always evaluate to false\\.$#"
+			count: 1
+			path: src/Service/AbstractGenerator.php
+
+		-
+			message: "#^Result of && is always false\\.$#"
+			count: 2
+			path: src/Service/AbstractGenerator.php
+
+		-
+			message: "#^Call to function is_int\\(\\) with string will always evaluate to false\\.$#"
+			count: 1
+			path: src/Service/Dumper.php
+
+		-
+			message: "#^Call to function is_null\\(\\) with string will always evaluate to false\\.$#"
+			count: 1
+			path: src/Service/Dumper.php
+
+		-
+			message: "#^Call to function is_string\\(\\) with Symfony\\\\Component\\\\Routing\\\\Generator\\\\UrlGeneratorInterface\\|null will always evaluate to false\\.$#"
+			count: 1
+			path: src/Service/Dumper.php
+
+		-
+			message: "#^Else branch is unreachable because ternary operator condition is always true\\.$#"
+			count: 3
+			path: src/Service/Dumper.php
+
+		-
+			message: "#^Instanceof between int and Symfony\\\\Component\\\\Routing\\\\Generator\\\\UrlGeneratorInterface will always evaluate to false\\.$#"
+			count: 1
+			path: src/Service/Dumper.php
+
+		-
+			message: "#^Result of && is always false\\.$#"
+			count: 4
+			path: src/Service/Dumper.php
+
+		-
+			message: "#^Result of \\|\\| is always false\\.$#"
+			count: 1
+			path: src/Service/Dumper.php
