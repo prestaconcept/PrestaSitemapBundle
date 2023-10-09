@@ -27,7 +27,7 @@ use Symfony\Component\Routing\Router;
 class PrestaSitemapExtensionTest extends TestCase
 {
     private const SERVICES = [
-        ['presta_sitemap.eventlistener.route_annotation', 'Static routes listener', 'kernel.event_subscriber'],
+        ['presta_sitemap.eventlistener.route_annotation', 'Static routes listener', 'kernel.event_listener'],
         ['presta_sitemap.controller', 'Sitemap controller', null],
         ['presta_sitemap.dump_command', 'Dump sitemap command', 'console.command'],
     ];
