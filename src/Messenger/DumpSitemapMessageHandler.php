@@ -13,11 +13,13 @@ namespace Presta\SitemapBundle\Messenger;
 
 use Presta\SitemapBundle\Service\DumperInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Message handler to handle DumpSitemapMessage asynchronously or synchronously in background
  */
+#[AsMessageHandler]
 class DumpSitemapMessageHandler
 {
     /**
