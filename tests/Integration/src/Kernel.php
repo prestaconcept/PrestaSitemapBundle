@@ -48,9 +48,6 @@ if (BaseKernel::VERSION_ID >= 50400) {
             $version = sprintf('%s.%s', BaseKernel::MAJOR_VERSION, BaseKernel::MINOR_VERSION);
             $container->import('../config/' . $version . '/*.yaml');
             $container->import('../config/services.yaml');
-            if (\PHP_VERSION_ID < 80000) {
-                $container->import('../config/' . $version . '/special/annotations.yaml');
-            }
         }
 
         private function configureRoutes(RoutingConfigurator $routes): void
@@ -63,9 +60,6 @@ if (BaseKernel::VERSION_ID >= 50400) {
         {
             yield new \Symfony\Bundle\FrameworkBundle\FrameworkBundle();
             yield new \Presta\SitemapBundle\PrestaSitemapBundle();
-            if (\PHP_VERSION_ID < 80000) {
-                yield new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle();
-            }
         }
 
         public function boot()
@@ -123,9 +117,6 @@ if (BaseKernel::VERSION_ID >= 50400) {
         {
             yield new \Symfony\Bundle\FrameworkBundle\FrameworkBundle();
             yield new \Presta\SitemapBundle\PrestaSitemapBundle();
-            if (\PHP_VERSION_ID < 80000) {
-                yield new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle();
-            }
         }
 
         public function boot()

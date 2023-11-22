@@ -1,0 +1,25 @@
+archive:
+    path: /archive
+    controller: Presta\SitemapBundle\Tests\Integration\Controller\ArchivesController::archive
+
+blog_read:
+    path: /blog
+    controller: Presta\SitemapBundle\Tests\Integration\Controller\BlogController::read
+    options:
+        sitemap:
+            section: blog
+
+blog_post:
+    path: /blog/{slug}
+    controller: Presta\SitemapBundle\Tests\Integration\Controller\BlogController::post
+
+dispatch_message:
+    path: /dispatch-message
+    controller: Presta\SitemapBundle\Tests\Integration\Controller\MessengerController::dispatch
+
+home:
+    path: /
+    controller: Presta\SitemapBundle\Tests\Integration\Controller\StaticController::home
+    options:
+        sitemap:
+            section: static

@@ -19,9 +19,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class MessengerController
 {
-    /**
-     * @Route("/dispatch-message", name="dispatch_message")
-     */
     #[Route(path: '/dispatch-message', name: 'dispatch_message')]
     public function dispatch(Request $request, MessageBusInterface $bus): Response
     {
