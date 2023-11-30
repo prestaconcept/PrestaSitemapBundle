@@ -4,7 +4,7 @@ The `Presta\SitemapBundle\Service\UrlContainerInterface::addUrl` method first ar
 an instance of `Presta\SitemapBundle\Sitemap\Url\Url`, which is an interface.
 
 In the examples you've seen in that doc, we used only `Presta\SitemapBundle\Sitemap\Url\UrlConcrete`.
-It cover the minimal requirement for a sitemap XML node.
+It covers the minimal requirement for a sitemap XML node.
 
 > **Note:** This bundle is only registering `Presta\SitemapBundle\Sitemap\Url\UrlConcrete`
 >           instances for the static routes you configured in your app.
@@ -91,7 +91,7 @@ $urls->addUrl($decoratedUrl, 'default');
 ```
 
 
-## Adding alternales
+## Adding alternates
 
 Using the multilang decorator.
 
@@ -116,7 +116,7 @@ $urls->addUrl($decoratedUrl, 'default');
 <url>
     <loc>https://acme.com/</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://acme.fr/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://acme.de/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://acme.de/"/>
 </url>
 ```
 
@@ -254,7 +254,7 @@ $urls->addUrl($url, 'default');
 
 ## Limitations
 
-The bundle takes care about limit constraints. For example, it automatically divide sections into smaller fragments.
+The bundle takes care about limit constraints. For example, it automatically divides sections into smaller fragments.
 
 But there is some cases for which it will just block you from doing forbidden things with exceptions.
 
