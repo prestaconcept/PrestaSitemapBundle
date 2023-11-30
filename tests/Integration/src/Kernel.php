@@ -62,7 +62,7 @@ if (BaseKernel::VERSION_ID >= 50400) {
             yield new \Presta\SitemapBundle\PrestaSitemapBundle();
         }
 
-        public function boot()
+        public function boot(): void
         {
             /* force "var" dir to be removed the first time this kernel boot */
             static $cleanVarDirectory = true;
@@ -119,7 +119,7 @@ if (BaseKernel::VERSION_ID >= 50400) {
             yield new \Presta\SitemapBundle\PrestaSitemapBundle();
         }
 
-        public function boot()
+        public function boot(): void
         {
             /* force "var" dir to be removed the first time this kernel boot */
             static $cleanVarDirectory = true;
