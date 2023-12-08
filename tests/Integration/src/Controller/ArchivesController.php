@@ -16,6 +16,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class ArchivesController
 {
+    /**
+     * @Route("/archive", name="archive")
+     */
     #[Route(path: '/archive', name: 'archive')]
     public function archive(): Response
     {
