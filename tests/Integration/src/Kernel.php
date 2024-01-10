@@ -63,12 +63,9 @@ if (BaseKernel::VERSION_ID >= 50400) {
         {
             yield new \Symfony\Bundle\FrameworkBundle\FrameworkBundle();
             yield new \Presta\SitemapBundle\PrestaSitemapBundle();
-            if (\PHP_VERSION_ID < 80000) {
-                yield new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle();
-            }
         }
 
-        public function boot()
+        public function boot(): void
         {
             /* force "var" dir to be removed the first time this kernel boot */
             static $cleanVarDirectory = true;
@@ -123,12 +120,9 @@ if (BaseKernel::VERSION_ID >= 50400) {
         {
             yield new \Symfony\Bundle\FrameworkBundle\FrameworkBundle();
             yield new \Presta\SitemapBundle\PrestaSitemapBundle();
-            if (\PHP_VERSION_ID < 80000) {
-                yield new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle();
-            }
         }
 
-        public function boot()
+        public function boot(): void
         {
             /* force "var" dir to be removed the first time this kernel boot */
             static $cleanVarDirectory = true;

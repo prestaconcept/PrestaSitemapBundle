@@ -1,6 +1,2 @@
 framework:
     annotations: true
-
-sensio_framework_extra:
-    router:
-        annotations: true
