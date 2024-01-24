@@ -3,7 +3,7 @@
 Require the bundle as a dependency.
 
 ```bash
-$ composer require presta/sitemap-bundle
+composer require presta/sitemap-bundle
 ```
 
 Enable it in your application Kernel.
