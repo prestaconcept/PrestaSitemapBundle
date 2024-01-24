@@ -50,19 +50,28 @@ class GeneratorTest extends WebTestCase
 
     public function testFetch(): void
     {
-        $generator = $this->generator();
-
-        $section = $generator->fetch('void');
-        self::assertNull($section);
+        self::assertNull($this->generator()->fetch('default'));
 
         $triggered = false;
-        $listener = function (SitemapPopulateEvent $event) use (&$triggered) {
-            self::assertEquals($event->getSection(), 'foo');
+        $this->eventDispatcher->addListener(SitemapPopulateEvent::class, function (SitemapPopulateEvent $event) use (&$triggered) {
+            self::assertEquals($event->getSection(), 'default');
+            $event->getUrlContainer()->addUrl(new UrlConcrete('http://acme.com/page-1'), 'default');
+            $event->getUrlContainer()->addUrl(new UrlConcrete('http://acme.com/page-2'), 'default');
             $triggered = true;
-        };
-        $this->eventDispatcher->addListener(SitemapPopulateEvent::class, $listener);
+        });
 
-        $generator->fetch('foo');
+        $default = $this->generator()->fetch('default');
+        self::assertInstanceOf(Urlset::class, $default);
+        self::assertStringContainsString('http://acme.com/page-1', $default->toXml());
+        self::assertStringNotContainsString('http://acme.com/page-2', $default->toXml());
+
+        $default0 = $this->generator()->fetch('default_0');
+        self::assertInstanceOf(Urlset::class, $default0);
+        self::assertStringNotContainsString('http://acme.com/page-1', $default0->toXml());
+        self::assertStringContainsString('http://acme.com/page-2', $default0->toXml());
+
+        self::assertNull($this->generator()->fetch('default_1'));
+
         self::assertTrue($triggered, 'Event listener was triggered');
     }
 
