@@ -72,7 +72,7 @@ class DumpSitemapsCommand extends Command
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Base url to use for absolute urls. Good example - http://acme.com/, bad example - acme.com.' .
-                ' Defaults to router.request_context.host parameter'
+                ' Defaults to Symfony\'s default routing context'
             )
             ->addOption(
                 'gzip',
