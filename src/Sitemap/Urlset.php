@@ -125,7 +125,7 @@ class Urlset extends XmlConstraint
     protected function getStructureXml(): string
     {
         $struct = '<?xml version="1.0" encoding="UTF-8"?>';
-        $struct .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" NAMESPACES>URLS</urlset>';
+        $struct .= '<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9" NAMESPACES>URLS</urlset>';
 
         $namespaces = '';
         foreach ($this->customNamespaces as $key => $location) {

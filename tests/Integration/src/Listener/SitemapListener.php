@@ -33,7 +33,7 @@ final class SitemapListener implements EventSubscriberInterface
         [
             'title' => 'Post with one image',
             'slug' => 'post-with-one-image',
-            'images' => ['http://lorempixel.com/400/200/technics/1'],
+            'images' => ['https://lorempixel.com/400/200/technics/1'],
             'video' => null,
         ],
         [
@@ -45,7 +45,7 @@ final class SitemapListener implements EventSubscriberInterface
         [
             'title' => 'Post with multimedia',
             'slug' => 'post-with-multimedia',
-            'images' => ['http://lorempixel.com/400/200/technics/2', 'http://lorempixel.com/400/200/technics/3'],
+            'images' => ['https://lorempixel.com/400/200/technics/2', 'https://lorempixel.com/400/200/technics/3'],
             'video' => 'https://www.youtube.com/watch?v=JugaMuswrmk',
         ],
     ];

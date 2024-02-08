@@ -23,7 +23,7 @@ abstract class BaseSitemapTestCase extends WebTestCase
     protected static function assertIndex(string $xml, bool $gzip = false): void
     {
         $index = simplexml_load_string($xml);
-        $index->registerXPathNamespace('sm', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+        $index->registerXPathNamespace('sm', 'https://www.sitemaps.org/schemas/sitemap/0.9');
 
         self::assertIndexContainsSectionLink($index, 'static', $gzip);
         self::assertIndexContainsSectionLink($index, 'blog', $gzip);
@@ -34,7 +34,7 @@ abstract class BaseSitemapTestCase extends WebTestCase
     protected static function assertStaticSection(string $xml): void
     {
         $static = simplexml_load_string($xml);
-        $static->registerXPathNamespace('sm', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+        $static->registerXPathNamespace('sm', 'https://www.sitemaps.org/schemas/sitemap/0.9');
 
         if (Kernel::VERSION_ID >= 50100) {
             self::assertSectionContainsCountUrls($static, 'static', 4);
@@ -58,9 +58,9 @@ abstract class BaseSitemapTestCase extends WebTestCase
     protected static function assertBlogSection(string $xml): void
     {
         $blog = simplexml_load_string($xml);
-        $blog->registerXPathNamespace('sm', 'http://www.sitemaps.org/schemas/sitemap/0.9');
-        $blog->registerXPathNamespace('image', 'http://www.google.com/schemas/sitemap-image/1.1');
-        $blog->registerXPathNamespace('video', 'http://www.google.com/schemas/sitemap-video/1.1');
+        $blog->registerXPathNamespace('sm', 'https://www.sitemaps.org/schemas/sitemap/0.9');
+        $blog->registerXPathNamespace('image', 'https://www.google.com/schemas/sitemap-image/1.1');
+        $blog->registerXPathNamespace('video', 'https://www.google.com/schemas/sitemap-video/1.1');
 
         self::assertSectionContainsCountUrls($blog, 'blog', 5);
         $list = self::assertSectionContainsPath($blog, 'blog', '/blog');
@@ -68,19 +68,19 @@ abstract class BaseSitemapTestCase extends WebTestCase
         $postWithoutMedia = self::assertSectionContainsPath($blog, 'blog', '/blog/post-without-media');
         self::assertUrlConcrete($postWithoutMedia, 'blog', 0.5, 'daily');
         $postWithOneImage = self::assertSectionContainsPath($blog, 'blog', '/blog/post-with-one-image');
-        self::assertUrlHasImage($postWithOneImage, 'blog', 'http://lorempixel.com/400/200/technics/1');
+        self::assertUrlHasImage($postWithOneImage, 'blog', 'https://lorempixel.com/400/200/technics/1');
         $postWithAVideo = self::assertSectionContainsPath($blog, 'blog', '/blog/post-with-a-video');
         self::assertUrlHasVideo($postWithAVideo, 'blog', 'https://www.youtube.com/watch?v=j6IKRxH8PTg');
         $postWithMultimedia = self::assertSectionContainsPath($blog, 'blog', '/blog/post-with-multimedia');
-        self::assertUrlHasImage($postWithMultimedia, 'blog', 'http://lorempixel.com/400/200/technics/2');
-        self::assertUrlHasImage($postWithMultimedia, 'blog', 'http://lorempixel.com/400/200/technics/3');
+        self::assertUrlHasImage($postWithMultimedia, 'blog', 'https://lorempixel.com/400/200/technics/2');
+        self::assertUrlHasImage($postWithMultimedia, 'blog', 'https://lorempixel.com/400/200/technics/3');
         self::assertUrlHasVideo($postWithMultimedia, 'blog', 'https://www.youtube.com/watch?v=JugaMuswrmk');
     }
 
     protected static function assertArchivesSection(string $xml): void
     {
         $archives = simplexml_load_string($xml);
-        $archives->registerXPathNamespace('sm', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+        $archives->registerXPathNamespace('sm', 'https://www.sitemaps.org/schemas/sitemap/0.9');
 
         self::assertSectionContainsCountUrls($archives, 'archive', 10);
         Assert::assertCount(
