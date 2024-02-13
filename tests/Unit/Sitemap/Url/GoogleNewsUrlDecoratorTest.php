@@ -36,7 +36,7 @@ class GoogleNewsUrlDecoratorTest extends TestCase
         $dom = new \DOMDocument();
         $dom->loadXML($this->generateXml($url));
 
-        $newsTags = $dom->getElementsByTagNameNS('http://www.google.com/schemas/sitemap-news/0.9', '*');
+        $newsTags = $dom->getElementsByTagNameNS('https://www.google.com/schemas/sitemap-news/0.9', '*');
 
         self::assertEquals(6, $newsTags->length, 'Could not find news specific tags');
     }
@@ -54,7 +54,7 @@ class GoogleNewsUrlDecoratorTest extends TestCase
         $dom = new \DOMDocument();
         $dom->loadXML($this->generateXml($url));
 
-        $dateNodes = $dom->getElementsByTagNameNS('http://www.google.com/schemas/sitemap-news/0.9', 'publication_date');
+        $dateNodes = $dom->getElementsByTagNameNS('https://www.google.com/schemas/sitemap-news/0.9', 'publication_date');
         self::assertEquals(1, $dateNodes->length, 'Could not find news:publication_date tag');
         self::assertEquals($date->format(\DateTime::W3C), $dateNodes->item(0)->textContent, 'Date was not formatted properly');
     }
@@ -73,7 +73,7 @@ class GoogleNewsUrlDecoratorTest extends TestCase
         $dom = new \DOMDocument();
         $dom->loadXML($this->generateXml($url));
 
-        $dateNodes = $dom->getElementsByTagNameNS('http://www.google.com/schemas/sitemap-news/0.9', 'publication_date');
+        $dateNodes = $dom->getElementsByTagNameNS('https://www.google.com/schemas/sitemap-news/0.9', 'publication_date');
         self::assertEquals(1, $dateNodes->length, 'Could not find news:publication_date tag');
         self::assertEquals($date->format('Y-m-d'), $dateNodes->item(0)->textContent, 'Date was not formatted properly');
     }
@@ -103,7 +103,7 @@ class GoogleNewsUrlDecoratorTest extends TestCase
 
         $dom = new \DOMDocument();
         $dom->loadXML($this->generateXml($url));
-        $accessNodes = $dom->getElementsByTagNameNS('http://www.google.com/schemas/sitemap-news/0.9', 'access');
+        $accessNodes = $dom->getElementsByTagNameNS('https://www.google.com/schemas/sitemap-news/0.9', 'access');
         self::assertEquals(1, $accessNodes->length, 'Could not find news:access tag');
         self::assertEquals('Registration', $accessNodes->item(0)->textContent, 'Acces tag did not contain the right value');
     }
@@ -134,7 +134,7 @@ class GoogleNewsUrlDecoratorTest extends TestCase
 
         $dom = new \DOMDocument();
         $dom->loadXML($this->generateXml($url));
-        $geoNodes = $dom->getElementsByTagNameNS('http://www.google.com/schemas/sitemap-news/0.9', 'geo_locations');
+        $geoNodes = $dom->getElementsByTagNameNS('https://www.google.com/schemas/sitemap-news/0.9', 'geo_locations');
         self::assertEquals(1, $geoNodes->length, 'Could not find news:geo_locations tag');
         self::assertEquals('Detroit, Michigan, USA', $geoNodes->item(0)->textContent, 'Locations tag did not contain the right value');
     }
@@ -191,7 +191,7 @@ class GoogleNewsUrlDecoratorTest extends TestCase
         );
         $dom = new \DOMDocument();
         $dom->loadXML($this->generateXml($url));
-        $stockNodes = $dom->getElementsByTagNameNS('http://www.google.com/schemas/sitemap-news/0.9', 'stock_tickers');
+        $stockNodes = $dom->getElementsByTagNameNS('https://www.google.com/schemas/sitemap-news/0.9', 'stock_tickers');
         self::assertEquals(1, $stockNodes->length, 'Could not find news:stock_tickers tag');
         self::assertEquals('NYSE:OWW, NASDAQ:GTAT', $stockNodes->item(0)->textContent, 'Stock tickers tag did not contain the right value');
     }

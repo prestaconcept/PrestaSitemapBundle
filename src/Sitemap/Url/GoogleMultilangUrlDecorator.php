@@ -25,7 +25,7 @@ class GoogleMultilangUrlDecorator extends UrlDecorator
     /**
      * @var array<string, string>
      */
-    protected $customNamespaces = ['xhtml' => 'http://www.w3.org/1999/xhtml'];
+    protected $customNamespaces = ['xhtml' => 'https://www.w3.org/1999/xhtml'];
 
     /**
      * @var string

@@ -32,7 +32,7 @@ class GoogleNewsUrlDecorator extends UrlDecorator
     /**
      * @var array<string, string>
      */
-    protected $customNamespaces = ['news' => 'http://www.google.com/schemas/sitemap-news/0.9'];
+    protected $customNamespaces = ['news' => 'https://www.google.com/schemas/sitemap-news/0.9'];
 
     /**
      * @var string
