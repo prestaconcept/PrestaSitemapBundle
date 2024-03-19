@@ -64,7 +64,7 @@ class GoogleVideoUrlDecoratorTest extends TestCase
 
         $this->xml = new \DOMDocument();
 
-        $xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"';
+        $xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"';
 
         foreach ($url->getCustomNamespaces() as $name => $uri) {
             $xml .= ' xmlns:' . $name . '="' . $uri . '"';
@@ -77,7 +77,7 @@ class GoogleVideoUrlDecoratorTest extends TestCase
 
     public function testCountNamespaces(): void
     {
-        $namespaces = $this->xml->getElementsByTagNameNS('https://www.google.com/schemas/sitemap-video/1.1', '*');
+        $namespaces = $this->xml->getElementsByTagNameNS('http://www.google.com/schemas/sitemap-video/1.1', '*');
         self::assertEquals(72, $namespaces->length);
     }
 
@@ -117,8 +117,8 @@ class GoogleVideoUrlDecoratorTest extends TestCase
     public function testTagsByVideo(): void
     {
         $xpath = new \DOMXPath($this->xml);
-        $xpath->registerNamespace('s', 'https://www.sitemaps.org/schemas/sitemap/0.9');
-        $xpath->registerNamespace('v', 'https://www.google.com/schemas/sitemap-video/1.1');
+        $xpath->registerNamespace('s', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+        $xpath->registerNamespace('v', 'http://www.google.com/schemas/sitemap-video/1.1');
 
         self::assertEquals('http://acme.com/video/thumbnail1.jpg', $xpath->evaluate('string(/s:urlset/s:url/v:video[1]/v:thumbnail_loc)'));
         self::assertEquals('http://acme.com/video/thumbnail2.jpg', $xpath->evaluate('string(/s:urlset/s:url/v:video[2]/v:thumbnail_loc)'));
