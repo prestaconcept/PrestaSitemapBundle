@@ -139,7 +139,7 @@ class UrlConcreteTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage(
             "The value \"$value\" is not supported by the option priority, it must be a numeric between 0.0 and 1.0." .
-            " See https://www.sitemaps.org/protocol.html#xmlTagDefinitions"
+            " See http://www.sitemaps.org/protocol.html#xmlTagDefinitions"
         );
 
         $url = new UrlConcrete('http://example.com');

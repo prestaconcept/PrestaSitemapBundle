@@ -25,7 +25,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     /**
      * @var array<string, string>
      */
-    protected $customNamespaces = ['video' => 'https://www.google.com/schemas/sitemap-video/1.1'];
+    protected $customNamespaces = ['video' => 'http://www.google.com/schemas/sitemap-video/1.1'];
 
     /**
      * @var string
