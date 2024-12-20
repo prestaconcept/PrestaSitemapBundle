@@ -56,10 +56,10 @@ class GoogleImage
      */
     public function __construct(
         string $location,
-        string $caption = null,
-        string $geoLocation = null,
-        string $title = null,
-        string $license = null
+        ?string $caption = null,
+        ?string $geoLocation = null,
+        ?string $title = null,
+        ?string $license = null
     ) {
         $this->setLocation($location);
         $this->setCaption($caption);

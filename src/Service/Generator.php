@@ -34,7 +34,7 @@ class Generator extends AbstractGenerator implements GeneratorInterface
     public function __construct(
         EventDispatcherInterface $dispatcher,
         UrlGeneratorInterface $router,
-        int $itemsBySet = null
+        ?int $itemsBySet = null
     ) {
         parent::__construct($dispatcher, $router, $itemsBySet);
 
@@ -65,7 +65,7 @@ class Generator extends AbstractGenerator implements GeneratorInterface
     /**
      * @inheritdoc
      */
-    protected function newUrlset(string $name, \DateTimeInterface $lastmod = null): Urlset
+    protected function newUrlset(string $name, ?\DateTimeInterface $lastmod = null): Urlset
     {
         return new Urlset(
             $this->router->generate(

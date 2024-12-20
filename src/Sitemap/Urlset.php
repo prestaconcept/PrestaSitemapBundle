@@ -48,7 +48,7 @@ class Urlset extends XmlConstraint
      * @param string                 $loc
      * @param DateTimeInterface|null $lastmod
      */
-    public function __construct(string $loc, DateTimeInterface $lastmod = null)
+    public function __construct(string $loc, ?DateTimeInterface $lastmod = null)
     {
         $this->loc = $loc;
         $this->lastmod = $lastmod ?? new \DateTimeImmutable();

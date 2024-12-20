@@ -43,7 +43,7 @@ class GoogleMultilangUrlDecorator extends UrlDecorator
      *
      * @return GoogleMultilangUrlDecorator
      */
-    public function addLink(string $href, string $hreflang, string $rel = null): self
+    public function addLink(string $href, string $hreflang, ?string $rel = null): self
     {
         $this->linkXml .= $this->generateLinkXml($href, $hreflang, $rel);
 
@@ -57,7 +57,7 @@ class GoogleMultilangUrlDecorator extends UrlDecorator
      *
      * @return string
      */
-    protected function generateLinkXml(string $href, string $hreflang, string $rel = null): string
+    protected function generateLinkXml(string $href, string $hreflang, ?string $rel = null): string
     {
         if (null == $rel) {
             $rel = self::REL_ALTERNATE;

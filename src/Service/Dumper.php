@@ -58,7 +58,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
         Filesystem $filesystem,
         UrlGeneratorInterface $urlGenerator,
         string $sitemapFilePrefix = Configuration::DEFAULT_FILENAME,
-        int $itemsBySet = null
+        ?int $itemsBySet = null
     ) {
         parent::__construct($dispatcher, $urlGenerator, $itemsBySet);
 
@@ -69,7 +69,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
     /**
      * @inheritdoc
      */
-    public function dump(string $targetDir, string $host, string $section = null, array $options = [])
+    public function dump(string $targetDir, string $host, ?string $section = null, array $options = [])
     {
         /** @var array{gzip: bool} $options */
         $options = array_merge(['gzip' => false], $options);
@@ -262,7 +262,7 @@ class Dumper extends AbstractGenerator implements DumperInterface
      *
      * @return DumpingUrlset|Urlset
      */
-    protected function newUrlset(string $name, \DateTimeInterface $lastmod = null, bool $gzExtension = false): Urlset
+    protected function newUrlset(string $name, ?\DateTimeInterface $lastmod = null, bool $gzExtension = false): Urlset
     {
         $url = $this->baseUrl . $this->sitemapFilePrefix . '.' . $name . '.xml';
         if ($gzExtension) {

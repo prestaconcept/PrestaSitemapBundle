@@ -227,9 +227,9 @@ class GoogleNewsUrlDecoratorTest extends TestCase
         string $language,
         DateTime $date,
         string $title,
-        string $access = null,
+        ?string $access = null,
         array $genres = [],
-        string $geoLocations = null,
+        ?string $geoLocations = null,
         array $keywords = [],
         array $stockTickers = []
     ): void {

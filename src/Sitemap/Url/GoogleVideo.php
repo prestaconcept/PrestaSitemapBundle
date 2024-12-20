@@ -528,7 +528,7 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function setFamilyFriendly(string $familyFriendly = null): self
+    public function setFamilyFriendly(?string $familyFriendly = null): self
     {
         if (null == $familyFriendly) {
             $familyFriendly = self::FAMILY_FRIENDLY_YES;
@@ -881,7 +881,7 @@ class GoogleVideo
      *
      * @return GoogleVideo
      */
-    public function addPrice($amount, string $currency, string $type = null, string $resolution = null): self
+    public function addPrice($amount, string $currency, ?string $type = null, ?string $resolution = null): self
     {
         $this->prices[] = [
             'amount' => $amount,

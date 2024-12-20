@@ -149,7 +149,7 @@ class DumpSitemapsCommandTest extends TestCase
         yield 'Custom https port' => ['https://host.org:8080', 'https://host.org:8080/'];
     }
 
-    private function executeCommand(?string $section, bool $gzip, string $baseUrl = null): array
+    private function executeCommand(?string $section, bool $gzip, ?string $baseUrl = null): array
     {
         $options = ['target' => self::TARGET_DIR, '--gzip' => $gzip];
         if ($section !== null) {

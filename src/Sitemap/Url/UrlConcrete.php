@@ -59,8 +59,8 @@ class UrlConcrete implements Url
      */
     public function __construct(
         string $loc,
-        DateTimeInterface $lastmod = null,
-        string $changefreq = null,
+        ?DateTimeInterface $lastmod = null,
+        ?string $changefreq = null,
         $priority = null
     ) {
         $this->setLoc($loc);
@@ -116,7 +116,7 @@ class UrlConcrete implements Url
      *
      * @return UrlConcrete
      */
-    public function setChangefreq(string $changefreq = null): self
+    public function setChangefreq(?string $changefreq = null): self
     {
         $frequencies = [
             self::CHANGEFREQ_ALWAYS,

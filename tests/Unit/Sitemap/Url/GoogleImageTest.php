@@ -23,9 +23,9 @@ class GoogleImageTest extends TestCase
         string $expectedXml,
         string $location,
         string $caption,
-        string $geoLocalisation = null,
-        string $title = null,
-        string $license = null
+        ?string $geoLocalisation = null,
+        ?string $title = null,
+        ?string $license = null
     ): void {
         $failed = false;
         try {
