@@ -43,9 +43,9 @@ class DumpSitemapMessage
      * @param array<string, mixed> $options
      */
     public function __construct(
-        string $section = null,
-        string $baseUrl = null,
-        string $targetDir = null,
+        ?string $section = null,
+        ?string $baseUrl = null,
+        ?string $targetDir = null,
         array $options = []
     ) {
         $this->section = $section;

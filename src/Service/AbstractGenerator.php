@@ -65,7 +65,7 @@ abstract class AbstractGenerator implements UrlContainerInterface
     public function __construct(
         EventDispatcherInterface $dispatcher,
         UrlGeneratorInterface $urlGenerator,
-        int $itemsBySet = null
+        ?int $itemsBySet = null
     ) {
         $this->dispatcher = $dispatcher;
         // We add one to LIMIT_ITEMS because it was used as an index, not a quantity
@@ -146,14 +146,14 @@ abstract class AbstractGenerator implements UrlContainerInterface
      *
      * @return Urlset
      */
-    abstract protected function newUrlset(string $name, \DateTimeInterface $lastmod = null): Urlset;
+    abstract protected function newUrlset(string $name, ?\DateTimeInterface $lastmod = null): Urlset;
 
     /**
      * Dispatches SitemapPopulate Event - the listeners should use it to add their URLs to the sitemap
      *
      * @param string|null $section
      */
-    protected function populate(string $section = null): void
+    protected function populate(?string $section = null): void
     {
         $event = new SitemapPopulateEvent($this, $this->urlGenerator, $section);
 
