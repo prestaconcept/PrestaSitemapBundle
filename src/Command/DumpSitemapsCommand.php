@@ -12,6 +12,7 @@
 namespace Presta\SitemapBundle\Command;
 
 use Presta\SitemapBundle\Service\DumperInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,6 +24,7 @@ use Symfony\Component\Routing\RouterInterface;
 /**
  * Command to dump the sitemaps to provided directory
  */
+#[AsCommand(name: 'presta:sitemaps:dump', description: 'Dumps sitemaps to given location')]
 class DumpSitemapsCommand extends Command
 {
     /**
@@ -49,18 +51,12 @@ class DumpSitemapsCommand extends Command
         parent::__construct();
     }
 
-    public static function getDefaultName(): ?string
-    {
-        return 'presta:sitemaps:dump';
-    }
-
     /**
      * @inheritdoc
      */
     protected function configure(): void
     {
         $this
-            ->setDescription('Dumps sitemaps to given location')
             ->addOption(
                 'section',
                 null,
