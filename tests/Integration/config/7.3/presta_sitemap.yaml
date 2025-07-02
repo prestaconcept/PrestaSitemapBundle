@@ -1,0 +1,9 @@
+presta_sitemap:
+    default_section: static
+    dump_directory: "%kernel.project_dir%/public"
+    items_by_set: 10
+    alternate:
+        enabled: true
+        default_locale: en
+        locales: [en, fr]
+        i18n: symfony

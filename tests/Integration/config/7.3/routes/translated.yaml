@@ -1,0 +1,7 @@
+about:
+  path:
+    en: /about
+    fr: /a-propos
+  defaults: { _controller: \Presta\SitemapBundle\Tests\Integration\Controller\StaticController::about }
+  options:
+    sitemap: true
