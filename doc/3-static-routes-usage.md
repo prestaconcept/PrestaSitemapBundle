@@ -23,7 +23,7 @@ namespace App\Controller;
 
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class DefaultController extends Controller
 {
@@ -61,7 +61,7 @@ class DefaultController extends Controller
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends Controller
 {
