@@ -18,10 +18,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - php-version: 7.2
-            symfony-version: 5.4.*
-          - php-version: 8.1
-            symfony-version: 5.4.*
           - php-version: 8.1
             symfony-version: 6.4.*
           - php-version: 8.4
@@ -30,6 +26,10 @@ jobs:
             symfony-version: 7.2.*
           - php-version: 8.4
             symfony-version: 7.2.*
+          - php-version: 8.2
+            symfony-version: 7.3.*@dev
+          - php-version: 8.4
+            symfony-version: 7.3.*@dev
 
     steps:
       - name: "Checkout"

@@ -31,7 +31,7 @@
             </call>
         </service>
 
-        <service id="presta_sitemap.dump_command" class="Presta\SitemapBundle\Command\DumpSitemapsCommand" public="true">
+        <service id="presta_sitemap.dump_command" class="Presta\SitemapBundle\Command\DumpSitemapsCommand" public="true" autoconfigure="true">
             <argument type="service" id="router" />
             <argument type="service" id="presta_sitemap.dumper" />
             <argument>%presta_sitemap.dump_directory%</argument>

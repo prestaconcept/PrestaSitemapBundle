@@ -1,6 +1,5 @@
 framework:
     messenger:
-        reset_on_message: true
         transports:
             async: 'in-memory://'
         routing:
