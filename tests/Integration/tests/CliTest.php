@@ -76,18 +76,18 @@ class CliTest extends SitemapTestCase
     public function testDumpSitemapUsingCLI(bool $gzip): void
     {
         $index = $this->index();
-        self::assertFileNotExists($index, 'Sitemap index file does not exists before dump');
+        self::assertFileDoesNotExist($index, 'Sitemap index file does not exists before dump');
 
         $static = $this->section('static', $gzip);
-        self::assertFileNotExists($static, 'Sitemap "static" section file does not exists before dump');
+        self::assertFileDoesNotExist($static, 'Sitemap "static" section file does not exists before dump');
 
         $blog = $this->section('blog', $gzip);
-        self::assertFileNotExists($blog, 'Sitemap "blog" section file does not exists before dump');
+        self::assertFileDoesNotExist($blog, 'Sitemap "blog" section file does not exists before dump');
 
         $archives = $this->section('archives', $gzip);
         $archives0 = $this->section('archives_0', $gzip);
-        self::assertFileNotExists($archives, 'Sitemap "archive" section file does not exists before dump');
-        self::assertFileNotExists($archives0, 'Sitemap "archive_0" section file does not exists before dump');
+        self::assertFileDoesNotExist($archives, 'Sitemap "archive" section file does not exists before dump');
+        self::assertFileDoesNotExist($archives0, 'Sitemap "archive_0" section file does not exists before dump');
 
         $commandTester = new CommandTester(
             (new Application(self::createKernel()))->find('presta:sitemaps:dump')

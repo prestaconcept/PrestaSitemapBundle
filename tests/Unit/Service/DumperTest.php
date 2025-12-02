@@ -130,7 +130,7 @@ class DumperTest extends TestCase
 
         self::removeDir();
 
-        self::assertDirectoryNotExists(self::DUMP_DIR);
+        self::assertDirectoryDoesNotExist(self::DUMP_DIR);
         $this->dumper->dump(self::DUMP_DIR, 'https://acme.org', 'default');
         self::assertDirectoryExists(self::DUMP_DIR);
     }
@@ -244,7 +244,7 @@ XML
         if ($hasDefaultSection) {
             self::assertFileIsReadable($default, 'Sitemap "default" section file is readable');
         } else {
-            self::assertFileNotExists(
+            self::assertFileDoesNotExist(
                 $default,
                 'Sitemap "default" section file does not exists after dumping "blog" section'
             );
@@ -254,11 +254,11 @@ XML
             self::assertFileIsReadable($blog, 'Sitemap "blog" section file is readable');
             self::assertFileIsReadable($blog0, 'Sitemap "blog_0" section file is readable');
         } else {
-            self::assertFileNotExists(
+            self::assertFileDoesNotExist(
                 $blog,
                 'Sitemap "blog" section file does not exists after dumping "default" section'
             );
-            self::assertFileNotExists(
+            self::assertFileDoesNotExist(
                 $blog0,
                 'Sitemap "blog_0 section file does not exists after dumping "default" section'
             );

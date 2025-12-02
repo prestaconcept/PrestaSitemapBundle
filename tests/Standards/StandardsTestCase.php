@@ -54,6 +54,7 @@ abstract class StandardsTestCase extends TestCase
                 Finder::create()
                     ->in(__DIR__ . '/../../tests/')
                     ->exclude('Integration/var/')
+                    ->exclude('Integration/config/')
                     ->files()
                     ->name('*.php'),
                 'tests'

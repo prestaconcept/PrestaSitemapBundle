@@ -30,8 +30,8 @@ class PrestaSitemapExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
-        $loader->load('services.xml');
+        $loader = new Loader\PhpFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
+        $loader->load('services.php');
 
         $container->setParameter($this->getAlias() . '.dump_directory', (string)$config['dump_directory']);
         $container->setParameter($this->getAlias() . '.timetolive', (int)$config['timetolive']);
@@ -41,16 +41,16 @@ class PrestaSitemapExtension extends Extension
         $container->setParameter($this->getAlias() . '.default_section', (string)$config['default_section']);
 
         if (true === $config['route_annotation_listener']) {
-            $loader->load('route_annotation_listener.xml');
+            $loader->load('route_annotation_listener.php');
 
             if ($this->isConfigEnabled($container, $config['alternate'])) {
                 $container->setParameter($this->getAlias() . '.alternate', $config['alternate']);
-                $loader->load('alternate_listener.xml');
+                $loader->load('alternate_listener.php');
             }
         }
 
         if (interface_exists(MessageBusInterface::class)) {
-            $loader->load('messenger.xml');
+            $loader->load('messenger.php');
         }
 
         $generator = $container->setAlias('presta_sitemap.generator', $config['generator']);

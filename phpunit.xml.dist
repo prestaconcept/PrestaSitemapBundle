@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.5/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
          backupGlobals="false"
          colors="true"
          bootstrap="vendor/autoload.php"
+         cacheDirectory=".phpunit.cache"
 >
     <php>
         <server name="KERNEL_DIR" value="Tests/Integration/src"/>
@@ -24,19 +25,9 @@
             <directory suffix="Test.php">./tests/Standards</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist>
+    <source>
+        <include>
             <directory>./src/</directory>
-        </whitelist>
-    </filter>
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener">
-            <arguments>
-                <array>
-                    <!-- disable the DebugClassLoader integration -->
-                    <element key="debug-class-loader"><integer>0</integer></element>
-                </array>
-            </arguments>
-        </listener>
-    </listeners>
+        </include>
+    </source>
 </phpunit>
