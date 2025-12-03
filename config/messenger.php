@@ -7,7 +7,6 @@ use Presta\SitemapBundle\Messenger\DumpSitemapMessageHandler;
 
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
-    $parameters = $container->parameters();
 
     $services->set('presta_sitemap.messenger.message_handler', DumpSitemapMessageHandler::class)
         ->args([

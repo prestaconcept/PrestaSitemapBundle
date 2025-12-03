@@ -7,7 +7,6 @@ use Presta\SitemapBundle\EventListener\StaticRoutesAlternateEventListener;
 
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
-    $parameters = $container->parameters();
 
     $services->set('presta_sitemap.event_listener.static_routes_alternate', StaticRoutesAlternateEventListener::class)
         ->args([

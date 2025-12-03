@@ -15,10 +15,13 @@ use Presta\SitemapBundle\Messenger\DumpSitemapMessage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Attribute\Route;
+use Presta\SitemapBundle\Route;
 
 final class MessengerController
 {
+    /**
+     * @Route("/dispatch-message", name="dispatch_message")
+     */
     #[Route(path: '/dispatch-message', name: 'dispatch_message')]
     public function dispatch(Request $request, MessageBusInterface $bus): Response
     {

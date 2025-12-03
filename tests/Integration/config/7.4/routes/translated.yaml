@@ -5,4 +5,3 @@ about:
   defaults: { _controller: \Presta\SitemapBundle\Tests\Integration\Controller\StaticController::about }
   options:
     sitemap: true
-

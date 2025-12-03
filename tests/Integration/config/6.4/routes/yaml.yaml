@@ -4,12 +4,3 @@ yaml:
   options:
     sitemap:
       section: static
-
-company:
-  path: /company
-  defaults: { _controller: Presta\SitemapBundle\Tests\Integration\Controller\StaticController::company }
-  options:
-    sitemap:
-      priority: 0.7
-      changefreq: weekly
-      section: static
