@@ -12,6 +12,7 @@
 namespace Presta\SitemapBundle\Tests\Unit\Service;
 
 use Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Service\Dumper;
@@ -65,9 +66,7 @@ class DumperTest extends TestCase
         self::removeDir();
     }
 
-    /**
-     * @dataProvider fromScratch
-     */
+    #[DataProvider('fromScratch')]
     public function testFromScratch(?string $section, bool $gzip): void
     {
         $hasDefaultSection = \in_array($section, ['default', null], true);
@@ -99,9 +98,7 @@ class DumperTest extends TestCase
         yield ['unknown', true];
     }
 
-    /**
-     * @dataProvider incremental
-     */
+    #[DataProvider('incremental')]
     public function testIncremental(bool $gzip): void
     {
         $this->eventDispatcher->addListener(SitemapPopulateEvent::class, self::defaultListener());
@@ -135,9 +132,7 @@ class DumperTest extends TestCase
         self::assertDirectoryExists(self::DUMP_DIR);
     }
 
-    /**
-     * @dataProvider existingInvalidSitemap
-     */
+    #[DataProvider('existingInvalidSitemap')]
     public function testExistingInvalidSitemap(string $index): void
     {
         $this->expectException(\InvalidArgumentException::class);

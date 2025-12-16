@@ -11,14 +11,13 @@
 
 namespace Presta\SitemapBundle\Tests\Unit\Sitemap\Url;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
 class UrlConcreteTest extends TestCase
 {
-    /**
-     * @dataProvider toXmlProvider
-     */
+    #[DataProvider('toXmlProvider')]
     public function testToXml($expectedXml, $loc, $lastmod = null, $changefreq = null, $priority = null): void
     {
         $url = new UrlConcrete($loc, $lastmod, $changefreq, $priority);
@@ -110,9 +109,7 @@ class UrlConcreteTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider setPriorityProvider
-     */
+    #[DataProvider('setPriorityProvider')]
     public function testSetPriority($assigned, ?float $expected): void
     {
         $url = new UrlConcrete('http://example.com');
@@ -131,9 +128,7 @@ class UrlConcreteTest extends TestCase
         yield [1.00, 1.0];
     }
 
-    /**
-     * @dataProvider setInvalidPriorityProvider
-     */
+    #[DataProvider('setInvalidPriorityProvider')]
     public function testSetInvalidPriority($value): void
     {
         $this->expectException(\RuntimeException::class);

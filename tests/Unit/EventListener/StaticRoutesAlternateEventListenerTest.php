@@ -11,6 +11,7 @@
 
 namespace Presta\SitemapBundle\Tests\Unit\EventListener;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Event\SitemapAddUrlEvent;
 use Presta\SitemapBundle\EventListener\StaticRoutesAlternateEventListener;
@@ -48,9 +49,7 @@ class StaticRoutesAlternateEventListenerTest extends TestCase
         $this->router->getContext()->fromRequest(Request::create('https://acme.org'));
     }
 
-    /**
-     * @dataProvider translated
-     */
+    #[DataProvider('translated')]
     public function testTranslatedUrls(
         array $listenerOptions,
         string $route,
@@ -79,9 +78,7 @@ class StaticRoutesAlternateEventListenerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider skipped
-     */
+    #[DataProvider('skipped')]
     public function testSkippedUrls(array $listenerOptions, string $route): void
     {
         $event = $this->dispatch($listenerOptions, $route);
@@ -95,9 +92,7 @@ class StaticRoutesAlternateEventListenerTest extends TestCase
         yield [self::JMS_OPTIONS, 'fr__RG__about'];
     }
 
-    /**
-     * @dataProvider untranslated
-     */
+    #[DataProvider('untranslated')]
     public function testUntranslatedUrls(array $listenerOptions, string $route): void
     {
         $event = $this->dispatch($listenerOptions, $route);

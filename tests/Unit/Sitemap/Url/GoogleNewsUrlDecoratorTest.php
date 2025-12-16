@@ -12,6 +12,7 @@
 namespace Presta\SitemapBundle\Tests\Unit\Sitemap\Url;
 
 use DateTime;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Exception\GoogleNewsUrlException;
@@ -218,9 +219,7 @@ class GoogleNewsUrlDecoratorTest extends TestCase
         $this->createExampleUrl()->setPublicationDateFormat(DATE_COOKIE);
     }
 
-    /**
-     * @dataProvider toXml
-     */
+    #[DataProvider('toXml')]
     public function testToXml(
         string $expectedXml,
         string $name,

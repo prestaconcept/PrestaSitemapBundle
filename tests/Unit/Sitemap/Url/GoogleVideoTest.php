@@ -11,6 +11,7 @@
 
 namespace Presta\SitemapBundle\Tests\Unit\Sitemap\Url;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Exception\GoogleVideoException;
 use Presta\SitemapBundle\Exception\GoogleVideoTagException;
@@ -49,9 +50,7 @@ final class GoogleVideoTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider durationValues
-     */
+    #[DataProvider('durationValues')]
     public function testDurationValues(int $value): void
     {
         $this->expectException(GoogleVideoException::class);
@@ -70,9 +69,7 @@ final class GoogleVideoTest extends TestCase
         yield [28801];
     }
 
-    /**
-     * @dataProvider ratingValues
-     */
+    #[DataProvider('ratingValues')]
     public function testRatingValues(int $value): void
     {
         $this->expectException(GoogleVideoException::class);
@@ -150,9 +147,7 @@ final class GoogleVideoTest extends TestCase
         } while(++$count <= 33);
     }
 
-    /**
-     * @dataProvider toXml
-     */
+    #[DataProvider('toXml')]
     public function testToXml(
         string $expectedXml,
         string $thumbnail,

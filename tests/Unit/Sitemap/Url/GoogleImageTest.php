@@ -11,14 +11,13 @@
 
 namespace Presta\SitemapBundle\Tests\Unit\Sitemap\Url;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Sitemap;
 
 class GoogleImageTest extends TestCase
 {
-    /**
-     * @dataProvider toXmlProvider
-     */
+    #[DataProvider('toXmlProvider')]
     public function testToXml(
         string $expectedXml,
         string $location,

@@ -11,6 +11,7 @@
 
 namespace Presta\SitemapBundle\Tests\Integration\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -70,9 +71,7 @@ class CliTest extends SitemapTestCase
         ];
     }
 
-    /**
-     * @dataProvider gzip
-     */
+    #[DataProvider('gzip')]
     public function testDumpSitemapUsingCLI(bool $gzip): void
     {
         $index = $this->index();

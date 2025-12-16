@@ -12,6 +12,7 @@
 namespace Presta\SitemapBundle\Tests\Unit\Routing;
 
 use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Routing\RouteOptionParser;
 use Symfony\Component\Routing\Route;
@@ -30,9 +31,7 @@ class RouteOptionParserTest extends TestCase
         RouteOptionParser::parse('route1', $this->getRoute(['lastmod' => 'unknown']));
     }
 
-    /**
-     * @dataProvider notRegisteredOptions
-     */
+    #[DataProvider('notRegisteredOptions')]
     public function testNotRegisteredOptions($option): void
     {
         $options = RouteOptionParser::parse('route_name', $this->getRoute($option));
@@ -40,9 +39,7 @@ class RouteOptionParserTest extends TestCase
         self::assertNull($options, 'Not registered to sitemap');
     }
 
-    /**
-     * @dataProvider registeredOptions
-     */
+    #[DataProvider('registeredOptions')]
     public function testRegisteredOptions(
         $option,
         ?string $section,
