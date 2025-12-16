@@ -50,7 +50,9 @@ jobs:
             symfony/framework-bundle:${{ matrix.symfony-version }} \
             symfony/http-kernel:${{ matrix.symfony-version }} \
             symfony/routing:${{ matrix.symfony-version }} \
-            symfony/messenger:${{ matrix.symfony-version }}
+            symfony/messenger:${{ matrix.symfony-version }} --dev \
+            symfony/browser-kit:${{ matrix.symfony-version }} --dev \
+            symfony/yaml:${{ matrix.symfony-version }} --dev
           composer update --no-interaction --no-progress
 
       - name: "Run tests with phpunit/phpunit"
@@ -83,7 +85,9 @@ jobs:
             symfony/framework-bundle:${{ matrix.symfony-version }} \
             symfony/http-kernel:${{ matrix.symfony-version }} \
             symfony/routing:${{ matrix.symfony-version }} \
-            symfony/messenger:${{ matrix.symfony-version }}
+            symfony/messenger:${{ matrix.symfony-version }} --dev \
+            symfony/browser-kit:${{ matrix.symfony-version }} --dev \
+            symfony/yaml:${{ matrix.symfony-version }} --dev
           composer update --no-interaction --no-progress
 
       - name: "Run tests with phpunit/phpunit"
@@ -122,7 +126,9 @@ jobs:
             symfony/framework-bundle:${{ matrix.symfony-version }} \
             symfony/http-kernel:${{ matrix.symfony-version }} \
             symfony/routing:${{ matrix.symfony-version }} \
-            symfony/messenger:${{ matrix.symfony-version }}
+            symfony/messenger:${{ matrix.symfony-version }} --dev \
+            symfony/browser-kit:${{ matrix.symfony-version }} --dev \
+            symfony/yaml:${{ matrix.symfony-version }} --dev
           composer update --no-interaction --no-progress
 
       - name: "Run static analysis with phpstan/phpstan"
@@ -155,7 +161,9 @@ jobs:
             symfony/framework-bundle:${{ matrix.symfony-version }} \
             symfony/http-kernel:${{ matrix.symfony-version }} \
             symfony/routing:${{ matrix.symfony-version }} \
-            symfony/messenger:${{ matrix.symfony-version }}
+            symfony/messenger:${{ matrix.symfony-version }} --dev \
+            symfony/browser-kit:${{ matrix.symfony-version }} --dev \
+            symfony/yaml:${{ matrix.symfony-version }} --dev
           composer update --no-interaction --no-progress
 
       - name: "Run checkstyle with squizlabs/php_codesniffer"
