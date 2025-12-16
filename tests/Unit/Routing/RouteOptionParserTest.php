@@ -65,14 +65,14 @@ class RouteOptionParserTest extends TestCase
         self::assertSame($priority, $options['priority'], '"priority" option is as expected');
     }
 
-    public function notRegisteredOptions(): \Generator
+    public static function notRegisteredOptions(): \Generator
     {
         yield [null];
         yield [false];
         yield ['no'];
     }
 
-    public function registeredOptions(): \Generator
+    public static function registeredOptions(): \Generator
     {
         yield [true, null, null, null, null];
         yield ['yes', null, null, null, null];

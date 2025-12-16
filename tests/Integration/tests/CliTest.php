@@ -62,7 +62,7 @@ class CliTest extends SitemapTestCase
         return $data;
     }
 
-    public function gzip(): array
+    public static function gzip(): array
     {
         return [
             [false],

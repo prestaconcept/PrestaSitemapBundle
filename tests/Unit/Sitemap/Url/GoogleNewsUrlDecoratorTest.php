@@ -245,7 +245,7 @@ class GoogleNewsUrlDecoratorTest extends TestCase
         self::assertSame($expectedXml, $url->toXml());
     }
 
-    public function toXml(): \Generator
+    public static function toXml(): \Generator
     {
         yield [
             '<url><loc>http://acme.com/</loc><news:news><news:publication><news:name><![CDATA[Symfony Sitemap]]></news:name><news:language>fr</news:language></news:publication><news:publication_date>2020-01-01T10:00:00+00:00</news:publication_date><news:title><![CDATA[Setup sitemap with Symfony]]></news:title></news:news></url>',

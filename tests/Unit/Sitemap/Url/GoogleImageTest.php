@@ -38,7 +38,7 @@ class GoogleImageTest extends TestCase
         self::assertEquals($expectedXml, $image->toXML());
     }
 
-    public function toXmlProvider(): \Generator
+    public static function toXmlProvider(): \Generator
     {
         yield [
             '<image:image><image:loc>http://acme.com/logo.jpg</image:loc><image:caption><![CDATA[this is about logo]]></image:caption><image:geo_location><![CDATA[Lyon, France]]></image:geo_location><image:title><![CDATA[The Acme logo]]></image:title><image:license><![CDATA[WTFPL]]></image:license></image:image>',

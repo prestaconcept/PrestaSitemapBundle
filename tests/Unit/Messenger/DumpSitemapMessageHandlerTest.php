@@ -73,7 +73,7 @@ class DumpSitemapMessageHandlerTest extends TestCase
         $this->handler->__invoke(new DumpSitemapMessage(null, 'irc://'));
     }
 
-    public function provideCases(): \Generator
+    public static function provideCases(): \Generator
     {
         yield 'Entire sitemap' => [null, false, null, null];
         yield 'Entire sitemap with gzip' => [null, true, null, null];

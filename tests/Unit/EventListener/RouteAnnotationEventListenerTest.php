@@ -80,7 +80,7 @@ class RouteAnnotationEventListenerTest extends TestCase
         self::assertNotNull($this->findUrl($urlset, 'http://localhost/redirect'));
     }
 
-    public function routes(): \Generator
+    public static function routes(): \Generator
     {
         // *Route vars : [name, path, sitemap option]
         // *Sitemap vars : [loc, changefreq, lastmod, priority]

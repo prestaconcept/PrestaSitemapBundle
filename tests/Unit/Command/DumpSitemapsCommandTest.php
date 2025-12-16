@@ -131,7 +131,7 @@ class DumpSitemapsCommandTest extends TestCase
         $this->executeCommand(null, false, 'not an url');
     }
 
-    public function dump(): \Generator
+    public static function dump(): \Generator
     {
         yield 'Entire sitemap' => [null, false];
         yield 'Entire sitemap with gzip' => [null, true];
@@ -139,7 +139,7 @@ class DumpSitemapsCommandTest extends TestCase
         yield '"audio" sitemap with gzip' => ['audio', true];
     }
 
-    public function baseUrls(): \Generator
+    public static function baseUrls(): \Generator
     {
         yield 'Standard http' => ['http://host.org', 'http://host.org/'];
         yield 'Standard http with port' => ['http://host.org:80', 'http://host.org/'];

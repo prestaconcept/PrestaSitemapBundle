@@ -87,7 +87,7 @@ class DumperTest extends TestCase
         self::assertGeneratedSitemap($gzip, $hasIndex, $hasDefaultSection, $hasBlogSection);
     }
 
-    public function fromScratch(): \Generator
+    public static function fromScratch(): \Generator
     {
         yield [null, false];
         yield [null, true];
@@ -118,7 +118,7 @@ class DumperTest extends TestCase
         self::assertGeneratedSitemap($gzip, true, true, true);
     }
 
-    public function incremental(): \Generator
+    public static function incremental(): \Generator
     {
         yield [false];
         yield [true];
@@ -172,7 +172,7 @@ class DumperTest extends TestCase
         $this->dumper->dump(self::DUMP_DIR, 'https://acme.org', 'default');
     }
 
-    public function existingInvalidSitemap(): \Generator
+    public static function existingInvalidSitemap(): \Generator
     {
         yield [
             <<<XML

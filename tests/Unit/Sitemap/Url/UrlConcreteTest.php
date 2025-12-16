@@ -25,7 +25,7 @@ class UrlConcreteTest extends TestCase
         self::assertEquals($expectedXml, $url->toXml());
     }
 
-    public function toXmlProvider(): array
+    public static function toXmlProvider(): array
     {
         return [
             ['<url><loc>http://example.com/</loc></url>', 'http://example.com/'],
@@ -120,7 +120,7 @@ class UrlConcreteTest extends TestCase
         self::assertSame($expected, $url->getPriority());
     }
 
-    public function setPriorityProvider(): \Generator
+    public static function setPriorityProvider(): \Generator
     {
         yield [null, null];
         yield [0, 0.0];
@@ -146,7 +146,7 @@ class UrlConcreteTest extends TestCase
         $url->setPriority($value);
     }
 
-    public function setInvalidPriorityProvider(): \Generator
+    public static function setInvalidPriorityProvider(): \Generator
     {
         yield [true];
         yield [-1];

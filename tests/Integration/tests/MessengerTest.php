@@ -102,7 +102,7 @@ class MessengerTest extends SitemapTestCase
         self::assertArchivesSection($this->fileContent($archives0, $gzip));
     }
 
-    public function gzip(): array
+    public static function gzip(): array
     {
         return [
             [false],
