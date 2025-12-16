@@ -14,7 +14,11 @@
 
   <rule ref="Generic.PHP.ForbiddenFunctions">
     <properties>
-      <property name="forbiddenFunctions" type="array" value="dump=>null,var_dump=>null,die=>null"/>
+      <property name="forbiddenFunctions" type="array">
+        <element key="dump" value="null"/>
+        <element key="var_dump" value="null"/>
+        <element key="die" value="null"/>
+      </property>
     </properties>
   </rule>
 
