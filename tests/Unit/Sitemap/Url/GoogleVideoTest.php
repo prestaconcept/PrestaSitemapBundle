@@ -11,6 +11,7 @@
 
 namespace Presta\SitemapBundle\Tests\Unit\Sitemap\Url;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Exception\GoogleVideoException;
 use Presta\SitemapBundle\Exception\GoogleVideoTagException;
@@ -49,9 +50,7 @@ final class GoogleVideoTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider durationValues
-     */
+    #[DataProvider('durationValues')]
     public function testDurationValues(int $value): void
     {
         $this->expectException(GoogleVideoException::class);
@@ -64,15 +63,13 @@ final class GoogleVideoTest extends TestCase
         );
     }
 
-    public function durationValues(): \Generator
+    public static function durationValues(): \Generator
     {
         yield [-1];
         yield [28801];
     }
 
-    /**
-     * @dataProvider ratingValues
-     */
+    #[DataProvider('ratingValues')]
     public function testRatingValues(int $value): void
     {
         $this->expectException(GoogleVideoException::class);
@@ -85,7 +82,7 @@ final class GoogleVideoTest extends TestCase
         );
     }
 
-    public function ratingValues(): \Generator
+    public static function ratingValues(): \Generator
     {
         yield [-1];
         yield [6];
@@ -150,9 +147,7 @@ final class GoogleVideoTest extends TestCase
         } while(++$count <= 33);
     }
 
-    /**
-     * @dataProvider toXml
-     */
+    #[DataProvider('toXml')]
     public function testToXml(
         string $expectedXml,
         string $thumbnail,
@@ -164,7 +159,7 @@ final class GoogleVideoTest extends TestCase
         self::assertSame($expectedXml, $video->toXml());
     }
 
-    public function toXml(): \Generator
+    public static function toXml(): \Generator
     {
         yield [
             '<video:video><video:thumbnail_loc>http://acme.com/video/thumbnail.jpg</video:thumbnail_loc><video:title><![CDATA[Acme video]]></video:title><video:description><![CDATA[An acme video for testing purposes]]></video:description><video:category><![CDATA[Awesome Cats]]></video:category><video:content_loc>http://acme.com/video/content.flv</video:content_loc><video:duration>600</video:duration><video:rating>4.2</video:rating><video:view_count>42</video:view_count><video:family_friendly>yes</video:family_friendly><video:requires_subscription>yes</video:requires_subscription><video:live>no</video:live><video:expiration_date>2030-01-01T10:00:00+00:00</video:expiration_date><video:publication_date>2020-01-01T10:00:00+00:00</video:publication_date><video:player_loc allow_embed="no" autoplay="ap=1">http://acme.com/video/player.swf?a=b&amp;c=d</video:player_loc><video:restriction relationship="allow">FR BE</video:restriction><video:restriction relationship="deny">GB</video:restriction><video:gallery_loc title="Gallery for testing purposes">http://acme.com/video/gallery/?p=1&amp;sort=desc</video:gallery_loc><video:uploader info="http://acme.com/video/users/1/">depely</video:uploader><video:platform relationship="allow">web mobile</video:platform></video:video>',

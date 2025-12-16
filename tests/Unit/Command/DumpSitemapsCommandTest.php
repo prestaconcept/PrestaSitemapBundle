@@ -11,6 +11,7 @@
 
 namespace Presta\SitemapBundle\Tests\Unit\Command;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Command\DumpSitemapsCommand;
@@ -43,9 +44,7 @@ class DumpSitemapsCommandTest extends TestCase
         $this->dumper = $this->createMock(DumperInterface::class);
     }
 
-    /**
-     * @dataProvider dump
-     */
+    #[DataProvider('dump')]
     public function testDumpSitemapSuccessful(?string $section, bool $gzip): void
     {
         if ($section === null) {
@@ -66,9 +65,7 @@ class DumpSitemapsCommandTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider dump
-     */
+    #[DataProvider('dump')]
     public function testDumpSitemapFailed(?string $section, bool $gzip): void
     {
         $this->dumper->method('dump')
@@ -80,9 +77,7 @@ class DumpSitemapsCommandTest extends TestCase
         self::assertSame(1, $status, 'Command returned an error code');
     }
 
-    /**
-     * @dataProvider baseUrls
-     */
+    #[DataProvider('baseUrls')]
     public function testRouterHost(string $inUrl, string $expectedUrl): void
     {
         $this->router->getContext()->fromRequest(Request::create($inUrl));
@@ -131,7 +126,7 @@ class DumpSitemapsCommandTest extends TestCase
         $this->executeCommand(null, false, 'not an url');
     }
 
-    public function dump(): \Generator
+    public static function dump(): \Generator
     {
         yield 'Entire sitemap' => [null, false];
         yield 'Entire sitemap with gzip' => [null, true];
@@ -139,7 +134,7 @@ class DumpSitemapsCommandTest extends TestCase
         yield '"audio" sitemap with gzip' => ['audio', true];
     }
 
-    public function baseUrls(): \Generator
+    public static function baseUrls(): \Generator
     {
         yield 'Standard http' => ['http://host.org', 'http://host.org/'];
         yield 'Standard http with port' => ['http://host.org:80', 'http://host.org/'];

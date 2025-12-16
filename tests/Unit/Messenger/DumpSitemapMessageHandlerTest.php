@@ -11,6 +11,7 @@
 
 namespace Presta\SitemapBundle\Tests\Unit\Messenger;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Messenger\DumpSitemapMessage;
 use Presta\SitemapBundle\Messenger\DumpSitemapMessageHandler;
@@ -53,9 +54,7 @@ class DumpSitemapMessageHandlerTest extends TestCase
         $this->handler = new DumpSitemapMessageHandler($this->router, $this->dumper, self::TARGET_DIR);
     }
 
-    /**
-     * @dataProvider provideCases
-     */
+    #[DataProvider('provideCases')]
     public function testHandle(?string $section, bool $gzip, ?string $baseUrl, ?string $targetDir): void
     {
         $this->dumper->expects(self::once())
@@ -73,7 +72,7 @@ class DumpSitemapMessageHandlerTest extends TestCase
         $this->handler->__invoke(new DumpSitemapMessage(null, 'irc://'));
     }
 
-    public function provideCases(): \Generator
+    public static function provideCases(): \Generator
     {
         yield 'Entire sitemap' => [null, false, null, null];
         yield 'Entire sitemap with gzip' => [null, true, null, null];

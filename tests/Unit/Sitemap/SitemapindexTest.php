@@ -35,7 +35,7 @@ class SitemapindexTest extends TestCase
         $loc            = 'http://acme.com/';
         $sitemapindex   = new Sitemap\Sitemapindex();
 
-        $getSitemapXmlMethod = self::getMethod($sitemapindex, 'getSitemapXml');
+        $getSitemapXmlMethod = new \ReflectionMethod($sitemapindex, 'getSitemapXml');
 
         self::assertXmlStringEqualsXmlString(
             '<sitemap><loc>' . $loc . '</loc><lastmod>' . $today->format('c') . '</lastmod></sitemap>',
@@ -52,18 +52,5 @@ class SitemapindexTest extends TestCase
             '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>',
             $xml
         );
-    }
-
-    /**
-     * get accessible method that was private or protected
-     *
-     * @param mixed  $obj - classname or instance
-     * @param string $name
-     */
-    protected static function getMethod($obj, $name): \ReflectionMethod
-    {
-        $method = new \ReflectionMethod($obj, $name);
-        $method->setAccessible(true);
-        return $method;
     }
 }

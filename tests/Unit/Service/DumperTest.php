@@ -12,6 +12,7 @@
 namespace Presta\SitemapBundle\Tests\Unit\Service;
 
 use Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Service\Dumper;
@@ -65,9 +66,7 @@ class DumperTest extends TestCase
         self::removeDir();
     }
 
-    /**
-     * @dataProvider fromScratch
-     */
+    #[DataProvider('fromScratch')]
     public function testFromScratch(?string $section, bool $gzip): void
     {
         $hasDefaultSection = \in_array($section, ['default', null], true);
@@ -87,7 +86,7 @@ class DumperTest extends TestCase
         self::assertGeneratedSitemap($gzip, $hasIndex, $hasDefaultSection, $hasBlogSection);
     }
 
-    public function fromScratch(): \Generator
+    public static function fromScratch(): \Generator
     {
         yield [null, false];
         yield [null, true];
@@ -99,9 +98,7 @@ class DumperTest extends TestCase
         yield ['unknown', true];
     }
 
-    /**
-     * @dataProvider incremental
-     */
+    #[DataProvider('incremental')]
     public function testIncremental(bool $gzip): void
     {
         $this->eventDispatcher->addListener(SitemapPopulateEvent::class, self::defaultListener());
@@ -118,7 +115,7 @@ class DumperTest extends TestCase
         self::assertGeneratedSitemap($gzip, true, true, true);
     }
 
-    public function incremental(): \Generator
+    public static function incremental(): \Generator
     {
         yield [false];
         yield [true];
@@ -135,9 +132,7 @@ class DumperTest extends TestCase
         self::assertDirectoryExists(self::DUMP_DIR);
     }
 
-    /**
-     * @dataProvider existingInvalidSitemap
-     */
+    #[DataProvider('existingInvalidSitemap')]
     public function testExistingInvalidSitemap(string $index): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -172,7 +167,7 @@ class DumperTest extends TestCase
         $this->dumper->dump(self::DUMP_DIR, 'https://acme.org', 'default');
     }
 
-    public function existingInvalidSitemap(): \Generator
+    public static function existingInvalidSitemap(): \Generator
     {
         yield [
             <<<XML

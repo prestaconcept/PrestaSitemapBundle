@@ -11,6 +11,7 @@
 
 namespace Presta\SitemapBundle\Tests\Unit\EventListener;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Event\SitemapAddUrlEvent;
 use Presta\SitemapBundle\EventListener\StaticRoutesAlternateEventListener;
@@ -48,9 +49,7 @@ class StaticRoutesAlternateEventListenerTest extends TestCase
         $this->router->getContext()->fromRequest(Request::create('https://acme.org'));
     }
 
-    /**
-     * @dataProvider translated
-     */
+    #[DataProvider('translated')]
     public function testTranslatedUrls(
         array $listenerOptions,
         string $route,
@@ -61,7 +60,7 @@ class StaticRoutesAlternateEventListenerTest extends TestCase
         self::assertSame($xml, $event->getUrl()->toXml());
     }
 
-    public function translated(): \Generator
+    public static function translated(): \Generator
     {
         $options = ['lastmod' => null, 'changefreq' => null, 'priority' => null];
         $xml = '<url><loc>https://acme.org/about</loc><xhtml:link rel="alternate" hreflang="en" href="https://acme.org/about" /><xhtml:link rel="alternate" hreflang="fr" href="https://acme.org/a-propos" /></url>';
@@ -79,9 +78,7 @@ class StaticRoutesAlternateEventListenerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider skipped
-     */
+    #[DataProvider('skipped')]
     public function testSkippedUrls(array $listenerOptions, string $route): void
     {
         $event = $this->dispatch($listenerOptions, $route);
@@ -89,15 +86,13 @@ class StaticRoutesAlternateEventListenerTest extends TestCase
         self::assertFalse($event->shouldBeRegistered());
     }
 
-    public function skipped(): \Generator
+    public static function skipped(): \Generator
     {
         yield [self::SYMFONY_OPTIONS, 'about.fr'];
         yield [self::JMS_OPTIONS, 'fr__RG__about'];
     }
 
-    /**
-     * @dataProvider untranslated
-     */
+    #[DataProvider('untranslated')]
     public function testUntranslatedUrls(array $listenerOptions, string $route): void
     {
         $event = $this->dispatch($listenerOptions, $route);
@@ -105,7 +100,7 @@ class StaticRoutesAlternateEventListenerTest extends TestCase
         self::assertTrue($event->shouldBeRegistered());
     }
 
-    public function untranslated(): \Generator
+    public static function untranslated(): \Generator
     {
         yield [self::SYMFONY_OPTIONS, 'home'];
         yield [self::JMS_OPTIONS, 'home'];

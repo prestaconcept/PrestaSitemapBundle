@@ -11,6 +11,7 @@
 
 namespace Presta\SitemapBundle\Tests\Integration\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -40,9 +41,7 @@ class MessengerTest extends SitemapTestCase
         }
     }
 
-    /**
-     * @dataProvider gzip
-     */
+    #[DataProvider('gzip')]
     public function testDumpSitemapUsingMessenger(bool $gzip): void
     {
         $kernel = self::bootKernel();
@@ -102,7 +101,7 @@ class MessengerTest extends SitemapTestCase
         self::assertArchivesSection($this->fileContent($archives0, $gzip));
     }
 
-    public function gzip(): array
+    public static function gzip(): array
     {
         return [
             [false],

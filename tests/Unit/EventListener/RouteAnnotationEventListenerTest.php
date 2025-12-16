@@ -11,6 +11,7 @@
 
 namespace Presta\SitemapBundle\Tests\Unit\EventListener;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Presta\SitemapBundle\Event\SitemapAddUrlEvent;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
@@ -27,9 +28,7 @@ use Symfony\Component\Routing\Router;
 
 class RouteAnnotationEventListenerTest extends TestCase
 {
-    /**
-     * @dataProvider routes
-     */
+    #[DataProvider('routes')]
     public function testPopulateSitemap(?string $section, array $routes, array $urls): void
     {
         $urlContainer = $this->dispatch($section, $routes);
@@ -55,9 +54,7 @@ class RouteAnnotationEventListenerTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider routes
-     */
+    #[DataProvider('routes')]
     public function testEventListenerCanPreventUrlFromBeingAddedToSitemap(?string $section, array $routes): void
     {
         $urlContainer = $this->dispatch($section, $routes, function (SitemapAddUrlEvent $event): void {
@@ -80,7 +77,7 @@ class RouteAnnotationEventListenerTest extends TestCase
         self::assertNotNull($this->findUrl($urlset, 'http://localhost/redirect'));
     }
 
-    public function routes(): \Generator
+    public static function routes(): \Generator
     {
         // *Route vars : [name, path, sitemap option]
         // *Sitemap vars : [loc, changefreq, lastmod, priority]

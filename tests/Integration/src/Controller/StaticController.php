@@ -12,14 +12,15 @@
 namespace Presta\SitemapBundle\Tests\Integration\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use Presta\SitemapBundle\Route;
+use Symfony\Component\Routing\Annotation\Route as RouteAnnotation;
+use Symfony\Component\Routing\Attribute\Route as RouteAttribute;
 
 final class StaticController
 {
     /**
-     * @Route("", name="home", options={"sitemap"={"section"="static"}})
+     * @RouteAnnotation("", name="home", options={"sitemap"={"section"="static"}})
      */
-    #[Route(path: '', name: 'home', options: ['sitemap' => ['section' => 'static']])]
+    #[RouteAttribute(path: '', name: 'home', options: ['sitemap' => ['section' => 'static']])]
     public function home(): Response
     {
         return new Response(__FUNCTION__);
