@@ -20,16 +20,22 @@ jobs:
         include:
           - php-version: 8.1
             symfony-version: 6.4.*
-          - php-version: 8.4
+          - php-version: 8.5
             symfony-version: 6.4.*
+
           - php-version: 8.2
-            symfony-version: 7.2.*
+            symfony-version: 7.4.*
+          - php-version: 8.5
+            symfony-version: 7.4.*
+
           - php-version: 8.4
-            symfony-version: 7.3.*
+            symfony-version: 8.0.*
+          - php-version: 8.5
+            symfony-version: 8.0.*
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
 
       - name: "Setup PHP"
         uses: shivammathur/setup-php@v2
@@ -37,15 +43,16 @@ jobs:
           coverage: none
           php-version: ${{ matrix.php-version }}
 
-      - name: "Install dependencies with composer"
+      - name: "symfony/flex is required to install the correct symfony version"
         run: |
-          composer require --no-interaction --no-update \
-            symfony/console:${{ matrix.symfony-version }} \
-            symfony/framework-bundle:${{ matrix.symfony-version }} \
-            symfony/http-kernel:${{ matrix.symfony-version }} \
-            symfony/routing:${{ matrix.symfony-version }} \
-            symfony/messenger:${{ matrix.symfony-version }}
-          composer update --no-interaction --no-progress
+          composer global config --no-plugins allow-plugins.symfony/flex true
+          composer global require symfony/flex
+
+      - name: "Configure Symfony version for symfony/flex"
+        run: composer config extra.symfony.require "${{ matrix.symfony-version }}"
+
+      - name: "Install dependencies with composer"
+        run: composer update --no-interaction --no-progress
 
       - name: "Run tests with phpunit/phpunit"
         run: vendor/bin/phpunit
@@ -57,12 +64,12 @@ jobs:
     strategy:
       matrix:
         include:
-          - php-version: 8.4
-            symfony-version: 7.3.*
+          - php-version: 8.5
+            symfony-version: 8.0.*
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
 
       - name: "Setup PHP"
         uses: shivammathur/setup-php@v2
@@ -70,15 +77,16 @@ jobs:
           coverage: xdebug
           php-version: ${{ matrix.php-version }}
 
-      - name: "Install dependencies with composer"
+      - name: "symfony/flex is required to install the correct symfony version"
         run: |
-          composer require --no-interaction --no-update \
-            symfony/console:${{ matrix.symfony-version }} \
-            symfony/framework-bundle:${{ matrix.symfony-version }} \
-            symfony/http-kernel:${{ matrix.symfony-version }} \
-            symfony/routing:${{ matrix.symfony-version }} \
-            symfony/messenger:${{ matrix.symfony-version }}
-          composer update --no-interaction --no-progress
+          composer global config --no-plugins allow-plugins.symfony/flex true
+          composer global require symfony/flex
+
+      - name: "Configure Symfony version for symfony/flex"
+        run: composer config extra.symfony.require "${{ matrix.symfony-version }}"
+
+      - name: "Install dependencies with composer"
+        run: composer update --no-interaction --no-progress
 
       - name: "Run tests with phpunit/phpunit"
         env:
@@ -96,12 +104,12 @@ jobs:
     strategy:
       matrix:
         include:
-          - php-version: 8.4
-            symfony-version: 7.3.*
+          - php-version: 8.5
+            symfony-version: 8.0.*
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
 
       - name: "Setup PHP"
         uses: shivammathur/setup-php@v2
@@ -109,15 +117,16 @@ jobs:
           coverage: none
           php-version: ${{ matrix.php-version }}
 
-      - name: "Install dependencies with composer"
+      - name: "symfony/flex is required to install the correct symfony version"
         run: |
-          composer require --no-interaction --no-update \
-            symfony/console:${{ matrix.symfony-version }} \
-            symfony/framework-bundle:${{ matrix.symfony-version }} \
-            symfony/http-kernel:${{ matrix.symfony-version }} \
-            symfony/routing:${{ matrix.symfony-version }} \
-            symfony/messenger:${{ matrix.symfony-version }}
-          composer update --no-interaction --no-progress
+          composer global config --no-plugins allow-plugins.symfony/flex true
+          composer global require symfony/flex
+
+      - name: "Configure Symfony version for symfony/flex"
+        run: composer config extra.symfony.require "${{ matrix.symfony-version }}"
+
+      - name: "Install dependencies with composer"
+        run: composer update --no-interaction --no-progress
 
       - name: "Run static analysis with phpstan/phpstan"
         run: vendor/bin/phpstan analyze
@@ -129,12 +138,12 @@ jobs:
     strategy:
       matrix:
         include:
-          - php-version: 8.4
-            symfony-version: 7.3.*
+          - php-version: 8.5
+            symfony-version: 8.0.*
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
 
       - name: "Setup PHP"
         uses: shivammathur/setup-php@v2
@@ -142,15 +151,16 @@ jobs:
           coverage: none
           php-version: ${{ matrix.php-version }}
 
-      - name: "Install dependencies with composer"
+      - name: "symfony/flex is required to install the correct symfony version"
         run: |
-          composer require --no-interaction --no-update \
-            symfony/console:${{ matrix.symfony-version }} \
-            symfony/framework-bundle:${{ matrix.symfony-version }} \
-            symfony/http-kernel:${{ matrix.symfony-version }} \
-            symfony/routing:${{ matrix.symfony-version }} \
-            symfony/messenger:${{ matrix.symfony-version }}
-          composer update --no-interaction --no-progress
+          composer global config --no-plugins allow-plugins.symfony/flex true
+          composer global require symfony/flex
+
+      - name: "Configure Symfony version for symfony/flex"
+        run: composer config extra.symfony.require "${{ matrix.symfony-version }}"
+
+      - name: "Install dependencies with composer"
+        run: composer update --no-interaction --no-progress
 
       - name: "Run checkstyle with squizlabs/php_codesniffer"
         run: vendor/bin/phpcs

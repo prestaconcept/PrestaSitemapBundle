@@ -18,124 +18,77 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
-use Symfony\Component\Routing\RouteCollectionBuilder;
 
-if (BaseKernel::VERSION_ID >= 50400) {
-    class Kernel extends BaseKernel
+class Kernel extends BaseKernel
+{
+    use MicroKernelTrait;
+
+    public function __construct(string $environment, bool $debug)
     {
-        use MicroKernelTrait;
+        $this->setupRouteAlias();
 
-        public function getCacheDir(): string
-        {
-            return $this->getProjectDir() . '/var/cache/' . $this->environment;
-        }
+        parent::__construct($environment, $debug);
+    }
 
-        public function getLogDir(): string
-        {
-            return $this->getProjectDir() . '/var/log';
-        }
-
-        public function getProjectDir(): string
-        {
-            return \dirname(__DIR__);
-        }
-
-        private function configureContainer(
-            ContainerConfigurator $container,
-            LoaderInterface $loader,
-            ContainerBuilder $builder
-        ): void {
-            $version = sprintf('%s.%s', BaseKernel::MAJOR_VERSION, BaseKernel::MINOR_VERSION);
-            $container->import('../config/' . $version . '/*.yaml');
-            $container->import('../config/services.yaml');
-            if (\PHP_VERSION_ID < 80000) {
-                $container->import('../config/' . $version . '/special/annotations.yaml');
-            }
-        }
-
-        private function configureRoutes(RoutingConfigurator $routes): void
-        {
-            $version = sprintf('%s.%s', BaseKernel::MAJOR_VERSION, BaseKernel::MINOR_VERSION);
-            $routes->import('../config/' . $version . '/{routes}/*.{xml,yaml}');
-        }
-
-        public function registerBundles(): iterable
-        {
-            yield new \Symfony\Bundle\FrameworkBundle\FrameworkBundle();
-            yield new \Presta\SitemapBundle\PrestaSitemapBundle();
-        }
-
-        public function boot(): void
-        {
-            /* force "var" dir to be removed the first time this kernel boot */
-            static $cleanVarDirectory = true;
-
-            if ($cleanVarDirectory === true) {
-                $varDirectory = $this->getProjectDir() . '/var';
-                if (is_dir($varDirectory)) {
-                    (new Filesystem())->remove($varDirectory);
-                }
-                $cleanVarDirectory = false;
-            }
-
-            parent::boot();
+    // TODO: Remove after dropping support for Symfony 7.x
+    private function setupRouteAlias(): void
+    {
+        if (class_exists('Symfony\Component\Routing\Annotation\Route')) {
+            class_alias('Symfony\Component\Routing\Annotation\Route', 'Presta\SitemapBundle\Route');
+        } elseif (class_exists('Symfony\Component\Routing\Attribute\Route')) {
+            class_alias('Symfony\Component\Routing\Attribute\Route', 'Presta\SitemapBundle\Route');
         }
     }
-} else {
-    class Kernel extends BaseKernel
+
+    public function getCacheDir(): string
     {
-        use MicroKernelTrait;
+        return $this->getProjectDir() . '/var/cache/' . $this->environment;
+    }
 
-        protected function configureRoutes(RouteCollectionBuilder $routes): void
-        {
-            $confDir = $this->getProjectDir() . '/config';
-            $version = sprintf('%s.%s', BaseKernel::MAJOR_VERSION, BaseKernel::MINOR_VERSION);
-            $routes->import($confDir . '/' . $version . '/{routes}/*.{xml,yaml}', '/', 'glob');
-        }
+    public function getLogDir(): string
+    {
+        return $this->getProjectDir() . '/var/log';
+    }
 
-        protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
-        {
-            $confDir = $this->getProjectDir() . '/config';
-            $version = sprintf('%s.%s', BaseKernel::MAJOR_VERSION, BaseKernel::MINOR_VERSION);
-            $loader->load($confDir . '/' . $version . '/*.yaml', 'glob');
-            $loader->load($confDir . '/services.yaml');
-        }
+    public function getProjectDir(): string
+    {
+        return \dirname(__DIR__);
+    }
 
-        public function getCacheDir(): string
-        {
-            return $this->getProjectDir() . '/var/cache/' . $this->environment;
-        }
+    private function configureContainer(
+        ContainerConfigurator $container,
+        LoaderInterface $loader,
+        ContainerBuilder $builder
+    ): void {
+        $version = sprintf('%s.%s', BaseKernel::MAJOR_VERSION, BaseKernel::MINOR_VERSION);
+        $container->import('../config/' . $version . '/*.yaml');
+        $container->import('../config/services.yaml');
+    }
 
-        public function getLogDir(): string
-        {
-            return $this->getProjectDir() . '/var/log';
-        }
+    private function configureRoutes(RoutingConfigurator $routes): void
+    {
+        $version = sprintf('%s.%s', BaseKernel::MAJOR_VERSION, BaseKernel::MINOR_VERSION);
+        $routes->import('../config/' . $version . '/{routes}/*.{xml,yaml}');
+    }
 
-        public function getProjectDir(): string
-        {
-            return \dirname(__DIR__);
-        }
+    public function registerBundles(): iterable
+    {
+        yield new \Symfony\Bundle\FrameworkBundle\FrameworkBundle();
+        yield new \Presta\SitemapBundle\PrestaSitemapBundle();
+    }
 
-        public function registerBundles(): iterable
-        {
-            yield new \Symfony\Bundle\FrameworkBundle\FrameworkBundle();
-            yield new \Presta\SitemapBundle\PrestaSitemapBundle();
-        }
+    public function boot(): void
+    {
+        static $cleanVarDirectory = true;
 
-        public function boot(): void
-        {
-            /* force "var" dir to be removed the first time this kernel boot */
-            static $cleanVarDirectory = true;
-
-            if ($cleanVarDirectory === true) {
-                $varDirectory = $this->getProjectDir() . '/var';
-                if (is_dir($varDirectory)) {
-                    (new Filesystem())->remove($varDirectory);
-                }
-                $cleanVarDirectory = false;
+        if ($cleanVarDirectory === true) {
+            $varDirectory = $this->getProjectDir() . '/var';
+            if (is_dir($varDirectory)) {
+                (new Filesystem())->remove($varDirectory);
             }
-
-            parent::boot();
+            $cleanVarDirectory = false;
         }
+
+        parent::boot();
     }
 }

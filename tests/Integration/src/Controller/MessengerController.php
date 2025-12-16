@@ -15,7 +15,7 @@ use Presta\SitemapBundle\Messenger\DumpSitemapMessage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Presta\SitemapBundle\Route;
 
 final class MessengerController
 {

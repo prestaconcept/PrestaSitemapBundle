@@ -12,7 +12,7 @@
 namespace Presta\SitemapBundle\Tests\Integration\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Presta\SitemapBundle\Route;
 
 final class StaticController
 {
