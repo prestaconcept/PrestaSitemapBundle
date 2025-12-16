@@ -23,23 +23,6 @@ class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
 
-    public function __construct(string $environment, bool $debug)
-    {
-        $this->setupRouteAlias();
-
-        parent::__construct($environment, $debug);
-    }
-
-    // TODO: Remove after dropping support for Symfony 7.x
-    private function setupRouteAlias(): void
-    {
-        if (class_exists('Symfony\Component\Routing\Annotation\Route')) {
-            class_alias('Symfony\Component\Routing\Annotation\Route', 'Presta\SitemapBundle\Route');
-        } elseif (class_exists('Symfony\Component\Routing\Attribute\Route')) {
-            class_alias('Symfony\Component\Routing\Attribute\Route', 'Presta\SitemapBundle\Route');
-        }
-    }
-
     public function getCacheDir(): string
     {
         return $this->getProjectDir() . '/var/cache/' . $this->environment;

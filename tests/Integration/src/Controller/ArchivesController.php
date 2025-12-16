@@ -12,14 +12,15 @@
 namespace Presta\SitemapBundle\Tests\Integration\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use Presta\SitemapBundle\Route;
+use Symfony\Component\Routing\Annotation\Route as RouteAnnotation;
+use Symfony\Component\Routing\Attribute\Route as RouteAttribute;
 
 final class ArchivesController
 {
     /**
-     * @Route("/archive", name="archive")
+     * @RouteAnnotation("/archive", name="archive")
      */
-    #[Route(path: '/archive', name: 'archive')]
+    #[RouteAttribute(path: '/archive', name: 'archive')]
     public function archive(): Response
     {
         return new Response(__FUNCTION__);

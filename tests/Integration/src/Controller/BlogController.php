@@ -12,23 +12,24 @@
 namespace Presta\SitemapBundle\Tests\Integration\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use Presta\SitemapBundle\Route;
+use Symfony\Component\Routing\Annotation\Route as RouteAnnotation;
+use Symfony\Component\Routing\Attribute\Route as RouteAttribute;
 
 final class BlogController
 {
     /**
-     * @Route("/blog", name="blog_read", options={"sitemap"={"section"="blog"}})
+     * @RouteAnnotation("/blog", name="blog_read", options={"sitemap"={"section"="blog"}})
      */
-    #[Route(path: '/blog', name: 'blog_read', options: ['sitemap' => ['section' => 'blog']])]
+    #[RouteAttribute(path: '/blog', name: 'blog_read', options: ['sitemap' => ['section' => 'blog']])]
     public function read(): Response
     {
         return new Response(__FUNCTION__);
     }
 
     /**
-     * @Route("/blog/{slug}", name="blog_post")
+     * @RouteAnnotation("/blog/{slug}", name="blog_post")
      */
-    #[Route(path: '/blog/{slug}', name: 'blog_post')]
+    #[RouteAttribute(path: '/blog/{slug}', name: 'blog_post')]
     public function post(string $slug): Response
     {
         return new Response(__FUNCTION__ . ':' . $slug);
