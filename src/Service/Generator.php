@@ -52,7 +52,7 @@ class Generator extends AbstractGenerator implements GeneratorInterface
             return $this->getRoot();
         }
 
-        $baseName = preg_replace('/(.*?)(_\d+)?/', '\1', $name);
+        $baseName = preg_replace('/_\d+$/', '', $name);
         $this->populate($baseName);
 
         if (array_key_exists($name, $this->urlsets)) {
