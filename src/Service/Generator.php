@@ -46,20 +46,25 @@ class Generator extends AbstractGenerator implements GeneratorInterface
      */
     public function fetch(string $name): ?XmlConstraint
     {
-        if ('root' === $name) {
-            $this->populate();
+        try {
+            if ('root' === $name) {
+                $this->populate();
 
-            return $this->getRoot();
+                return $this->getRoot();
+            }
+
+            $baseName = preg_replace('/(.*?)(_\d+)?/', '\1', $name);
+            $this->populate($baseName);
+
+            if (array_key_exists($name, $this->urlsets)) {
+                return $this->urlsets[$name];
+            }
+
+            return null;
+        } finally {
+            $this->root = null;
+            $this->urlsets = [];
         }
-
-        $baseName = preg_replace('/(.*?)(_\d+)?/', '\1', $name);
-        $this->populate($baseName);
-
-        if (array_key_exists($name, $this->urlsets)) {
-            return $this->urlsets[$name];
-        }
-
-        return null;
     }
 
     /**
