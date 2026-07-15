@@ -38,7 +38,7 @@ class GoogleVideoUrlDecorator extends UrlDecorator
     protected $limitItemsReached = false;
 
     /**
-     * @var int
+     * @var int<0, max>
      */
     protected $countItems = 0;
 

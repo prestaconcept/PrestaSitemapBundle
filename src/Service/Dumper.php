@@ -173,18 +173,23 @@ class Dumper extends AbstractGenerator implements DumperInterface
         }
 
         foreach ($index->children() as $child) {
-            /** @var $child \SimpleXMLElement */
+            /** @var \SimpleXMLElement $child */
             if ($child->getName() === 'sitemap') {
                 if (!isset($child->loc)) {
                     throw new \InvalidArgumentException(
                         "One of referenced sitemaps in $filename doesn't contain 'loc' attribute"
                     );
                 }
-                preg_match(
-                    '/^' . preg_quote($this->sitemapFilePrefix) . '\.(.+)\.xml(\.gz)?$/',
-                    basename($child->loc),
-                    $matches
-                ); // cut .xml|.xml.gz and check gz files
+                // cut .xml|.xml.gz and check gz files
+                if (
+                    !preg_match(
+                        '/^' . preg_quote($this->sitemapFilePrefix, '/') . '\.(.+)\.xml(\.gz)?$/',
+                        basename((string)$child->loc),
+                        $matches
+                    )
+                ) {
+                    continue;
+                }
                 $basename = $matches[1];
                 $gzOption = isset($matches[2]);
 

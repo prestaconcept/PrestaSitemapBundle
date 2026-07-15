@@ -101,7 +101,7 @@ class Configuration implements ConfigurationInterface
                             ->beforeNormalization()
                             ->ifString()
                                 ->then(
-                                    function ($v) {
+                                    function (string $v) {
                                         return preg_split('/\s*,\s*/', $v);
                                     }
                                 )
