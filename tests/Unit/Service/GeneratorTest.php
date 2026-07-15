@@ -75,6 +75,40 @@ class GeneratorTest extends WebTestCase
         self::assertTrue($triggered, 'Event listener was triggered');
     }
 
+    public function testFetchDoesNotAccumulateAcrossCalls(): void
+    {
+        $this->eventDispatcher->addListener(SitemapPopulateEvent::class, function (SitemapPopulateEvent $event): void {
+            $event->getUrlContainer()->addUrl(new UrlConcrete('http://acme.com/page-1'), 'default');
+        });
+
+        // Reuse the same generator instance to emulate a persistent runtime
+        // (e.g. FrankenPHP worker mode) where the shared service survives
+        // across requests. A high items-by-set limit ensures the URLs would
+        // pile up in the same urlset rather than overflow to a new one.
+        $generator = new Generator($this->eventDispatcher, $this->router, 100);
+
+        $first = $generator->fetch('default');
+        self::assertInstanceOf(Urlset::class, $first);
+        self::assertCount(1, $first);
+
+        $second = $generator->fetch('default');
+        self::assertInstanceOf(Urlset::class, $second);
+        self::assertCount(1, $second, 'URLs must not pile up when fetch() is called again');
+    }
+
+    public function testResetClearsAccumulatedState(): void
+    {
+        $generator = new Generator($this->eventDispatcher, $this->router, 100);
+
+        // Populate the urlset without going through fetch() (which resets on its own).
+        $generator->addUrl(new UrlConcrete('http://acme.com/manual'), 'default');
+        self::assertCount(1, $generator->getUrlset('default'));
+
+        $generator->reset();
+
+        self::assertCount(0, $generator->getUrlset('default'), 'reset() must clear the accumulated urlsets');
+    }
+
     public function testRouterInjectedIntoEvent(): void
     {
         $eventRouter = null;

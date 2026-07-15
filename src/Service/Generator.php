@@ -15,11 +15,12 @@ use Presta\SitemapBundle\Sitemap\Urlset;
 use Presta\SitemapBundle\Sitemap\XmlConstraint;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Service\ResetInterface;
 
 /**
  * Sitemap generator.
  */
-class Generator extends AbstractGenerator implements GeneratorInterface
+class Generator extends AbstractGenerator implements GeneratorInterface, ResetInterface
 {
     /**
      * @var UrlGeneratorInterface
@@ -46,20 +47,33 @@ class Generator extends AbstractGenerator implements GeneratorInterface
      */
     public function fetch(string $name): ?XmlConstraint
     {
-        if ('root' === $name) {
-            $this->populate();
+        try {
+            if ('root' === $name) {
+                $this->populate();
 
-            return $this->getRoot();
+                return $this->getRoot();
+            }
+
+            $baseName = preg_replace('/(.*?)(_\d+)?/', '\1', $name);
+            $this->populate($baseName);
+
+            if (array_key_exists($name, $this->urlsets)) {
+                return $this->urlsets[$name];
+            }
+
+            return null;
+        } finally {
+            $this->reset();
         }
+    }
 
-        $baseName = preg_replace('/(.*?)(_\d+)?/', '\1', $name);
-        $this->populate($baseName);
-
-        if (array_key_exists($name, $this->urlsets)) {
-            return $this->urlsets[$name];
-        }
-
-        return null;
+    /**
+     * @inheritdoc
+     */
+    public function reset(): void
+    {
+        $this->root = null;
+        $this->urlsets = [];
     }
 
     /**

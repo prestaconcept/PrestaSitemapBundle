@@ -21,7 +21,8 @@ return static function (ContainerConfigurator $container) {
             service('router'),
             '%presta_sitemap.items_by_set%',
         ])
-        ->call('setDefaults', ['%presta_sitemap.defaults%']);
+        ->call('setDefaults', ['%presta_sitemap.defaults%'])
+        ->tag('kernel.reset', ['method' => 'reset']);
 
     $services->set('presta_sitemap.dumper_default', '%presta_sitemap.dumper.class%')
         ->args([
