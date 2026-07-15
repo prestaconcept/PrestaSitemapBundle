@@ -28,6 +28,20 @@ class PrestaSitemapExtension extends Extension
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
+        /**
+         * @var array{
+         *     generator: string,
+         *     dumper: string,
+         *     timetolive: int,
+         *     sitemap_file_prefix: string,
+         *     items_by_set: int,
+         *     route_annotation_listener: bool,
+         *     dump_directory: string,
+         *     defaults: array<string, mixed>,
+         *     default_section: string,
+         *     alternate: array<string, mixed>,
+         * } $config
+         */
         $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\PhpFileLoader($container, new FileLocator(__DIR__ . '/../../config'));

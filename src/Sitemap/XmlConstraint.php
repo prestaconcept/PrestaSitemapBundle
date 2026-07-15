@@ -37,7 +37,7 @@ abstract class XmlConstraint implements \Countable
     protected $countBytes = 0;
 
     /**
-     * @var int
+     * @var int<0, max>
      */
     protected $countItems = 0;
 

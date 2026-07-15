@@ -166,13 +166,7 @@ class UrlConcrete implements Url
             return $this;
         }
 
-        if (is_string($priority) || is_int($priority)) {
-            $priority = (float)$priority;
-        }
-
-        if (is_float($priority) && $priority >= 0 && $priority <= 1) {
-            $this->priority = round($priority, 1);
-        } else {
+        if (!is_numeric($priority) || (float)$priority < 0 || (float)$priority > 1) {
             throw new \RuntimeException(
                 sprintf(
                     'The value "%s" is not supported by the option priority,' .
@@ -182,6 +176,8 @@ class UrlConcrete implements Url
                 )
             );
         }
+
+        $this->priority = round((float)$priority, 1);
 
         return $this;
     }

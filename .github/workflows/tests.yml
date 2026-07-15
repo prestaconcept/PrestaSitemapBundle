@@ -29,9 +29,9 @@ jobs:
             symfony-version: 7.4.*
 
           - php-version: 8.4
-            symfony-version: 8.0.*
+            symfony-version: 8.1.*
           - php-version: 8.5
-            symfony-version: 8.0.*
+            symfony-version: 8.1.*
 
     steps:
       - name: "Checkout"
@@ -48,6 +48,7 @@ jobs:
           composer require --no-interaction --no-update \
             symfony/console:${{ matrix.symfony-version }} \
             symfony/framework-bundle:${{ matrix.symfony-version }} \
+            symfony/http-foundation:${{ matrix.symfony-version }} \
             symfony/http-kernel:${{ matrix.symfony-version }} \
             symfony/routing:${{ matrix.symfony-version }} \
             symfony/messenger:${{ matrix.symfony-version }} --dev \
@@ -66,7 +67,7 @@ jobs:
       matrix:
         include:
           - php-version: 8.5
-            symfony-version: 8.0.*
+            symfony-version: 8.1.*
 
     steps:
       - name: "Checkout"
@@ -83,6 +84,7 @@ jobs:
           composer require --no-interaction --no-update \
             symfony/console:${{ matrix.symfony-version }} \
             symfony/framework-bundle:${{ matrix.symfony-version }} \
+            symfony/http-foundation:${{ matrix.symfony-version }} \
             symfony/http-kernel:${{ matrix.symfony-version }} \
             symfony/routing:${{ matrix.symfony-version }} \
             symfony/messenger:${{ matrix.symfony-version }} --dev \
@@ -107,7 +109,7 @@ jobs:
       matrix:
         include:
           - php-version: 8.5
-            symfony-version: 8.0.*
+            symfony-version: 8.1.*
 
     steps:
       - name: "Checkout"
@@ -124,6 +126,7 @@ jobs:
           composer require --no-interaction --no-update \
             symfony/console:${{ matrix.symfony-version }} \
             symfony/framework-bundle:${{ matrix.symfony-version }} \
+            symfony/http-foundation:${{ matrix.symfony-version }} \
             symfony/http-kernel:${{ matrix.symfony-version }} \
             symfony/routing:${{ matrix.symfony-version }} \
             symfony/messenger:${{ matrix.symfony-version }} --dev \
@@ -142,7 +145,7 @@ jobs:
       matrix:
         include:
           - php-version: 8.5
-            symfony-version: 8.0.*
+            symfony-version: 8.1.*
 
     steps:
       - name: "Checkout"
@@ -159,6 +162,7 @@ jobs:
           composer require --no-interaction --no-update \
             symfony/console:${{ matrix.symfony-version }} \
             symfony/framework-bundle:${{ matrix.symfony-version }} \
+            symfony/http-foundation:${{ matrix.symfony-version }} \
             symfony/http-kernel:${{ matrix.symfony-version }} \
             symfony/routing:${{ matrix.symfony-version }} \
             symfony/messenger:${{ matrix.symfony-version }} --dev \

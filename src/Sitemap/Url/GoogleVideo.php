@@ -169,7 +169,7 @@ class GoogleVideo
 
     /**
      * multiple prices can be added, see self::addPrice()
-     * @var array<int, array<string, mixed>>
+     * @var array<int, array{amount: int|float, currency: string, type: string|null, resolution: string|null}>
      */
     protected $prices = [];
 
@@ -896,7 +896,7 @@ class GoogleVideo
     /**
      * list of defined prices with price, currency, type and resolution
      *
-     * @return array<int, array<string, mixed>>
+     * @return array<int, array{amount: int|float, currency: string, type: string|null, resolution: string|null}>
      */
     public function getPrices(): array
     {
