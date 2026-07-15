@@ -21,7 +21,7 @@
     },
     "require-dev": {
         "doctrine/annotations": "^1.0",
-        "phpstan/phpstan": "^1.12",
+        "phpstan/phpstan": "^2.2",
         "phpunit/phpunit": "^10.0",
         "squizlabs/php_codesniffer": "^3.5",
         "symfony/messenger": "^6.4|^7.0|^8.0",
