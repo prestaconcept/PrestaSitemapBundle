@@ -96,6 +96,19 @@ class GeneratorTest extends WebTestCase
         self::assertCount(1, $second, 'URLs must not pile up when fetch() is called again');
     }
 
+    public function testResetClearsAccumulatedState(): void
+    {
+        $generator = new Generator($this->eventDispatcher, $this->router, 100);
+
+        // Populate the urlset without going through fetch() (which resets on its own).
+        $generator->addUrl(new UrlConcrete('http://acme.com/manual'), 'default');
+        self::assertCount(1, $generator->getUrlset('default'));
+
+        $generator->reset();
+
+        self::assertCount(0, $generator->getUrlset('default'), 'reset() must clear the accumulated urlsets');
+    }
+
     public function testRouterInjectedIntoEvent(): void
     {
         $eventRouter = null;

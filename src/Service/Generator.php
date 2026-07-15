@@ -15,11 +15,12 @@ use Presta\SitemapBundle\Sitemap\Urlset;
 use Presta\SitemapBundle\Sitemap\XmlConstraint;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Service\ResetInterface;
 
 /**
  * Sitemap generator.
  */
-class Generator extends AbstractGenerator implements GeneratorInterface
+class Generator extends AbstractGenerator implements GeneratorInterface, ResetInterface
 {
     /**
      * @var UrlGeneratorInterface
@@ -62,9 +63,17 @@ class Generator extends AbstractGenerator implements GeneratorInterface
 
             return null;
         } finally {
-            $this->root = null;
-            $this->urlsets = [];
+            $this->reset();
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function reset(): void
+    {
+        $this->root = null;
+        $this->urlsets = [];
     }
 
     /**
