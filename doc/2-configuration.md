@@ -13,6 +13,35 @@ presta_sitemap:
         lastmod: now
 ```
 
+### Omitting `changefreq` and `priority`
+
+Any of these may be set to `null`, in which case the tag is not written at all:
+
+```yaml
+# config/packages/presta_sitemap.yaml
+presta_sitemap:
+    defaults:
+        priority: null
+        changefreq: null
+        lastmod: null
+```
+
+This is worth knowing about, because the bundle's own defaults (`priority: 0.5`,
+`changefreq: daily`) are applied to **every** URL that does not set its own — so unless you
+opt out, every entry in your sitemap carries both tags.
+
+Both are still valid [sitemaps.org](https://www.sitemaps.org/protocol.html) tags, but Google
+[states plainly](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap)
+that it *"ignores `<priority>` and `<changefreq>` values"*. On a small sitemap that is harmless.
+On a large one it is not free: the two tags add roughly 40 bytes per URL, so a 50,000-URL sitemap
+carries about 2 MB of markup no consumer reads — which matters because the protocol caps a single
+sitemap at 50 MB uncompressed, and that budget is better spent on URLs.
+
+`lastmod` is a different case and generally worth keeping — but note that the default value,
+`now`, means "modified at dump time" for every URL, which is exactly the kind of unverifiable
+timestamp Google says it will disregard. If you cannot supply a real per-URL modification date,
+setting it to `null` is more honest than stamping every URL with the time the sitemap was built.
+
 Or choose the default sections for static routes:
 
 ```yaml
