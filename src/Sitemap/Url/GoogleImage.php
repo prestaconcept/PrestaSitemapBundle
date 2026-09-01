@@ -177,7 +177,7 @@ class GoogleImage
     {
         $xml = '<image:image>';
 
-        $xml .= '<image:loc>' . Utils::encode($this->getLocation()) . '</image:loc>';
+        $xml .= '<image:loc>' . Utils::encodeUrl($this->getLocation()) . '</image:loc>';
 
         if ($this->getCaption()) {
             $xml .= '<image:caption>' . Utils::cdata($this->getCaption()) . '</image:caption>';

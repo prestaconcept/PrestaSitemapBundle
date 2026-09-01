@@ -27,4 +27,10 @@ class UtilsTest extends TestCase
         $actual = Utils::encode('data & spécial chars>');
         self::assertEquals('data &amp; spécial chars&gt;', $actual);
     }
+
+    public function testEncodeUrl(): void
+    {
+        $actual = Utils::encodeUrl('http://example.org/test_ä');
+        self::assertEquals('http://example.org/test_%C3%A4', $actual);
+    }
 }

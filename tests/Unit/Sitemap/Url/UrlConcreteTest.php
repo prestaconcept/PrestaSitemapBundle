@@ -30,6 +30,8 @@ class UrlConcreteTest extends TestCase
             ['<url><loc>http://example.com/</loc></url>', 'http://example.com/'],
             ['<url><loc>http://example.com/abcd</loc></url>', 'http://example.com/abcd'],
             ['<url><loc>http://example.com/abcd/?a=1&amp;b=cdf</loc></url>', 'http://example.com/abcd/?a=1&b=cdf'],
+            ['<url><loc>http://example.com/%C3%A4</loc></url>', 'http://example.com/ä'],
+            ['<url><loc>http://example.com/folder/%C3%A4</loc></url>', 'http://example.com/folder/ä'],
             [
                 '<url><loc>http://example.com/</loc><lastmod>2012-12-29T10:39:12+00:00</lastmod></url>',
                 'http://example.com/',

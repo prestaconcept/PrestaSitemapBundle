@@ -941,7 +941,7 @@ class GoogleVideo
 
         //----------------------
         // required fields
-        $videoXml .= '<video:thumbnail_loc>' . Utils::encode($this->getThumbnailLocation()) . '</video:thumbnail_loc>';
+        $videoXml .= '<video:thumbnail_loc>' . Utils::encodeUrl($this->getThumbnailLocation()) . '</video:thumbnail_loc>';
         $videoXml .= '<video:title>' . Utils::cdata($this->getTitle()) . '</video:title>';
         $videoXml .= '<video:description>' . Utils::cdata($this->getDescription()) . '</video:description>';
 
@@ -952,7 +952,7 @@ class GoogleVideo
             $videoXml .= '<video:category>' . Utils::cdata($category) . '</video:category>';
         }
         if ($location = $this->getContentLocation()) {
-            $videoXml .= '<video:content_loc>' . Utils::encode($location) . '</video:content_loc>';
+            $videoXml .= '<video:content_loc>' . Utils::encodeUrl($location) . '</video:content_loc>';
         }
         if ($duration = $this->getDuration()) {
             $videoXml .= '<video:duration>' . $duration . '</video:duration>';

@@ -65,7 +65,7 @@ class GoogleMultilangUrlDecorator extends UrlDecorator
 
         return '<xhtml:link rel="' . $rel
             . '" hreflang="' . $hreflang
-            . '" href="' . Utils::encode($href) . '" />';
+            . '" href="' . Utils::encodeUrl($href) . '" />';
     }
 
     /**

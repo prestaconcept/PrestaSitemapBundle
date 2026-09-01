@@ -195,7 +195,7 @@ class UrlConcrete implements Url
      */
     public function toXml(): string
     {
-        $xml = '<url><loc>' . Utils::encode($this->getLoc()) . '</loc>';
+        $xml = '<url><loc>' . Utils::encodeUrl($this->getLoc()) . '</loc>';
 
         $lastmod = $this->getLastmod();
         if ($lastmod) {
